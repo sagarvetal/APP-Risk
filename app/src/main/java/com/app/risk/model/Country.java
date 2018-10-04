@@ -1,10 +1,12 @@
 package com.app.risk.model;
 
+import java.io.Serializable;
+
 /**
  * Country model to save details of each country
  * @author Akshita Angara
  */
-public class Country {
+public class Country implements Serializable {
 
     String nameOfCountry;
     Continent belongsToContinent;
