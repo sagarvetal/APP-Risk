@@ -6,8 +6,18 @@ package com.app.risk.model;
  */
 public class Continent {
 
-    String nameOfContinent;
-    int armyControlValue;
+    private String nameOfContinent;
+    private int armyControlValue;
+
+    /**
+     * Constructor to initialise a new object with the given name and army control value
+     * @param nameOfContinent
+     * @param armyControlValue
+     */
+    public Continent(String nameOfContinent, int armyControlValue) {
+        this.nameOfContinent = nameOfContinent;
+        this.armyControlValue = armyControlValue;
+    }
 
     /**
      * Getter function to return the name of continent

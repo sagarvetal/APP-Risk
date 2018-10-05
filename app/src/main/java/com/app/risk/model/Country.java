@@ -6,8 +6,18 @@ package com.app.risk.model;
  */
 public class Country {
 
-    String nameOfCountry;
-    Continent belongsToContinent;
+    private String nameOfCountry;
+    private Continent belongsToContinent;
+
+    /**
+     * Constructor to initialise a new object with the given name and its continent
+     * @param nameOfCountry
+     * @param belongsToContinent
+     */
+    public Country(String nameOfCountry, Continent belongsToContinent) {
+        this.nameOfCountry = nameOfCountry;
+        this.belongsToContinent = belongsToContinent;
+    }
 
     /**
      * Getter function to get name of country
