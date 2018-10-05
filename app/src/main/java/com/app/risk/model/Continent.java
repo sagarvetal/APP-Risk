@@ -10,7 +10,7 @@ public class Continent {
     private int armyControlValue;
 
     /**
-     * Constructor to initialise a new object with the given name and army control value
+     * Constructor to create a new object with the given name and army control value
      * @param nameOfContinent
      * @param armyControlValue
      */

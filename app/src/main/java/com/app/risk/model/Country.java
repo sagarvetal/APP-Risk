@@ -10,13 +10,21 @@ public class Country {
     private Continent belongsToContinent;
 
     /**
-     * Constructor to initialise a new object with the given name and its continent
+     * Constructor to create a new object with the given name and its continent.
      * @param nameOfCountry
      * @param belongsToContinent
      */
     public Country(String nameOfCountry, Continent belongsToContinent) {
         this.nameOfCountry = nameOfCountry;
         this.belongsToContinent = belongsToContinent;
+    }
+
+    /**
+     * Constructor to create a new object with a given name.
+     * @param nameOfCountry
+     */
+    public Country(String nameOfCountry) {
+        this.nameOfCountry = nameOfCountry;
     }
 
     /**
