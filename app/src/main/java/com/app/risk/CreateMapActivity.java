@@ -1,8 +1,9 @@
-package com.app.risk.view;
+package com.app.risk;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,49 +11,52 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.app.risk.MainActivity;import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class MapView extends AppCompatActivity {
+public class CreateMapActivity extends Activity {
     private ListView lvCountry;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_view);
-
+        setContentView(R.layout.activity_create_map);
         lvCountry = (ListView) findViewById(R.id.lvCountry);
-
-        ArrayList<Item> countryList = new ArrayList<MainActivity.MapView.Item>();
+        ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
         // Header
-        countryList.add(new SectionItem("Asia"));
+        countryList.add(new CreateMapActivity.SectionItem("Asia"));
         // State Name
-        countryList.add(new EntryItem("India"));
-        countryList.add(new EntryItem("China"));
-        countryList.add(new EntryItem("Hong Kong"));
-        countryList.add(new EntryItem("Nepal"));
-
-        // Header
-        countryList.add(new SectionItem("North Asia"));
-        // State Name
-        countryList.add(new EntryItem("Belarus"));
-        countryList.add(new EntryItem("Moldova"));
-        countryList.add(new EntryItem("Russian Federation"));
-        countryList.add(new EntryItem("Ukraine"));
+        countryList.add(new CreateMapActivity.EntryItem("India"));
+        countryList.add(new CreateMapActivity.EntryItem("China"));
+        countryList.add(new CreateMapActivity.EntryItem("Hong Kong"));
+        countryList.add(new CreateMapActivity.EntryItem("Nepal"));
 
         // Header
-        countryList.add(new SectionItem("North America"));
+        countryList.add(new CreateMapActivity.SectionItem("North Asia"));
         // State Name
-        countryList.add(new EntryItem("Canada"));
-        countryList.add(new EntryItem("Saint Pierre and Miquelon"));
-        countryList.add(new EntryItem("United States"));
+        countryList.add(new CreateMapActivity.EntryItem("Belarus"));
+        countryList.add(new CreateMapActivity.EntryItem("Moldova"));
+        countryList.add(new CreateMapActivity.EntryItem("Russian Federation"));
+        countryList.add(new CreateMapActivity.EntryItem("Ukraine"));
 
         // Header
-        countryList.add(new SectionItem("North & Central America"));
+        countryList.add(new CreateMapActivity.SectionItem("North America"));
         // State Name
-        countryList.add(new EntryItem("Caribbean Islands"));
-        countryList.add(new EntryItem("Anguilla"));
-        countryList.add(new EntryItem("Antigua and Barbuda"));
-        countryList.add(new EntryItem("Aruba"));
+        countryList.add(new CreateMapActivity.EntryItem("Canada"));
+        countryList.add(new CreateMapActivity.EntryItem("Saint Pierre and Miquelon"));
+        countryList.add(new CreateMapActivity.EntryItem("United States"));
 
+        // Header
+        countryList.add(new CreateMapActivity.SectionItem("North & Central America"));
+        // State Name
+        countryList.add(new CreateMapActivity.EntryItem("Caribbean Islands"));
+        countryList.add(new CreateMapActivity.EntryItem("Anguilla"));
+        countryList.add(new CreateMapActivity.EntryItem("Antigua and Barbuda"));
+        countryList.add(new CreateMapActivity.EntryItem("Aruba"));
+        final CountryAdaptor adapter = new CountryAdaptor(this, countryList);
+        lvCountry.setAdapter(adapter);
+        lvCountry.setTextFilterEnabled(true);
     }
 
     public interface Item {
@@ -60,7 +64,7 @@ public class MapView extends AppCompatActivity {
         public String getTitle();
     }
 
-    public class SectionItem implements Item {
+    public class SectionItem implements CreateMapActivity.Item {
         private final String title;
 
         public SectionItem(String title) {
@@ -76,7 +80,8 @@ public class MapView extends AppCompatActivity {
             return true;
         }
     }
-    public class EntryItem implements Item {
+
+    public class EntryItem implements CreateMapActivity.Item {
         public final String title;
 
         public EntryItem(String title) {
@@ -94,15 +99,16 @@ public class MapView extends AppCompatActivity {
     }
 
     public class CountryAdaptor extends BaseAdapter {
+
         private Context context;
-        private ArrayList<Item> item;
-        private ArrayList<Item> orignalItem;
+        private ArrayList<CreateMapActivity.Item> item;
+        private ArrayList<CreateMapActivity.Item> orignalItem;
 
         public CountryAdaptor(){
             super();
         }
 
-        public CountryAdaptor(Context context,ArrayList<Item> item){
+        public CountryAdaptor(Context context,ArrayList<CreateMapActivity.Item> item){
             this.context = context;
             this.item = item;
         }
@@ -128,15 +134,14 @@ public class MapView extends AppCompatActivity {
             if (item.get(position).isSection()){
                 convertView = inflater.inflate(R.layout.layout_section,parent,false);
                 TextView tvSectionTitle = (TextView) convertView.findViewById(R.id.tvSectionTitle);
-                tvSectionTitle.setText(((SectionItem) item.get(position)).getTitle());
+                tvSectionTitle.setText(((CreateMapActivity.SectionItem) item.get(position)).getTitle());
             }else{
                 convertView = inflater.inflate(R.layout.layout_item, parent, false);
                 TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
-                tvItemTitle.setText(((EntryItem) item.get(position)).getTitle());
+                tvItemTitle.setText(((CreateMapActivity.EntryItem) item.get(position)).getTitle());
             }
             return convertView;
         }
     }
 
 }
-
