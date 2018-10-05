@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Risk</string>
+    <string name="title_activity_user_driven_map">UserDrivenMap</string>
+    <string name="title_activity_user_driven_maps">UserDrivenMaps</string>
+    <string name="add_country">Add Country</string>
 </resources>
