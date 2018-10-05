@@ -1,12 +1,10 @@
 package com.app.risk.model;
 
-import java.io.Serializable;
-
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
  */
-public class Continent implements Serializable {
+public class Continent {
 
     String nameOfContinent;
     int armyControlValue;
