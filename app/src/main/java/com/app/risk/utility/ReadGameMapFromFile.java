@@ -30,13 +30,17 @@ public class ReadGameMapFromFile {
 
         try {
 
-            FileReader fileReader = new FileReader(fileName);
+            FileReader fileReader = new FileReader("C:\\Users\\akshi\\IdeaProjects\\Test\\src\\com\\app\\risk\\utility\\" + fileName + ".map");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             while((line = bufferedReader.readLine()) != null) {
 
                 if (line.equals("[Continents]")) {
-                    while((line = bufferedReader.readLine()) != "\n\n\n") {
+                    while(true) {
+
+                        line = bufferedReader.readLine();
+                        if(line.equals(""))
+                            break;
 
                         String[] words = line.split("=");
                         continentList.add(new Continent(words[0], Integer.parseInt(words[1])));
@@ -44,7 +48,11 @@ public class ReadGameMapFromFile {
                 }
 
                 if (line.equals("[Territories]")) {
-                    while((line = bufferedReader.readLine()) != "\n\n\n") {
+                    while(true) {
+
+                        line = bufferedReader.readLine();
+                        if((line == null) || (line.equals("")))
+                            break;
 
                         String[] words = line.split(",");
                         GameMap tempGameMap = new GameMap();
@@ -78,6 +86,8 @@ public class ReadGameMapFromFile {
                     }
                 }
             }
+
+            System.out.println("Game map loaded: " + gameMapList);
 
         } catch (IOException e) {
             e.printStackTrace();

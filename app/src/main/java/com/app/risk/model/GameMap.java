@@ -42,9 +42,9 @@ public class GameMap {
      * @return comma separated string of all connected countries
      */
     public String getConnectedCountriesAsString() {
-        String returnString = null;
+        String returnString = "";
         for(Country country: connectedToCountries) {
-            returnString += country + ",";
+            returnString += country.getNameOfCountry() + ",";
         }
         return returnString;
     }

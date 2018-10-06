@@ -24,7 +24,7 @@ public class WriteGameMapToFile {
 
         try {
 
-            FileWriter fileWriter = new FileWriter(fileName);
+            FileWriter fileWriter = new FileWriter("C:\\Users\\akshi\\IdeaProjects\\Test\\src\\com\\app\\risk\\utility\\" + fileName + ".map");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
             bufferedWriter.write("[Map]\n");
@@ -53,7 +53,7 @@ public class WriteGameMapToFile {
                         "," +
                         gameMap.getCoordinateY() +
                         "," +
-                        gameMap.getFromCountry().getBelongsToContinent() +
+                        gameMap.getFromCountry().getBelongsToContinent().getNameOfContinent() +
                         "," +
                         gameMap.getConnectedCountriesAsString() +
                         "\n"
