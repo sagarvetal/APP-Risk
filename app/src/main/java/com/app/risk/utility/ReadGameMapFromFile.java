@@ -87,8 +87,6 @@ public class ReadGameMapFromFile {
                 }
             }
 
-            System.out.println("Game map loaded: " + gameMapList);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
