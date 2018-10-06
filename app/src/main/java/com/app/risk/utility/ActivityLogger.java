@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * This class logs the all activities done by player
+ * This class logs the all activities done during game play.
  * @author Sagar Vetal
  * @date 06/10/2018
  * @version 1.0.0
@@ -21,8 +21,8 @@ import java.io.IOException;
 public class ActivityLogger {
 
     /**
-     * This method logs the all activities done by player
-     * @param activity An activity performed by player.
+     * This method logs the all activities done during game play.
+     * @param activity An activity performed during game play..
      */
     public static void log(final String activity) {
         try {
