@@ -2,20 +2,33 @@ package com.app.risk;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.app.risk.model.Continent;
+import com.app.risk.model.Country;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
 
 public class CreateMapActivity extends Activity {
+
     private ListView lvCountry;
 
     @Override
@@ -24,39 +37,67 @@ public class CreateMapActivity extends Activity {
         setContentView(R.layout.activity_create_map);
         lvCountry = (ListView) findViewById(R.id.lvCountry);
         ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
-        // Header
-        countryList.add(new CreateMapActivity.SectionItem("Asia"));
-        // State Name
-        countryList.add(new CreateMapActivity.EntryItem("India"));
-        countryList.add(new CreateMapActivity.EntryItem("China"));
-        countryList.add(new CreateMapActivity.EntryItem("Hong Kong"));
-        countryList.add(new CreateMapActivity.EntryItem("Nepal"));
 
-        // Header
-        countryList.add(new CreateMapActivity.SectionItem("North Asia"));
-        // State Name
-        countryList.add(new CreateMapActivity.EntryItem("Belarus"));
-        countryList.add(new CreateMapActivity.EntryItem("Moldova"));
-        countryList.add(new CreateMapActivity.EntryItem("Russian Federation"));
-        countryList.add(new CreateMapActivity.EntryItem("Ukraine"));
+        HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
+        Continent continent = new Continent();
+        continent.setArmyControlValue(34);
+        continent.setNameOfContinent("Army");
+        ArrayList<Country> arr = new ArrayList<>();
 
-        // Header
-        countryList.add(new CreateMapActivity.SectionItem("North America"));
-        // State Name
-        countryList.add(new CreateMapActivity.EntryItem("Canada"));
-        countryList.add(new CreateMapActivity.EntryItem("Saint Pierre and Miquelon"));
-        countryList.add(new CreateMapActivity.EntryItem("United States"));
+        userCreatedMapData.put(continent,arr);
+        Country co = new Country();
+        co.setNameOfCountry("sfdfds");
+        co.setBelongsToContinent(continent);
+        arr.add(co);
+        Country c1 = new Country();
+        c1.setNameOfCountry("sdfdsf12");
+        c1.setBelongsToContinent(continent);
+        arr.add(c1);
+        Iterator it = userCreatedMapData.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry pair = (Map.Entry)it.next();
+            countryList.add(new CreateMapActivity.SectionItem((Continent)pair.getKey()));
+            ArrayList<Country> arrCountry = new ArrayList<>();
+            arrCountry = (ArrayList<Country>) pair.getValue();
+            for (Country obj : arrCountry){
+                countryList.add(new CreateMapActivity.EntryItem(obj));
+            }
+        }
 
-        // Header
-        countryList.add(new CreateMapActivity.SectionItem("North & Central America"));
-        // State Name
-        countryList.add(new CreateMapActivity.EntryItem("Caribbean Islands"));
-        countryList.add(new CreateMapActivity.EntryItem("Anguilla"));
-        countryList.add(new CreateMapActivity.EntryItem("Antigua and Barbuda"));
-        countryList.add(new CreateMapActivity.EntryItem("Aruba"));
         final CountryAdaptor adapter = new CountryAdaptor(this, countryList);
         lvCountry.setAdapter(adapter);
         lvCountry.setTextFilterEnabled(true);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int x = (int)event.getRawX();
+        int y = (int)event.getRawY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                addButton(x,y);
+        }
+        return false;
+    }
+
+    public void addButton(int x,int y){
+
+        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content)).getChildAt(0);
+        Button btn = new Button(this);
+
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(180, 180); // Button width and button height.
+        lp.leftMargin = x;
+        lp.topMargin = y;
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+
+        btn.setLayoutParams(lp);
+        viewGroup.addView(btn);
     }
 
     public interface Item {
@@ -65,10 +106,12 @@ public class CreateMapActivity extends Activity {
     }
 
     public class SectionItem implements CreateMapActivity.Item {
+        Continent continent;
+
         private final String title;
 
-        public SectionItem(String title) {
-            this.title = title;
+        public SectionItem(Continent continent) {
+            this.title = continent.getNameOfContinent();
         }
 
         public String getTitle() {
@@ -82,10 +125,12 @@ public class CreateMapActivity extends Activity {
     }
 
     public class EntryItem implements CreateMapActivity.Item {
+        Country country;
+
         public final String title;
 
-        public EntryItem(String title) {
-            this.title = title;
+        public EntryItem(Country country) {
+            this.title = country.getNameOfCountry();
         }
 
         public String getTitle() {
