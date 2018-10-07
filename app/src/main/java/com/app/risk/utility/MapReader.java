@@ -1,5 +1,8 @@
 package com.app.risk.utility;
 
+import android.os.Environment;
+
+import com.app.risk.constants.FileConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -115,5 +118,19 @@ public class MapReader {
             }
         }
         return null;
+    }
+
+    /**
+     * This method reads the map directory and returns the list of map.
+     * @return list of string of map name.
+     */
+    public List<String> getMapList(){
+        final List<String> mapList = new ArrayList<>();
+        final String rootPath = Environment.getExternalStorageDirectory().toString();
+        final File mapDir = new File(rootPath + File.separator + FileConstants.LOG_FILE_PATH);
+        for(final File file: mapDir.listFiles()) {
+            mapList.add(file.getName());
+        }
+        return mapList;
     }
 }
