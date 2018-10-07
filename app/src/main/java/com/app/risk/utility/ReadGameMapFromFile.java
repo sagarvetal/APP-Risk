@@ -90,6 +90,8 @@ public class ReadGameMapFromFile {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        countryList = null;
     }
 
     /**
