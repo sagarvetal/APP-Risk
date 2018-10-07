@@ -9,6 +9,10 @@ package com.app.risk.constants;
  */
 public class FileConstants {
 
+    //Logs
     public static final String LOG_FILE_PATH = "logs";
     public static final String LOG_FILE_NAME = "logs.txt";
+
+    //Maps
+    public static final String MAP_FILE_PATH = "maps";
 }
