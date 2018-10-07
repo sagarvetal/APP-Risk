@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">Risk</string>
+    <string name="app_name">Risk Game</string>
+
+
+    <!-- >
+    main screen strings
+    <!-->
+    <string name="user_seletction_value">2</string>
+    <string name="player">player</string>
+
+    <array name="main_menu">
+        <item>Play</item>
+        <item>Create Map</item>
+        <item>Edit Map</item>
+        <item>Help</item>
+        <item>Setting</item>
+        <item>Exit</item>
+    </array>
+
 </resources>
