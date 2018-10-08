@@ -5,16 +5,9 @@
     <!-- >
     main screen strings
     <!-->
-    <string name="user_seletction_value">2</string>
+    <string name="player_selection_value">2</string>
     <string name="player">player</string>
-
-    <array name="main_menu">
-        <item>Play</item>
-        <item>Create Map</item>
-        <item>Edit Map</item>
-        <item>Help</item>
-        <item>Setting</item>
-        <item>Exit</item>
-    </array>
+    <string name="map_header">Map Selection</string>
+    <string name="player_selection_header">Player Selection</string>
 
 </resources>
