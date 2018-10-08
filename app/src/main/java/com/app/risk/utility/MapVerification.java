@@ -1,10 +1,13 @@
 package com.app.risk.utility;
 
+import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 /**
  * Verify if the map created by the user is correct and follows all the rules and regulations
@@ -16,6 +19,8 @@ import java.util.List;
 public class MapVerification {
 
     private List<GameMap> gameMapList = new ArrayList<>();
+    private HashMap<String, String> countryContinentMapping = new HashMap<>();
+    private List<String> countriesVisited = new ArrayList<>();
 
     /**
      * Method called in controller which performs different checks to make sure map is verified
@@ -30,6 +35,73 @@ public class MapVerification {
             System.out.println("Error: Country belongs to multiple continents.");
             return false;
         }
+        if (!checkMapIsConnectedGraph()) {
+            System.out.println("Error: Map is not connected.");
+            return false;
+        }
+        if (!checkContinentIsConnectedSubgraph()) {
+            System.out.println("Error: Continent is not connected.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Performs a check to make sure the entire map is a connected graph
+     * (implements DFS on the entire graph)
+     * @return true if the map is connected, false otherwise
+     */
+    private boolean checkMapIsConnectedGraph() {
+
+        Set<String> allCountriesInMap = countryContinentMapping.keySet();
+
+        DepthFirstTraversal(gameMapList.get(0));
+
+        for(String country: allCountriesInMap) {
+            if(!countriesVisited.contains(country))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Method to perform DFS of the gamp map graph to determine if the graph is connected.
+     * @param gameMap
+     */
+    private void DepthFirstTraversal(GameMap gameMap) {
+
+        countriesVisited.add(gameMap.getFromCountry().getNameOfCountry());
+
+        for (Country country: gameMap.getConnectedToCountries()) {
+            if (!countriesVisited.contains(country.getNameOfCountry())) {
+                DepthFirstTraversal(getGameMapObjectByCountry(country));
+            }
+        }
+    }
+
+    /**
+     * Method to return an object of GameMap class based on the from country
+     * @param country
+     * @return GameMap object if the from country equals the parameter
+     */
+    private GameMap getGameMapObjectByCountry(Country country) {
+
+        for (GameMap gameMap: gameMapList) {
+            if (gameMap.getFromCountry().equals(country))
+                return gameMap;
+        }
+
+        return null;
+    }
+
+    /**
+     * Performs a check to make sure each continent in the map is a connected subgraph
+     * (implements DFS on each continent)
+     * @return true if each continent is a connected subgraph, false otherwise
+     */
+    private boolean checkContinentIsConnectedSubgraph() {
 
         return true;
     }
@@ -39,8 +111,6 @@ public class MapVerification {
      * @return true if each country belongs to only one continent, false otherwise
      */
     private boolean checkCountryBelongsToOneContinent() {
-
-        HashMap<String, String> countryContinentMapping = new HashMap<>();
 
         for(GameMap gameMap: gameMapList) {
 

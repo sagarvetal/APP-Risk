@@ -18,6 +18,7 @@ public class GameMap {
      * @return from country
      */
     public Country getFromCountry() {
+
         return fromCountry;
     }
 
@@ -26,6 +27,7 @@ public class GameMap {
      * @param fromCountry
      */
     public void setFromCountry(Country fromCountry) {
+
         this.fromCountry = fromCountry;
     }
 
@@ -34,6 +36,7 @@ public class GameMap {
      * @return list of all connected countries
      */
     public List<Country> getConnectedToCountries() {
+
         return connectedToCountries;
     }
 
@@ -42,6 +45,7 @@ public class GameMap {
      * @return comma separated string of all connected countries
      */
     public String getConnectedCountriesAsString() {
+
         String returnString = "";
         for(Country country: connectedToCountries) {
             returnString += country.getNameOfCountry() + ",";
@@ -54,6 +58,7 @@ public class GameMap {
      * @param connectedToCountries
      */
     public void setConnectedToCountries(List<Country> connectedToCountries) {
+
         this.connectedToCountries = connectedToCountries;
     }
 
@@ -62,6 +67,7 @@ public class GameMap {
      * @return x-coordinate
      */
     public int getCoordinateX() {
+
         return coordinateX;
     }
 
@@ -70,6 +76,7 @@ public class GameMap {
      * @param coordinateX
      */
     public void setCoordinateX(int coordinateX) {
+
         this.coordinateX = coordinateX;
     }
 
@@ -78,6 +85,7 @@ public class GameMap {
      * @return y-coordinate
      */
     public int getCoordinateY() {
+
         return coordinateY;
     }
 
@@ -86,6 +94,7 @@ public class GameMap {
      * @param coordinateY
      */
     public void setCoordinateY(int coordinateY) {
+
         this.coordinateY = coordinateY;
     }
 }
