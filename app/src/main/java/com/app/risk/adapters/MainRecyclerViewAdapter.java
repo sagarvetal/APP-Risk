@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.risk.view.MapSelection;
-import com.app.risk.view.PlayerSelection;
+import com.app.risk.view.MapSelectionActivity;
+import com.app.risk.view.PlaceArmiesActivity;
 import com.app.risk.R;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 switch(cardArrayList.get(getAdapterPosition())){
 
                     case "Play":
-                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelection.class));
+                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
                         break;
                     case "Create Map":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
@@ -87,6 +87,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         break;
                     case "Exit":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), PlaceArmiesActivity.class));
                         break;
                 }
 
