@@ -2,6 +2,7 @@ package com.app.risk.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -15,9 +16,9 @@ import java.util.List;
 public class GamePlay implements Serializable {
 
     private String mapName;
-    private List<Continent> continents;
-    private List<Country> countries;
-    private List<Player> players;
+    private HashMap<String, Continent> continents;
+    private HashMap<String, Country> countries;
+    private HashMap<Integer, Player> players;
     private Player currentPlayer;
     private List<Card> cards;
 
@@ -26,9 +27,9 @@ public class GamePlay implements Serializable {
      * It initializes the continent, country, player and card list.
      */
     public GamePlay() {
-        this.continents = new ArrayList<>();
-        this.countries = new ArrayList<>();
-        this.players = new ArrayList<>();
+        this.continents = new HashMap<>();
+        this.countries = new HashMap<>();
+        this.players = new HashMap<>();
         this.cards = new ArrayList<>();
     }
 
@@ -52,7 +53,7 @@ public class GamePlay implements Serializable {
      * Getter function to return the list of continents retrieved from the map selected for game play.
      * @return the list of continents retrieved from the map.
      */
-    public List<Continent> getContinents() {
+    public HashMap<String, Continent> getContinents() {
         return continents;
     }
 
@@ -60,7 +61,7 @@ public class GamePlay implements Serializable {
      * Setter function to set the list of continents retrieved from the map selected for game play.
      * @param continents The list of continents retrieved from the map.
      */
-    public void setContinents(List<Continent> continents) {
+    public void setContinents(HashMap<String, Continent> continents) {
         this.continents = continents;
     }
 
@@ -68,7 +69,7 @@ public class GamePlay implements Serializable {
      * Getter function to return the list of countries retrieved from the map selected for game play.
      * @return the list of countries retrieved from the map.
      */
-    public List<Country> getCountries() {
+    public HashMap<String, Country> getCountries() {
         return countries;
     }
 
@@ -76,7 +77,7 @@ public class GamePlay implements Serializable {
      * Setter function to set the list of countries retrieved from the map selected for game play.
      * @param countries The list of countries retrieved from the map.
      */
-    public void setCountries(List<Country> countries) {
+    public void setCountries(HashMap<String, Country> countries) {
         this.countries = countries;
     }
 
@@ -84,7 +85,7 @@ public class GamePlay implements Serializable {
      * Getter function to return the list of players who are playing the game.
      * @return the list of players who are playing the game.
      */
-    public List<Player> getPlayers() {
+    public HashMap<Integer, Player> getPlayers() {
         return players;
     }
 
@@ -92,7 +93,7 @@ public class GamePlay implements Serializable {
      * Setter function to set the list of players who are playing the game.
      * @param players The list of players who are playing the game.
      */
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(HashMap<Integer, Player> players) {
         this.players = players;
     }
 

@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -50,14 +51,14 @@ public class MapReader {
 
                     case "[continents]":
                         line = br.readLine();
-                        final List<Continent> continents = new ArrayList<>();
+                        final HashMap<String, Continent> continents = new HashMap<>();
 
                         while(!line.isEmpty() && !line.startsWith("[")) {
                             if(line.contains("=")) {
                                 final Continent continent = new Continent();
                                 continent.setNameOfContinent(line.split("=")[0].trim());
                                 continent.setArmyControlValue(Integer.parseInt(line.split("=")[1].trim()));
-                                continents.add(continent);
+                                continents.put(continent.getNameOfContinent(), continent);
                             }
                             line = br.readLine();
                         }
@@ -67,24 +68,22 @@ public class MapReader {
                     case "[territories]":
                     case "[countries]":
                         line = br.readLine();
-                        final List<Country> countries = new ArrayList<>();
+                        final HashMap<String, Country> countries = new HashMap<>();
 
                         while(line != null) {
                             final String[] elements = line.trim().split(",");
 
-                            final List<Country> adjacentCountries = new ArrayList<>();
+                            final List<String> adjacentCountries = new ArrayList<>();
                             for(int i = 4; i < elements.length; i++) {
-                                final Country country = new Country();
-                                country.setNameOfCountry(elements[i].trim());
-                                adjacentCountries.add(country);
+                                adjacentCountries.add(elements[i].trim());
                             }
 
                             final Country country = new Country();
                             country.setNameOfCountry(elements[0]);
-                            country.setBelongsToContinent(findContinentByName(elements[3].trim(), gamePlay.getContinents()));
+                            country.setBelongsToContinent(gamePlay.getContinents().get(elements[3].trim()));
                             country.setAdjacentCountries(adjacentCountries);
 
-                            countries.add(country);
+                            countries.put(country.getNameOfCountry(), country);
                             line = br.readLine();
 
                             while(line != null && line.isEmpty()) {
@@ -103,21 +102,6 @@ public class MapReader {
             e.printStackTrace();
         }
         return gamePlay;
-    }
-
-    /**
-     * This method finds the continent by name in given list of continents.
-     * @param continentName The name of the continent.
-     * @param continents List of continents.
-     * @return the continent object if found, otherwise return null.
-     */
-    public Continent findContinentByName(final String continentName, final List<Continent> continents) {
-        for(final Continent continent : continents) {
-            if(continent.getNameOfContinent().equalsIgnoreCase(continentName)) {
-                return continent;
-            }
-        }
-        return null;
     }
 
     /**
