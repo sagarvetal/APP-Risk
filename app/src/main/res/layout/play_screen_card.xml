@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        xmlns:card_view ="http://schemas.android.com/apk/res-auto"
+        card_view:cardUseCompatPadding="true"
+        card_view:cardElevation="10dp"
+        card_view:cardBackgroundColor="#FFFFFF"
+        android:id="@+id/play_screen_card_carview"
+        >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:nestedScrollingEnabled="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="Country Name"
+                android:textSize="30dp"
+                android:id="@+id/play_screen_card_country_name"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="No.of Armies"
+                android:textSize="20dp"
+                android:id="@+id/play_screen_card_armies"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continent Name"
+            android:textSize="20dp"
+            android:id="@+id/play_screen_card_continent"
+            />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/play_screen_card_neighbours"
+            android:fastScrollEnabled="true"
+
+            >
+        </ListView>
+
+</LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>
