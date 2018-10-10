@@ -9,19 +9,11 @@ import com.app.risk.R;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
-
-
-        startActivity(new Intent(MainActivity.this,MainScreen.class));
+        startActivity(new Intent(MainActivity.this,MainScreenActivity.class));
     }
-
-
-
-
 
 }
