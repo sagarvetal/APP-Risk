@@ -1,5 +1,6 @@
 package com.app.risk.utility;
 
+import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 
@@ -7,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 /**
  * Verify if the map created by the user is correct and follows all the rules and regulations
@@ -15,20 +15,23 @@ import java.util.Stack;
  * 2. Each continent is a connected sub-graph
  * 3. Each country belongs to one and only one continent
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class MapVerification {
 
+    private List<Continent> continentList = new ArrayList<>();
     private List<GameMap> gameMapList = new ArrayList<>();
     private HashMap<String, String> countryContinentMapping = new HashMap<>();
     private List<String> countriesVisited = new ArrayList<>();
 
     /**
      * Method called in controller which performs different checks to make sure map is verified
-     * @param gameMapList
+     * @param continentList, gameMapList
      * @return true if all checks are satisfied, false otherwise
      */
-    public boolean mapVerification(List<GameMap> gameMapList) {
+    public boolean mapVerification(List<Continent> continentList, List<GameMap> gameMapList) {
 
+        this.continentList = continentList;
         this.gameMapList = gameMapList;
 
         if (!checkCountryBelongsToOneContinent()) {
@@ -54,6 +57,7 @@ public class MapVerification {
      */
     private boolean checkMapIsConnectedGraph() {
 
+        countriesVisited = null;
         Set<String> allCountriesInMap = countryContinentMapping.keySet();
 
         DepthFirstTraversal(gameMapList.get(0));
@@ -67,7 +71,7 @@ public class MapVerification {
     }
 
     /**
-     * Method to perform DFS of the gamp map graph to determine if the graph is connected.
+     * Method to perform DFS.
      * @param gameMap
      */
     private void DepthFirstTraversal(GameMap gameMap) {
@@ -102,6 +106,10 @@ public class MapVerification {
      * @return true if each continent is a connected subgraph, false otherwise
      */
     private boolean checkContinentIsConnectedSubgraph() {
+
+        List<Country> countryList = new ArrayList<>();
+
+
 
         return true;
     }

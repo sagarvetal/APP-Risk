@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * GameMap class to store each node (country) of the game map graph
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class GameMap {
 

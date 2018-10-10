@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Create and write game map defined by user to text file
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class WriteGameMapToFile {
 

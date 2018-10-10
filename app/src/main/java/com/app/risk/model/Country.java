@@ -3,6 +3,7 @@ package com.app.risk.model;
 /**
  * Country model to save details of each country
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class Country {
 

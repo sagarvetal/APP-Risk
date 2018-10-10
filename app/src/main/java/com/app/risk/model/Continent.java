@@ -3,6 +3,7 @@ package com.app.risk.model;
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class Continent {
 

@@ -14,6 +14,7 @@ import java.util.List;
 /**
  * Read map from its text file representation to a class object to load the map
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class ReadGameMapFromFile {
 
