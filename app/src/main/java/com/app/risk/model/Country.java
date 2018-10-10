@@ -11,7 +11,7 @@ public class Country {
 
     String nameOfCountry;
     Continent belongsToContinent;
-    private List<Country> adjacentCountries;
+    private List<String> adjacentCountries;
     private Player player;
     private int noOfArmies;
 
@@ -59,7 +59,7 @@ public class Country {
      * Getter function to return the list of adjacent countries.
      * @return list of adjacent countries
      */
-    public List<Country> getAdjacentCountries() {
+    public List<String> getAdjacentCountries() {
         return adjacentCountries;
     }
 
@@ -67,7 +67,7 @@ public class Country {
      * Setter function to set the list of adjacent countries.
      * @param adjacentCountries The list of adjacent countries.
      */
-    public void setAdjacentCountries(List<Country> adjacentCountries) {
+    public void setAdjacentCountries(List<String> adjacentCountries) {
         this.adjacentCountries = adjacentCountries;
     }
 
