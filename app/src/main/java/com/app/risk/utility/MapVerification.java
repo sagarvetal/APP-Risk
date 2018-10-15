@@ -14,26 +14,30 @@ import java.util.Set;
  * 1. Map is a connected graph.
  * 2. Each continent is a connected sub-graph
  * 3. Each country belongs to one and only one continent
+ * 4. All countries are unique and no duplicate countries exist
  * @author Akshita Angara
  * @version 1.0.0
  */
 public class MapVerification {
 
-    private List<Continent> continentList = new ArrayList<>();
+    private List<Country> countryList = new ArrayList<>();
     private List<GameMap> gameMapList = new ArrayList<>();
     private HashMap<String, String> countryContinentMapping = new HashMap<>();
     private List<String> countriesVisited = new ArrayList<>();
 
     /**
      * Method called in controller which performs different checks to make sure map is verified
-     * @param continentList, gameMapList
+     * @param gameMapList
      * @return true if all checks are satisfied, false otherwise
      */
-    public boolean mapVerification(List<Continent> continentList, List<GameMap> gameMapList) {
+    public boolean mapVerification(List<GameMap> gameMapList) {
 
-        this.continentList = continentList;
         this.gameMapList = gameMapList;
 
+        if (!uniqueCountries()) {
+            System.out.println("Error: Duplicate countries exist.");
+            return false;
+        }
         if (!checkCountryBelongsToOneContinent()) {
             System.out.println("Error: Country belongs to multiple continents.");
             return false;
@@ -51,8 +55,7 @@ public class MapVerification {
     }
 
     /**
-     * Performs a check to make sure the entire map is a connected graph
-     * (implements DFS on the entire graph)
+     * Performs a check to make sure the entire map is a connected graph (implements DFS on the entire graph)
      * @return true if the map is connected, false otherwise
      */
     private boolean checkMapIsConnectedGraph() {
@@ -71,7 +74,7 @@ public class MapVerification {
     }
 
     /**
-     * Method to perform DFS.
+     * Method to perform DFS
      * @param gameMap
      */
     private void DepthFirstTraversal(GameMap gameMap) {
@@ -129,12 +132,30 @@ public class MapVerification {
 
                     System.out.println(countryContinentMapping.get(gameMap.getFromCountry().getNameOfCountry()) +
                             " belongs to more than one continent.");
-
                     return false;
                 }
             } else {
                 countryContinentMapping.put(gameMap.getFromCountry().getNameOfCountry(),
                         gameMap.getFromCountry().getBelongsToContinent().getNameOfContinent());
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Performs a check to make sure that all countries are unique and no country is duplicated.
+     * @return true if there are no duplicate countries, false otherwise
+     */
+    private boolean uniqueCountries() {
+
+        for (GameMap gameMap: gameMapList) {
+
+            if (!countryList.isEmpty() && countryList.contains(gameMap.getFromCountry())) {
+                System.out.println(gameMap.getFromCountry().getNameOfCountry() + " already exists.");
+                return false;
+            } else {
+                countryList.add(gameMap.getFromCountry());
             }
         }
 
