@@ -11,6 +11,12 @@ public class Country {
     private Continent belongsToContinent;
 
     /**
+     * Default constructor
+     */
+    public Country() {
+    }
+
+    /**
      * Constructor to create a new object with the given name and its continent.
      * @param nameOfCountry
      * @param belongsToContinent

@@ -19,15 +19,15 @@ import java.util.List;
 public class ReadGameMapFromFile {
 
     private String line;
-    private HashMap<String, Country> countryList = new HashMap<>();
+    private HashMap<String, GameMap> countryGameMapList = new HashMap<>();
     private List<Continent> continentList = new ArrayList<>();
-    private List<GameMap> gameMapList = new ArrayList<>();
+    private List<GameMap> finalGameMapList = new ArrayList<>();
 
     /**
      * Function to read from Conquest map file format to GameMap class object (loading a map)
      * @param fileName
      */
-    public void readGameMapFromFile (String fileName) {
+    public List<GameMap> readGameMapFromFile (String fileName) {
 
         try {
 
@@ -56,25 +56,25 @@ public class ReadGameMapFromFile {
                             break;
 
                         String[] words = line.split(",");
+                        GameMap gameMapForFinalList = new GameMap();
                         GameMap tempGameMap = new GameMap();
 
                         if (continentBelongsToContinentList(words[3])) {
                             Continent tempContinent = getContinentByName(words[3]);
                             if (tempContinent != null) {
 
-                                if(countryList.containsKey(words[0])) {
-                                    countryList.get(words[0]).setBelongsToContinent(tempContinent);
+                                if(!countryGameMapList.isEmpty() && countryGameMapList.containsKey(words[0])) {
+                                    countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
                                 } else {
-                                    countryList.put(words[0], new Country(words[0], tempContinent));
+                                    countryGameMapList.put(words[0], new GameMap(new Country(words[0], tempContinent)));
                                 }
 
-                                tempGameMap.setFromCountry(countryList.get(words[0]));
-                                tempGameMap.setCoordinateX(Integer.parseInt(words[1]));
-                                tempGameMap.setCoordinateY(Integer.parseInt(words[2]));
+                                gameMapForFinalList.setFromCountry(countryGameMapList.get(words[0]).getFromCountry());
+                                gameMapForFinalList.setCoordinateX(Integer.parseInt(words[1]));
+                                gameMapForFinalList.setCoordinateY(Integer.parseInt(words[2]));
+                                gameMapForFinalList.setConnectedToCountries(setAdjacentCountriesList(words));
 
-                                tempGameMap.setConnectedToCountries(setAdjacentCountriesList(words));
-
-                                gameMapList.add(tempGameMap);
+                                finalGameMapList.add(gameMapForFinalList);
 
                             } else {
                                 System.out.println("Error: Continent with name: " + words[3] +
@@ -92,7 +92,7 @@ public class ReadGameMapFromFile {
             e.printStackTrace();
         }
 
-        countryList = null;
+        return finalGameMapList;
     }
 
     /**
@@ -100,16 +100,16 @@ public class ReadGameMapFromFile {
      * @param words - array of names of connected countries
      * @return list of country objects to be set in the game map object
      */
-    private List<Country> setAdjacentCountriesList(String[] words) {
+    private ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
 
-        List<Country> returnCountryList = new ArrayList<>();
+        ArrayList<GameMap> returnCountryList = new ArrayList<>();
 
         for (int i=4; i<words.length; i++) {
-            if (countryList.containsKey(words[i])) {
-                returnCountryList.add(countryList.get(words[i]));
+            if (countryGameMapList.containsKey(words[i])) {
+                returnCountryList.add(countryGameMapList.get(words[i]));
             } else {
-                countryList.put(words[i], new Country(words[i]));
-                returnCountryList.add(countryList.get(words[i]));
+                countryGameMapList.put(words[i], new GameMap(new Country(words[i])));
+                returnCountryList.add(countryGameMapList.get(words[i]));
             }
         }
 
