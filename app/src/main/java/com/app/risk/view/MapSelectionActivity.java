@@ -2,6 +2,7 @@ package com.app.risk.view;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.app.risk.R;
+import com.app.risk.adapters.ViewPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -19,47 +21,45 @@ public class MapSelectionActivity extends AppCompatActivity {
 
     private ArrayList<String> list;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_selection);
 
-        setUpDisplay();
+        setUpViewPager();
+        //setUpDisplay();
     }
 
+    /*
+     * This method initialize the pagerview of the activity
+     */
 
+    public void setUpViewPager(){
+        ViewPager viewPager = findViewById(R.id.map_selection_viewpager);
 
-    public void setUpDisplay(){
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(),3);
 
-        final ListView listView = findViewById(R.id.map_selection_listview);
+        viewPager.setAdapter(adapter);
 
-        list = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            list.add("Map " + i);
-        }
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,list);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                Toast.makeText(MapSelectionActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
 
-                new AlertDialog.Builder(MapSelectionActivity.this)
-                        .setMessage("Load Map")
-                        .setNegativeButton("No",null)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(MapSelectionActivity.this, "" + list.get(position), Toast.LENGTH_SHORT).show();
+            @Override
+            public void onPageSelected(int position) {
 
-                                Intent intent = new Intent(MapSelectionActivity.this,PlayerSelectionActivity.class);
-                                intent.putExtra("MAP_INFO",list.get(position));
-                                startActivity(intent);
-                            }
-                        }).create().show();
+            }
 
-               }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
         });
     }
+
+
 
 }

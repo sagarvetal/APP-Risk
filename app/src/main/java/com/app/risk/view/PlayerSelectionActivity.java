@@ -34,12 +34,15 @@ public class PlayerSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_selection);
 
-
         setUpData();
         setUpNextButton();
         getMapInfo();
     }
 
+    /*
+    * This method gets the map information from the previous
+    * activity using an intent
+    */
     public void getMapInfo() {
         Intent intent = getIntent();
         mapInfo = intent.getStringExtra("MAP_INFO");
@@ -48,6 +51,11 @@ public class PlayerSelectionActivity extends AppCompatActivity {
     }
 
 
+    /*
+     * This method initialize the elements of the view
+     * such as listview, seekbar and no. of players on display
+     * activity using an intent
+     */
     public void setUpData()
     {
         listView = findViewById(R.id.player_selection_listview);
@@ -121,6 +129,11 @@ public class PlayerSelectionActivity extends AppCompatActivity {
             }
         });
     }
+
+    /*
+     * This method sets up the button which connects one activity to another
+     * activity using an intent
+     */
 
     public void setUpNextButton()
     {

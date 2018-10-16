@@ -21,12 +21,23 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
     private ArrayList<String> pList;
     private Context context;
+
+    /*
+     * The constructor of the class which sets the context and arraylist
+     * of for the adapter
+     * @param context: to be used to call any activity methods using reference
+     * @param pList: player list to be set up for recyclerview
+     */
     public PlayScreenRVAdapter(Context context,ArrayList<String> pList) {
         this.pList = pList;
         this.context = context;
     }
 
-
+    /*
+     *ViewHolder method inflates the view to be represented in recyclerview
+     *
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public PlayScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,16 +46,31 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         return adapter;
     }
 
+    /*
+     *BindViewHolder binds the data with the particular layout and
+     * displays on the recyclerview
+     *
+     * {@inheritDoc}
+     */
     @Override
     public void onBindViewHolder(@NonNull PlayScreenViewHolder holder, int position) {
         holder.countryName.setText(pList.get(position));
 
     }
 
+    /*
+     *Returns the number of items in recyclerview adapter
+     * {@inheritDoc}
+     */
     @Override
     public int getItemCount() {
         return pList.size();
     }
+
+    /*
+     *Inner class of recyclerview adapter which gets the reference to
+     * view holder and add functionality to the views
+     */
 
     public class PlayScreenViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -80,7 +106,9 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
         }
 
-
+        /*
+         * {@inheritDoc}
+         */
         @Override
         public void onClick(View v) {
 
