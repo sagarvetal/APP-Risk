@@ -6,6 +6,7 @@ import com.app.risk.model.GameMap;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +19,15 @@ public class WriteGameMapToFile {
     /**
      * Function to write the game map data to a text file in the given Conquest map file format.
      * @param fileName - user specified file name
-     * @param continentList - list of continents chosen by the user
      * @param gameMapList - list of continent and connected countries of each country chosen by the user
      */
-    public void writeGameMapToFile (String fileName, List<Continent> continentList, List<GameMap> gameMapList){
+    public void writeGameMapToFile (String fileName, List<GameMap> gameMapList){
+
+        List<Continent> continentList = new ArrayList<>();
+        for(GameMap gameMap: gameMapList){
+            if(!continentList.isEmpty() && !continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
+                continentList.add(gameMap.getFromCountry().getBelongsToContinent());
+        }
 
         try {
 
