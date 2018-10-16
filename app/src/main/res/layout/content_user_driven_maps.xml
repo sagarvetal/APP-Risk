@@ -22,10 +22,10 @@
         android:text="@string/add_country"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addCustomValue"
-        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintHorizontal_bias="0.184"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintVertical_bias="0.959" />
 
     <Spinner
         android:id="@+id/country"
@@ -37,6 +37,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:hint="@string/country"
         app:layout_constraintBottom_toTopOf="@+id/addCountry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.04"
@@ -53,6 +54,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:hint="@string/continent"
         app:layout_constraintBottom_toTopOf="@+id/country"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
@@ -62,15 +64,17 @@
     <EditText
         android:id="@+id/continentValue"
         android:layout_width="216dp"
-        android:layout_height="28dp"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:focusableInTouchMode="true"
         android:ems="10"
-        android:inputType="number"
+        android:hint="@string/continentvalue"
+        android:inputType="phone"
         app:layout_constraintBottom_toTopOf="@+id/addCountry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.05"
@@ -91,10 +95,10 @@
         android:text="Connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.944"
+        app:layout_constraintHorizontal_bias="0.745"
         app:layout_constraintStart_toEndOf="@+id/addCustomValue"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+        app:layout_constraintVertical_bias="0.959" />
 
     <Button
         android:id="@+id/addCustomValue"
@@ -109,15 +113,15 @@
         android:text="Custom Value"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.88" />
+        app:layout_constraintVertical_bias="0.959" />
 
     <ListView
         android:id="@+id/selectedCountries"
         android:layout_width="218dp"
-        android:layout_height="104dp"
+        android:layout_height="160dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
