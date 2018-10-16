@@ -103,4 +103,12 @@ public class Country {
         this.noOfArmies = noOfArmies;
     }
 
+    /**
+     * This function is to increment no of armies by given count.
+     * @param count The increment count by which the no of armies to be incremented.
+     */
+    public void incrementArmies(final int count) {
+        this.noOfArmies += count;
+    }
+
 }
