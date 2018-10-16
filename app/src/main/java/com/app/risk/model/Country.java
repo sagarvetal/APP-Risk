@@ -18,8 +18,8 @@ public class Country {
 
     /**
      * Constructor to create a new object with the given name and its continent.
-     * @param nameOfCountry
-     * @param belongsToContinent
+     * @param nameOfCountry Name of the country
+     * @param belongsToContinent Continent object to which the country belongs
      */
     public Country(String nameOfCountry, Continent belongsToContinent) {
         this.nameOfCountry = nameOfCountry;
@@ -28,7 +28,7 @@ public class Country {
 
     /**
      * Constructor to create a new object with a given name.
-     * @param nameOfCountry
+     * @param nameOfCountry Name of the country
      */
     public Country(String nameOfCountry) {
         this.nameOfCountry = nameOfCountry;
@@ -44,7 +44,7 @@ public class Country {
 
     /**
      * Setter function to set name of country
-     * @param nameOfCountry
+     * @param nameOfCountry Name of the country
      */
     public void setNameOfCountry(String nameOfCountry) {
         this.nameOfCountry = nameOfCountry;
@@ -60,7 +60,7 @@ public class Country {
 
     /**
      * Setter function to set details of the continent to which the country belongs
-     * @param belongsToContinent
+     * @param belongsToContinent Continent object to which the country belongs
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
         this.belongsToContinent = belongsToContinent;

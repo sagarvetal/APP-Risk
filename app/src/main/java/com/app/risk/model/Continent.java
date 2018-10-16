@@ -12,8 +12,8 @@ public class Continent {
 
     /**
      * Constructor to create a new object with the given name and army control value
-     * @param nameOfContinent
-     * @param armyControlValue
+     * @param nameOfContinent Name of the continent
+     * @param armyControlValue Army control value given when a country is acquired
      */
     public Continent(String nameOfContinent, int armyControlValue) {
         this.nameOfContinent = nameOfContinent;
@@ -30,7 +30,7 @@ public class Continent {
 
     /**
      * Setter function to set the name of continent
-     * @param nameOfContinent
+     * @param nameOfContinent Name of the continent
      */
     public void setNameOfContinent(String nameOfContinent) {
         this.nameOfContinent = nameOfContinent;
@@ -48,7 +48,7 @@ public class Continent {
     /**
      * Setter function to set the control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
-     * @param armyControlValue
+     * @param armyControlValue Army control value given when a country is acquired
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
