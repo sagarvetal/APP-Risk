@@ -13,8 +13,7 @@ import java.util.Set;
  * This class is used to randomly allocate initial armies to player and
  * number of countries to players.
  * @author Sagar Vetal
- * @date 07/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 07/10/2018)
  */
 public class StartupPhaseController {
 
