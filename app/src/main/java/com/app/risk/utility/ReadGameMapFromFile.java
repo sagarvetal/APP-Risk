@@ -57,7 +57,6 @@ public class ReadGameMapFromFile {
 
                         String[] words = line.split(",");
                         GameMap gameMapForFinalList = new GameMap();
-                        GameMap tempGameMap = new GameMap();
 
                         if (continentBelongsToContinentList(words[3])) {
                             Continent tempContinent = getContinentByName(words[3]);
