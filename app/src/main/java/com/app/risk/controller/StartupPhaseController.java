@@ -29,25 +29,17 @@ public class StartupPhaseController {
         Collections.sort(playerIds);
         Collections.shuffle(countryNames);
 
-        final int countriesPerPlayer = gamePlay.getCountries().size() / gamePlay.getPlayers().size();
         int countryIndex = 0;
-
-        for(final Integer playerId : playerIds) {
-            for(int i = 0; i < countriesPerPlayer; i++) {
+        while(countryIndex != countryNames.size()){
+            for(final Integer playerId : playerIds) {
                 final String countryName = countryNames.get(countryIndex);
                 gamePlay.getCountries().get(countryName).setPlayer(gamePlay.getPlayers().get(playerId));
+                gamePlay.getPlayers().get(playerId).incrementCountries(1);
                 ++countryIndex;
-            }
-            gamePlay.getPlayers().get(playerId).setNoOfCountries(countriesPerPlayer);
-        }
 
-        final int remainingCountries = gamePlay.getCountries().size() % gamePlay.getPlayers().size();
-        if(remainingCountries != 0){
-            for(int i = 0; i < remainingCountries; i++) {
-                final String countryName = countryNames.get(countryIndex);
-                gamePlay.getCountries().get(countryName).setPlayer(gamePlay.getPlayers().get(playerIds.get(i)));
-                gamePlay.getPlayers().get(playerIds.get(i)).incrementCountries(1);
-                ++countryIndex;
+                if(countryIndex == countryNames.size()){
+                    break;
+                }
             }
         }
     }
