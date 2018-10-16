@@ -7,7 +7,6 @@ import com.app.risk.model.GameMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -24,9 +23,8 @@ public class MapVerification {
     private List<GameMap> gameMapList = new ArrayList<>();
     private HashMap<Object, Object> mappingForVerification = new HashMap<>();
     private Stack<GameMap> depthFirstTraversalStack = new Stack<>();
-
-    private HashMap<Continent, List<Country>> continentCountryMapping = new HashMap<>();
     private List<String> countriesVisited = new ArrayList<>();
+    private HashMap<Continent, List<GameMap>> continentCountryMapping = new HashMap<>();
 
     /**
      * Method called in controller which performs different checks to make sure map is verified
@@ -106,9 +104,10 @@ public class MapVerification {
     private boolean checkMapIsConnectedGraph() {
 
         countriesVisited = null;
+        depthFirstTraversalStack = null;
         depthFirstTraversalStack.push(gameMapList.get(0));
 
-        DepthFirstTraversal();
+        DepthFirstTraversal(gameMapList);
 
         for(GameMap gameMap: gameMapList) {
             if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
@@ -125,6 +124,22 @@ public class MapVerification {
      */
     private boolean checkContinentIsConnectedSubgraph() {
 
+        continentCountryMapping = null;
+        generateContinentCountryMapping();
+
+        for(Continent continent: continentCountryMapping.keySet()) {
+
+            countriesVisited = null;
+            depthFirstTraversalStack = null;
+            List<GameMap> traversableCountries = continentCountryMapping.get(continent);
+            depthFirstTraversalStack.push(traversableCountries.get(0));
+            DepthFirstTraversal(traversableCountries);
+
+            for(GameMap gameMap: traversableCountries) {
+                if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
+                    return false;
+            }
+        }
 
         return true;
     }
@@ -132,7 +147,7 @@ public class MapVerification {
     /**
      * Method to perform DFS
      */
-    private void DepthFirstTraversal() {
+    private void DepthFirstTraversal(List<GameMap> traversableCountries) {
 
         while (!depthFirstTraversalStack.empty()){
 
@@ -144,7 +159,8 @@ public class MapVerification {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
 
                 for (GameMap neighbourCountry: countryVisited.getConnectedToCountries()){
-                    if(!countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())){
+                    if(traversableCountries.contains(neighbourCountry)
+                            && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())){
                         depthFirstTraversalStack.push(neighbourCountry);
                     }
                 }
@@ -158,12 +174,12 @@ public class MapVerification {
     private void generateContinentCountryMapping() {
 
         for (GameMap gameMap: gameMapList) {
-            if (continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
+            if (!continentCountryMapping.isEmpty() && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
                 continentCountryMapping.get(gameMap.getFromCountry().getBelongsToContinent())
-                        .add(gameMap.getFromCountry());
+                        .add(gameMap);
             } else {
-                List<Country> country = new ArrayList<>();
-                country.add(gameMap.getFromCountry());
+                List<GameMap> country = new ArrayList<>();
+                country.add(gameMap);
                 continentCountryMapping.put(gameMap.getFromCountry().getBelongsToContinent(), country);
             }
         }
