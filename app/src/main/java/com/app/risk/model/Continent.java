@@ -1,5 +1,7 @@
 package com.app.risk.model;
 
+import android.graphics.Color;
+
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara

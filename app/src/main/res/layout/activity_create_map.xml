@@ -8,11 +8,27 @@
 
     <include layout="@layout/content_create_map" />
 
-    <ListView
-        android:id="@+id/lvCountry"
-        android:layout_width="200dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:headerDividersEnabled="false"></ListView>
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/lvCountry"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:headerDividersEnabled="false"></ListView>
+        <SurfaceView
+            android:id="@+id/surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingRight="100dp"
+            />
+
+    </LinearLayout>
+
+
 
 
 </android.support.design.widget.CoordinatorLayout>
