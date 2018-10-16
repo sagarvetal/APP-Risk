@@ -4,8 +4,7 @@ package com.app.risk.constants;
  * This class contains all file constant values
  * Like name and path of log files and map files, etc.
  * @author Sagar Vetal
- * @date 06/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 06/10/2018)
  */
 public class FileConstants {
 

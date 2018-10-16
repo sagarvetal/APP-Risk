@@ -10,8 +10,7 @@ import java.util.List;
  * like list of continents and countries retrieved from map,
  * list of players and available cards, etc.
  * @author Sagar Vetal
- * @date 05/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 05/10/2018)
  */
 public class GamePlay implements Serializable {
 

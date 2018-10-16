@@ -17,8 +17,7 @@ import java.util.List;
 /**
  * This class is used to read the map to be used for game play.
  * @author Sagar Vetal
- * @date 05/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 05/10/2018)
  */
 public class MapReader {
 

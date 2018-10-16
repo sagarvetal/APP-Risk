@@ -15,8 +15,7 @@ import java.io.IOException;
 /**
  * This class logs the all activities done during game play.
  * @author Sagar Vetal
- * @date 06/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 06/10/2018)
  */
 public class ActivityLogger {
 

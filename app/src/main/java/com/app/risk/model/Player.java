@@ -9,8 +9,7 @@ import java.util.List;
  * Player model to capture player details
  * like name, assigned countries and armies, and cards earned
  * @author Sagar Vetal
- * @date 04/10/2018
- * @version 1.0.0
+ * @version 1.0.0 (Date: 04/10/2018)
  */
 public class Player implements Serializable {
 
