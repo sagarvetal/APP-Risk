@@ -1,7 +1,6 @@
 package com.app.risk.utility;
 
 import com.app.risk.model.Continent;
-import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ public class MapVerification {
     private HashMap<Continent, List<GameMap>> continentCountryMapping = new HashMap<>();
 
     /**
-     * Method called in controller which performs different checks to make sure map is verified
-     * @param gameMapList
+     * Method called in controller which performs different checks to make sure map is valid
+     * @param gameMapList List of GameMap objects forming the map to be verified
      * @return true if all checks are satisfied, false otherwise
      */
     public boolean mapVerification(List<GameMap> gameMapList) {
@@ -136,8 +135,10 @@ public class MapVerification {
             DepthFirstTraversal(traversableCountries);
 
             for(GameMap gameMap: traversableCountries) {
-                if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
+                if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry())) {
+                    System.out.println(continent.getNameOfContinent() + " is not a connected subgraph.");
                     return false;
+                }
             }
         }
 
@@ -145,7 +146,8 @@ public class MapVerification {
     }
 
     /**
-     * Method to perform DFS
+     * Method to perform DFS on the list of countries that belong to the entire map or to a continent
+     * @param traversableCountries Countries that belong to either the entire map (forming a map) or a continent (forming a subgraph)
      */
     private void DepthFirstTraversal(List<GameMap> traversableCountries) {
 
