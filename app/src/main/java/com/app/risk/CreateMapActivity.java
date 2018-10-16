@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.app.risk;
 
 import android.annotation.SuppressLint;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
+import com.app.risk.model.GameMap;
 import com.app.risk.view.MapObjectsView;
 
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public class CreateMapActivity extends Activity {
 
     private ListView lvCountry;
     ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
-    ArrayList<CountryRepresentation> arrCountriesRepresentationOnGraph = new ArrayList<CountryRepresentation>();
+    ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
     ArrayList<Integer> arrCountryAdded = new ArrayList<>();
     int indexOfToButton = -1;
     int indexOfFromButton = -1;
@@ -49,7 +53,6 @@ public class CreateMapActivity extends Activity {
     Canvas canvas;
 
     int currentIndexCountrySelected;
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -116,14 +119,12 @@ public class CreateMapActivity extends Activity {
                 if (!arrCountryAdded.contains(position)){
                     Item item = (Item)adapter.getItem(position);
                     if (item instanceof EntryItem){
-                        CountryRepresentation countryRepresentation = new CountryRepresentation();
-                        countryRepresentation.continent = ((EntryItem) item).country.getBelongsToContinent();
-                        countryRepresentation.arrConnectedCountries = new ArrayList<>();
-                        countryRepresentation.continentColor = ((EntryItem) item).color;
-                        countryRepresentation.currentCountry = ((EntryItem) item).country;
-                        countryRepresentation.index = position;
+                        GameMap map = new GameMap();
+                        map.setContinentColor(((EntryItem) item).color);
+                        map.setFromCountry(((EntryItem) item).country);
+                        map.setIndexOfCountryInList(position);
                         currentIndexCountrySelected = position;
-                        arrCountriesRepresentationOnGraph.add(countryRepresentation);
+                        arrCountriesRepresentationOnGraph.add(map);
                         arrCountryAdded.add(position);
                         lvCountry.invalidateViews();
                     }
@@ -135,30 +136,36 @@ public class CreateMapActivity extends Activity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN){
                     if (totalCountriesAddedInGraph < totalCountries){
-                        CountryRepresentation cr = arrCountriesRepresentationOnGraph.get(findIndexOfObject(currentIndexCountrySelected));
-                        cr.xPosition = event.getX();
-                        cr.yPosition = event.getY();
-                        arrCountriesRepresentationOnGraph.add(currentIndexCountrySelected,cr);
+                        GameMap map = arrCountriesRepresentationOnGraph.get(findIndexOfObject(currentIndexCountrySelected));
+                        map.setCoordinateX(event.getX());
+                        map.setCoordinateY(event.getY());
+                        arrCountriesRepresentationOnGraph.add(currentIndexCountrySelected,map);
                         renderMap();
                     }else{
-                        for (CountryRepresentation cr : arrCountriesRepresentationOnGraph){
-                            if ((isPointInCircle(event.getX(),event.getY(),cr.xPosition,cr.yPosition))){
+                        for (GameMap map : arrCountriesRepresentationOnGraph){
+                            if ((isPointInCircle(event.getX(),event.getY(),map.getCoordinateX(),map.getCoordinateY()))){
                                 if(indexOfToButton == -1){
-                                    indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(cr);
+                                    indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(map);
                                     renderMap();
-
                                     break;
                                 }else{
-                                    indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(cr);
-                                    CountryRepresentation toCountry = arrCountriesRepresentationOnGraph.get(indexOfToButton);
-                                    CountryRepresentation fromCountry = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
-                                    fromCountry.arrConnectedCountries.add(toCountry);
-//                                    toCountry.arrConnectedCountries.add(fromCountry);
-//                                    arrCountriesRepresentationOnGraph.add(indexOfToButton,toCountry);
-                                    arrCountriesRepresentationOnGraph.add(indexOfFromButton,fromCountry);
-                                    renderMap();
-                                    indexOfToButton = -1;
-                                    break;
+                                    indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(map);
+                                    GameMap toCountryMap = arrCountriesRepresentationOnGraph.get(indexOfToButton);
+                                    GameMap fromCountryMap = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
+                                    if ((fromCountryMap.getConnectedToCountries().contains(toCountryMap) || toCountryMap.getConnectedToCountries().contains(fromCountryMap)) == false) {
+                                        ArrayList<GameMap> arrConnectedFromCountry = fromCountryMap.getConnectedToCountries();
+                                        ArrayList<GameMap> arrConnectedToCountry = toCountryMap.getConnectedToCountries();
+                                        arrConnectedFromCountry.add(toCountryMap);
+                                        arrConnectedToCountry.add(fromCountryMap);
+                                        toCountryMap.setConnectedToCountries(arrConnectedToCountry);
+                                        fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
+                                        arrCountriesRepresentationOnGraph.add(indexOfToButton,toCountryMap);
+                                        arrCountriesRepresentationOnGraph.add(indexOfFromButton,fromCountryMap);
+                                        renderMap();
+                                        indexOfToButton = -1;
+                                        break;
+                                    }
+
                                 }
                             }
                         }
@@ -169,15 +176,28 @@ public class CreateMapActivity extends Activity {
         });
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public int findIndexOfObject(int index){
-        for (CountryRepresentation cr: arrCountriesRepresentationOnGraph){
-            if (cr.index == index){
-                return arrCountriesRepresentationOnGraph.indexOf(cr);
+        for (GameMap map: arrCountriesRepresentationOnGraph){
+            if (map.getIndexOfCountryInList() == index){
+                return arrCountriesRepresentationOnGraph.indexOf(map);
             }
         }
         return -1;
     }
 
+    /**
+     *
+     * @param xTouched
+     * @param yTouched
+     * @param xCountry
+     * @param yCountry
+     * @return
+     */
     public boolean isPointInCircle(float xTouched,float yTouched,float xCountry,float yCountry){
         double centerX = xCountry + RADIUS;
         double centerY = yCountry + RADIUS;
@@ -186,7 +206,6 @@ public class CreateMapActivity extends Activity {
         return (distanceX * distanceX) + (distanceY * distanceY) <= RADIUS * RADIUS;
     }
 
-
     public void renderMap(){
         Paint connectionLine = new Paint();
         connectionLine.setColor(Color.BLACK);
@@ -194,12 +213,12 @@ public class CreateMapActivity extends Activity {
         canvas = surfaceView.getHolder().lockCanvas();
 
 
-        for (CountryRepresentation countryRepresentation : arrCountriesRepresentationOnGraph ){
+        for (GameMap map : arrCountriesRepresentationOnGraph ){
             Paint paint = new Paint();
-            paint.setColor(countryRepresentation.continentColor);
-            canvas.drawCircle(countryRepresentation.xPosition,countryRepresentation.yPosition,RADIUS,paint);
-            for (CountryRepresentation nieghbourCountry : countryRepresentation.getArrConnectedCountries()){
-                canvas.drawLine(countryRepresentation.xPosition,countryRepresentation.yPosition,nieghbourCountry.xPosition,nieghbourCountry.yPosition,connectionLine);
+            paint.setColor(map.getContinentColor());
+            canvas.drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
+            for (GameMap nieghbourCountry : map.getConnectedToCountries()  ){
+                canvas.drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
             }
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
@@ -207,11 +226,19 @@ public class CreateMapActivity extends Activity {
         currentIndexCountrySelected = -1;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public int getColors(int index){
         String[] allColors = this.getResources().getStringArray(R.array.colors);
         return Color.parseColor(allColors[index]);
     }
 
+    /**
+     *
+     */
     public interface Item {
         public boolean isSection();
         public String getTitle();
@@ -294,98 +321,5 @@ public class CreateMapActivity extends Activity {
         }
     }
 
-    public  void prepareLine(){
-        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
-                .findViewById(android.R.id.content)).getChildAt(0);
-        int indexToButton = findIndexOfObject(indexOfToButton);
-        int indexFromButton = findIndexOfObject(indexOfFromButton);
-        CountryRepresentation toCountry = arrCountriesRepresentationOnGraph.get(indexToButton);
-        CountryRepresentation fromCountry = arrCountriesRepresentationOnGraph.get(indexFromButton);
-        Button toButton = (Button)findViewById(toCountry.index);
-        int[] loc1 = new int[2];
-        toButton.getLocationInWindow(loc1);//loc1[0] is x and loc1[1] is y
-        //for more information about this method, in Android Studio, just right-click -> Go To -> Declaration
-        Button fromButton = (Button)findViewById(fromCountry.index);
-        int[] loc2 = new int[2];
-        fromButton.getLocationInWindow(loc2);
-
-        View v = new View(getApplication());
-        v.setLayoutParams(new ViewGroup.LayoutParams(loc2[0]-loc1[0]-toButton.getWidth(),dpToPx(2)));   //dpToPx(20 + 20), dpToPx(2)));
-        v.setBackgroundColor(Color.parseColor("#B3B3B3"));
-        viewGroup.addView(v);
-        v.setTranslationY(-dpToPx(30+20+20)-dpToPx(20+30/2));
-        v.setTranslationX(dpToPx(20+30));
-    }
-
-    private int dpToPx(int dp) {
-        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
-    }
-
-
-    public class CountryRepresentation {
-        Continent continent;
-        Country currentCountry;
-        int index;
-        int continentColor;
-        float xPosition;
-        float yPosition;
-        ArrayList<CountryRepresentation> arrConnectedCountries;
-
-        public void setContinent(Continent continent) {
-            this.continent = continent;
-        }
-
-        public void setContinentColor(int continentColor) {
-            this.continentColor = continentColor;
-        }
-
-        public void setCountry(Country country) {
-            this.currentCountry = country;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-
-        public Continent getContinent(){
-            return continent;
-        }
-
-        public void setxPosition(int xPosition) {
-            this.xPosition = xPosition;
-        }
-
-        public void setyPosition(int yPosition) {
-            this.yPosition = yPosition;
-        }
-
-        public void setArrConnectedCountries(ArrayList<CountryRepresentation> arrConnectedCountries) {
-            this.arrConnectedCountries = arrConnectedCountries;
-        }
-
-        public ArrayList<CountryRepresentation> getArrConnectedCountries() {
-            return arrConnectedCountries;
-        }
-
-        public Country getCountry(){
-            return currentCountry;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public int getContinentColor() {
-            return continentColor;
-        }
-
-        public float getxPosition() {
-            return xPosition;
-        }
-
-        public float getyPosition() {
-            return yPosition;
-        }
-    }
 
 }
