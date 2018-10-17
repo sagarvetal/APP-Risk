@@ -13,14 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.R;
+import com.app.risk.model.Country;
+import com.app.risk.model.GamePlay;
 
 import java.util.ArrayList;
 
 public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapter.PlayScreenViewHolder> {
 
 
-    private ArrayList<String> pList;
+    private GamePlay gamePlay;
+    private ArrayList<Country> countries;
     private Context context;
+    private ArrayList<String> neighbouringCountries;
 
     /*
      * The constructor of the class which sets the context and arraylist
@@ -28,9 +32,11 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      * @param context: to be used to call any activity methods using reference
      * @param pList: player list to be set up for recyclerview
      */
-    public PlayScreenRVAdapter(Context context,ArrayList<String> pList) {
-        this.pList = pList;
+    public PlayScreenRVAdapter(Context context, GamePlay gamePlay, ArrayList<Country> countries) {
         this.context = context;
+        this.gamePlay = gamePlay;
+        this.countries = countries;
+        this.neighbouringCountries = new ArrayList<>();
     }
 
     /*
@@ -54,8 +60,18 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      */
     @Override
     public void onBindViewHolder(@NonNull PlayScreenViewHolder holder, int position) {
-        holder.countryName.setText(pList.get(position));
+        holder.countryName.setText(countries.get(position).getNameOfCountry());
+        holder.continentName.setText(countries.get(position).getBelongsToContinent().getNameOfContinent());
+        holder.armies.setText(""+countries.get(position).getNoOfArmies());
 
+        neighbouringCountries = gamePlay.getCountries().get(countries.get(position).getNameOfCountry()).getAdjacentCountries();
+        ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, neighbouringCountries);
+        holder.adjacentCountries.setAdapter(adapter);
+
+        ViewGroup.LayoutParams layoutParams = holder.adjacentCountries.getLayoutParams();
+        layoutParams.height = neighbouringCountries.size() * 173;
+        holder.adjacentCountries.setLayoutParams(layoutParams);
+        holder.adjacentCountries.requestLayout();
     }
 
     /*
@@ -64,46 +80,31 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      */
     @Override
     public int getItemCount() {
-        return pList.size();
+        return countries.size();
     }
 
     /*
      *Inner class of recyclerview adapter which gets the reference to
      * view holder and add functionality to the views
      */
-
     public class PlayScreenViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private CardView cardView;
-        private TextView countryName,armies,continent;
+        private TextView countryName,armies, continentName;
         private ListView adjacentCountries;
         private View view;
 
-        public PlayScreenViewHolder(View itemView) {
+        public PlayScreenViewHolder(final View itemView) {
             super(itemView);
             view = itemView;
 
             cardView = itemView.findViewById(R.id.play_screen_card_carview);
             countryName = itemView.findViewById(R.id.play_screen_card_country_name);
             armies = itemView.findViewById(R.id.play_screen_card_armies);
-            continent = itemView.findViewById(R.id.play_screen_card_continent);
+            continentName = itemView.findViewById(R.id.play_screen_card_continent);
             adjacentCountries = itemView.findViewById(R.id.play_screen_card_neighbours);
 
-            ArrayList<String> arrayList = new ArrayList<>();
-            for(int i=1;i<6;i++){
-                arrayList.add("neighbour "+ i);
-            }
-
-            ArrayAdapter adapter = new ArrayAdapter(context,android.R.layout.simple_list_item_1,arrayList);
-            adjacentCountries.setAdapter(adapter);
             cardView.setOnClickListener(this);
-
-
-            ViewGroup.LayoutParams layoutParams = adjacentCountries.getLayoutParams();
-            layoutParams.height = arrayList.size() * 173;
-            adjacentCountries.setLayoutParams(layoutParams);
-            adjacentCountries.requestLayout();
-
         }
 
         /*
@@ -111,9 +112,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
          */
         @Override
         public void onClick(View v) {
-
             if(v == cardView){
-                Toast.makeText(context, "" + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "" + getAdapterPosition()+"=>"+neighbouringCountries.size(), Toast.LENGTH_SHORT).show();
             }
         }
     }
