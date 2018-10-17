@@ -56,18 +56,19 @@ public class ReadGameMapFromFile {
                             break;
 
                         String[] words = line.split(",");
-                        GameMap gameMapForFinalList = new GameMap();
+                        //GameMap gameMapForFinalList = new GameMap();
 
                         if (continentBelongsToContinentList(words[3])) {
                             Continent tempContinent = getContinentByName(words[3]);
                             if (tempContinent != null) {
 
-                                if(!countryGameMapList.isEmpty() && countryGameMapList.containsKey(words[0])) {
+                                if(countryGameMapList!=null && countryGameMapList.containsKey(words[0])) {
                                     countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
                                 } else {
                                     countryGameMapList.put(words[0], new GameMap(new Country(words[0], tempContinent)));
                                 }
 
+                                GameMap gameMapForFinalList = countryGameMapList.get(words[0]);
                                 gameMapForFinalList.setFromCountry(countryGameMapList.get(words[0]).getFromCountry());
                                 gameMapForFinalList.setCoordinateX(Integer.parseInt(words[1]));
                                 gameMapForFinalList.setCoordinateY(Integer.parseInt(words[2]));

@@ -25,7 +25,9 @@ public class WriteGameMapToFile {
 
         List<Continent> continentList = new ArrayList<>();
         for(GameMap gameMap: gameMapList){
-            if(!continentList.isEmpty() && !continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
+            if(!continentList.isEmpty() && continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
+                continue;
+            else
                 continentList.add(gameMap.getFromCountry().getBelongsToContinent());
         }
 
