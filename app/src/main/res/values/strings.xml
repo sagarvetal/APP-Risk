@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Risk</string>
+    <string name="title_activity_create_map">CreateMapActivity</string>
 </resources>

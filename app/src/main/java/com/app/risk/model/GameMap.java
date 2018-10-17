@@ -1,6 +1,7 @@
 package com.app.risk.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GameMap class to store each node (country) of the game map graph
@@ -16,33 +17,6 @@ public class GameMap {
     private int indexOfCountryInList;
     private int continentColor;
 
-    /**
-     * Default constructor
-     */
-    public GameMap() {
-    }
-
-    /**
-     * Constructor to create a GameMap object with the given country, its coordinates and its list of connected countries
-     * @param fromCountry From country
-     * @param coordinateX X-coordinate in the location of the country on map
-     * @param coordinateY Y-coordinate in the location of the country on map
-     * @param connectedToCountries List of GameMap objects of the countries that the fromCountry is connected to
-     */
-    public GameMap(Country fromCountry, float coordinateX, float coordinateY, ArrayList<GameMap> connectedToCountries) {
-        this.fromCountry = fromCountry;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
-        this.connectedToCountries = connectedToCountries;
-    }
-
-    /**
-     * Constructor to create a GameMap object with the given fromCountry
-     * @param fromCountry From country
-     */
-    public GameMap(Country fromCountry) {
-        this.fromCountry = fromCountry;
-    }
 
     public int getIndexOfCountryInList(){
         return indexOfCountryInList;
@@ -51,6 +25,7 @@ public class GameMap {
     public int getContinentColor(){
         return continentColor;
     }
+
 
     public void setContinentColor(int continentColor) {
         this.continentColor = continentColor;
@@ -71,7 +46,7 @@ public class GameMap {
 
     /**
      * Setter function to set the from country
-     * @param fromCountry From country
+     * @param fromCountry
      */
     public void setFromCountry(Country fromCountry) {
 
@@ -80,7 +55,7 @@ public class GameMap {
 
     /**
      * Getter function to return list of all the countries that the from country is connected to (adjacency list)
-     * @return List of GameMap objects of the countries that the fromCountry is connected to
+     * @return list of all connected countries
      */
     public ArrayList<GameMap> getConnectedToCountries() {
 
@@ -96,14 +71,13 @@ public class GameMap {
         String returnString = "";
         for(GameMap map: connectedToCountries) {
             returnString += map.fromCountry.getNameOfCountry() + ",";
-
         }
         return returnString;
     }
 
     /**
      * Setter function to set the list of all countries that the from country is connected to (adjacency list)
-     * @param connectedToCountries List of GameMap objects of the countries that the fromCountry is connected to
+     * @param connectedToCountries
      */
     public void setConnectedToCountries(ArrayList<GameMap> connectedToCountries) {
 
@@ -112,7 +86,7 @@ public class GameMap {
 
     /**
      * Getter function to return the x-coordinate of the position of the from country
-     * @return X-coordinate in the location of the country on map
+     * @return x-coordinate
      */
     public float getCoordinateX() {
 
@@ -121,7 +95,7 @@ public class GameMap {
 
     /**
      * Setter function to set the x-coordinate of the position of the from country
-     * @param coordinateX X-coordinate in the location of the country on map
+     * @param coordinateX
      */
     public void setCoordinateX(float coordinateX) {
 
@@ -130,7 +104,7 @@ public class GameMap {
 
     /**
      * Getter function to return the y-coordinate of the position of the from country
-     * @return Y-coordinate in the location of the country on map
+     * @return y-coordinate
      */
     public float getCoordinateY() {
 
@@ -139,11 +113,10 @@ public class GameMap {
 
     /**
      * Setter function to set the y-coordinate of the position of the from country
-     * @param coordinateY Y-coordinate in the location of the country on map
+     * @param coordinateY
      */
     public void setCoordinateY(float coordinateY) {
 
         this.coordinateY = coordinateY;
     }
 }
-

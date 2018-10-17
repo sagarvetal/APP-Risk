@@ -1,5 +1,7 @@
 package com.app.risk.model;
 
+import android.graphics.Color;
+
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
@@ -7,18 +9,8 @@ package com.app.risk.model;
  */
 public class Continent {
 
-    private String nameOfContinent;
-    private int armyControlValue;
-
-    /**
-     * Constructor to create a new object with the given name and army control value
-     * @param nameOfContinent Name of the continent
-     * @param armyControlValue Army control value given when a country is acquired
-     */
-    public Continent(String nameOfContinent, int armyControlValue) {
-        this.nameOfContinent = nameOfContinent;
-        this.armyControlValue = armyControlValue;
-    }
+    String nameOfContinent;
+    int armyControlValue;
 
     /**
      * Getter function to return the name of continent
