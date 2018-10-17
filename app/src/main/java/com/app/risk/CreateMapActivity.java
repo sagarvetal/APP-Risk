@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -137,7 +138,7 @@ public class CreateMapActivity extends Activity {
                         GameMap map = arrCountriesRepresentationOnGraph.get(findIndexOfObject(currentIndexCountrySelected));
                         map.setCoordinateX(event.getX());
                         map.setCoordinateY(event.getY());
-                        arrCountriesRepresentationOnGraph.add(currentIndexCountrySelected,map);
+                        arrCountriesRepresentationOnGraph.set(findIndexOfObject(currentIndexCountrySelected),map);
                         renderMap();
                     }else{
                         for (GameMap map : arrCountriesRepresentationOnGraph){
@@ -157,8 +158,8 @@ public class CreateMapActivity extends Activity {
                                         arrConnectedToCountry.add(fromCountryMap);
                                         toCountryMap.setConnectedToCountries(arrConnectedToCountry);
                                         fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
-                                        arrCountriesRepresentationOnGraph.add(indexOfToButton,toCountryMap);
-                                        arrCountriesRepresentationOnGraph.add(indexOfFromButton,fromCountryMap);
+                                        arrCountriesRepresentationOnGraph.set(indexOfToButton,toCountryMap);
+                                        arrCountriesRepresentationOnGraph.set(indexOfFromButton,fromCountryMap);
                                         renderMap();
                                         indexOfToButton = -1;
                                         break;
@@ -177,6 +178,9 @@ public class CreateMapActivity extends Activity {
             @Override
             public void onClick(View view) {
                 MapVerification mapVerification = new MapVerification();
+                for (GameMap map : arrCountriesRepresentationOnGraph){
+                    Log.d(TAG, "onClick: " +map.getFromCountry().getNameOfCountry());
+                }
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
                     WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
                     writeGameMapToFile.writeGameMapToFile("Game",arrCountriesRepresentationOnGraph);
