@@ -1,41 +1,35 @@
 package com.app.risk.model;
 
+import android.support.annotation.NonNull;
+
+import java.io.Serializable;
+
 /**
  * Country model to save details of each country
+ *
  * @author Akshita Angara
- * @version 1.0.0
  */
-public class Country {
+public class Country implements Serializable,Comparable<Country> {
 
-    private String nameOfCountry;
-    private Continent belongsToContinent;
+    String nameOfCountry;
+    Continent belongsToContinent;
 
-    /**
-     * Default constructor
-     */
-    public Country() {
+    Country() {
+        super();
     }
 
-    /**
-     * Constructor to create a new object with the given name and its continent.
-     * @param nameOfCountry Name of the country
-     * @param belongsToContinent Continent object to which the country belongs
-     */
-    public Country(String nameOfCountry, Continent belongsToContinent) {
-        this.nameOfCountry = nameOfCountry;
-        this.belongsToContinent = belongsToContinent;
+    public Country(String new_nameOfCountry) {
+        nameOfCountry = new_nameOfCountry;
     }
 
-    /**
-     * Constructor to create a new object with a given name.
-     * @param nameOfCountry Name of the country
-     */
-    public Country(String nameOfCountry) {
-        this.nameOfCountry = nameOfCountry;
+    public Country(String new_nameOfCountry, Continent new_belongsToContinent) {
+        nameOfCountry = new_nameOfCountry;
+        belongsToContinent = new_belongsToContinent;
     }
 
     /**
      * Getter function to get name of country
+     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -44,7 +38,8 @@ public class Country {
 
     /**
      * Setter function to set name of country
-     * @param nameOfCountry Name of the country
+     *
+     * @param nameOfCountry
      */
     public void setNameOfCountry(String nameOfCountry) {
         this.nameOfCountry = nameOfCountry;
@@ -52,6 +47,7 @@ public class Country {
 
     /**
      * Getter function to return the continent that the country belongs to
+     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -60,9 +56,32 @@ public class Country {
 
     /**
      * Setter function to set details of the continent to which the country belongs
-     * @param belongsToContinent Continent object to which the country belongs
+     *
+     * @param belongsToContinent
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
         this.belongsToContinent = belongsToContinent;
+    }
+
+    public int hashCode() {
+
+        return nameOfCountry.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof Country) {
+            if (this.nameOfCountry.equalsIgnoreCase(((Country) obj).nameOfCountry)) ;
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(@NonNull Country country) {
+        if (this.nameOfCountry.equals(country.nameOfCountry))
+            return 0;
+        return this.nameOfCountry.compareToIgnoreCase(country.nameOfCountry);
     }
 }
