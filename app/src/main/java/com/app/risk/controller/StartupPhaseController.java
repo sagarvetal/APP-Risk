@@ -109,14 +109,30 @@ public class StartupPhaseController {
      * This method gives list of countries concurred by given player.
      * @param playerId This is player id.
      */
-    public List<Country> getCountryListByPlayerId(final int playerId, final GamePlay gamePlay) {
-        final List<Country> countryList = new ArrayList<>();
+    public ArrayList<Country> getCountryListByPlayerId(final int playerId, final GamePlay gamePlay) {
+        final ArrayList<Country> countryList = new ArrayList<>();
         for(final Country country : gamePlay.getCountries().values()) {
             if(country.getPlayer().getId() == playerId) {
                 countryList.add(country);
             }
         }
         return countryList;
+    }
+
+    /**
+     * This method set given players into GamePlaye object and assign ids.
+     * @param playerNames This is list of player names of type string.
+     * @param gamePlay This is a GamePlay object.
+     */
+    public void setPlayers(final ArrayList<String> playerNames, final GamePlay gamePlay){
+        int id = 0;
+        for(final String playerName : playerNames) {
+            final Player player = new Player();
+            player.setId(id++);
+            player.setName(playerName);
+            player.setActive(true);
+            gamePlay.getPlayers().put(player.getId(), player);
+        }
     }
 
 }
