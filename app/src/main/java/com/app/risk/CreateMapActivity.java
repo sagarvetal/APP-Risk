@@ -52,6 +52,8 @@ public class CreateMapActivity extends Activity {
     int totalCountriesAddedInGraph = 0;
     SurfaceView surfaceView;
     Canvas canvas;
+    public HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
+
 
     int currentIndexCountrySelected;
 
@@ -62,37 +64,8 @@ public class CreateMapActivity extends Activity {
         setContentView(R.layout.activity_create_map);
         lvCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
+        userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
 
-        HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
-        Continent continent = new Continent("Army",34);
-
-        ArrayList<Country> arr = new ArrayList<>();
-
-        Continent continent1 = new Continent("sfssfd",24);
-
-        ArrayList<Country> arr1 = new ArrayList<>();
-
-        Country co = new Country();
-        co.setNameOfCountry("sfdfdseeee");
-        co.setBelongsToContinent(continent);
-        arr.add(co);
-
-        Country c1 = new Country();
-        c1.setNameOfCountry("sdfdsf122233");
-        c1.setBelongsToContinent(continent);
-        arr.add(c1);
-
-        userCreatedMapData.put(continent,arr);
-
-        Country co1 = new Country();
-        co1.setNameOfCountry("sfdfds");
-        co1.setBelongsToContinent(continent);
-        arr1.add(co1);
-        Country c12 = new Country();
-        c12.setNameOfCountry("sdfdsf12");
-        c12.setBelongsToContinent(continent);
-        arr1.add(c12);
-        userCreatedMapData.put(continent1,arr1);
         final Iterator it = userCreatedMapData.entrySet().iterator();
         int colorIndex = 0;
         while (it.hasNext()){
@@ -183,8 +156,8 @@ public class CreateMapActivity extends Activity {
                 }
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
                     WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                    writeGameMapToFile.writeGameMapToFile("Game",arrCountriesRepresentationOnGraph);
-                }else{
+                    writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,"main",arrCountriesRepresentationOnGraph);
+                }else {
                     Toast.makeText(CreateMapActivity.this,
                             "Verification Failed", Toast.LENGTH_LONG).show();
                 }

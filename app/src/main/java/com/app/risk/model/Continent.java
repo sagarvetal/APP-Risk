@@ -1,25 +1,27 @@
 package com.app.risk.model;
 
-import android.graphics.Color;
+import java.io.Serializable;
 
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
- * @version 1.0.0
  */
-public class Continent {
+public class Continent implements Serializable {
 
-    private String nameOfContinent;
-    private int armyControlValue;
-
-    /**
-     * Constructor to create a new object with the given name and army control value
-     * @param nameOfContinent Name of the continent
-     * @param armyControlValue Army control value given when a country is acquired
-     */
-    public Continent(String nameOfContinent, int armyControlValue) {
-        this.nameOfContinent = nameOfContinent;
-        this.armyControlValue = armyControlValue;
+    String nameOfContinent;
+    int armyControlValue;
+    Continent()
+    {
+        super();
+    }
+    public Continent(String new_nameOfContinent,int new_armyControlValue)
+    {
+        nameOfContinent=new_nameOfContinent;
+        armyControlValue=new_armyControlValue;
+    }
+    public Continent(String new_nameOfContinent)
+    {
+        nameOfContinent=new_nameOfContinent;
     }
 
     /**
@@ -32,7 +34,7 @@ public class Continent {
 
     /**
      * Setter function to set the name of continent
-     * @param nameOfContinent Name of the continent
+     * @param nameOfContinent
      */
     public void setNameOfContinent(String nameOfContinent) {
         this.nameOfContinent = nameOfContinent;
@@ -50,9 +52,30 @@ public class Continent {
     /**
      * Setter function to set the control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
-     * @param armyControlValue Army control value given when a country is acquired
+     * @param armyControlValue
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
+    }
+    public int hashCode(){
+
+        return nameOfContinent.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof Continent) {
+            if (this.nameOfContinent.equalsIgnoreCase(((Continent) obj).nameOfContinent))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int compareTo(Continent new_continent) {
+
+        if (this.nameOfContinent.equals(new_continent.nameOfContinent))
+            return 0;
+        return this.nameOfContinent.compareToIgnoreCase(new_continent.nameOfContinent);
     }
 }
