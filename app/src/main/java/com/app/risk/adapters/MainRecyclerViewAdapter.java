@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.risk.UserDrivenMaps;
+import com.app.risk.view.MainActivity;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.view.PlaceArmiesActivity;
 import com.app.risk.R;
@@ -74,7 +76,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
                         break;
                     case "Create Map":
-                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                        final Intent userMapCreate = new Intent(invokingActivity.getApplicationContext(), UserDrivenMaps.class);
+                        invokingActivity.startActivity(userMapCreate);
                         break;
                     case "Edit Map":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
