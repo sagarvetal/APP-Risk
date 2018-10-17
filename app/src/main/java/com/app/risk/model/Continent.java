@@ -9,8 +9,18 @@ import android.graphics.Color;
  */
 public class Continent {
 
-    String nameOfContinent;
-    int armyControlValue;
+    private String nameOfContinent;
+    private int armyControlValue;
+
+    /**
+     * Constructor to create a new object with the given name and army control value
+     * @param nameOfContinent Name of the continent
+     * @param armyControlValue Army control value given when a country is acquired
+     */
+    public Continent(String nameOfContinent, int armyControlValue) {
+        this.nameOfContinent = nameOfContinent;
+        this.armyControlValue = armyControlValue;
+    }
 
     /**
      * Getter function to return the name of continent
