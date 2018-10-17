@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
+import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,19 +55,18 @@ public class CreateMapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        canvas.drawColor(getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_create_map);
         lvCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
 
         HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
-        Continent continent = new Continent();
-        continent.setArmyControlValue(34);
-        continent.setNameOfContinent("Army");
+        Continent continent = new Continent("Army",34);
+
         ArrayList<Country> arr = new ArrayList<>();
 
-        Continent continent1 = new Continent();
-        continent1.setArmyControlValue(34);
-        continent1.setNameOfContinent("hjhjhjj");
+        Continent continent1 = new Continent("sfssfd",24);
+
         ArrayList<Country> arr1 = new ArrayList<>();
 
         Country co = new Country();
@@ -174,6 +174,13 @@ public class CreateMapActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MapVerification mapVerification = new MapVerification();
+                if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
+
+                }else{
+
+                }
+
 
             }
         });
