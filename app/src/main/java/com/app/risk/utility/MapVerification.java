@@ -1,6 +1,7 @@
 package com.app.risk.utility;
 
 import com.app.risk.model.Continent;
+import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
@@ -60,17 +61,19 @@ public class MapVerification {
      */
     private boolean uniqueCountries() {
 
+        mappingForVerification.clear();
+
         for (GameMap gameMap: gameMapList) {
 
-            if(!mappingForVerification.isEmpty() && mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry())){
-                System.out.println(mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry()) + " already exists.");
+            if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry())){
+                Country country = (Country) mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry());
+                System.out.println(country.getNameOfCountry() + " already exists.");
                 return false;
             } else {
                 mappingForVerification.put(gameMap.getFromCountry().getNameOfCountry(), gameMap.getFromCountry());
             }
         }
 
-        mappingForVerification = null;
         return true;
     }
 
@@ -80,9 +83,11 @@ public class MapVerification {
      */
     private boolean checkCountryBelongsToOneContinent() {
 
+        mappingForVerification.clear();
+
         for(GameMap gameMap: gameMapList) {
 
-            if(!mappingForVerification.isEmpty() && mappingForVerification.containsKey(gameMap.getFromCountry())
+            if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry())
                     && !mappingForVerification.get(gameMap.getFromCountry()).equals(gameMap.getFromCountry().getBelongsToContinent())) {
                 System.out.println(mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry()) + " belongs to more than one continent.");
                 return false;
@@ -91,7 +96,6 @@ public class MapVerification {
             }
         }
 
-        mappingForVerification = null;
         return true;
     }
 
@@ -102,8 +106,8 @@ public class MapVerification {
      */
     private boolean checkMapIsConnectedGraph() {
 
-        countriesVisited = null;
-        depthFirstTraversalStack = null;
+        countriesVisited.clear();
+        depthFirstTraversalStack.clear();
         depthFirstTraversalStack.push(gameMapList.get(0));
 
         DepthFirstTraversal(gameMapList);
@@ -123,13 +127,13 @@ public class MapVerification {
      */
     private boolean checkContinentIsConnectedSubgraph() {
 
-        continentCountryMapping = null;
+        continentCountryMapping.clear();
         generateContinentCountryMapping();
 
         for(Continent continent: continentCountryMapping.keySet()) {
 
-            countriesVisited = null;
-            depthFirstTraversalStack = null;
+            countriesVisited.clear();
+            depthFirstTraversalStack.clear();
             List<GameMap> traversableCountries = continentCountryMapping.get(continent);
             depthFirstTraversalStack.push(traversableCountries.get(0));
             DepthFirstTraversal(traversableCountries);
@@ -155,7 +159,7 @@ public class MapVerification {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
 
-            if(!countriesVisited.isEmpty() && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
+            if(countriesVisited!=null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
                 continue;
             } else {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
@@ -176,7 +180,7 @@ public class MapVerification {
     private void generateContinentCountryMapping() {
 
         for (GameMap gameMap: gameMapList) {
-            if (!continentCountryMapping.isEmpty() && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
+            if (continentCountryMapping!=null && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
                 continentCountryMapping.get(gameMap.getFromCountry().getBelongsToContinent())
                         .add(gameMap);
             } else {
