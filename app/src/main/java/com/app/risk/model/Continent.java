@@ -5,6 +5,7 @@ import android.graphics.Color;
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class Continent {
 
@@ -21,7 +22,7 @@ public class Continent {
 
     /**
      * Setter function to set the name of continent
-     * @param nameOfContinent
+     * @param nameOfContinent Name of the continent
      */
     public void setNameOfContinent(String nameOfContinent) {
         this.nameOfContinent = nameOfContinent;
@@ -39,7 +40,7 @@ public class Continent {
     /**
      * Setter function to set the control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
-     * @param armyControlValue
+     * @param armyControlValue Army control value given when a country is acquired
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
