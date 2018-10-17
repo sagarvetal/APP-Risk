@@ -21,11 +21,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.MapVerification;
+import com.app.risk.utility.ReadGameMapFromFile;
+import com.app.risk.utility.WriteGameMapToFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +58,6 @@ public class CreateMapActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        canvas.drawColor(getResources().getColor(R.color.colorPrimary));
         setContentView(R.layout.activity_create_map);
         lvCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
@@ -176,12 +178,12 @@ public class CreateMapActivity extends Activity {
             public void onClick(View view) {
                 MapVerification mapVerification = new MapVerification();
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
-
+                    WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
+                    writeGameMapToFile.writeGameMapToFile("Game",arrCountriesRepresentationOnGraph);
                 }else{
-
+                    Toast.makeText(CreateMapActivity.this,
+                            "Verification Failed", Toast.LENGTH_LONG).show();
                 }
-
-
             }
         });
     }

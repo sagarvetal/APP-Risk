@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
 
         <ListView
             android:id="@+id/lvCountry"
@@ -25,7 +26,6 @@
             android:layout_height="match_parent"
             android:paddingRight="100dp"
             />
-
 
     </LinearLayout>
 
