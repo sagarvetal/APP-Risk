@@ -1,7 +1,6 @@
 package com.app.risk.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -11,27 +10,35 @@ import java.io.Serializable;
  *
  * @author Akshita Angara
  */
-public class Country implements Serializable,Comparable<Country> {
+public class Country implements Serializable, Comparable<Country> {
 
-    String nameOfCountry;
-    Continent belongsToContinent;
-    private List<String> adjacentCountries;
+    private String nameOfCountry;
+    private Continent belongsToContinent;
+    private ArrayList<String> adjacentCountries;
     private Player player;
     private int noOfArmies;
 
     /**
      * This is a default constructor.
-     * It initializes the neighbouring country list.
+     * It initializes the adjacent country list.
      */
     public Country() {
         super();
         adjacentCountries = new ArrayList<>();
     }
 
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of country.
+     */
     public Country(String new_nameOfCountry) {
         nameOfCountry = new_nameOfCountry;
     }
 
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of country and continent it belongs to.
+     */
     public Country(String new_nameOfCountry, Continent new_belongsToContinent) {
         nameOfCountry = new_nameOfCountry;
         belongsToContinent = new_belongsToContinent;
@@ -39,7 +46,6 @@ public class Country implements Serializable,Comparable<Country> {
 
     /**
      * Getter function to get name of country
-     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -48,7 +54,6 @@ public class Country implements Serializable,Comparable<Country> {
 
     /**
      * Setter function to set name of country
-     *
      * @param nameOfCountry
      */
     public void setNameOfCountry(String nameOfCountry) {
@@ -57,7 +62,6 @@ public class Country implements Serializable,Comparable<Country> {
 
     /**
      * Getter function to return the continent that the country belongs to
-     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -66,7 +70,6 @@ public class Country implements Serializable,Comparable<Country> {
 
     /**
      * Setter function to set details of the continent to which the country belongs
-     *
      * @param belongsToContinent
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
@@ -77,7 +80,7 @@ public class Country implements Serializable,Comparable<Country> {
      * Getter function to return the list of adjacent countries.
      * @return list of adjacent countries
      */
-    public List<String> getAdjacentCountries() {
+    public ArrayList<String> getAdjacentCountries() {
         return adjacentCountries;
     }
 
@@ -85,7 +88,7 @@ public class Country implements Serializable,Comparable<Country> {
      * Setter function to set the list of adjacent countries.
      * @param adjacentCountries The list of adjacent countries.
      */
-    public void setAdjacentCountries(List<String> adjacentCountries) {
+    public void setAdjacentCountries(ArrayList<String> adjacentCountries) {
         this.adjacentCountries = adjacentCountries;
     }
 
