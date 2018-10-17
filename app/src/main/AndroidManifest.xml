@@ -26,13 +26,13 @@
             android:name=".UserDrivenMaps"
             android:label="@string/title_activity_user_driven_maps"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".CreateMapActivity"
             android:label="@string/title_activity_create_map"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
