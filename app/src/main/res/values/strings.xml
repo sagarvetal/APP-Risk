@@ -1,14 +1,29 @@
 <resources>
     <string name="app_name">Risk</string>
+    <!-- >
+    main screen strings
+    <!-->
+    <string name="player_selection_value">2</string>
+    <string name="player">player</string>
+    <string name="map_header">Map Selection</string>
+    <string name="player_selection_header">Player Selection</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="title_activity_user_driven_map">UserDrivenMap</string>
     <string name="title_activity_user_driven_maps">UserDrivenMaps</string>
+    <string name="title_activity_create_map">CreateMapActivity</string>
+
     <string name="add_country">Add Country</string>
     <string name="country">Country</string>
+
     <string name="continent">Continent</string>
     <string name="continentvalue">Continent Value</string>
     <string name="title_activity_custom_continent">CustomContinent</string>
+
     <string name="title_activity_custom_country">CustomCountry</string>
     <string name="add_custom_value">Add Custom Value</string>
     <string name="custom_name">Custom Name</string>
-    <string name="title_activity_create_map">CreateMapActivity</string>
+
 </resources>
