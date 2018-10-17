@@ -10,25 +10,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
-import com.app.risk.view.MapObjectsView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,6 +170,14 @@ public class CreateMapActivity extends Activity {
                 return true;
             }
         });
+        FloatingActionButton fab = findViewById(R.id.done);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     /**
