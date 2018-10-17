@@ -156,8 +156,8 @@ public class CreateMapActivity extends Activity {
                 }
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
                     WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                    writeGameMapToFile.writeGameMapToFile("Game",arrCountriesRepresentationOnGraph);
-                }else{
+                    writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,"main",arrCountriesRepresentationOnGraph);
+                }else {
                     Toast.makeText(CreateMapActivity.this,
                             "Verification Failed", Toast.LENGTH_LONG).show();
                 }
