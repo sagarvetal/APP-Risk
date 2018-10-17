@@ -3,6 +3,7 @@ package com.app.risk;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ public class UserDrivenMaps extends AppCompatActivity {
     Spinner country = null;
     EditText continentValue = null;
     Button addCountry = null;
+    Button connectMap=null;
     Button addCustomValue = null;
     ListView selectedCountryList = null;
     UserDrivenMaps currentobj = null;
@@ -359,6 +361,16 @@ public class UserDrivenMaps extends AppCompatActivity {
                                 .create().show();
 
 
+            }
+        });
+
+
+        connectMap = (Button) findViewById(R.id.addNeighbours);
+        connectMap.setOnClickListener( new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent userMapConnect = new Intent(UserDrivenMaps.this, CreateMapActivity.class);
+                userMapConnect.putExtra("maps", maps);
+                startActivity(userMapConnect);
             }
         });
     }
