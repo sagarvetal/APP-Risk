@@ -10,4 +10,5 @@
     <string name="title_activity_custom_country">CustomCountry</string>
     <string name="add_custom_value">Add Custom Value</string>
     <string name="custom_name">Custom Name</string>
+    <string name="title_activity_create_map">CreateMapActivity</string>
 </resources>

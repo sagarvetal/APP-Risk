@@ -2,12 +2,14 @@ package com.app.risk.model;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Country model to save details of each country
  *
  * @author Akshita Angara
  */
-public class Country implements Comparable<Country> {
+public class Country implements Serializable,Comparable<Country> {
 
     String nameOfCountry;
     Continent belongsToContinent;
