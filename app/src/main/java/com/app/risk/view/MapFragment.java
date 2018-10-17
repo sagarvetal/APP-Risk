@@ -1,6 +1,5 @@
 package com.app.risk.view;
 
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,16 +27,14 @@ public class MapFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_view_layout,container,false);
 
-
         CardView cardView = view.findViewById(R.id.map_view_layout_cardview);
         textView = view.findViewById(R.id.map_view_layout_textview);
-        textView.setText(getArguments().getString("abc"));
+        textView.setText(getArguments().getString("MAP_NAME"));
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +48,7 @@ public class MapFragment extends Fragment {
                                 Toast.makeText(getActivity(), "" + textView.getText().toString(), Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(getActivity(),PlayerSelectionActivity.class);
-                                intent.putExtra("MAP_INFO",textView.getText().toString().trim());
+                                intent.putExtra("MAP_NAME",textView.getText().toString().trim());
                                 startActivity(intent);
                             }
                         }).create().show();

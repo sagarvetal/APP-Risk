@@ -7,28 +7,29 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.app.risk.view.MapFragment;
 
+import java.util.ArrayList;
+
 public class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
 
-    private int length;
-    private String a[] = {"a","b","c"};
+    private ArrayList<String> mapList;
 
-    public ViewPagerAdapter(FragmentManager fm,int length) {
+    public ViewPagerAdapter(FragmentManager fm, ArrayList<String> mapList) {
         super(fm);
-        this.length = length;
+        this.mapList = mapList;
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(int index) {
         Fragment fragment = new MapFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("abc",a[position]);
+        bundle.putString("MAP_NAME", mapList.get(index));
         fragment.setArguments(bundle);
         return fragment;
     }
 
     @Override
     public int getCount() {
-        return length;
+        return mapList.size();
     }
 }
