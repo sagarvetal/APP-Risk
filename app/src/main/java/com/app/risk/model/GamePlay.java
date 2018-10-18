@@ -19,6 +19,7 @@ public class GamePlay implements Serializable {
     private HashMap<String, Country> countries;
     private HashMap<Integer, Player> players;
     private Player currentPlayer;
+    private String currentPhase;
     private List<Card> cards;
 
     /**
@@ -110,6 +111,14 @@ public class GamePlay implements Serializable {
      */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public String getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public void setCurrentPhase(String currentPhase) {
+        this.currentPhase = currentPhase;
     }
 
     /**
