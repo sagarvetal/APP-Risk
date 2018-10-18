@@ -1,7 +1,9 @@
 package com.app.risk.utility;
 
 import com.app.risk.model.Continent;
+
 import com.app.risk.model.Country;
+
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ public class MapVerification {
      */
     private boolean uniqueCountries() {
 
+
         mappingForVerification.clear();
 
         for (GameMap gameMap: gameMapList) {
@@ -68,11 +71,13 @@ public class MapVerification {
             if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry())){
                 Country country = (Country) mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry());
                 System.out.println(country.getNameOfCountry() + " already exists.");
+
                 return false;
             } else {
                 mappingForVerification.put(gameMap.getFromCountry().getNameOfCountry(), gameMap.getFromCountry());
             }
         }
+
 
         return true;
     }
@@ -83,11 +88,13 @@ public class MapVerification {
      */
     private boolean checkCountryBelongsToOneContinent() {
 
+
         mappingForVerification.clear();
 
         for(GameMap gameMap: gameMapList) {
 
             if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry())
+
                     && !mappingForVerification.get(gameMap.getFromCountry()).equals(gameMap.getFromCountry().getBelongsToContinent())) {
                 System.out.println(mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry()) + " belongs to more than one continent.");
                 return false;
@@ -95,6 +102,7 @@ public class MapVerification {
                 mappingForVerification.put(gameMap.getFromCountry(), gameMap.getFromCountry().getBelongsToContinent());
             }
         }
+
 
         return true;
     }
@@ -106,8 +114,10 @@ public class MapVerification {
      */
     private boolean checkMapIsConnectedGraph() {
 
+
         countriesVisited.clear();
         depthFirstTraversalStack.clear();
+
         depthFirstTraversalStack.push(gameMapList.get(0));
 
         DepthFirstTraversal(gameMapList);
@@ -127,13 +137,16 @@ public class MapVerification {
      */
     private boolean checkContinentIsConnectedSubgraph() {
 
+
         continentCountryMapping.clear();
+
         generateContinentCountryMapping();
 
         for(Continent continent: continentCountryMapping.keySet()) {
 
             countriesVisited.clear();
             depthFirstTraversalStack.clear();
+
             List<GameMap> traversableCountries = continentCountryMapping.get(continent);
             depthFirstTraversalStack.push(traversableCountries.get(0));
             DepthFirstTraversal(traversableCountries);
@@ -159,7 +172,9 @@ public class MapVerification {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
 
+
             if(countriesVisited!=null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
+
                 continue;
             } else {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
@@ -180,7 +195,9 @@ public class MapVerification {
     private void generateContinentCountryMapping() {
 
         for (GameMap gameMap: gameMapList) {
+
             if (continentCountryMapping!=null && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
+
                 continentCountryMapping.get(gameMap.getFromCountry().getBelongsToContinent())
                         .add(gameMap);
             } else {
