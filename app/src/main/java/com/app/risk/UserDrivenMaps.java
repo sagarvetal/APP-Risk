@@ -65,6 +65,13 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<UserDrivenMaps.Item> countryList = new ArrayList<UserDrivenMaps.Item>();
 
+    /**
+     * This method is invoked when the activity is created
+     * This method initializes the item on the view with the ArrayAdapters.
+     * sets the observer for each item on the View.
+     * {@inheritDoc}
+     * @param savedInstanceState saves the current instance
+     */
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
