@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -63,6 +66,8 @@ public class CreateMapActivity extends Activity {
         setContentView(R.layout.activity_create_map);
         listCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
+
+
         userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
 
         prepareDataForList();
@@ -79,13 +84,17 @@ public class CreateMapActivity extends Activity {
      * Gets add button and handles on click listener
      */
     public void setAddButtonListener(){
-        FloatingActionButton addButton = findViewById(R.id.done);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleAddMapAction();;
-            }
-        });
+        if(totalCountries == totalCountriesAddedInGraph){
+            FloatingActionButton addButton = findViewById(R.id.done);
+            addButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleAddMapAction();;
+                }
+            });
+        }else{
+            showToast("Add All Countries First");
+        }
     }
 
     /**
@@ -156,23 +165,32 @@ public class CreateMapActivity extends Activity {
                         if(indexOfToButton == -1){
                             indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(map);
                             renderMap();
+                            showToast("To Country Selected");
                             break;
                         }else{
                             indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(map);
-                            GameMap toCountryMap = arrCountriesRepresentationOnGraph.get(indexOfToButton);
-                            GameMap fromCountryMap = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
-                            if ((fromCountryMap.getConnectedToCountries().contains(toCountryMap) || toCountryMap.getConnectedToCountries().contains(fromCountryMap)) == false) {
-                                ArrayList<GameMap> arrConnectedFromCountry = fromCountryMap.getConnectedToCountries();
-                                ArrayList<GameMap> arrConnectedToCountry = toCountryMap.getConnectedToCountries();
-                                arrConnectedFromCountry.add(toCountryMap);
-                                arrConnectedToCountry.add(fromCountryMap);
-                                toCountryMap.setConnectedToCountries(arrConnectedToCountry);
-                                fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
-                                arrCountriesRepresentationOnGraph.set(indexOfToButton,toCountryMap);
-                                arrCountriesRepresentationOnGraph.set(indexOfFromButton,fromCountryMap);
-                                renderMap();
-                                indexOfToButton = -1;
+                            if(indexOfToButton == indexOfFromButton) {
+                                showToast("To Country and From Country cannot be same");
                                 break;
+                            }else{
+                                GameMap toCountryMap = arrCountriesRepresentationOnGraph.get(indexOfToButton);
+                                GameMap fromCountryMap = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
+                                if ((fromCountryMap.getConnectedToCountries().contains(toCountryMap) || toCountryMap.getConnectedToCountries().contains(fromCountryMap)) == false) {
+                                    ArrayList<GameMap> arrConnectedFromCountry = fromCountryMap.getConnectedToCountries();
+                                    ArrayList<GameMap> arrConnectedToCountry = toCountryMap.getConnectedToCountries();
+                                    arrConnectedFromCountry.add(toCountryMap);
+                                    arrConnectedToCountry.add(fromCountryMap);
+                                    toCountryMap.setConnectedToCountries(arrConnectedToCountry);
+                                    fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
+                                    arrCountriesRepresentationOnGraph.set(indexOfToButton,toCountryMap);
+                                    arrCountriesRepresentationOnGraph.set(indexOfFromButton,fromCountryMap);
+                                    renderMap();
+                                    showToast("From Country Selected");
+                                    indexOfToButton = -1;
+                                    break;
+                                }else{
+                                    showToast("Countries Already Connected");
+                                }
                             }
 
                         }
@@ -188,9 +206,6 @@ public class CreateMapActivity extends Activity {
      */
     public void handleAddMapAction(){
         MapVerification mapVerification = new MapVerification();
-        for (GameMap map : arrCountriesRepresentationOnGraph){
-            Log.d(TAG, "onClick: " +map.getFromCountry().getNameOfCountry());
-        }
         if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
             final EditText edittext = new EditText(CreateMapActivity.this);
             AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
@@ -201,8 +216,7 @@ public class CreateMapActivity extends Activity {
             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String mapName = edittext.getText().toString();
-                    WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                    writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,mapName,arrCountriesRepresentationOnGraph);
+                    handleMapVerificationSucced(mapName);
                 }
             });
 
@@ -218,6 +232,11 @@ public class CreateMapActivity extends Activity {
             Toast.makeText(CreateMapActivity.this,
                     "Verification Failed", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void handleMapVerificationSucced(String filename){
+        WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
+        writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,filename,arrCountriesRepresentationOnGraph);
     }
 
     /**
@@ -277,6 +296,7 @@ public class CreateMapActivity extends Activity {
         for (GameMap map : arrCountriesRepresentationOnGraph ){
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
+            canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-10,map.getCoordinateY()-10,connectionLine);
             canvas.drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
             for (GameMap nieghbourCountry : map.getConnectedToCountries()  ){
                 canvas.drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
@@ -297,6 +317,10 @@ public class CreateMapActivity extends Activity {
         return Color.parseColor(allColors[index]);
     }
 
+    public void showToast(String msg){
+        Toast.makeText(CreateMapActivity.this, msg,
+                Toast.LENGTH_LONG).show();
+    }
     /**
      *
      */
