@@ -85,7 +85,7 @@ public class CreateMapActivity extends Activity {
         final CountryAdaptor adapter = new CountryAdaptor(this, countryList);
         lvCountry.setAdapter(adapter);
         lvCountry.setTextFilterEnabled(true);
-
+        //Test
         lvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
