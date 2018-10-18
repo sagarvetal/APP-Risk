@@ -231,12 +231,16 @@ public class UserDrivenMaps extends AppCompatActivity {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));//check this place
                     maps.get(new Continent(continentSelected, continentValueSelected)).add(addNewCountry);
                     int countryPosition=countryAdapter.getPosition(countrySelected);
+                    int countryCount=countryAdapter.getCount();
                     presentcountryList.remove(countrySelected);
                     //countryAdapter.remove(countrySelected);
                     if(continentSelected.equalsIgnoreCase(currentContinent)) {
                         countryList.add(new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
-                        country.setSelection(countryPosition);
+                        if(countryCount-1==countryPosition)
+                            country.setSelection(countryPosition-1);
+                        else
+                            country.setSelection(countryPosition);
                         countrySelected=country.getSelectedItem().toString();
                     }
                     else
@@ -256,7 +260,10 @@ public class UserDrivenMaps extends AppCompatActivity {
                         }
                         countryList.add(i+1,new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
-                        country.setSelection(countryPosition);
+                        if(countryCount-1==countryPosition)
+                            country.setSelection(countryPosition-1);
+                        else
+                            country.setSelection(countryPosition);
                         countrySelected=country.getSelectedItem().toString();
                         int position=countryList.lastIndexOf(new SectionItem(continentSelected));
                         System.out.println("::::::::::::::::::::::::::index of continent:::::::::::::::::"+position);
@@ -270,6 +277,7 @@ public class UserDrivenMaps extends AppCompatActivity {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));
                     ArrayList<Country> adjacentCountry = new ArrayList<Country>();
                     int countryPosition=countryAdapter.getPosition(countrySelected);
+                    int countryCount=countryAdapter.getCount();
                     adjacentCountry.add(addNewCountry);
                     maps.put(new Continent(continentSelected, continentValueSelected), adjacentCountry);
                     presentcountryList.remove(countrySelected.trim().toString());
@@ -280,7 +288,10 @@ public class UserDrivenMaps extends AppCompatActivity {
                     //countryList.notify();
                     countryAdapter.notifyDataSetChanged();
                     countryListAdapter.notifyDataSetChanged();
-                    country.setSelection(countryPosition);
+                    if(countryCount-1==countryPosition)
+                        country.setSelection(countryPosition-1);
+                    else
+                        country.setSelection(countryPosition);
                     countrySelected=country.getSelectedItem().toString();
                     continentValue.setFocusable(false);
                 }
