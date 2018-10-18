@@ -43,25 +43,23 @@ public class UserDrivenMaps extends AppCompatActivity {
     Spinner country = null;
     EditText continentValue = null;
     Button addCountry = null;
-    Button connectMap=null;
+    Button connectMap = null;
     Button addCustomValue = null;
     ListView selectedCountryList = null;
     UserDrivenMaps currentobj = null;
-    CountryAdaptor countryListAdapter=null;
-    ArrayAdapter<String> countryAdapter=null;
-    boolean continentFlag=false;
-    List<String> continentsList=null;
-    List<String> presentcountryList=null;
-    ArrayAdapter<String> continentAdapter=null;
-    String currentContinent="";
-    // AlertDialog builder = null;
+    CountryAdaptor countryListAdapter = null;
+    ArrayAdapter<String> countryAdapter = null;
+    boolean continentFlag = false;
+    List<String> continentsList = null;
+    List<String> presentcountryList = null;
+    ArrayAdapter<String> continentAdapter = null;
+    String currentContinent = "";
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<UserDrivenMaps.Item> countryList = new ArrayList<UserDrivenMaps.Item>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         currentobj = this;
-        //   builder=new AlertDialog.Builder(this).create();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_driven_maps);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,10 +67,8 @@ public class UserDrivenMaps extends AppCompatActivity {
 
         continent = (Spinner) findViewById(R.id.continent);
         continentsList = new ArrayList(Arrays.asList(getResources().getStringArray(R.array.continent)));
-       /* ArrayAdapter<CharSequence> continentAdapter = ArrayAdapter.createFromResource(this,
-                R.array.continent, android.R.layout.simple_spinner_item);*/
-        continentAdapter = new ArrayAdapter<String> (this,
-                android.R.layout.simple_spinner_item,continentsList);
+        continentAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, continentsList);
         continentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         continent.setAdapter(continentAdapter);
 
@@ -85,17 +81,15 @@ public class UserDrivenMaps extends AppCompatActivity {
                 continentValue.setFocusable(true);
                 continentSelected = continent.getSelectedItem().toString();
                 Set<Continent> listOfContinents = maps.keySet();
-                boolean found=false;
-                for(Continent recordContinent:listOfContinents) {
+                boolean found = false;
+                for (Continent recordContinent : listOfContinents) {
                     if (continentSelected.toString().trim().equalsIgnoreCase(recordContinent.getNameOfContinent())) {
                         continentValue.setText(Integer.toString(recordContinent.getArmyControlValue()));
-                        // Toast.makeText(UserDrivenMaps.this, "asia", Toast.LENGTH_SHORT).show();
-                        found=true;
+                        found = true;
                         continentValue.setFocusable(false);
                     }
                 }
-                if(!found)
-                {
+                if (!found) {
 
                     continentValue.setFocusable(true);
                     continentValue.setFocusableInTouchMode(true);
@@ -112,10 +106,8 @@ public class UserDrivenMaps extends AppCompatActivity {
 
         country = (Spinner) findViewById(R.id.country);
         presentcountryList = new ArrayList(Arrays.asList(getResources().getStringArray(R.array.country)));
-        countryAdapter = new ArrayAdapter<String> (this,
-                android.R.layout.simple_spinner_item,presentcountryList);
-       /* countryAdapter = ArrayAdapter.createFromResource(this,
-                R.array.country, android.R.layout.simple_spinner_item);*/
+        countryAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, presentcountryList);
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         country.setAdapter(countryAdapter);
         country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -136,23 +128,6 @@ public class UserDrivenMaps extends AppCompatActivity {
 
         continentValue = (EditText) findViewById(R.id.continentValue);
         continentValue.clearFocus();
-        //continentValue.setShowSoftInputOnFocus(true);
-
-       /* continentValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                continentValue.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        InputMethodManager imm = (InputMethodManager) UserDrivenMaps.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(continentValue, InputMethodManager.SHOW_IMPLICIT);
-                    }
-                });
-            }
-        });*/
-        // continentValue.requestFocus();
-
-
         selectedCountryList = (ListView) findViewById(R.id.selectedCountries);
 
 
@@ -171,10 +146,9 @@ public class UserDrivenMaps extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    //UserDrivenMaps.th.dimiss();
+
                                 }
                             });
-                    // AlertDialog dialog = builder.create();
                     builder.show();
                 }
                 if (countrySelected.equalsIgnoreCase("")) {
@@ -185,10 +159,8 @@ public class UserDrivenMaps extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    // builder.dismiss();
                                 }
                             });
-                    // AlertDialog dialog = builder.create();
                     builder.show();
                 }
                 if (continentValue.getText().toString().trim().equalsIgnoreCase("") || continentValue.getText().toString().trim().length() == 0) {
@@ -200,10 +172,8 @@ public class UserDrivenMaps extends AppCompatActivity {
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    //UserDrivenMaps.th.dimiss();
                                 }
                             });
-                    // AlertDialog dialog = builder.create();
                     builder.show();
                 }
                 println("hello:::::::::::::::::::::::::::::::::after dialog box");
@@ -219,10 +189,8 @@ public class UserDrivenMaps extends AppCompatActivity {
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            //builder.dismiss();
                                         }
                                     });
-                            // AlertDialog dialog = builder.create();
                             builder.show();
                         }
                     }
@@ -230,69 +198,59 @@ public class UserDrivenMaps extends AppCompatActivity {
                 if (maps != null && maps.containsKey(new Continent(continentSelected))) {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));//check this place
                     maps.get(new Continent(continentSelected, continentValueSelected)).add(addNewCountry);
-                    int countryPosition=countryAdapter.getPosition(countrySelected);
-                    int countryCount=countryAdapter.getCount();
+                    int countryPosition = countryAdapter.getPosition(countrySelected);
+                    int countryCount = countryAdapter.getCount();
                     presentcountryList.remove(countrySelected);
-                    //countryAdapter.remove(countrySelected);
-                    if(continentSelected.equalsIgnoreCase(currentContinent)) {
+                    if (continentSelected.equalsIgnoreCase(currentContinent)) {
                         countryList.add(new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
-                        if(countryCount-1==countryPosition)
-                            country.setSelection(countryPosition-1);
+                        if (countryCount - 1 == countryPosition)
+                            country.setSelection(countryPosition - 1);
                         else
                             country.setSelection(countryPosition);
-                        countrySelected=country.getSelectedItem().toString();
-                    }
-                    else
-                    {
-                        System.out.println("::::::::::::::::::::::::::resultof contains:::::::::::::::::"+countryList.contains(new SectionItem(continentSelected)));
-                        int i=0;
-                        for(UserDrivenMaps.Item entry:countryList)
-                        {
-                            if(entry instanceof SectionItem)
-                            {
-                                if(((SectionItem)entry).getTitle().equalsIgnoreCase(continentSelected))
-                                {
+                        countrySelected = country.getSelectedItem().toString();
+                    } else {
+                        System.out.println("::::::::::::::::::::::::::resultof contains:::::::::::::::::" + countryList.contains(new SectionItem(continentSelected)));
+                        int i = 0;
+                        for (UserDrivenMaps.Item entry : countryList) {
+                            if (entry instanceof SectionItem) {
+                                if (((SectionItem) entry).getTitle().equalsIgnoreCase(continentSelected)) {
                                     break;
                                 }
                             }
-                            i=i+1;
+                            i = i + 1;
                         }
-                        countryList.add(i+1,new EntryItem(countrySelected));
+                        countryList.add(i + 1, new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
-                        if(countryCount-1==countryPosition)
-                            country.setSelection(countryPosition-1);
+                        if (countryCount - 1 == countryPosition)
+                            country.setSelection(countryPosition - 1);
                         else
                             country.setSelection(countryPosition);
-                        countrySelected=country.getSelectedItem().toString();
-                        int position=countryList.lastIndexOf(new SectionItem(continentSelected));
-                        System.out.println("::::::::::::::::::::::::::index of continent:::::::::::::::::"+position);
+                        countrySelected = country.getSelectedItem().toString();
+                        int position = countryList.lastIndexOf(new SectionItem(continentSelected));
+                        System.out.println("::::::::::::::::::::::::::index of continent:::::::::::::::::" + position);
 
                     }
                     countryAdapter.notifyDataSetChanged();
                     continentValue.setFocusable(false);
-                    //countryList.notify();
-                    // countryListAdapter.notifyDataSetChanged();
                 } else {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));
                     ArrayList<Country> adjacentCountry = new ArrayList<Country>();
-                    int countryPosition=countryAdapter.getPosition(countrySelected);
-                    int countryCount=countryAdapter.getCount();
+                    int countryPosition = countryAdapter.getPosition(countrySelected);
+                    int countryCount = countryAdapter.getCount();
                     adjacentCountry.add(addNewCountry);
                     maps.put(new Continent(continentSelected, continentValueSelected), adjacentCountry);
                     presentcountryList.remove(countrySelected.trim().toString());
                     countryList.add(new SectionItem(continentSelected));
-                    //countryAdapter.remove(countrySelected);
                     countryList.add(new EntryItem(countrySelected));
-                    currentContinent=continentSelected;
-                    //countryList.notify();
+                    currentContinent = continentSelected;
                     countryAdapter.notifyDataSetChanged();
                     countryListAdapter.notifyDataSetChanged();
-                    if(countryCount-1==countryPosition)
-                        country.setSelection(countryPosition-1);
+                    if (countryCount - 1 == countryPosition)
+                        country.setSelection(countryPosition - 1);
                     else
                         country.setSelection(countryPosition);
-                    countrySelected=country.getSelectedItem().toString();
+                    countrySelected = country.getSelectedItem().toString();
                     continentValue.setFocusable(false);
                 }
 
@@ -301,83 +259,36 @@ public class UserDrivenMaps extends AppCompatActivity {
 
         });
         addCustomValue = (Button) findViewById(R.id.addCustomValue);
-        addCustomValue.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view)
-            {
-//                new AlertDialog.Builder( SweetAlertDialog.NORMAL_TYPE))
-//                        .setTitleText("Map Editor")
-//                        .setContentText("Select Option")
-//                        .setConfirmText("Create Map")
-//                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sDialog) {
-//                                sDialog.dismissWithAnimation();
-//                                Intent intent = new Intent(getActivity(), MapEditorActivity.class);
-//                                getActivity().startActivity(intent);
-//                            }
-//                        })
-//                        .setCancelText("Load Map")
-//                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-//                            @Override
-//                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-//                                sweetAlertDialog.dismissWithAnimation();
-//                               // Bundle bundle = new Bundle();
-//                                //bundle.putString(SyncStateContract.Constants.KEY_FROM, Constants.VALUE_FROM_EDIT_MAP);
-//                                Intent intent = new Intent(getActivity(), MapSelectionAndInitializationActivity.class);
-//                                //intent.putExtras(bundle);
-//                                getActivity().startActivity(intent);
-//                            }
-//                        })
-//                        .show();
-
-                final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout,null);
+        addCustomValue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout, null);
                 new AlertDialog.Builder(UserDrivenMaps.this)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 RadioGroup radioGroup = inflaterView.findViewById(R.id.custom_value_radiogroup);
-                                      /*  radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                                            @Override
-                                            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-
-                                                Toast.makeText(UserDrivenMaps.this, "" + i+" is Checked", Toast.LENGTH_SHORT).show();
-                                                if(i==R.id.ContinentRadio)
-                                                {
-                                                    continentFlag=true;
-                                                } else if(i==R.id.CountryRadio)
-                                                {
-                                                    continentFlag=false;
-                                                }
-                                                //Toast.makeText(UserDrivenMaps.this, "" + i, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });*/
                                 int radioButtonID = radioGroup.getCheckedRadioButtonId();
 
-                                if(radioButtonID==R.id.ContinentRadio)
-                                {
-                                    continentFlag=true;
-                                } else if(radioButtonID==R.id.CountryRadio)
-                                {
-                                    continentFlag=false;
+                                if (radioButtonID == R.id.ContinentRadio) {
+                                    continentFlag = true;
+                                } else if (radioButtonID == R.id.CountryRadio) {
+                                    continentFlag = false;
                                 }
 
                                 EditText editText = inflaterView.findViewById(R.id.custom_value_edittext);
                                 String s = editText.getText().toString().trim();
 
-                                if(continentFlag)
-                                {
+                                if (continentFlag) {
                                     continentsList.add(s.trim().toString());
                                     continentAdapter.notifyDataSetChanged();
-                                }
-                                else
-                                {
+                                } else {
                                     presentcountryList.add(s.trim().toString());
                                     countryAdapter.notifyDataSetChanged();
                                 }
-                                Toast.makeText(UserDrivenMaps.this, "" + s+" is added", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(UserDrivenMaps.this, "" + s + " is added", Toast.LENGTH_SHORT).show();
                             }
                         })
-                        .setNegativeButton("Cancel",null)
+                        .setNegativeButton("Cancel", null)
                         .setView(inflaterView)
                         .create().show();
 
@@ -387,7 +298,7 @@ public class UserDrivenMaps extends AppCompatActivity {
 
 
         connectMap = (Button) findViewById(R.id.addNeighbours);
-        connectMap.setOnClickListener( new View.OnClickListener() {
+        connectMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent userMapConnect = new Intent(UserDrivenMaps.this, CreateMapActivity.class);
                 userMapConnect.putExtra("maps", maps);
