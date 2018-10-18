@@ -72,7 +72,7 @@ public class UserDrivenMaps extends AppCompatActivity {
        /* ArrayAdapter<CharSequence> continentAdapter = ArrayAdapter.createFromResource(this,
                 R.array.continent, android.R.layout.simple_spinner_item);*/
         continentAdapter = new ArrayAdapter<String> (this,
-                 android.R.layout.simple_spinner_item,continentsList);
+                android.R.layout.simple_spinner_item,continentsList);
         continentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         continent.setAdapter(continentAdapter);
 
@@ -89,7 +89,7 @@ public class UserDrivenMaps extends AppCompatActivity {
                 for(Continent recordContinent:listOfContinents) {
                     if (continentSelected.toString().trim().equalsIgnoreCase(recordContinent.getNameOfContinent())) {
                         continentValue.setText(Integer.toString(recordContinent.getArmyControlValue()));
-                       // Toast.makeText(UserDrivenMaps.this, "asia", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(UserDrivenMaps.this, "asia", Toast.LENGTH_SHORT).show();
                         found=true;
                         continentValue.setFocusable(false);
                     }
@@ -113,7 +113,7 @@ public class UserDrivenMaps extends AppCompatActivity {
         country = (Spinner) findViewById(R.id.country);
         presentcountryList = new ArrayList(Arrays.asList(getResources().getStringArray(R.array.country)));
         countryAdapter = new ArrayAdapter<String> (this,
-                 android.R.layout.simple_spinner_item,presentcountryList);
+                android.R.layout.simple_spinner_item,presentcountryList);
        /* countryAdapter = ArrayAdapter.createFromResource(this,
                 R.array.country, android.R.layout.simple_spinner_item);*/
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -230,39 +230,46 @@ public class UserDrivenMaps extends AppCompatActivity {
                 if (maps != null && maps.containsKey(new Continent(continentSelected))) {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));//check this place
                     maps.get(new Continent(continentSelected, continentValueSelected)).add(addNewCountry);
+                    int countryPosition=countryAdapter.getPosition(countrySelected);
                     presentcountryList.remove(countrySelected);
                     //countryAdapter.remove(countrySelected);
                     if(continentSelected.equalsIgnoreCase(currentContinent)) {
                         countryList.add(new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
+                        country.setSelection(countryPosition);
+                        countrySelected=country.getSelectedItem().toString();
                     }
                     else
                     {
                         System.out.println("::::::::::::::::::::::::::resultof contains:::::::::::::::::"+countryList.contains(new SectionItem(continentSelected)));
-                       int i=0;
-                       for(UserDrivenMaps.Item entry:countryList)
-                       {
-                           if(entry instanceof SectionItem)
-                           {
-                               if(((SectionItem)entry).getTitle().equalsIgnoreCase(continentSelected))
-                               {
-                                   break;
-                               }
-                           }
-                           i=i+1;
-                       }
+                        int i=0;
+                        for(UserDrivenMaps.Item entry:countryList)
+                        {
+                            if(entry instanceof SectionItem)
+                            {
+                                if(((SectionItem)entry).getTitle().equalsIgnoreCase(continentSelected))
+                                {
+                                    break;
+                                }
+                            }
+                            i=i+1;
+                        }
                         countryList.add(i+1,new EntryItem(countrySelected));
                         countryListAdapter.notifyDataSetChanged();
+                        country.setSelection(countryPosition);
+                        countrySelected=country.getSelectedItem().toString();
                         int position=countryList.lastIndexOf(new SectionItem(continentSelected));
                         System.out.println("::::::::::::::::::::::::::index of continent:::::::::::::::::"+position);
 
                     }
                     countryAdapter.notifyDataSetChanged();
+                    continentValue.setFocusable(false);
                     //countryList.notify();
-                   // countryListAdapter.notifyDataSetChanged();
+                    // countryListAdapter.notifyDataSetChanged();
                 } else {
                     Country addNewCountry = new Country(countrySelected, new Continent(continentSelected, continentValueSelected));
                     ArrayList<Country> adjacentCountry = new ArrayList<Country>();
+                    int countryPosition=countryAdapter.getPosition(countrySelected);
                     adjacentCountry.add(addNewCountry);
                     maps.put(new Continent(continentSelected, continentValueSelected), adjacentCountry);
                     presentcountryList.remove(countrySelected.trim().toString());
@@ -273,6 +280,9 @@ public class UserDrivenMaps extends AppCompatActivity {
                     //countryList.notify();
                     countryAdapter.notifyDataSetChanged();
                     countryListAdapter.notifyDataSetChanged();
+                    country.setSelection(countryPosition);
+                    countrySelected=country.getSelectedItem().toString();
+                    continentValue.setFocusable(false);
                 }
 
 
@@ -309,12 +319,12 @@ public class UserDrivenMaps extends AppCompatActivity {
 //                        })
 //                        .show();
 
-                    final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout,null);
-                        new AlertDialog.Builder(UserDrivenMaps.this)
-                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        RadioGroup radioGroup = inflaterView.findViewById(R.id.custom_value_radiogroup);
+                final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout,null);
+                new AlertDialog.Builder(UserDrivenMaps.this)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                RadioGroup radioGroup = inflaterView.findViewById(R.id.custom_value_radiogroup);
                                       /*  radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                             @Override
                                             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -330,35 +340,35 @@ public class UserDrivenMaps extends AppCompatActivity {
                                                 //Toast.makeText(UserDrivenMaps.this, "" + i, Toast.LENGTH_SHORT).show();
                                             }
                                         });*/
-                                        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+                                int radioButtonID = radioGroup.getCheckedRadioButtonId();
 
-                                        if(radioButtonID==R.id.ContinentRadio)
-                                        {
-                                            continentFlag=true;
-                                        } else if(radioButtonID==R.id.CountryRadio)
-                                        {
-                                            continentFlag=false;
-                                        }
+                                if(radioButtonID==R.id.ContinentRadio)
+                                {
+                                    continentFlag=true;
+                                } else if(radioButtonID==R.id.CountryRadio)
+                                {
+                                    continentFlag=false;
+                                }
 
-                                        EditText editText = inflaterView.findViewById(R.id.custom_value_edittext);
-                                        String s = editText.getText().toString().trim();
+                                EditText editText = inflaterView.findViewById(R.id.custom_value_edittext);
+                                String s = editText.getText().toString().trim();
 
-                                        if(continentFlag)
-                                        {
-                                            continentsList.add(s.trim().toString());
-                                            continentAdapter.notifyDataSetChanged();
-                                        }
-                                        else
-                                        {
-                                            presentcountryList.add(s.trim().toString());
-                                            countryAdapter.notifyDataSetChanged();
-                                        }
-                                        Toast.makeText(UserDrivenMaps.this, "" + s+" is added", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .setNegativeButton("Cancel",null)
-                                .setView(inflaterView)
-                                .create().show();
+                                if(continentFlag)
+                                {
+                                    continentsList.add(s.trim().toString());
+                                    continentAdapter.notifyDataSetChanged();
+                                }
+                                else
+                                {
+                                    presentcountryList.add(s.trim().toString());
+                                    countryAdapter.notifyDataSetChanged();
+                                }
+                                Toast.makeText(UserDrivenMaps.this, "" + s+" is added", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel",null)
+                        .setView(inflaterView)
+                        .create().show();
 
 
             }
