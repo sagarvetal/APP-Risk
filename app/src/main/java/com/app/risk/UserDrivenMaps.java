@@ -155,7 +155,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
-  
+    /**
+     *This method is invoked when addCountry button is pressed.
+     *This adds the country,continent and continent value to the HashMap
+     */
     public void addSelectedCountry() {
         if (continentSelected.trim().equalsIgnoreCase("")) {
             AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
