@@ -337,7 +337,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         public String getTitle();
     }
 
-
+    /**
+     *class which manages the section of the list
+     *
+     */
     public class SectionItem implements UserDrivenMaps.Item {
         private final String title;
         /**
@@ -370,7 +373,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
 
             return title.hashCode();
         }
-
+        /**
+         *checks whether the two list are equal or not
+         *
+         */
         public boolean equals(Object obj) {
             if (obj instanceof SectionItem) {
                 if (this.title.equalsIgnoreCase(((SectionItem) obj).title)) ;
