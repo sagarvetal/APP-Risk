@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,27 +122,34 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         public void onClick(View v) {
             if(v == cardView){
                 if(GamePlayConstants.REINFORCEMENT_PHASE.equalsIgnoreCase(gamePlay.getCurrentPhase())) {
-
-                    final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
-                    new AlertDialog.Builder(context)
-                            .setMessage("Place Armies")
-                            .setView(view)
-                            .setPositiveButton("Place", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    EditText editText = view.findViewById(R.id.play_screen_reinforcement_edittext);
-                                    editText.setHint("Enter value less than " + gamePlay.getCurrentPlayer().getReinforcementArmies());
-                                    int selectedArmies = Integer.parseInt(editText.getText().toString().trim());
-                                    gamePlay.getCurrentPlayer().decrementReinforcementArmies(selectedArmies);
-                                    countries.get(getAdapterPosition()).incrementArmies(selectedArmies);
-                                    notifyDataSetChanged();
-
-                                }
-                            })
-                            .create().show();
+                    show(getAdapterPosition());
                 }
                 //Toast.makeText(context, "" + getAdapterPosition()+"=>"+neighbouringCountries.size(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void show(final int adapterPostion){
+        AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
+        reinforcementDialogBox.setTitle("Place Armies");
+        View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+        reinforcementDialogBox.setView(view);
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+        numberPicker.setMaxValue(gamePlay.getCurrentPlayer().getReinforcementArmies()); // max value 100
+        numberPicker.setMinValue(1);   // min value 1
+        numberPicker.setWrapSelectorWheel(false);
+
+        reinforcementDialogBox.setPositiveButton("Place", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(context, "" + numberPicker.getValue(), Toast.LENGTH_SHORT).show();
+                gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
+                countries.get(adapterPostion).incrementArmies(numberPicker.getValue());
+                notifyDataSetChanged();
+            }
+        });
+        reinforcementDialogBox.setNegativeButton("Cancel",null);
+        reinforcementDialogBox.create();
+        reinforcementDialogBox.show();
     }
 }
