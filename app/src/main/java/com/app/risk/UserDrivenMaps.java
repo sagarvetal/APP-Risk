@@ -137,7 +137,11 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         connectMap = (Button) findViewById(R.id.addNeighbours);
         connectMap.setOnClickListener(this);
     }
-
+    /**
+     * This method acts as a Listener for the buttons addCountry,addCustomValue,connect
+     * {@inheritDoc}
+     * @param v The view on which the click is done, that object of the view is called.
+     */
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addCountry:
@@ -151,7 +155,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
-
+  
     public void addSelectedCountry() {
         if (continentSelected.trim().equalsIgnoreCase("")) {
             AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
