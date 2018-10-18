@@ -359,14 +359,14 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
 
         /**
-         * whether the list item is a section
+         * checks whether the list item is a section
          * @return true if the list is section else false is returned
          */
         public boolean isSection() {
             return true;
         }
         /**
-         *computes the hashcode of the list
+         *computes the hashcode of the list item
          *
          */
         public int hashCode() {
@@ -389,19 +389,32 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
 
 
     }
-
+    /**
+     *class which manges the entry of the list
+     *
+     */
     public class EntryItem implements UserDrivenMaps.Item {
         public final String title;
-
+        /**
+         *Contructor to create the entry with given title
+         * @param title of the list
+         */
         public EntryItem(String title) {
             this.title = title;
         }
-
+        /**
+         *getter to get the list title
+         *
+         */
         public String getTitle() {
             return title;
         }
 
-        @Override
+        /**
+         * checks whether the list item is a section
+         * @return true if the list is section else false is returned
+         *
+         */
         public boolean isSection() {
             return false;
         }
