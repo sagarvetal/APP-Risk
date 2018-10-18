@@ -367,7 +367,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
         /**
          *computes the hashcode of the list item
-         *
+         * @return hashcode of the title
          */
         public int hashCode() {
 
@@ -375,7 +375,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
         /**
          *checks whether the two list are equal or not
-         *
+         * @return true if both are equal or return false
          */
         public boolean equals(Object obj) {
             if (obj instanceof SectionItem) {
@@ -418,12 +418,18 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         public boolean isSection() {
             return false;
         }
-
+        /**
+         *computes the hashcode of the list
+         * @return hashcode of the title
+         */
         public int hashCode() {
 
             return title.hashCode();
         }
-
+        /**
+         *checks whether the two list are equal or not
+         * @return true if both are equal or return false
+         */
         public boolean equals(Object obj) {
             if (obj instanceof EntryItem) {
                 if (this.title.equalsIgnoreCase(((EntryItem) obj).title)) ;
