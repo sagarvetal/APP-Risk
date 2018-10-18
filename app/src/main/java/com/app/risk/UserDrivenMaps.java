@@ -277,7 +277,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
 
     }
-
+    /**
+     *This method is invoked when addCustomValue is pressed
+     *This method allows the user to add custom country and continent value.
+     */
     public void addUserCustomValue() {
         final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout, null);
         new AlertDialog.Builder(UserDrivenMaps.this)
@@ -310,7 +313,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
                 .setView(inflaterView)
                 .create().show();
     }
-
+    /**
+     *This method is invoked when connect button is pressed
+     *This method allows the user to redirect to another activity where countries are connected.
+     */
     public void connectCountries() {
         Intent userMapConnect = new Intent(UserDrivenMaps.this, CreateMapActivity.class);
         userMapConnect.putExtra("maps", maps);
