@@ -1,19 +1,24 @@
 package com.app.risk.utility;
 
+
 import android.content.Context;
+
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
+
  * Read map from its text file representation to a class object to load the map from internal storage
  * @author Akshita Angara
  * @version 1.0.0
@@ -27,6 +32,7 @@ public class ReadGameMapFromFile {
 
     /**
      * Function to read from Conquest map file format to GameMap class object (loading a map)
+
      * @param context current state/context of the application
      * @param fileName user requested file name
      */
@@ -35,6 +41,7 @@ public class ReadGameMapFromFile {
         try {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(fileName+".map")));
+
 
             while((line = bufferedReader.readLine()) != null) {
 
@@ -59,17 +66,22 @@ public class ReadGameMapFromFile {
 
                         String[] words = line.split(",");
 
+
                         if (continentBelongsToContinentList(words[3])) {
                             Continent tempContinent = getContinentByName(words[3]);
                             if (tempContinent != null) {
 
+
                                 if(countryGameMapList!=null && countryGameMapList.containsKey(words[0])) {
+
                                     countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
                                 } else {
                                     countryGameMapList.put(words[0], new GameMap(new Country(words[0], tempContinent)));
                                 }
 
+
                                 GameMap gameMapForFinalList = countryGameMapList.get(words[0]);
+
                                 gameMapForFinalList.setFromCountry(countryGameMapList.get(words[0]).getFromCountry());
                                 gameMapForFinalList.setCoordinateX(Integer.parseInt(words[1]));
                                 gameMapForFinalList.setCoordinateY(Integer.parseInt(words[2]));
@@ -98,7 +110,9 @@ public class ReadGameMapFromFile {
 
     /**
      * Function to set the list of all connected countries in the game map object
+
      * @param words array of names of connected countries
+
      * @return list of country objects to be set in the game map object
      */
     private ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
@@ -119,7 +133,9 @@ public class ReadGameMapFromFile {
 
     /**
      * Check if the continent that the country belongs to is part of the continent list
+
      * @param continentName name of the continent
+
      * @return true if continent belongs to continent list, false otherwise
      */
     private boolean continentBelongsToContinentList(String continentName) {
@@ -144,7 +160,9 @@ public class ReadGameMapFromFile {
 
     /**
      * Return a continent object from a list if its name equals the name of the continent passed as parameter
+
      * @param continentName name of the continent
+
      * @return continent object which has the same name as the parameter
      */
     private Continent getContinentByName (String continentName) {

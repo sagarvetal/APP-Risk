@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Risk</string>
+
     <!-- >
     main screen strings
     <!-->
@@ -25,5 +26,6 @@
     <string name="title_activity_custom_country">CustomCountry</string>
     <string name="add_custom_value">Add Custom Value</string>
     <string name="custom_name">Custom Name</string>
+
 
 </resources>
