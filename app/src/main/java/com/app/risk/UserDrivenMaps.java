@@ -322,21 +322,35 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         userMapConnect.putExtra("maps", maps);
         startActivity(userMapConnect);
     }
-
+    /**
+     *custom item interface which represents the object in the list
+     *
+     */
     public interface Item {
+        /**
+         *List item which is section
+         */
         public boolean isSection();
-
+        /**
+         *Title of the List item
+         */
         public String getTitle();
     }
 
 
     public class SectionItem implements UserDrivenMaps.Item {
         private final String title;
-
+        /**
+         *Contstructor to set the title of the list
+         * @param title of the Section of type string
+         */
         public SectionItem(String title) {
             this.title = title;
         }
-
+        /**
+         *getter to get the list title
+         *
+         */
         public String getTitle() {
             return title;
         }
