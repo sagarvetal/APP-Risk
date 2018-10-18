@@ -440,17 +440,27 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             return false;
         }
     }
-
+    /**
+     *Custom adapter to store the values of the items in the list view
+     *
+     */
     public class CountryAdaptor extends BaseAdapter {
 
         private Context context;
         private ArrayList<UserDrivenMaps.Item> item;
         private ArrayList<UserDrivenMaps.Item> orignalItem;
-
+        /**
+         *non parameterized Contructor of Custom adapter to create its instance
+         *
+         */
         public CountryAdaptor() {
             super();
         }
-
+        /**
+         *parameterized Contructor of Custom adapter to create its instance
+         * @param context of the Activity
+         * @param item ArrayList which stores the items in the list
+         */
         public CountryAdaptor(Context context, ArrayList<UserDrivenMaps.Item> item) {
             this.context = context;
             this.item = item;
