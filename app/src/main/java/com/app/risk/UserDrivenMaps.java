@@ -34,7 +34,15 @@ import java.util.List;
 import java.util.Set;
 
 import static java.sql.DriverManager.println;
-
+/**
+ * This Activity class takes the user given country,continent
+ * and continent value .Shows the user the list of countries,continent
+ * selected by the user and binds them into a single hashMap
+ * and sends it another activity where it connects the countries
+ *
+ * @author      Akhila Chilukuri
+ * @version     1.0.0
+ */
 public class UserDrivenMaps extends AppCompatActivity implements View.OnClickListener {
     String continentSelected = "";
     String countrySelected = "";
@@ -57,7 +65,6 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<UserDrivenMaps.Item> countryList = new ArrayList<UserDrivenMaps.Item>();
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
