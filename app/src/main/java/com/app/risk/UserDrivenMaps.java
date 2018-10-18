@@ -466,22 +466,40 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             this.item = item;
         }
 
-        @Override
+        /**
+         *gets of the items in the list
+         * @return item size is returned
+         *
+         */
         public int getCount() {
             return item.size();
         }
 
-        @Override
+        /**
+         *gets the item at the given postion
+         * @param position of item in the list is returned
+         * @return Object of the itel is returned
+         */
         public Object getItem(int position) {
             return item.get(position);
         }
 
-        @Override
+        /**
+         *gets the item ID at a given postion
+         * @param position of item in the list
+         * @return Id of the item
+         */
         public long getItemId(int position) {
             return position;
         }
 
-        @Override
+        /**
+         *puts the list of items on the view
+         * @param position of the item
+         * @param convertView view of the item
+         * @param parent of the item
+         *
+         */
         public View getView(int position, View convertView, ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if (item.get(position).isSection()) {
