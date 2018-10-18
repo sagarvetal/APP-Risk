@@ -349,17 +349,23 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
         /**
          *getter to get the list title
-         *
+         * @return title of the list
          */
         public String getTitle() {
             return title;
         }
 
-        @Override
+        /**
+         * whether the list item is a section
+         * @return true if the list is section else false is returned
+         */
         public boolean isSection() {
             return true;
         }
-
+        /**
+         *computes the hashcode of the list
+         *
+         */
         public int hashCode() {
 
             return title.hashCode();
