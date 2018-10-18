@@ -1,30 +1,59 @@
 package com.app.risk.model;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import android.support.annotation.NonNull;
+
+import java.io.Serializable;
 
 /**
  * Country model to save details of each country
+ *
  * @author Akshita Angara
  */
-public class Country {
 
-    String nameOfCountry;
-    Continent belongsToContinent;
-    private List<String> adjacentCountries;
+public class Country implements Serializable, Comparable<Country> {
+
+
+    private String nameOfCountry;
+    private Continent belongsToContinent;
+    private ArrayList<String> adjacentCountries;
     private Player player;
     private int noOfArmies;
 
     /**
      * This is a default constructor.
-     * It initializes the neighbouring country list.
+     * It initializes the adjacent country list.
      */
     public Country() {
+        super();
         adjacentCountries = new ArrayList<>();
     }
 
     /**
+     * This is a parameterized constructor.
+     * It initializes the name of country.
+     */
+    public Country(String new_nameOfCountry) {
+        nameOfCountry = new_nameOfCountry;
+    }
+
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of country and continent it belongs to.
+     */
+    public Country(String new_nameOfCountry, Continent new_belongsToContinent) {
+        nameOfCountry = new_nameOfCountry;
+        belongsToContinent = new_belongsToContinent;
+    }
+
+
+
+
+
+    /**
      * Getter function to get name of country
+     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -33,6 +62,7 @@ public class Country {
 
     /**
      * Setter function to set name of country
+     *
      * @param nameOfCountry
      */
     public void setNameOfCountry(String nameOfCountry) {
@@ -41,6 +71,7 @@ public class Country {
 
     /**
      * Getter function to return the continent that the country belongs to
+     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -49,17 +80,19 @@ public class Country {
 
     /**
      * Setter function to set details of the continent to which the country belongs
+     *
      * @param belongsToContinent
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
         this.belongsToContinent = belongsToContinent;
     }
 
+
     /**
      * Getter function to return the list of adjacent countries.
      * @return list of adjacent countries
      */
-    public List<String> getAdjacentCountries() {
+    public ArrayList<String> getAdjacentCountries() {
         return adjacentCountries;
     }
 
@@ -67,7 +100,7 @@ public class Country {
      * Setter function to set the list of adjacent countries.
      * @param adjacentCountries The list of adjacent countries.
      */
-    public void setAdjacentCountries(List<String> adjacentCountries) {
+    public void setAdjacentCountries(ArrayList<String> adjacentCountries) {
         this.adjacentCountries = adjacentCountries;
     }
 
@@ -109,6 +142,28 @@ public class Country {
      */
     public void incrementArmies(final int count) {
         this.noOfArmies += count;
+    }
+
+    public int hashCode() {
+
+        return nameOfCountry.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof Country) {
+            if (this.nameOfCountry.equalsIgnoreCase(((Country) obj).nameOfCountry)) ;
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(@NonNull Country country) {
+        if (this.nameOfCountry.equals(country.nameOfCountry))
+            return 0;
+        return this.nameOfCountry.compareToIgnoreCase(country.nameOfCountry);
     }
 
 }

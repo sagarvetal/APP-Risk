@@ -1,13 +1,41 @@
 package com.app.risk.model;
 
+import java.io.Serializable;
+
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
  */
-public class Continent {
+public class Continent implements Serializable {
 
-    String nameOfContinent;
-    int armyControlValue;
+
+    private String nameOfContinent;
+    private int armyControlValue;
+
+    /**
+     * This is a default constructor.
+     */
+    public Continent() {
+        super();
+    }
+
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of continent and army control value.
+     */
+    public Continent(String new_nameOfContinent, int new_armyControlValue) {
+        nameOfContinent = new_nameOfContinent;
+        armyControlValue = new_armyControlValue;
+    }
+
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of continent.
+     */
+    public Continent(String new_nameOfContinent) {
+
+        nameOfContinent=new_nameOfContinent;
+    }
 
     /**
      * Getter function to return the name of continent
@@ -41,5 +69,28 @@ public class Continent {
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
+    }
+
+
+    public int hashCode(){
+
+        return nameOfContinent.hashCode();
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof Continent) {
+            if (this.nameOfContinent.equalsIgnoreCase(((Continent) obj).nameOfContinent))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int compareTo(Continent new_continent) {
+
+        if (this.nameOfContinent.equals(new_continent.nameOfContinent))
+            return 0;
+        return this.nameOfContinent.compareToIgnoreCase(new_continent.nameOfContinent);
     }
 }

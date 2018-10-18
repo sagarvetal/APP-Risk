@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
+import com.app.risk.controller.StartupPhaseController;
+import com.app.risk.model.Country;
+import com.app.risk.model.GamePlay;
+import com.app.risk.utility.MapReader;
 
 import java.util.ArrayList;
 
@@ -21,27 +25,22 @@ public class PlayScreenActivity extends AppCompatActivity {
     private TextView pName,pArmies,pCountries;
     private RecyclerView recyclerView;
     private CardView cardView;
+    private GamePlay gamePlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
-
-        initId();
-        getData();
+        init();
     }
 
-    public void getData(){
-        Intent intent = getIntent();
-        ArrayList<String> sample = new ArrayList<>();
-        String mapInfo = intent.getStringExtra("MAP_INFO");
-        sample = intent.getStringArrayListExtra("PLAYER_INFO");
-
-        Toast.makeText(this, "" + mapInfo + "\n"
-                + sample, Toast.LENGTH_SHORT).show();
-    }
-
-    public void initId()
+    public void init()
     {
+        final Intent intent = getIntent();
+        final String mapName = intent.getStringExtra("MAP_NAME");
+        final ArrayList<String> playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+        Toast.makeText(this, "" + mapName + "\n" + playerNames, Toast.LENGTH_SHORT).show();
+
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
@@ -49,19 +48,27 @@ public class PlayScreenActivity extends AppCompatActivity {
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
 
-        ArrayList<String> temp = new ArrayList<>();
-        for(int i=0;i<10;i++){
-            temp.add("Something "+ i);
-        }
+//        gamePlay = MapReader.readMap(getResources().openRawResource(R.raw.map1));
+//        final StartupPhaseController startupPhaseController = new StartupPhaseController();
+//        startupPhaseController.setPlayers(playerNames, gamePlay);
+//        startupPhaseController.assignInitialCountries(gamePlay);
+//        startupPhaseController.assignInitialArmies(gamePlay);
+//        startupPhaseController.placeInitialArmies(gamePlay);
+//        gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
 
-        LinearLayoutManager layout = new LinearLayoutManager(this);
-        PlayScreenRVAdapter adapter = new PlayScreenRVAdapter(this,temp);
-
-
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layout);
-        recyclerView.setNestedScrollingEnabled(true);
-        recyclerView.setHasFixedSize(false);
+//        final ArrayList<Country> countries = startupPhaseController.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId(), gamePlay);
+//
+//        final LinearLayoutManager layout = new LinearLayoutManager(this);
+//        final PlayScreenRVAdapter adapter = new PlayScreenRVAdapter(this, gamePlay, countries);
+//
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(layout);
+//        recyclerView.setNestedScrollingEnabled(true);
+//        recyclerView.setHasFixedSize(false);
+//
+//        pName.setText(gamePlay.getCurrentPlayer().getName());
+//        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
+//        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
 
     }
 }

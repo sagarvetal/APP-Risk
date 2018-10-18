@@ -1,18 +1,14 @@
 package com.app.risk.utility;
 
-import android.os.Environment;
-
-import com.app.risk.constants.FileConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This class is used to read the map to be used for game play.
@@ -22,17 +18,16 @@ import java.util.List;
 public class MapReader {
 
     /**
-     * This method takes path of the map as an argument,
+     * This method takes input stream of the map as an argument,
      * retrieves list of continents and countries stored in the map and
      * returns the gamePlay object.
-     * @param mapfilePath Path of the map file.
+     * @param inputStream Input stream of the map.
      * @return the gamePlay object
      */
-    public GamePlay readMap(final String mapfilePath) {
+    public static GamePlay readMap(final InputStream inputStream) {
         final GamePlay gamePlay = new GamePlay();
         try {
-            final FileReader fileReader = new FileReader(new File(mapfilePath));
-            final BufferedReader br = new BufferedReader(fileReader);
+            final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String line = br.readLine();
 
             while(line != null) {
@@ -72,7 +67,7 @@ public class MapReader {
                         while(line != null) {
                             final String[] elements = line.trim().split(",");
 
-                            final List<String> adjacentCountries = new ArrayList<>();
+                            final ArrayList<String> adjacentCountries = new ArrayList<>();
                             for(int i = 4; i < elements.length; i++) {
                                 adjacentCountries.add(elements[i].trim());
                             }
@@ -107,13 +102,17 @@ public class MapReader {
      * This method reads the map directory and returns the list of map.
      * @return list of string of map name.
      */
-    public List<String> getMapList(){
-        final List<String> mapList = new ArrayList<>();
-        final String rootPath = Environment.getExternalStorageDirectory().toString();
-        final File mapDir = new File(rootPath + File.separator + FileConstants.LOG_FILE_PATH);
+    public static ArrayList<String> getMapList(){
+        final ArrayList<String> mapList = new ArrayList<>();
+        /*final String rootPath = Environment.getExternalStorageDirectory().toString();
+        final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         for(final File file: mapDir.listFiles()) {
             mapList.add(file.getName());
-        }
+        }*/
+        mapList.add("map1.map");
+        mapList.add("map2.map");
+        mapList.add("map3.map");
+        mapList.add("map4.map");
         return mapList;
     }
 }
