@@ -1,6 +1,7 @@
 package com.app.risk.model;
 
 import java.util.ArrayList;
+
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
@@ -10,7 +11,9 @@ import java.io.Serializable;
  *
  * @author Akshita Angara
  */
+
 public class Country implements Serializable, Comparable<Country> {
+
 
     private String nameOfCountry;
     private Continent belongsToContinent;
@@ -44,8 +47,13 @@ public class Country implements Serializable, Comparable<Country> {
         belongsToContinent = new_belongsToContinent;
     }
 
+
+
+
+
     /**
      * Getter function to get name of country
+     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -54,6 +62,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set name of country
+     *
      * @param nameOfCountry
      */
     public void setNameOfCountry(String nameOfCountry) {
@@ -62,6 +71,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the continent that the country belongs to
+     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -70,11 +80,13 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set details of the continent to which the country belongs
+     *
      * @param belongsToContinent
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
         this.belongsToContinent = belongsToContinent;
     }
+
 
     /**
      * Getter function to return the list of adjacent countries.
@@ -133,6 +145,7 @@ public class Country implements Serializable, Comparable<Country> {
     }
 
     public int hashCode() {
+
         return nameOfCountry.hashCode();
     }
 

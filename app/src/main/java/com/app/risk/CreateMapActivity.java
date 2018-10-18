@@ -156,6 +156,7 @@ public class CreateMapActivity extends Activity {
                     Log.d(TAG, "onClick: " +map.getFromCountry().getNameOfCountry());
                 }
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
+
                     final EditText edittext = new EditText(CreateMapActivity.this);
                     AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
                     alert.setMessage("");
@@ -178,7 +179,9 @@ public class CreateMapActivity extends Activity {
 
                     alert.show();
 
+
                 }else {
+
                     Toast.makeText(CreateMapActivity.this,
                             "Verification Failed", Toast.LENGTH_LONG).show();
                 }
