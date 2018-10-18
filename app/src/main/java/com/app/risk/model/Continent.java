@@ -8,19 +8,32 @@ import java.io.Serializable;
  */
 public class Continent implements Serializable {
 
-    String nameOfContinent;
-    int armyControlValue;
-    Continent()
-    {
+
+    private String nameOfContinent;
+    private int armyControlValue;
+
+    /**
+     * This is a default constructor.
+     */
+    public Continent() {
         super();
     }
-    public Continent(String new_nameOfContinent,int new_armyControlValue)
-    {
-        nameOfContinent=new_nameOfContinent;
-        armyControlValue=new_armyControlValue;
+
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of continent and army control value.
+     */
+    public Continent(String new_nameOfContinent, int new_armyControlValue) {
+        nameOfContinent = new_nameOfContinent;
+        armyControlValue = new_armyControlValue;
     }
-    public Continent(String new_nameOfContinent)
-    {
+
+    /**
+     * This is a parameterized constructor.
+     * It initializes the name of continent.
+     */
+    public Continent(String new_nameOfContinent) {
+
         nameOfContinent=new_nameOfContinent;
     }
 
@@ -57,6 +70,8 @@ public class Continent implements Serializable {
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
     }
+
+
     public int hashCode(){
 
         return nameOfContinent.hashCode();

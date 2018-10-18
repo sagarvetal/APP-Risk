@@ -9,17 +9,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:screenOrientation="landscape"
+
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity"
-            android:screenOrientation="landscape" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-                <intent-filter>
+        <activity android:name=".view.PlayerSelectionActivity" />
+        <activity android:name=".view.MainScreenActivity" >
+            <intent-filter>
+
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".view.MapSelectionActivity" />
+        <activity android:name=".view.PlayScreenActivity" />
+        <activity android:name=".view.PlaceArmiesActivity"></activity>
+
         <activity
             android:name=".UserDrivenMaps"
             android:label="@string/title_activity_user_driven_maps"
