@@ -138,7 +138,7 @@ public class GamePlay implements Serializable {
      */
     public void setCurrentPlayer() {
         final Player player = players.get(playerIdQueue.poll());
-        if(!player.isActive()){
+        if (!player.isActive()) {
             setCurrentPlayer();
         } else {
             currentPlayer = player;
@@ -148,6 +148,7 @@ public class GamePlay implements Serializable {
 
     /**
      * Getter function to return the current phase.
+     *
      * @return The current phase of the game.
      */
     public String getCurrentPhase() {
@@ -156,6 +157,7 @@ public class GamePlay implements Serializable {
 
     /**
      * Setter function to set the current phase.
+     *
      * @param currentPhase The current phase of the game.
      */
     public void setCurrentPhase(String currentPhase) {
@@ -182,6 +184,7 @@ public class GamePlay implements Serializable {
 
     /**
      * Getter function to return the queue of player ids.
+     *
      * @return The queue of player ids.
      */
     public Queue<Integer> getPlayerIdQueue() {
@@ -190,6 +193,7 @@ public class GamePlay implements Serializable {
 
     /**
      * Setter function to set the queue of player ids.
+     *
      * @param playerIdQueue The queue of player ids.
      */
     public void setPlayerIdQueue(Queue<Integer> playerIdQueue) {
@@ -198,12 +202,13 @@ public class GamePlay implements Serializable {
 
     /**
      * This method gives list of countries concurred by given player.
+     *
      * @param playerId This is player id.
      */
     public ArrayList<Country> getCountryListByPlayerId(final int playerId) {
         final ArrayList<Country> countryList = new ArrayList<>();
-        for(final Country country : countries.values()) {
-            if(country.getPlayer().getId() == playerId) {
+        for (final Country country : countries.values()) {
+            if (country.getPlayer().getId() == playerId) {
                 countryList.add(country);
             }
         }
@@ -212,11 +217,12 @@ public class GamePlay implements Serializable {
 
     /**
      * This method set given players into GamePlaye object and assign ids.
+     *
      * @param playerNames This is list of player names of type string.
      */
-    public void setPlayers(final ArrayList<String> playerNames){
+    public void setPlayers(final ArrayList<String> playerNames) {
         int id = 0;
-        for(final String playerName : playerNames) {
+        for (final String playerName : playerNames) {
             final Player player = new Player();
             player.setId(id++);
             player.setName(playerName);

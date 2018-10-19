@@ -17,6 +17,7 @@ import java.util.Stack;
  * 2. Each continent is a connected sub-graph
  * 3. Each country belongs to one and only one continent
  * 4. All countries are unique and no duplicate countries exist in the map
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -30,6 +31,7 @@ public class MapVerification {
 
     /**
      * Method called in controller which performs different checks to make sure map is valid
+     *
      * @param gameMapList List of GameMap objects forming the map to be verified
      * @return true if all checks are satisfied, false otherwise
      */
@@ -59,15 +61,16 @@ public class MapVerification {
 
     /**
      * Performs a check to make sure that all countries are unique and no country is duplicated.
+     *
      * @return true if there are no duplicate countries, false otherwise
      */
     public boolean uniqueCountries() {
 
         mappingForVerification.clear();
 
-        for (GameMap gameMap: gameMapList) {
+        for (GameMap gameMap : gameMapList) {
 
-            if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry())){
+            if (mappingForVerification != null && mappingForVerification.containsKey(gameMap.getFromCountry().getNameOfCountry())) {
                 Country country = (Country) mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry());
                 System.out.println(country.getNameOfCountry() + " already exists.");
 
@@ -82,15 +85,16 @@ public class MapVerification {
 
     /**
      * Performs a check to make sure each country belongs to only one continent
+     *
      * @return true if each country belongs to only one continent, false otherwise
      */
     public boolean checkCountryBelongsToOneContinent() {
 
         mappingForVerification.clear();
 
-        for(GameMap gameMap: gameMapList) {
+        for (GameMap gameMap : gameMapList) {
 
-            if(mappingForVerification!=null && mappingForVerification.containsKey(gameMap.getFromCountry())
+            if (mappingForVerification != null && mappingForVerification.containsKey(gameMap.getFromCountry())
 
                     && !mappingForVerification.get(gameMap.getFromCountry()).equals(gameMap.getFromCountry().getBelongsToContinent())) {
                 System.out.println(mappingForVerification.get(gameMap.getFromCountry().getNameOfCountry()) + " belongs to more than one continent.");
@@ -106,6 +110,7 @@ public class MapVerification {
     /**
      * Performs a check to make sure the entire map is a connected graph
      * (implements DFS on the entire graph)
+     *
      * @return true if the map is connected, false otherwise
      */
     public boolean checkMapIsConnectedGraph() {
@@ -117,8 +122,8 @@ public class MapVerification {
 
         depthFirstTraversal(gameMapList);
 
-        for(GameMap gameMap: gameMapList) {
-            if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
+        for (GameMap gameMap : gameMapList) {
+            if (!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
                 return false;
         }
 
@@ -128,6 +133,7 @@ public class MapVerification {
     /**
      * Performs a check to make sure each continent in the map is a connected subgraph
      * (implements DFS on each continent)
+     *
      * @return true if each continent is a connected subgraph, false otherwise
      */
     public boolean checkContinentIsConnectedSubgraph() {
@@ -136,7 +142,7 @@ public class MapVerification {
 
         generateContinentCountryMapping();
 
-        for(Continent continent: continentCountryMapping.keySet()) {
+        for (Continent continent : continentCountryMapping.keySet()) {
 
             countriesVisited.clear();
             depthFirstTraversalStack.clear();
@@ -145,8 +151,8 @@ public class MapVerification {
             depthFirstTraversalStack.push(traversableCountries.get(0));
             depthFirstTraversal(traversableCountries);
 
-            for(GameMap gameMap: traversableCountries) {
-                if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry())) {
+            for (GameMap gameMap : traversableCountries) {
+                if (!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry())) {
                     System.out.println(continent.getNameOfContinent() + " is not a connected subgraph.");
                     return false;
                 }
@@ -158,25 +164,26 @@ public class MapVerification {
 
     /**
      * Method to perform DFS on the list of countries that belong to the entire map or to a continent
+     *
      * @param traversableCountries Countries that belong to either the entire map (forming a map) or a continent (forming a subgraph)
      */
 
     private void depthFirstTraversal(List<GameMap> traversableCountries) {
 
 
-        while (!depthFirstTraversalStack.empty()){
+        while (!depthFirstTraversalStack.empty()) {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
 
-            if(countriesVisited!=null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
+            if (countriesVisited != null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())) {
                 continue;
             } else {
 
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
 
-                for (GameMap neighbourCountry: countryVisited.getConnectedToCountries()){
-                    if(traversableCountries.contains(neighbourCountry)
-                            && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())){
+                for (GameMap neighbourCountry : countryVisited.getConnectedToCountries()) {
+                    if (traversableCountries.contains(neighbourCountry)
+                            && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())) {
                         depthFirstTraversalStack.push(neighbourCountry);
                     }
                 }
@@ -189,9 +196,9 @@ public class MapVerification {
      */
     public void generateContinentCountryMapping() {
 
-        for (GameMap gameMap: gameMapList) {
+        for (GameMap gameMap : gameMapList) {
 
-            if (continentCountryMapping!=null && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
+            if (continentCountryMapping != null && continentCountryMapping.containsKey(gameMap.getFromCountry().getBelongsToContinent())) {
 
                 continentCountryMapping.get(gameMap.getFromCountry().getBelongsToContinent())
                         .add(gameMap);
