@@ -32,10 +32,8 @@ public class StartupPhaseController {
 
     /**
     * This method starts the startup phase.
-    * @param playerNames This is list of player names of type string.
     */
-    public void start(final ArrayList<String> playerNames){
-        setPlayers(playerNames);
+    public void start(){
         assignInitialCountries();
         assignInitialArmies();
         placeInitialArmies();
@@ -105,7 +103,7 @@ public class StartupPhaseController {
 
             for(final Player player : gamePlay.getPlayers().values()) {
                 hmPlayerUnplacedArmies.put(player.getId(), player.getNoOfArmies() - player.getNoOfCountries());
-                hmPlayerCountries.put(player.getId(), getCountryListByPlayerId(player.getId()));
+                hmPlayerCountries.put(player.getId(), gamePlay.getCountryListByPlayerId(player.getId()));
                 totalUnplacedArmies += player.getNoOfArmies() - player.getNoOfCountries();
             }
 
@@ -122,35 +120,6 @@ public class StartupPhaseController {
             }
         }
 
-    }
-
-    /**
-     * This method gives list of countries concurred by given player.
-     * @param playerId This is player id.
-     */
-    public ArrayList<Country> getCountryListByPlayerId(final int playerId) {
-        final ArrayList<Country> countryList = new ArrayList<>();
-        for(final Country country : gamePlay.getCountries().values()) {
-            if(country.getPlayer().getId() == playerId) {
-                countryList.add(country);
-            }
-        }
-        return countryList;
-    }
-
-    /**
-     * This method set given players into GamePlaye object and assign ids.
-     * @param playerNames This is list of player names of type string.
-     */
-    public void setPlayers(final ArrayList<String> playerNames){
-        int id = 0;
-        for(final String playerName : playerNames) {
-            final Player player = new Player();
-            player.setId(id++);
-            player.setName(playerName);
-            player.setActive(true);
-            gamePlay.getPlayers().put(player.getId(), player);
-        }
     }
 
 }
