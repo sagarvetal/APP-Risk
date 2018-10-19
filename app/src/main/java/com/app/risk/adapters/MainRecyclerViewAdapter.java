@@ -3,6 +3,7 @@ package com.app.risk.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.risk.EditMap;
 import com.app.risk.UserDrivenMaps;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.CardViewHolder> {
@@ -83,8 +84,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         invokingActivity.startActivity(userMapCreate);
                         break;
                     case "Edit Map":
-                        Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
-                        invokingActivity.startActivity(editMap);
+                        //Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
+                        //invokingActivity.startActivity(editMap);
                         break;
                     case "Help":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
@@ -93,7 +94,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
                     case "Exit":
-                       break;
+                            System.exit(0);
+                        break;
                 }
 
             }
