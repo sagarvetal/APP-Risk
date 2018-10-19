@@ -50,6 +50,18 @@ public class Country implements Serializable, Comparable<Country> {
     }
 
     /**
+     * Parameterized constructor to initialize name of country, continent it belongs to and a list of its adjacent countries
+     * @param nameOfCountry Name of country
+     * @param belongsToContinent Continent that the country belongs to
+     * @param adjacentCountries List of adjacent countries
+     */
+    public Country(String nameOfCountry, Continent belongsToContinent, ArrayList<String> adjacentCountries) {
+        this.nameOfCountry = nameOfCountry;
+        this.belongsToContinent = belongsToContinent;
+        this.adjacentCountries = adjacentCountries;
+    }
+
+    /**
      * Getter function to get name of country
      * @return name of country
      */

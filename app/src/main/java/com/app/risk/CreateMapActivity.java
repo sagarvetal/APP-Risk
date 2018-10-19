@@ -3,18 +3,15 @@ package com.app.risk;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,14 +26,12 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
-import com.app.risk.utility.WriteGameMapToFile;
+import com.app.risk.utility.MapWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Creates Map and saves map after verification
@@ -312,8 +307,8 @@ public class CreateMapActivity extends Activity  {
     }
 
     public void handleMapVerificationSucced(String filename){
-        WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-        writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,filename,arrCountriesRepresentationOnGraph);
+            MapWriter mapWriter = new MapWriter();
+            mapWriter.writeGameMapToFile(CreateMapActivity.this,filename,arrCountriesRepresentationOnGraph);
     }
 
     /**

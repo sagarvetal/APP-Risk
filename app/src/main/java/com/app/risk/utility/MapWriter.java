@@ -4,11 +4,13 @@ package com.app.risk.utility;
 import android.content.Context;
 
 
+import com.app.risk.constants.FileConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.GameMap;
 
 import java.io.BufferedWriter;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -21,7 +23,7 @@ import java.util.List;
  * @author Akshita Angara
  * @version 1.0.0
  */
-public class WriteGameMapToFile {
+public class MapWriter {
 
     /**
      * Function to write the game map data to a text file in the given Conquest map file format.
@@ -41,7 +43,11 @@ public class WriteGameMapToFile {
 
         try {
 
-            FileOutputStream f = context.openFileOutput(fileName + ".map", Context.MODE_PRIVATE);
+            String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
+            File mapDirectory = new File(mapDir);
+            if (!mapDirectory.exists())
+                mapDirectory.mkdirs();
+            FileOutputStream f = new FileOutputStream(new File(mapDirectory, fileName + FileConstants.MAP_FILE_EXTENSTION));
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(f));
 
             bufferedWriter.write("[Map]\n");
