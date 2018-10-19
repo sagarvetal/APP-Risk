@@ -10,6 +10,7 @@ import com.app.risk.model.GameMap;
 
 import java.io.BufferedReader;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -40,9 +41,9 @@ public class ReadGameMapFromFile {
 
         try {
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(fileName+".map")));
-
-
+            //BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
+             FileInputStream fis=context.openFileInput(fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fis));
             while((line = bufferedReader.readLine()) != null) {
 
                 if (line.equals("[Continents]")) {

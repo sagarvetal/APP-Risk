@@ -61,7 +61,7 @@ public class MapVerification {
      * Performs a check to make sure that all countries are unique and no country is duplicated.
      * @return true if there are no duplicate countries, false otherwise
      */
-    private boolean uniqueCountries() {
+    public boolean uniqueCountries() {
 
 
         mappingForVerification.clear();
@@ -86,7 +86,7 @@ public class MapVerification {
      * Performs a check to make sure each country belongs to only one continent
      * @return true if each country belongs to only one continent, false otherwise
      */
-    private boolean checkCountryBelongsToOneContinent() {
+    public boolean checkCountryBelongsToOneContinent() {
 
 
         mappingForVerification.clear();
@@ -112,7 +112,7 @@ public class MapVerification {
      * (implements DFS on the entire graph)
      * @return true if the map is connected, false otherwise
      */
-    private boolean checkMapIsConnectedGraph() {
+    public boolean checkMapIsConnectedGraph() {
 
 
         countriesVisited.clear();
@@ -135,7 +135,7 @@ public class MapVerification {
      * (implements DFS on each continent)
      * @return true if each continent is a connected subgraph, false otherwise
      */
-    private boolean checkContinentIsConnectedSubgraph() {
+    public boolean checkContinentIsConnectedSubgraph() {
 
 
         continentCountryMapping.clear();
@@ -166,7 +166,7 @@ public class MapVerification {
      * Method to perform DFS on the list of countries that belong to the entire map or to a continent
      * @param traversableCountries Countries that belong to either the entire map (forming a map) or a continent (forming a subgraph)
      */
-    private void DepthFirstTraversal(List<GameMap> traversableCountries) {
+    public void DepthFirstTraversal(List<GameMap> traversableCountries) {
 
         while (!depthFirstTraversalStack.empty()){
 
@@ -192,7 +192,7 @@ public class MapVerification {
     /**
      * Method to generate a hashmap with continent as key and a list of countries belonging to that continent as its value
      */
-    private void generateContinentCountryMapping() {
+    public void generateContinentCountryMapping() {
 
         for (GameMap gameMap: gameMapList) {
 

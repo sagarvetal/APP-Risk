@@ -64,7 +64,8 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     String currentContinent = "";
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<UserDrivenMaps.Item> countryList = new ArrayList<UserDrivenMaps.Item>();
-
+    Bundle sendBundle=new Bundle();
+    Boolean editMode=false;
     /**
      * This method is invoked when the activity is created
      * This method initializes the item on the view with the ArrayAdapters.
@@ -76,6 +77,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_driven_maps);
+
         continent = (Spinner) findViewById(R.id.continent);
         continentsList = new ArrayList(Arrays.asList(getResources().getStringArray(R.array.continent)));
         continentAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, continentsList);
@@ -127,16 +129,91 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
 
         addCountry = (Button) findViewById(R.id.addCountry);
         addCountry.setOnClickListener(this);
-        selectedCountryList = (ListView) findViewById(R.id.selectedCountries);
-        countryListAdapter = new CountryAdaptor(this, countryList);
-        selectedCountryList.setAdapter(countryListAdapter);
-        selectedCountryList.setTextFilterEnabled(true);
 
         addCustomValue = (Button) findViewById(R.id.addCustomValue);
         addCustomValue.setOnClickListener(this);
         connectMap = (Button) findViewById(R.id.addNeighbours);
         connectMap.setOnClickListener(this);
+
+
+        selectedCountryList = (ListView) findViewById(R.id.selectedCountries);
+        countryListAdapter = new CountryAdaptor(this, countryList);
+        selectedCountryList.setAdapter(countryListAdapter);
+        selectedCountryList.setTextFilterEnabled(true);
+
+        selectedCountryList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(countryList.get(i).isSection())
+                {
+
+                }
+                else
+                {
+                    Continent continent=null;
+                    String continentName=null;
+                    for(int j=0;j<i;j++)
+                    {
+                        if(countryList.get(j).isSection())
+                        {
+                            continentName=countryList.get(j).getTitle();
+                        }
+                    }
+                    Country country=new Country(countryList.get(i).getTitle().toString());
+                    presentcountryList.add(countryList.get(i).getTitle().toString());
+                    countryList.remove(i);
+                    continent=new Continent(continentName);
+                    ArrayList<Country> presentCountry=maps.get(continent);
+                    presentCountry.remove(country);
+                    countryListAdapter.notifyDataSetChanged();
+                    countryAdapter.notifyDataSetChanged();
+                }
+                return true;
+            }
+
+        });
+
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        editMode= bundle.getBoolean("edit Mode");
+        if(editMode)
+        {
+            setTheListView(bundle);
+            sendBundle.putBoolean("isEditMode",true);
+            sendBundle.putSerializable("arrGameData", intent.getSerializableExtra("arrGameData"));
+        }
     }
+    /**
+     * This method is invoked in the edit mode of the Map
+     * populates the values of the list with countries and continents in the Map
+     * @param bundle holds the key value pair of the object sent from the previous activity
+     */
+    private void setTheListView(Bundle bundle) {
+        maps=(HashMap<Continent, ArrayList<Country>>)bundle.getSerializable("maps");
+        Set<Continent> continentSet=maps.keySet();
+        for(Continent c:continentSet)
+        {
+            ArrayList<Country> countries=maps.get(c);
+            countryList.add(new SectionItem(c.getNameOfContinent()));
+            for(Country country:countries)
+            {
+                countryList.add(new EntryItem(country.getNameOfCountry()));
+                if(presentcountryList.contains(country.getNameOfCountry()))
+                {
+                    presentcountryList.remove(country.getNameOfCountry());
+                }
+            }
+            if(!continentsList.contains(c.getNameOfContinent()))
+            {
+                continentsList.add(c.getNameOfContinent());
+            }
+        }
+        countryListAdapter.notifyDataSetChanged();
+        countryAdapter.notifyDataSetChanged();
+        continentAdapter.notifyDataSetChanged();
+
+    }
+
     /**
      * This method acts as a Listener for the buttons addCountry,addCustomValue,connect
      * {@inheritDoc}
@@ -320,6 +397,10 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     public void connectCountries() {
         Intent userMapConnect = new Intent(UserDrivenMaps.this, CreateMapActivity.class);
         userMapConnect.putExtra("maps", maps);
+        if(editMode)
+        {
+            userMapConnect.putExtras(sendBundle);
+        }
         startActivity(userMapConnect);
     }
     /**

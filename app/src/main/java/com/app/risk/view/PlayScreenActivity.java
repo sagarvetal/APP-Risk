@@ -48,6 +48,7 @@ public class PlayScreenActivity extends AppCompatActivity {
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
 
+
 //        gamePlay = MapReader.readMap(getResources().openRawResource(R.raw.map1));
 //        final StartupPhaseController startupPhaseController = new StartupPhaseController();
 //        startupPhaseController.setPlayers(playerNames, gamePlay);
@@ -69,6 +70,7 @@ public class PlayScreenActivity extends AppCompatActivity {
 //        pName.setText(gamePlay.getCurrentPlayer().getName());
 //        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
 //        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
+
 
     }
 }

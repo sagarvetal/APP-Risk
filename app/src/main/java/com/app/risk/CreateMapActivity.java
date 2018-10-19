@@ -58,6 +58,16 @@ public class CreateMapActivity extends Activity {
 
     int currentIndexCountrySelected;
 
+    private Context context;
+
+//save the context recievied via constructor in a local variable
+
+    public CreateMapActivity(Context context){
+        this.context=context;
+    }
+    public CreateMapActivity(){
+        super();
+    }
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
