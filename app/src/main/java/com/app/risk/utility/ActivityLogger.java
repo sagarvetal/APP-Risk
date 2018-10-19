@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * This class logs the all activities done during game play.
+ *
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 06/10/2018)
  */
@@ -21,11 +22,12 @@ public class ActivityLogger {
 
     /**
      * This method logs the all activities done during game play.
+     *
      * @param activity An activity performed during game play..
      */
     public static void log(final String activity) {
         try {
-            final FileWriter fileWriter = new FileWriter(getFilePath(),true);
+            final FileWriter fileWriter = new FileWriter(getFilePath(), true);
             final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(activity);
             bufferedWriter.newLine();
@@ -39,6 +41,7 @@ public class ActivityLogger {
     /**
      * This method finds the path of log file and return file object.
      * If log folder is not present, it will create the log folder.
+     *
      * @return file object
      */
     public static File getFilePath() {

@@ -30,7 +30,7 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.map_view_layout,container,false);
+        View view = inflater.inflate(R.layout.map_view_layout, container, false);
 
         CardView cardView = view.findViewById(R.id.map_view_layout_cardview);
         textView = view.findViewById(R.id.map_view_layout_textview);
@@ -41,14 +41,14 @@ public class MapFragment extends Fragment {
 
                 new AlertDialog.Builder(getActivity())
                         .setMessage("Load Map")
-                        .setNegativeButton("No",null)
+                        .setNegativeButton("No", null)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Toast.makeText(getActivity(), "" + textView.getText().toString(), Toast.LENGTH_SHORT).show();
 
-                                Intent intent = new Intent(getActivity(),PlayerSelectionActivity.class);
-                                intent.putExtra("MAP_NAME",textView.getText().toString().trim());
+                                Intent intent = new Intent(getActivity(), PlayerSelectionActivity.class);
+                                intent.putExtra("MAP_NAME", textView.getText().toString().trim());
                                 startActivity(intent);
                             }
                         }).create().show();

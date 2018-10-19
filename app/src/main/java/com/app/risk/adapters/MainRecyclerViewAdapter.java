@@ -94,9 +94,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
                     case "Exit":
-                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), PlaceArmiesActivity.class));
-                        break;
+                       break;
                 }
 
             }

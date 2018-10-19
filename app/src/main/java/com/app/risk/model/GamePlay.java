@@ -1,9 +1,13 @@
 package com.app.risk.model;
 
+import com.app.risk.constants.GamePlayConstants;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * GamePlay model to store the details of game currently being played
@@ -20,7 +24,9 @@ public class GamePlay implements Serializable {
     private HashMap<String, Country> countries;
     private HashMap<Integer, Player> players;
     private Player currentPlayer;
+    private String currentPhase;
     private List<Card> cards;
+    private Queue<Integer> playerIdQueue;
 
     /**
      * This is a default constructor.
@@ -31,6 +37,7 @@ public class GamePlay implements Serializable {
         this.countries = new HashMap<>();
         this.players = new HashMap<>();
         this.cards = new ArrayList<>();
+        this.playerIdQueue = new LinkedList<Integer>();
     }
 
     /**
@@ -124,6 +131,40 @@ public class GamePlay implements Serializable {
     }
 
     /**
+     * This function is to set the object of player whose turn is going on.
+     * It fetches the player id from queue.
+     * If the player is active, it will set as a current player and push that player in end of queue.
+     * If the player is inactive, it will remove that player from queue and recursively call itself.
+     */
+    public void setCurrentPlayer() {
+        final Player player = players.get(playerIdQueue.poll());
+        if (!player.isActive()) {
+            setCurrentPlayer();
+        } else {
+            currentPlayer = player;
+            playerIdQueue.offer(currentPlayer.getId());
+        }
+    }
+
+    /**
+     * Getter function to return the current phase.
+     *
+     * @return The current phase of the game.
+     */
+    public String getCurrentPhase() {
+        return currentPhase;
+    }
+
+    /**
+     * Setter function to set the current phase.
+     *
+     * @param currentPhase The current phase of the game.
+     */
+    public void setCurrentPhase(String currentPhase) {
+        this.currentPhase = currentPhase;
+    }
+
+    /**
      * Getter function to return the list of cards available in game play
      *
      * @return list of cards
@@ -134,11 +175,60 @@ public class GamePlay implements Serializable {
 
     /**
      * Setter function to set the list of cards available in game play
-     *
-     * @param cards The card list available in game play
      */
-    public void setCards(List<Card> cards) {
-        this.cards = cards;
+    public void setCards() {
+        this.cards.add(new Card(GamePlayConstants.INFANTRY_CARD));
+        this.cards.add(new Card(GamePlayConstants.CAVALRY_CARD));
+        this.cards.add(new Card(GamePlayConstants.ARTILLERY_CARD));
     }
 
+    /**
+     * Getter function to return the queue of player ids.
+     *
+     * @return The queue of player ids.
+     */
+    public Queue<Integer> getPlayerIdQueue() {
+        return playerIdQueue;
+    }
+
+    /**
+     * Setter function to set the queue of player ids.
+     *
+     * @param playerIdQueue The queue of player ids.
+     */
+    public void setPlayerIdQueue(Queue<Integer> playerIdQueue) {
+        this.playerIdQueue = playerIdQueue;
+    }
+
+    /**
+     * This method gives list of countries concurred by given player.
+     *
+     * @param playerId This is player id.
+     */
+    public ArrayList<Country> getCountryListByPlayerId(final int playerId) {
+        final ArrayList<Country> countryList = new ArrayList<>();
+        for (final Country country : countries.values()) {
+            if (country.getPlayer().getId() == playerId) {
+                countryList.add(country);
+            }
+        }
+        return countryList;
+    }
+
+    /**
+     * This method set given players into GamePlaye object and assign ids.
+     *
+     * @param playerNames This is list of player names of type string.
+     */
+    public void setPlayers(final ArrayList<String> playerNames) {
+        int id = 0;
+        for (final String playerName : playerNames) {
+            final Player player = new Player();
+            player.setId(id++);
+            player.setName(playerName);
+            player.setActive(true);
+            players.put(player.getId(), player);
+            playerIdQueue.add(player.getId());
+        }
+    }
 }

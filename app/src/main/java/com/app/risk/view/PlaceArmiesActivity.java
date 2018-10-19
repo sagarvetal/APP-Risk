@@ -22,16 +22,16 @@ public class PlaceArmiesActivity extends AppCompatActivity {
         setUpRecyclerView();
     }
 
-    public void setUpRecyclerView(){
+    public void setUpRecyclerView() {
         ArrayList<String> arrayList = new ArrayList<>();
 
-        for(int i=0;i<10;i++) {
+        for (int i = 0; i < 10; i++) {
             arrayList.add("Country " + i);
         }
         recyclerView = findViewById(R.id.place_armiew_recyclerview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        MainRecyclerViewAdapter adapter = new MainRecyclerViewAdapter(arrayList,this);
+        MainRecyclerViewAdapter adapter = new MainRecyclerViewAdapter(arrayList, this);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
