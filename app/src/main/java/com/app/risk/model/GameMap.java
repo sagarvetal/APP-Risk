@@ -98,6 +98,7 @@ public class GameMap {
             returnString += map.fromCountry.getNameOfCountry() + ",";
 
         }
+
         return returnString;
     }
 
