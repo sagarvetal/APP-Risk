@@ -30,7 +30,7 @@ import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.MapVerification;
-import com.app.risk.utility.WriteGameMapToFile;
+import com.app.risk.utility.MapWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -166,8 +166,8 @@ public class CreateMapActivity extends Activity {
                     alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String mapName = edittext.getText().toString();
-                            WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                            writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,mapName,arrCountriesRepresentationOnGraph);
+                            MapWriter mapWriter = new MapWriter();
+                            mapWriter.writeGameMapToFile(CreateMapActivity.this,mapName,arrCountriesRepresentationOnGraph);
                         }
                     });
 
