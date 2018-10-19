@@ -22,7 +22,6 @@
         </activity>
         <activity android:name=".view.MapSelectionActivity" />
         <activity android:name=".view.PlayScreenActivity" />
-        <activity android:name=".view.PlaceArmiesActivity" />
         <activity
             android:name=".UserDrivenMaps"
             android:label="@string/title_activity_user_driven_maps"

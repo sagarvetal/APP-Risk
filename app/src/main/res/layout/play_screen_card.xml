@@ -24,8 +24,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            >
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -37,9 +39,16 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:text="No.of Armies"
-                android:textSize="20dp"
+                android:layout_weight="0.3"
+                android:text="Armies: "
+                android:textSize="25dp"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="Armies"
+                android:textSize="25dp"
                 android:id="@+id/play_screen_card_armies"
                 />
         </LinearLayout>
@@ -48,6 +57,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Continent Name"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
             android:textSize="20dp"
             android:id="@+id/play_screen_card_continent"
             />

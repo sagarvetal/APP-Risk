@@ -128,6 +128,9 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         break;
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
+
+
+
                         break;
                 }
             }
