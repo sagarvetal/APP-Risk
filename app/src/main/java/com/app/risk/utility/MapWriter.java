@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Create and write game map defined by user to text file in internal storage
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -27,15 +28,16 @@ public class MapWriter {
 
     /**
      * Function to write the game map data to a text file in the given Conquest map file format.
-     * @param context current state/context of the application
-     * @param fileName user specified file name
+     *
+     * @param context     current state/context of the application
+     * @param fileName    user specified file name
      * @param gameMapList list of continent and connected countries of each country chosen by the user
      */
-    public void writeGameMapToFile (Context context, String fileName, List<GameMap> gameMapList){
+    public void writeGameMapToFile(Context context, String fileName, List<GameMap> gameMapList) {
 
         List<Continent> continentList = new ArrayList<>();
-        for(GameMap gameMap: gameMapList){
-            if(!continentList.isEmpty() && continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
+        for (GameMap gameMap : gameMapList) {
+            if (!continentList.isEmpty() && continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
                 continue;
             else
                 continentList.add(gameMap.getFromCountry().getBelongsToContinent());
@@ -59,7 +61,7 @@ public class MapWriter {
             bufferedWriter.newLine();
 
             bufferedWriter.write("[Continents]\n");
-            for(Continent continent: continentList) {
+            for (Continent continent : continentList) {
                 bufferedWriter.write(continent.getNameOfContinent() +
                         "=" +
                         continent.getArmyControlValue() +
@@ -69,7 +71,7 @@ public class MapWriter {
             bufferedWriter.newLine();
 
             bufferedWriter.write("[Territories]\n");
-            for(GameMap gameMap: gameMapList) {
+            for (GameMap gameMap : gameMapList) {
                 bufferedWriter.write(gameMap.getFromCountry().getNameOfCountry() +
                         "," +
                         gameMap.getCoordinateX() +

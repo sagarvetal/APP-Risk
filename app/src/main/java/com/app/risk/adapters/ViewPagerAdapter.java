@@ -9,7 +9,7 @@ import com.app.risk.view.MapFragment;
 
 import java.util.ArrayList;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter{
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
 
     private ArrayList<String> mapList;

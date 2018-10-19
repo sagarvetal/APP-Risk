@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * Player model to capture player details
  * like name, assigned countries and armies, and cards earned
+ *
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 04/10/2018)
  */
@@ -31,6 +32,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the unique id of the player
+     *
      * @return id of player
      */
     public int getId() {
@@ -39,6 +41,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the unique id of the player
+     *
      * @param id The unique id of player
      */
     public void setId(int id) {
@@ -47,6 +50,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the name of the player
+     *
      * @return name of the player
      */
     public String getName() {
@@ -55,6 +59,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the name of the player
+     *
      * @param name The name of the player
      */
     public void setName(String name) {
@@ -63,6 +68,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the color code of the player
+     *
      * @return color code of the player
      */
     public String getColorCode() {
@@ -71,6 +77,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the color code of the player to identify them
+     *
      * @param colorCode The unique color code of the player
      */
     public void setColorCode(String colorCode) {
@@ -79,6 +86,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the no of countries assigned to the player
+     *
      * @return no of countries
      */
     public int getNoOfCountries() {
@@ -87,6 +95,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the no of countries assigned to the player
+     *
      * @param noOfCountries The number of countries assigned
      */
     public void setNoOfCountries(int noOfCountries) {
@@ -95,6 +104,7 @@ public class Player implements Serializable {
 
     /**
      * This function is to increment no of countries by given count.
+     *
      * @param count The increment count by which the no of countries to be incremented.
      */
     public void incrementCountries(final int count) {
@@ -103,6 +113,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the no of armies assigned to the player
+     *
      * @return no of armies
      */
     public int getNoOfArmies() {
@@ -111,6 +122,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the no of armies assigned to the player
+     *
      * @param noOfArmies The number of armies assigned
      */
     public void setNoOfArmies(int noOfArmies) {
@@ -119,6 +131,7 @@ public class Player implements Serializable {
 
     /**
      * This function is to increment no of armies by given count.
+     *
      * @param count The increment count by which the no of armies to be incremented.
      */
     public void incrementArmies(final int count) {
@@ -127,6 +140,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the no of reinforcement armies given to the player
+     *
      * @return no of reinforcement armies
      */
     public int getReinforcementArmies() {
@@ -135,6 +149,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the no of reinforcement armies given to the player
+     *
      * @param reinforcementArmies The number of reinforcement armies
      */
     public void setReinforcementArmies(int reinforcementArmies) {
@@ -143,6 +158,7 @@ public class Player implements Serializable {
 
     /**
      * This function is to decrement no of reinforcement armies by given count.
+     *
      * @param count The decrement count by which the no of reinforcement armies to be decremented.
      */
     public void decrementReinforcementArmies(final int count) {
@@ -151,6 +167,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the list of cards earned by player
+     *
      * @return list of cards
      */
     public List<Card> getCards() {
@@ -159,6 +176,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the card earned by player
+     *
      * @param card The card earned by player
      */
     public void setCards(Card card) {
@@ -167,6 +185,7 @@ public class Player implements Serializable {
 
     /**
      * Getter function to get the flag to determine game is over on not for respective player
+     *
      * @return true if player's game is not over; otherwise return false.
      */
     public boolean isActive() {
@@ -175,6 +194,7 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the flag to determine game is over on not for respective player
+     *
      * @param active It is true if player's game is not over; otherwise false.
      */
     public void setActive(boolean active) {
