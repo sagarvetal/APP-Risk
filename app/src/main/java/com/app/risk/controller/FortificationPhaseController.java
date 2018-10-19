@@ -6,6 +6,7 @@ import com.app.risk.model.GamePlay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Fortification phase class: Player can move his armies from a country he owns to another country
@@ -70,4 +71,10 @@ public class FortificationPhaseController {
             return false;
 
     }
+
+    public void assignCards() {
+        final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
+        gamePlay.getCurrentPlayer().setCards(gamePlay.getCards().get(randomIndex));
+    }
+
 }
