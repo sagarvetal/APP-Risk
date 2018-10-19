@@ -24,13 +24,13 @@
         <activity android:name=".view.PlayScreenActivity" />
         <activity android:name=".view.PlaceArmiesActivity" />
         <activity
-            android:name=".UserDrivenMaps"
+            android:name=".view.UserDrivenMaps"
             android:label="@string/title_activity_user_driven_maps"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".CreateMapActivity"
+            android:name=".view.CreateMapActivity"
             android:label="@string/title_activity_create_map"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
