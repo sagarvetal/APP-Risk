@@ -1,6 +1,5 @@
 package com.app.risk.adapters;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,19 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapter.PlayScreenViewHolder> {
 
@@ -32,21 +29,22 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     private ArrayList<Country> countries;
     private Context context;
     private ArrayList<String> neighbouringCountries;
+    private PhaseManager phaseManager;
 
-    /*
+    /**
      * The constructor of the class which sets the context and arraylist
      * of for the adapter
-     * @param context: to be used to call any activity methods using reference
-     * @param pList: player list to be set up for recyclerview
+     * @param context It is used to call any activity methods using reference
+     * @param gamePlay The GamePlay object
      */
-    public PlayScreenRVAdapter(Context context, GamePlay gamePlay, ArrayList<Country> countries) {
+    public PlayScreenRVAdapter(Context context, GamePlay gamePlay) {
         this.context = context;
         this.gamePlay = gamePlay;
-        this.countries = countries;
+        this.countries = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
         this.neighbouringCountries = new ArrayList<>();
     }
 
-    /*
+    /**
      *ViewHolder method inflates the view to be represented in recyclerview
      *
      * {@inheritDoc}
@@ -59,8 +57,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         return adapter;
     }
 
-    /*
-     *BindViewHolder binds the data with the particular layout and
+    /**
+     * BindViewHolder binds the data with the particular layout and
      * displays on the recyclerview
      *
      * {@inheritDoc}
@@ -82,8 +80,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
     }
 
-    /*
-     *Returns the number of items in recyclerview adapter
+    /**
+     * Returns the number of items in recyclerview adapter
      * {@inheritDoc}
      */
     @Override
@@ -91,8 +89,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         return countries.size();
     }
 
-    /*
-     *Inner class of recyclerview adapter which gets the reference to
+    /**
+     * Inner class of recyclerview adapter which gets the reference to
      * view holder and add functionality to the views
      */
     public class PlayScreenViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -115,41 +113,64 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             cardView.setOnClickListener(this);
         }
 
-        /*
+        /**
          * {@inheritDoc}
          */
         @Override
         public void onClick(View v) {
             if(v == cardView){
-                if(GamePlayConstants.REINFORCEMENT_PHASE.equalsIgnoreCase(gamePlay.getCurrentPhase())) {
-                    show(getAdapterPosition());
+                switch (gamePlay.getCurrentPhase()) {
+                    case GamePlayConstants.REINFORCEMENT_PHASE:
+                        showReinforcementDialogBox(getAdapterPosition());
+                        break;
+
+                    case GamePlayConstants.ATTACK_PHASE:
+                        break;
+
+                    case GamePlayConstants.FORTIFICATION_PHASE:
+                        break;
                 }
-                //Toast.makeText(context, "" + getAdapterPosition()+"=>"+neighbouringCountries.size(), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    public void show(final int adapterPostion){
-        AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
+    /**
+     * This method shows the dailog box to place the reinforcement armies.
+     * @param adapterPostion The position of country owned by the player.
+     */
+    public void showReinforcementDialogBox(final int adapterPostion){
+        final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
-        View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
         reinforcementDialogBox.setView(view);
+
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
-        numberPicker.setMaxValue(gamePlay.getCurrentPlayer().getReinforcementArmies()); // max value 100
-        numberPicker.setMinValue(1);   // min value 1
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(gamePlay.getCurrentPlayer().getReinforcementArmies());
         numberPicker.setWrapSelectorWheel(false);
 
         reinforcementDialogBox.setPositiveButton("Place", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(context, "" + numberPicker.getValue(), Toast.LENGTH_SHORT).show();
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
                 countries.get(adapterPostion).incrementArmies(numberPicker.getValue());
                 notifyDataSetChanged();
+                if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
+                    phaseManager.changePhase(GamePlayConstants.ATTACK_PHASE);
+                }
             }
         });
         reinforcementDialogBox.setNegativeButton("Cancel",null);
         reinforcementDialogBox.create();
         reinforcementDialogBox.show();
+    }
+
+    public PhaseManager getPhaseManager() {
+        return phaseManager;
+    }
+
+    public void setPhaseManager(PhaseManager phaseManager) {
+        this.phaseManager = phaseManager;
     }
 }
