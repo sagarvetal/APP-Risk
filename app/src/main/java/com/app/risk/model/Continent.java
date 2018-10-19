@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Continent model to save details of each continent
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -22,7 +23,8 @@ public class Continent implements Serializable {
     /**
      * This is a parameterized constructor.
      * It initializes the name of continent and army control value.
-     * @param new_nameOfContinent Name of the continent
+     *
+     * @param new_nameOfContinent  Name of the continent
      * @param new_armyControlValue Army control value
      */
     public Continent(String new_nameOfContinent, int new_armyControlValue) {
@@ -33,15 +35,17 @@ public class Continent implements Serializable {
     /**
      * This is a parameterized constructor.
      * It initializes the name of continent.
+     *
      * @param new_nameOfContinent Name of the continent
      */
     public Continent(String new_nameOfContinent) {
 
-        nameOfContinent=new_nameOfContinent;
+        nameOfContinent = new_nameOfContinent;
     }
 
     /**
      * Getter function to return the name of continent
+     *
      * @return name of continent
      */
     public String getNameOfContinent() {
@@ -50,6 +54,7 @@ public class Continent implements Serializable {
 
     /**
      * Setter function to set the name of continent
+     *
      * @param nameOfContinent Name of the continent
      */
     public void setNameOfContinent(String nameOfContinent) {
@@ -59,6 +64,7 @@ public class Continent implements Serializable {
     /**
      * Getter function to return control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
+     *
      * @return control value
      */
     public int getArmyControlValue() {
@@ -68,21 +74,21 @@ public class Continent implements Serializable {
     /**
      * Setter function to set the control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
+     *
      * @param armyControlValue Army control value
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
     }
 
-    public int hashCode(){
+    public int hashCode() {
 
         return nameOfContinent.hashCode();
     }
 
     public boolean equals(Object obj) {
         if (obj instanceof Continent) {
-            if (this.nameOfContinent.equalsIgnoreCase(((Continent) obj).nameOfContinent))
-            {
+            if (this.nameOfContinent.equalsIgnoreCase(((Continent) obj).nameOfContinent)) {
                 return true;
             }
         }

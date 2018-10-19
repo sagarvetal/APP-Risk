@@ -26,6 +26,13 @@
     <string name="title_activity_custom_country">CustomCountry</string>
     <string name="add_custom_value">Add Custom Value</string>
     <string name="custom_name">Custom Name</string>
+    <string name="to_country_selected">To Country Selected</string>
+    <string name="from_country_selected">From Country Selected</string>
+    <string name="to_from_same">To Country and From Country cannot be same</string>
+    <string name="countries_connected">Countries Already Connected</string>
+    <string name="add_all_countries">Add All Countries First</string>
+
+
 
 
 </resources>

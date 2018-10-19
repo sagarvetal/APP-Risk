@@ -10,7 +10,7 @@ public class MapObjectsView extends View {
     private Paint paint;
     public float xPosition;
     public float yPosition;
-    public  int continentColor;
+    public int continentColor;
 
 
     public MapObjectsView(Context context) {

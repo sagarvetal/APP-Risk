@@ -29,15 +29,13 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     /*
-    *Method retrieve the data and sets up the mainMenuList
-    */
-    public void setUpData()
-    {
-        final String mainMenuOptions[] = {"Play" , "Create Map", "Edit Map",
+     *Method retrieve the data and sets up the mainMenuList
+     */
+    public void setUpData() {
+        final String mainMenuOptions[] = {"Play", "Create Map", "Edit Map",
                 "Help", "Setting", "Exit"};
         mainMenuList = new ArrayList<>();
-        for(String i: mainMenuOptions)
-        {
+        for (String i : mainMenuOptions) {
             mainMenuList.add(i);
         }
     }
@@ -46,11 +44,10 @@ public class MainScreenActivity extends AppCompatActivity {
      *Method sets up recyclerview and its layout and passes
      * the list to it
      */
-    public void recyclerView()
-    {
+    public void recyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(this,2);
+        GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
 
         /*StaggeredGridLayoutManager linearLayoutManager = new StaggeredGridLayoutManager(2,
                 StaggeredGridLayoutManager.VERTICAL);
@@ -58,7 +55,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(new MainRecyclerViewAdapter(mainMenuList,MainScreenActivity.this));
+        recyclerView.setAdapter(new MainRecyclerViewAdapter(mainMenuList, MainScreenActivity.this));
 
 
     }
