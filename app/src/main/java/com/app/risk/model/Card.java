@@ -12,6 +12,20 @@ public class Card implements Serializable {
     private String type;
 
     /**
+     * This is default constructor.
+     */
+    public Card(){
+    }
+
+    /**
+     * This parameterized constructor initialize the card type.
+     * @param type It is type of card.
+     */
+    public Card(String type){
+        this.type = type;
+    }
+
+    /**
      * Getter function to return the card type
      * @return card type
      */

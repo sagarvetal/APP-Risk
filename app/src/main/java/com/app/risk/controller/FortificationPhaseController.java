@@ -6,6 +6,7 @@ import com.app.risk.model.GamePlay;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Fortification phase class: Player can move his armies from a country he owns to another country
@@ -15,18 +16,30 @@ import java.util.Stack;
  */
 public class FortificationPhaseController {
 
+    private GamePlay gamePlay;
+
     /**
-     * Method to perform DFS on the list of countries that belong to the player and find a path between two countries.
+     * This parameterized constructor initializes the GamePlay object.
+     * @param gamePlay The GamePlay object.
+     */
+    public FortificationPhaseController(final GamePlay gamePlay) {
+        this.gamePlay = gamePlay;
+    }
+
+    /**
+     * This method is to perform DFS on the list of countries that belong to the player and find a path between two countries.
      * The path should also be formed by countries belonging to the same player
+     * @param fromCountry The object of from country
+     * @param toCountry The object of to country
      * @return true if there exists a path between two countries pertaining to the conditions, false otherwise
      */
-    private boolean findPathBetweenCountries(int playerId, GamePlay gamePlay, Country fromCountry, Country toCountry) {
+    public boolean findPathBetweenCountries(final Country fromCountry, final Country toCountry) {
 
-        Stack<Country> depthFirstTraversalStack = new Stack<>();
-        List<Country> countriesVisited = new ArrayList<>();
-        List<Country> countriesBelongingToPlayer = (new StartupPhaseController()).getCountryListByPlayerId(playerId, gamePlay);
+        final Stack<Country> depthFirstTraversalStack = new Stack<>();
+        final List<Country> countriesVisited = new ArrayList<>();
+        final List<Country> countriesBelongToPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
 
-        if(countriesBelongingToPlayer.contains(fromCountry)) {
+        if(countriesBelongToPlayer.contains(fromCountry)) {
 
             depthFirstTraversalStack.push(fromCountry);
 
@@ -37,12 +50,11 @@ public class FortificationPhaseController {
                 if (countriesVisited.size() != 0 && countriesVisited.contains(countryVisited)) {
                     continue;
                 } else {
-
                     countriesVisited.add(countryVisited);
 
                     for (String neighbourCountry : countryVisited.getAdjacentCountries()) {
                         Country country = gamePlay.getCountries().get(neighbourCountry);
-                        if (countriesBelongingToPlayer.contains(country)
+                        if (countriesBelongToPlayer.contains(country)
                                 && !countriesVisited.contains(country)) {
                             depthFirstTraversalStack.push(country);
                         }
@@ -59,4 +71,10 @@ public class FortificationPhaseController {
             return false;
 
     }
+
+    public void assignCards() {
+        final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
+        gamePlay.getCurrentPlayer().setCards(gamePlay.getCards().get(randomIndex));
+    }
+
 }

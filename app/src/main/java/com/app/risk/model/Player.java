@@ -18,6 +18,7 @@ public class Player implements Serializable {
     private String colorCode;
     private int noOfCountries;
     private int noOfArmies;
+    private int reinforcementArmies;
     private List<Card> cards;
     private boolean isActive;
 
@@ -122,6 +123,30 @@ public class Player implements Serializable {
      */
     public void incrementArmies(final int count) {
         this.noOfArmies += count;
+    }
+
+    /**
+     * Getter function to return the no of reinforcement armies given to the player
+     * @return no of reinforcement armies
+     */
+    public int getReinforcementArmies() {
+        return reinforcementArmies;
+    }
+
+    /**
+     * Setter function to set the no of reinforcement armies given to the player
+     * @param reinforcementArmies The number of reinforcement armies
+     */
+    public void setReinforcementArmies(int reinforcementArmies) {
+        this.reinforcementArmies = reinforcementArmies;
+    }
+
+    /**
+     * This function is to decrement no of reinforcement armies by given count.
+     * @param count The decrement count by which the no of reinforcement armies to be decremented.
+     */
+    public void decrementReinforcementArmies(final int count) {
+        this.reinforcementArmies -= count;
     }
 
     /**
