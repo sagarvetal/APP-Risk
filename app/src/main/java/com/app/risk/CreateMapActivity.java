@@ -354,6 +354,9 @@ public class CreateMapActivity extends Activity  {
             }
         }
         return -1;
+
+
+        //Comment
     }
 
     /**
