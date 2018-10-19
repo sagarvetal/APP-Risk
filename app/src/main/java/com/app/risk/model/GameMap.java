@@ -99,6 +99,7 @@ public class GameMap implements Serializable {
             returnString += map.fromCountry.getNameOfCountry() + ",";
 
         }
+
         return returnString;
     }
 

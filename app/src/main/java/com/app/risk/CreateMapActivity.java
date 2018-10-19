@@ -1,34 +1,33 @@
-/**
- *
- */
 package com.app.risk;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
+import com.app.risk.utility.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
 import com.app.risk.utility.WriteGameMapToFile;
 
@@ -39,24 +38,29 @@ import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
-public class CreateMapActivity extends Activity {
+/**
+ * Creates Map and saves map after verification
+ *
+ */
+
+public class CreateMapActivity extends Activity  {
 
     public static final int RADIUS = 100;
+    private boolean isEditMode = false;
 
-    private ListView lvCountry;
-    ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
-    ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
-    ArrayList<Integer> arrCountryAdded = new ArrayList<>();
-    int indexOfToButton = -1;
-    int indexOfFromButton = -1;
-    int totalCountries=0;
-    int totalCountriesAddedInGraph = 0;
-    SurfaceView surfaceView;
-    Canvas canvas;
-    public HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
-
-
-    int currentIndexCountrySelected;
+    private ListView listCountry;
+    private ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
+    private CountryAdaptor countryAdaptor;
+    private ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
+    private ArrayList<Integer> arrCountryAdded = new ArrayList<>();
+    private int indexOfToButton = -1;
+    private int indexOfFromButton = -1;
+    private int totalCountries=0;
+    private int totalCountriesAddedInGraph = 0;
+    private SurfaceView surfaceView;
+    private Canvas canvas;
+    private HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
+    private int currentIndexCountrySelected;
 
     private Context context;
 
@@ -70,15 +74,134 @@ public class CreateMapActivity extends Activity {
     }
     @SuppressLint("ClickableViewAccessibility")
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_map);
-        lvCountry = (ListView) findViewById(R.id.lvCountry);
+        listCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
-        userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
 
-        final Iterator it = userCreatedMapData.entrySet().iterator();
+        surfaceView.getHolder().addCallback(surfaceCallback);
+
+        isEditMode = (Boolean)getIntent().getExtras().getBoolean("isEditMode");
+
+        if(isEditMode){
+            Intent intent = this.getIntent();
+            Bundle bundle = intent.getExtras();
+            arrCountriesRepresentationOnGraph =  (ArrayList<GameMap>)bundle.getSerializable("arrGameData");
+            userCreatedMapData = (HashMap<Continent,ArrayList<Country>>)bundle.getSerializable("maps");
+        }else{
+            userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
+        }
+
+        prepareDataForList();
+
+        setListItemListener();
+
+        setSurfaceViewListener();
+
+        setAddButtonListener();
+
+        if (isEditMode){
+            handleEditMode();
+        }
+
+    }
+
+    private SurfaceHolder.Callback surfaceCallback = new SurfaceHolder.Callback() {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+            canvas = surfaceView.getHolder().lockCanvas();
+            canvas.drawColor( Color.WHITE);
+            surfaceView.getHolder().unlockCanvasAndPost(canvas);
+        }
+
+        /**
+         * Initializing the surface destroy
+         * @param holder : this parameter holds the surface
+         */
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+
+            holder.removeCallback(surfaceCallback);
+        }
+
+        /**
+         * Initializing the change in surface
+         * @param holder : parameter for holding the surface
+         * @param format : parameter for defining the format
+         * @param width : parameter for defining width of the surface
+         * @param height : parameter for defining the height of the surface
+         */
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        }
+    };
+
+
+    public void handleEditMode(){
+
+        for (Item item : countryList){
+            if (item instanceof EntryItem){
+                handleTapOnListView(countryList.indexOf(item));
+            }
+        }
+        renderMap();
+
+    }
+    /**
+     * Gets add button and handles on click listener
+     */
+    public void setAddButtonListener(){
+
+        FloatingActionButton addButton = findViewById(R.id.done);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(totalCountries == totalCountriesAddedInGraph) {
+                    handleAddMapAction();
+                }else{
+                    showToast("Add All Countries First");
+                }
+            }
+        });
+    }
+
+    /**
+     *Gets list view and handles onclick listener
+     */
+    public void setListItemListener(){
+        countryAdaptor = new CountryAdaptor(this, countryList);
+        countryAdaptor.arrCountryAdded = arrCountryAdded;
+        listCountry.setAdapter(countryAdaptor);
+        listCountry.setTextFilterEnabled(true);
+        listCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                handleTapOnListView(position);
+            }
+        });
+    }
+
+    /**
+     *Gets surface view and handles onClick Listener
+     */
+    public void setSurfaceViewListener(){
+        surfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                handleTouchOnSurfaceView(event);
+                return true;
+            }
+        });
+    }
+
+    /**
+     *Prepares country list data as per hashmap of countries recieved
+     */
+    public void prepareDataForList(){
         int colorIndex = 0;
+        final Iterator it = userCreatedMapData.entrySet().iterator();
         while (it.hasNext()){
             Map.Entry pair = (Map.Entry)it.next();
             countryList.add(new CreateMapActivity.SectionItem((Continent)pair.getKey()));
@@ -92,153 +215,206 @@ public class CreateMapActivity extends Activity {
             }
             colorIndex++;
         }
-        final CountryAdaptor adapter = new CountryAdaptor(this, countryList);
-        lvCountry.setAdapter(adapter);
-        lvCountry.setTextFilterEnabled(true);
-        //Test
-        lvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!arrCountryAdded.contains(position)){
-                    Item item = (Item)adapter.getItem(position);
-                    if (item instanceof EntryItem){
-                        GameMap map = new GameMap();
-                        map.setContinentColor(((EntryItem) item).color);
-                        map.setFromCountry(((EntryItem) item).country);
-                        map.setIndexOfCountryInList(position);
-                        currentIndexCountrySelected = position;
-                        arrCountriesRepresentationOnGraph.add(map);
-                        arrCountryAdded.add(position);
-                        lvCountry.invalidateViews();
-                    }
-                }
-            }
-        });
-        surfaceView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN){
-                    if (totalCountriesAddedInGraph < totalCountries){
-                        GameMap map = arrCountriesRepresentationOnGraph.get(findIndexOfObject(currentIndexCountrySelected));
-                        map.setCoordinateX(event.getX());
-                        map.setCoordinateY(event.getY());
-                        arrCountriesRepresentationOnGraph.set(findIndexOfObject(currentIndexCountrySelected),map);
-                        renderMap();
-                    }else{
-                        for (GameMap map : arrCountriesRepresentationOnGraph){
-                            if ((isPointInCircle(event.getX(),event.getY(),map.getCoordinateX(),map.getCoordinateY()))){
-                                if(indexOfToButton == -1){
-                                    indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(map);
-                                    renderMap();
-                                    break;
-                                }else{
-                                    indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(map);
-                                    GameMap toCountryMap = arrCountriesRepresentationOnGraph.get(indexOfToButton);
-                                    GameMap fromCountryMap = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
-                                    if ((fromCountryMap.getConnectedToCountries().contains(toCountryMap) || toCountryMap.getConnectedToCountries().contains(fromCountryMap)) == false) {
-                                        ArrayList<GameMap> arrConnectedFromCountry = fromCountryMap.getConnectedToCountries();
-                                        ArrayList<GameMap> arrConnectedToCountry = toCountryMap.getConnectedToCountries();
-                                        arrConnectedFromCountry.add(toCountryMap);
-                                        arrConnectedToCountry.add(fromCountryMap);
-                                        toCountryMap.setConnectedToCountries(arrConnectedToCountry);
-                                        fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
-                                        arrCountriesRepresentationOnGraph.set(indexOfToButton,toCountryMap);
-                                        arrCountriesRepresentationOnGraph.set(indexOfFromButton,fromCountryMap);
-                                        renderMap();
-                                        indexOfToButton = -1;
-                                        break;
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
-        });
-        FloatingActionButton fab = findViewById(R.id.done);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MapVerification mapVerification = new MapVerification();
-                for (GameMap map : arrCountriesRepresentationOnGraph){
-                    Log.d(TAG, "onClick: " +map.getFromCountry().getNameOfCountry());
-                }
-                if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
-
-                    final EditText edittext = new EditText(CreateMapActivity.this);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
-                    alert.setMessage("");
-                    alert.setTitle("Enter Map name");
-                    alert.setView(edittext);
-
-                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            String mapName = edittext.getText().toString();
-                            WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                            writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,mapName,arrCountriesRepresentationOnGraph);
-                        }
-                    });
-
-                    alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // what ever you want to do with No option.
-                        }
-                    });
-
-                    alert.show();
-
-
-                }else {
-
-                    Toast.makeText(CreateMapActivity.this,
-                            "Verification Failed", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
     /**
-     *
-     * @param index
-     * @return
+     *Handles actions when surface view is tapped
+     * @param event event object recieved from click listener
      */
-    public int findIndexOfObject(int index){
+    public void handleTouchOnSurfaceView(MotionEvent event){
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            if (totalCountriesAddedInGraph < totalCountries){
+                if (currentIndexCountrySelected!=-1){
+                    GameMap map = arrCountriesRepresentationOnGraph.get(findIndexOfObjectarrCountriesRepresentationGraph(currentIndexCountrySelected));
+                    map.setCoordinateX(event.getX());
+                    map.setCoordinateY(event.getY());
+                    arrCountriesRepresentationOnGraph.set(findIndexOfObjectarrCountriesRepresentationGraph(currentIndexCountrySelected),map);
+                    renderMap();
+                }
+            }else{
+                for (GameMap map : arrCountriesRepresentationOnGraph){
+                    if ((isPointInCircle(event.getX(),event.getY(),map.getCoordinateX(),map.getCoordinateY()))){
+                        if(indexOfToButton == -1){
+                            indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(map);
+                            renderMap();
+                            showToast("To Country Selected");
+                            break;
+                        }else{
+                            indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(map);
+                            if(indexOfToButton == indexOfFromButton) {
+                                if (isEditMode){
+                                    removeConnection(map);
+                                }else{
+                                    showToast("To Country and From Country cannot be same");
+                                }
+                                break;
+                            }else{
+                                GameMap toCountryMap = arrCountriesRepresentationOnGraph.get(indexOfToButton);
+                                GameMap fromCountryMap = arrCountriesRepresentationOnGraph.get(indexOfFromButton);
+                                if ((fromCountryMap.getConnectedToCountries().contains(toCountryMap) || toCountryMap.getConnectedToCountries().contains(fromCountryMap)) == false) {
+                                    ArrayList<GameMap> arrConnectedFromCountry = fromCountryMap.getConnectedToCountries();
+                                    ArrayList<GameMap> arrConnectedToCountry = toCountryMap.getConnectedToCountries();
+                                    arrConnectedFromCountry.add(toCountryMap);
+                                    arrConnectedToCountry.add(fromCountryMap);
+                                    toCountryMap.setConnectedToCountries(arrConnectedToCountry);
+                                    fromCountryMap.setConnectedToCountries(arrConnectedFromCountry);
+                                    arrCountriesRepresentationOnGraph.set(indexOfToButton,toCountryMap);
+                                    arrCountriesRepresentationOnGraph.set(indexOfFromButton,fromCountryMap);
+                                    renderMap();
+                                    showToast("From Country Selected");
+                                    indexOfToButton = -1;
+                                    break;
+                                }else{
+                                    showToast("Countries Already Connected");
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Handles events when add map is tapped, saves map if verification succeeds and removes connection if failed
+     *
+     */
+    public void handleAddMapAction(){
+
+        MapVerification mapVerification = new MapVerification();
+        if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
+            final EditText edittext = new EditText(CreateMapActivity.this);
+            AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
+            alert.setMessage("");
+            alert.setTitle("Enter Map name");
+            alert.setView(edittext);
+
+            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String mapName = edittext.getText().toString();
+                    handleMapVerificationSucced(mapName);
+                }
+            });
+
+            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // what ever you want to do with No option.
+                }
+            });
+
+            alert.show();
+
+        }else {
+            Toast.makeText(CreateMapActivity.this,
+                    "Verification Failed", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void handleMapVerificationSucced(String filename){
+        WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
+        writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,filename,arrCountriesRepresentationOnGraph);
+    }
+
+    /**
+     * adds data in Gamemap object when user selects listview
+     * @param position position of object in list
+     */
+    public void handleTapOnListView(int position){
+        if (!arrCountryAdded.contains(position)){
+            Item item = (Item)countryAdaptor.getItem(position);
+            if (item instanceof EntryItem){
+                GameMap map = new GameMap();
+                map.setContinentColor(((EntryItem) item).color);
+                map.setFromCountry(((EntryItem) item).country);
+                map.setIndexOfCountryInList(position);
+                currentIndexCountrySelected = position;
+                if (isEditMode == false){
+                    arrCountriesRepresentationOnGraph.add(map);
+                }else{
+                    int indexInarrCountriesRepresentation = findIndexInarrCountriesRepresentationOnGraphFromCountry(((EntryItem) item).country);
+                    GameMap map1 = arrCountriesRepresentationOnGraph.get(indexInarrCountriesRepresentation);
+                    if (indexInarrCountriesRepresentation != -1){
+                        arrCountriesRepresentationOnGraph.set(indexInarrCountriesRepresentation,map1);
+                    }
+                }
+                arrCountryAdded.add(position);
+                listCountry.invalidateViews();
+            }
+        }
+    }
+    public  int findIndexInarrCountriesRepresentationOnGraphFromCountry(Country country){
+
+        for (GameMap map : arrCountriesRepresentationOnGraph ){
+            if (map.getFromCountry().equals(country)){
+                return arrCountriesRepresentationOnGraph.indexOf(map);
+            }
+        }
+        return  -1;
+    }
+    /**
+     *Finds index of game map object according to index of object according to countrylist
+     * @param index - index of object in countrylist
+     * @return index of same object in arrCountriesRepresentationOnGraph
+     */
+    public int findIndexOfObjectarrCountriesRepresentationGraph(int index){
         for (GameMap map: arrCountriesRepresentationOnGraph){
             if (map.getIndexOfCountryInList() == index){
                 return arrCountriesRepresentationOnGraph.indexOf(map);
             }
         }
         return -1;
+
+
+        //Comment
     }
 
     /**
-     *
-     * @param xTouched
-     * @param yTouched
-     * @param xCountry
-     * @param yCountry
-     * @return
+     * Detects if user tapped in cirlce
+     * @param xTouched - x coordinate where user tapped
+     * @param yTouched - y coordinate where user tapped
+     * @param xCountry - x coordinate of country created by user
+     * @param yCountry - y coordinate of country created by user
+     * @return whether tapped point belongs to country or not.
      */
     public boolean isPointInCircle(float xTouched,float yTouched,float xCountry,float yCountry){
-        double centerX = xCountry + RADIUS;
-        double centerY = yCountry + RADIUS;
-        double distanceX = xTouched - centerX;
-        double distanceY = yTouched - centerY;
         return Math.sqrt((xCountry-xTouched)*(xCountry-xTouched)+(yCountry-yTouched)*(yCountry-yTouched)) <= RADIUS;
     }
 
-    public void renderMap(){
-        Paint connectionLine = new Paint();
-        connectionLine.setColor(Color.BLACK);
-        connectionLine.setStrokeWidth(10);
+    public void removeConnection(GameMap map){
+
         canvas = surfaceView.getHolder().lockCanvas();
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        canvas.drawColor( Color.WHITE);
 
+        map.setConnectedToCountries(new ArrayList<GameMap>());
 
+        for (GameMap neighbourCountries : map.getConnectedToCountries() ){
+            map.setConnectedToCountries(new ArrayList<GameMap>());
+            for (GameMap nieghbourCountry : map.getConnectedToCountries()  ){
+                nieghbourCountry.setConnectedToCountries(new ArrayList<GameMap>());
+            }
+        }
+
+        surfaceView.getHolder().unlockCanvasAndPost(canvas);
+
+        renderMap();
+
+    }
+
+    /**
+     *Creates Map
+     */
+    public void renderMap(){
+        canvas = surfaceView.getHolder().lockCanvas();
+        canvas.drawColor( Color.WHITE);
+        Paint connectionLine = new Paint();
+        connectionLine.setColor(Color.WHITE);
+        connectionLine.setStrokeWidth(10);
         for (GameMap map : arrCountriesRepresentationOnGraph ){
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
+//            canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-10,map.getCoordinateY()-10,connectionLine);
             canvas.drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
             for (GameMap nieghbourCountry : map.getConnectedToCountries()  ){
                 canvas.drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
@@ -250,15 +426,19 @@ public class CreateMapActivity extends Activity {
     }
 
     /**
-     *
-     * @param index
-     * @return
+     * Sends color according to index
+     * @param index index of continent
+     * @return color
      */
     public int getColors(int index){
         String[] allColors = this.getResources().getStringArray(R.array.colors);
         return Color.parseColor(allColors[index]);
     }
 
+    public void showToast(String msg){
+        Toast.makeText(CreateMapActivity.this, msg,
+                Toast.LENGTH_LONG).show();
+    }
     /**
      *
      */
@@ -292,6 +472,7 @@ public class CreateMapActivity extends Activity {
             this.country = country;
             this.title = country.getNameOfCountry();
         }
+
         public String getTitle() {
             return title;
         }
@@ -301,48 +482,5 @@ public class CreateMapActivity extends Activity {
         }
     }
 
-    public class CountryAdaptor extends BaseAdapter {
-
-        private Context context;
-        private ArrayList<CreateMapActivity.Item> item;
-        private ArrayList<CreateMapActivity.Item> orignalItem;
-        public CountryAdaptor(){
-            super();
-        }
-        public CountryAdaptor(Context context,ArrayList<CreateMapActivity.Item> item){
-            this.context = context;
-            this.item = item;
-        }
-        @Override
-        public int getCount() {
-            return item.size();
-        }
-        @Override
-        public Object getItem(int position) {
-            return item.get(position);
-        }
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-        @Override
-        public View getView(int position, View convertView , ViewGroup parent){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (item.get(position).isSection()){
-                convertView = inflater.inflate(R.layout.layout_section,parent,false);
-                TextView tvSectionTitle = (TextView) convertView.findViewById(R.id.tvSectionTitle);
-                tvSectionTitle.setText(((CreateMapActivity.SectionItem) item.get(position)).getTitle());
-            }else{
-                convertView = inflater.inflate(R.layout.layout_item, parent, false);
-                TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
-                tvItemTitle.setText(((CreateMapActivity.EntryItem) item.get(position)).getTitle());
-                if (arrCountryAdded.contains(position)){
-                   tvItemTitle.setAlpha(0.2f);
-                }
-            }
-            return convertView;
-        }
-    }
-
-
 }
+

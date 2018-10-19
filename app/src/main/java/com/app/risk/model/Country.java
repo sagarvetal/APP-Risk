@@ -8,12 +8,11 @@ import java.io.Serializable;
 
 /**
  * Country model to save details of each country
- *
  * @author Akshita Angara
+ * @version 1.0.0
  */
 
 public class Country implements Serializable, Comparable<Country> {
-
 
     private String nameOfCountry;
     private Continent belongsToContinent;
@@ -33,6 +32,7 @@ public class Country implements Serializable, Comparable<Country> {
     /**
      * This is a parameterized constructor.
      * It initializes the name of country.
+     * @param new_nameOfCountry Name of country
      */
     public Country(String new_nameOfCountry) {
         nameOfCountry = new_nameOfCountry;
@@ -41,19 +41,16 @@ public class Country implements Serializable, Comparable<Country> {
     /**
      * This is a parameterized constructor.
      * It initializes the name of country and continent it belongs to.
+     * @param new_nameOfCountry Name of country
+     * @param new_belongsToContinent Continent that the country belongs to
      */
     public Country(String new_nameOfCountry, Continent new_belongsToContinent) {
         nameOfCountry = new_nameOfCountry;
         belongsToContinent = new_belongsToContinent;
     }
 
-
-
-
-
     /**
      * Getter function to get name of country
-     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -62,8 +59,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set name of country
-     *
-     * @param nameOfCountry
+     * @param nameOfCountry Name of country
      */
     public void setNameOfCountry(String nameOfCountry) {
         this.nameOfCountry = nameOfCountry;
@@ -71,7 +67,6 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the continent that the country belongs to
-     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -80,13 +75,11 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set details of the continent to which the country belongs
-     *
-     * @param belongsToContinent
+     * @param belongsToContinent Continent that the country belongs to
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
         this.belongsToContinent = belongsToContinent;
     }
-
 
     /**
      * Getter function to return the list of adjacent countries.
@@ -165,5 +158,4 @@ public class Country implements Serializable, Comparable<Country> {
             return 0;
         return this.nameOfCountry.compareToIgnoreCase(country.nameOfCountry);
     }
-
 }
