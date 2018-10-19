@@ -40,13 +40,13 @@ public class PlayerSelectionActivity extends AppCompatActivity {
     }
 
     /*
-    * This method gets the map information from the previous
-    * activity using an intent
-    */
+     * This method gets the map information from the previous
+     * activity using an intent
+     */
     public void getMapInfo() {
         Intent intent = getIntent();
         mapInfo = intent.getStringExtra("MAP_NAME");
-        Toast.makeText(this, ""+mapInfo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "" + mapInfo, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -55,8 +55,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
      * such as listview, seekbar and no. of players on display
      * activity using an intent
      */
-    public void setUpData()
-    {
+    public void setUpData() {
         listView = findViewById(R.id.player_selection_listview);
         seekBar = findViewById(R.id.player_selection_seekbar);
         playerDisplay = findViewById(R.id.userselection_textview);
@@ -66,14 +65,14 @@ public class PlayerSelectionActivity extends AppCompatActivity {
         playerNames.add("Player 1");
         playerNames.add("Player 2");
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, playerNames);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, playerNames);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final View inflaterView = getLayoutInflater().inflate(R.layout.player_selection_option,null);
+                final View inflaterView = getLayoutInflater().inflate(R.layout.player_selection_option, null);
                 new AlertDialog.Builder(PlayerSelectionActivity.this)
                         .setView(inflaterView)
                         .setTitle("Player Name")
@@ -83,16 +82,16 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         EditText editText = inflaterView.findViewById(R.id.player_selection_option_edittext);
                                         playerName = editText.getText().toString().trim();
-                                        if(!playerName.equals("")){
-                                            playerNames.set(position,playerName);
+                                        if (!playerName.equals("")) {
+                                            playerNames.set(position, playerName);
                                             adapter.notifyDataSetChanged();
                                         }
                                     }
                                 })
                         .create().show();
 
-                    EditText editText = inflaterView.findViewById(R.id.player_selection_option_edittext);
-                    editText.setText(playerNames.get(position));
+                EditText editText = inflaterView.findViewById(R.id.player_selection_option_edittext);
+                editText.setText(playerNames.get(position));
             }
         });
 
@@ -102,15 +101,14 @@ public class PlayerSelectionActivity extends AppCompatActivity {
 
                 playerDisplay.setText("" + progress);
                 int display = Integer.parseInt(playerDisplay.getText().toString().trim());
-                if(display > playerNames.size()) {
-                    for(int i = playerNames.size(); i<display; i++) {
+                if (display > playerNames.size()) {
+                    for (int i = playerNames.size(); i < display; i++) {
                         playerNames.add("Player " + (i + 1));
                     }
                     adapter.notifyDataSetChanged();
-                }
-                else if(display < playerNames.size()){
-                    for(int i = playerNames.size(); i>display; i--){
-                        playerNames.remove(playerNames.size()-1);
+                } else if (display < playerNames.size()) {
+                    for (int i = playerNames.size(); i > display; i--) {
+                        playerNames.remove(playerNames.size() - 1);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -134,8 +132,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
      * activity using an intent
      */
 
-    public void setUpNextButton()
-    {
+    public void setUpNextButton() {
         nextButton = findViewById(R.id.player_selection_next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,13 +141,13 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                 new AlertDialog.Builder(PlayerSelectionActivity.this)
                         .setTitle("Alert")
                         .setMessage("Are You sure?")
-                        .setNegativeButton("No",null)
+                        .setNegativeButton("No", null)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(PlayerSelectionActivity.this,PlayScreenActivity.class);
+                                Intent intent = new Intent(PlayerSelectionActivity.this, PlayScreenActivity.class);
                                 intent.putStringArrayListExtra("PLAYER_INFO", playerNames);
-                                intent.putExtra("MAP_NAME",mapInfo);
+                                intent.putExtra("MAP_NAME", mapInfo);
                                 startActivity(intent);
                             }
                         }).create().show();
