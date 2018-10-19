@@ -74,7 +74,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch(phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     Toast.makeText(this, phase , Toast.LENGTH_SHORT).show();
-                    gamePlay = MapReader.readMap(getResources().openRawResource(R.raw.map1));
+                    gamePlay = (new MapReader()).returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCurrentPhase(phase);
                     gamePlay.setPlayers(playerNames);
                     final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
@@ -124,4 +124,5 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             }
         }
     }
+
 }
