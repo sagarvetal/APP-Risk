@@ -166,11 +166,10 @@ public class MapVerification {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
 
-
             if(countriesVisited!=null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
-
                 continue;
             } else {
+
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
 
                 for (GameMap neighbourCountry: countryVisited.getConnectedToCountries()){
