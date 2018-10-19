@@ -63,7 +63,6 @@ public class MapVerification {
      */
     private boolean uniqueCountries() {
 
-
         mappingForVerification.clear();
 
         for (GameMap gameMap: gameMapList) {
@@ -78,7 +77,6 @@ public class MapVerification {
             }
         }
 
-
         return true;
     }
 
@@ -87,7 +85,6 @@ public class MapVerification {
      * @return true if each country belongs to only one continent, false otherwise
      */
     private boolean checkCountryBelongsToOneContinent() {
-
 
         mappingForVerification.clear();
 
@@ -103,7 +100,6 @@ public class MapVerification {
             }
         }
 
-
         return true;
     }
 
@@ -114,13 +110,12 @@ public class MapVerification {
      */
     private boolean checkMapIsConnectedGraph() {
 
-
         countriesVisited.clear();
         depthFirstTraversalStack.clear();
 
         depthFirstTraversalStack.push(gameMapList.get(0));
 
-        DepthFirstTraversal(gameMapList);
+        depthFirstTraversal(gameMapList);
 
         for(GameMap gameMap: gameMapList) {
             if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry()))
@@ -137,7 +132,6 @@ public class MapVerification {
      */
     private boolean checkContinentIsConnectedSubgraph() {
 
-
         continentCountryMapping.clear();
 
         generateContinentCountryMapping();
@@ -149,7 +143,7 @@ public class MapVerification {
 
             List<GameMap> traversableCountries = continentCountryMapping.get(continent);
             depthFirstTraversalStack.push(traversableCountries.get(0));
-            DepthFirstTraversal(traversableCountries);
+            depthFirstTraversal(traversableCountries);
 
             for(GameMap gameMap: traversableCountries) {
                 if(!countriesVisited.contains(gameMap.getFromCountry().getNameOfCountry())) {
@@ -166,17 +160,16 @@ public class MapVerification {
      * Method to perform DFS on the list of countries that belong to the entire map or to a continent
      * @param traversableCountries Countries that belong to either the entire map (forming a map) or a continent (forming a subgraph)
      */
-    private void DepthFirstTraversal(List<GameMap> traversableCountries) {
+    private void depthFirstTraversal(List<GameMap> traversableCountries) {
 
         while (!depthFirstTraversalStack.empty()){
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
 
-
             if(countriesVisited!=null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())){
-
                 continue;
             } else {
+
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
 
                 for (GameMap neighbourCountry: countryVisited.getConnectedToCountries()){
