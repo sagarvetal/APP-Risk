@@ -164,6 +164,15 @@ public class Country implements Serializable, Comparable<Country> {
         this.noOfArmies += count;
     }
 
+    /**
+     * This function is to decrement no of armies by given count.
+     *
+     * @param count The decrement count by which the no of armies to be decremented.
+     */
+    public void decrementReinforcementArmies(final int count) {
+        this.noOfArmies -= count;
+    }
+
     public int hashCode() {
 
         return nameOfCountry.hashCode();
