@@ -5,9 +5,9 @@ import java.io.Serializable;
 /**
  * Continent model to save details of each continent
  * @author Akshita Angara
+ * @version 1.0.0
  */
 public class Continent implements Serializable {
-
 
     private String nameOfContinent;
     private int armyControlValue;
@@ -22,6 +22,8 @@ public class Continent implements Serializable {
     /**
      * This is a parameterized constructor.
      * It initializes the name of continent and army control value.
+     * @param new_nameOfContinent Name of the continent
+     * @param new_armyControlValue Army control value
      */
     public Continent(String new_nameOfContinent, int new_armyControlValue) {
         nameOfContinent = new_nameOfContinent;
@@ -31,6 +33,7 @@ public class Continent implements Serializable {
     /**
      * This is a parameterized constructor.
      * It initializes the name of continent.
+     * @param new_nameOfContinent Name of the continent
      */
     public Continent(String new_nameOfContinent) {
 
@@ -47,7 +50,7 @@ public class Continent implements Serializable {
 
     /**
      * Setter function to set the name of continent
-     * @param nameOfContinent
+     * @param nameOfContinent Name of the continent
      */
     public void setNameOfContinent(String nameOfContinent) {
         this.nameOfContinent = nameOfContinent;
@@ -65,12 +68,11 @@ public class Continent implements Serializable {
     /**
      * Setter function to set the control value of continent
      * Control value - number of armies which will be allocated once the player acquires the whole continent
-     * @param armyControlValue
+     * @param armyControlValue Army control value
      */
     public void setArmyControlValue(int armyControlValue) {
         this.armyControlValue = armyControlValue;
     }
-
 
     public int hashCode(){
 

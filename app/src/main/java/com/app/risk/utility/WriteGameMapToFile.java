@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-
  * Create and write game map defined by user to text file in internal storage
-
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -27,7 +25,6 @@ public class WriteGameMapToFile {
 
     /**
      * Function to write the game map data to a text file in the given Conquest map file format.
-
      * @param context current state/context of the application
      * @param fileName user specified file name
      * @param gameMapList list of continent and connected countries of each country chosen by the user
@@ -39,16 +36,13 @@ public class WriteGameMapToFile {
             if(!continentList.isEmpty() && continentList.contains(gameMap.getFromCountry().getBelongsToContinent()))
                 continue;
             else
-
                 continentList.add(gameMap.getFromCountry().getBelongsToContinent());
         }
 
         try {
 
-
             FileOutputStream f = context.openFileOutput(fileName + ".map", Context.MODE_PRIVATE);
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(f));
-
 
             bufferedWriter.write("[Map]\n");
             bufferedWriter.write("author=\n");
