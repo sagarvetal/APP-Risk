@@ -138,6 +138,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 case GamePlayConstants.ATTACK_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = GamePlayConstants.ATTACK_PHASE;
+                    gamePlay.setCurrentPhase(phase);
                     Toast.makeText(PlayScreenActivity.this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     break;
@@ -145,6 +146,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
                     currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
+                    gamePlay.setCurrentPhase(phase);
                     Toast.makeText(this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     break;
