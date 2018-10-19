@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /**
  * Country model to save details of each country
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -32,6 +33,7 @@ public class Country implements Serializable, Comparable<Country> {
     /**
      * This is a parameterized constructor.
      * It initializes the name of country.
+     *
      * @param new_nameOfCountry Name of country
      */
     public Country(String new_nameOfCountry) {
@@ -41,7 +43,8 @@ public class Country implements Serializable, Comparable<Country> {
     /**
      * This is a parameterized constructor.
      * It initializes the name of country and continent it belongs to.
-     * @param new_nameOfCountry Name of country
+     *
+     * @param new_nameOfCountry      Name of country
      * @param new_belongsToContinent Continent that the country belongs to
      */
     public Country(String new_nameOfCountry, Continent new_belongsToContinent) {
@@ -51,9 +54,10 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Parameterized constructor to initialize name of country, continent it belongs to and a list of its adjacent countries
-     * @param nameOfCountry Name of country
+     *
+     * @param nameOfCountry      Name of country
      * @param belongsToContinent Continent that the country belongs to
-     * @param adjacentCountries List of adjacent countries
+     * @param adjacentCountries  List of adjacent countries
      */
     public Country(String nameOfCountry, Continent belongsToContinent, ArrayList<String> adjacentCountries) {
         this.nameOfCountry = nameOfCountry;
@@ -63,6 +67,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to get name of country
+     *
      * @return name of country
      */
     public String getNameOfCountry() {
@@ -71,6 +76,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set name of country
+     *
      * @param nameOfCountry Name of country
      */
     public void setNameOfCountry(String nameOfCountry) {
@@ -79,6 +85,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the continent that the country belongs to
+     *
      * @return object of Continent that the country belongs to
      */
     public Continent getBelongsToContinent() {
@@ -87,6 +94,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set details of the continent to which the country belongs
+     *
      * @param belongsToContinent Continent that the country belongs to
      */
     public void setBelongsToContinent(Continent belongsToContinent) {
@@ -95,6 +103,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the list of adjacent countries.
+     *
      * @return list of adjacent countries
      */
     public ArrayList<String> getAdjacentCountries() {
@@ -103,6 +112,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set the list of adjacent countries.
+     *
      * @param adjacentCountries The list of adjacent countries.
      */
     public void setAdjacentCountries(ArrayList<String> adjacentCountries) {
@@ -111,6 +121,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the player object who owns this country.
+     *
      * @return player object who owns this country.
      */
     public Player getPlayer() {
@@ -119,6 +130,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set the player object who owns this country.
+     *
      * @param player The player who owns this country.
      */
     public void setPlayer(Player player) {
@@ -127,6 +139,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Getter function to return the no of armies placed on this country.
+     *
      * @return the no of armies placed on this country.
      */
     public int getNoOfArmies() {
@@ -135,6 +148,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * Setter function to set the no of armies to be placed on this country.
+     *
      * @param noOfArmies The no of armies to be placed on this country.
      */
     public void setNoOfArmies(int noOfArmies) {
@@ -143,6 +157,7 @@ public class Country implements Serializable, Comparable<Country> {
 
     /**
      * This function is to increment no of armies by given count.
+     *
      * @param count The increment count by which the no of armies to be incremented.
      */
     public void incrementArmies(final int count) {
