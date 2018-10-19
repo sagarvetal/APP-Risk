@@ -146,7 +146,7 @@ public class Player implements Serializable {
      * @param count The decrement count by which the no of reinforcement armies to be decremented.
      */
     public void decrementReinforcementArmies(final int count) {
-        this.reinforcementArmies += count;
+        this.reinforcementArmies -= count;
     }
 
     /**
