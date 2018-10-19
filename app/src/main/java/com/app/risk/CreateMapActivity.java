@@ -5,13 +5,14 @@ package com.app.risk;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,6 @@ import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.MapVerification;
-import com.app.risk.utility.ReadGameMapFromFile;
 import com.app.risk.utility.WriteGameMapToFile;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class CreateMapActivity extends Activity {
         final CountryAdaptor adapter = new CountryAdaptor(this, countryList);
         lvCountry.setAdapter(adapter);
         lvCountry.setTextFilterEnabled(true);
-
+        //Test
         lvCountry.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -155,9 +156,32 @@ public class CreateMapActivity extends Activity {
                     Log.d(TAG, "onClick: " +map.getFromCountry().getNameOfCountry());
                 }
                 if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true){
-                    WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
-                    writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,"main",arrCountriesRepresentationOnGraph);
+
+                    final EditText edittext = new EditText(CreateMapActivity.this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
+                    alert.setMessage("");
+                    alert.setTitle("Enter Map name");
+                    alert.setView(edittext);
+
+                    alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String mapName = edittext.getText().toString();
+                            WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
+                            writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this,mapName,arrCountriesRepresentationOnGraph);
+                        }
+                    });
+
+                    alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // what ever you want to do with No option.
+                        }
+                    });
+
+                    alert.show();
+
+
                 }else {
+
                     Toast.makeText(CreateMapActivity.this,
                             "Verification Failed", Toast.LENGTH_LONG).show();
                 }
@@ -192,7 +216,7 @@ public class CreateMapActivity extends Activity {
         double centerY = yCountry + RADIUS;
         double distanceX = xTouched - centerX;
         double distanceY = yTouched - centerY;
-        return (distanceX * distanceX) + (distanceY * distanceY) <= RADIUS * RADIUS;
+        return Math.sqrt((xCountry-xTouched)*(xCountry-xTouched)+(yCountry-yTouched)*(yCountry-yTouched)) <= RADIUS;
     }
 
     public void renderMap(){

@@ -8,6 +8,7 @@ import java.io.Serializable;
  */
 public class Continent implements Serializable {
 
+
     private String nameOfContinent;
     private int armyControlValue;
 
@@ -32,6 +33,7 @@ public class Continent implements Serializable {
      * It initializes the name of continent.
      */
     public Continent(String new_nameOfContinent) {
+
         nameOfContinent=new_nameOfContinent;
     }
 
@@ -69,7 +71,9 @@ public class Continent implements Serializable {
         this.armyControlValue = armyControlValue;
     }
 
+
     public int hashCode(){
+
         return nameOfContinent.hashCode();
     }
 
