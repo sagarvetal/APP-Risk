@@ -24,49 +24,53 @@ import java.util.List;
 
 /**
  * Read map from its text file representation to a class object to load the map from internal storage
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
 public class MapReader {
 
-    private String line;
+    private static String line;
 
-    private HashMap<String, Continent> continentHashMap = new HashMap<>();
-    private HashMap<String, Country> countryHashMap = new HashMap<>();
-    private GamePlay finalGamePlay = new GamePlay();
+    private static HashMap<String, Continent> continentHashMap = new HashMap<>();
+    private static HashMap<String, Country> countryHashMap = new HashMap<>();
+    private static GamePlay finalGamePlay = new GamePlay();
 
-    private HashMap<String, GameMap> countryGameMapList = new HashMap<>();
-    private List<Continent> continentList = new ArrayList<>();
-    private List<GameMap> finalGameMapList = new ArrayList<>();
+    private static HashMap<String, GameMap> countryGameMapList = new HashMap<>();
+    private static List<Continent> continentList = new ArrayList<>();
+    private static List<GameMap> finalGameMapList = new ArrayList<>();
 
     /**
      * Return GamePlay object after loading file to start playing
-     * @param context current state/context of the application
+     *
+     * @param context  current state/context of the application
      * @param fileName user requested file name
      * @return GamePlay object
      */
-    public GamePlay returnGamePlayFromFile(Context context, String fileName){
+    public static GamePlay returnGamePlayFromFile(Context context, String fileName) {
         readGameMapFromFile(context, fileName);
         return finalGamePlay;
     }
 
     /**
      * Return GameMap object after loading file to edit map
-     * @param context current state/context of the application
+     *
+     * @param context  current state/context of the application
      * @param fileName user requested file name
      * @return List of GameMap object
      */
-    public List<GameMap> returnGameMapFromFile(Context context, String fileName){
+    public static List<GameMap> returnGameMapFromFile(Context context, String fileName) {
         readGameMapFromFile(context, fileName);
         return finalGameMapList;
     }
 
     /**
      * Function to read from Conquest map file format to GameMap class object (loading a map)
-     * @param context current state/context of the application
+     *
+     * @param context  current state/context of the application
      * @param fileName user requested file name
      */
-    private void readGameMapFromFile (Context context, String fileName) {
+    private static void readGameMapFromFile(Context context, String fileName) {
 
         try {
 
@@ -74,14 +78,14 @@ public class MapReader {
             File mapDirectory = new File(mapDir);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(mapDirectory, fileName))));
 
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
 
                 if (line.equals("[Map]")) {
                     while (true) {
 
                         line = bufferedReader.readLine();
 
-                        if(line.startsWith("image=")){
+                        if (line.startsWith("image=")) {
                             finalGamePlay.setMapName(line.split("=")[1].trim());
                         } else
                             break;
@@ -89,10 +93,10 @@ public class MapReader {
                 }
 
                 if (line.equals("[Continents]")) {
-                    while(true) {
+                    while (true) {
 
                         line = bufferedReader.readLine();
-                        if(line.equals(""))
+                        if (line.equals(""))
                             break;
 
                         String[] words = line.split("=");
@@ -104,11 +108,11 @@ public class MapReader {
                 }
 
                 if (line.equals("[Territories]")) {
-                    while(true) {
+                    while (true) {
 
                         line = bufferedReader.readLine();
 
-                        if((line == null) || (line.equals("")))
+                        if ((line == null) || (line.equals("")))
                             break;
 
                         String[] words = line.split(",");
@@ -119,7 +123,7 @@ public class MapReader {
                             Continent tempContinent = getContinentByName(words[3]);
                             if (tempContinent != null) {
 
-                                if(countryGameMapList!=null && countryGameMapList.containsKey(words[0])) {
+                                if (countryGameMapList != null && countryGameMapList.containsKey(words[0])) {
 
                                     countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
                                 } else {
@@ -156,14 +160,15 @@ public class MapReader {
 
     /**
      * Function to set the list of all connected countries in the game map object
+     *
      * @param words array of names of connected countries
      * @return list of country objects as string to be set in the game play object
      */
-    private ArrayList<String> setAdjacentCountriesListString(String[] words) {
+    private static ArrayList<String> setAdjacentCountriesListString(String[] words) {
 
         ArrayList<String> returnCountryList = new ArrayList<>();
 
-        for (int i=4; i<words.length; i++) {
+        for (int i = 4; i < words.length; i++) {
             returnCountryList.add(words[i]);
         }
 
@@ -172,15 +177,16 @@ public class MapReader {
 
     /**
      * This method reads the map directory and returns the list of map.
+     *
      * @return list of string of map names.
      */
-    public static ArrayList<String> getMapList(Context context){
+    public static ArrayList<String> getMapList(Context context) {
 
         final ArrayList<String> mapList = new ArrayList<>();
         final String rootPath = context.getFilesDir().getAbsolutePath();
         final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         System.out.println(mapDir);
-        for(final String file: mapDir.list()) {
+        for (final String file : mapDir.list()) {
             mapList.add(file);
         }
         return mapList;
@@ -188,14 +194,15 @@ public class MapReader {
 
     /**
      * Function to set the list of all connected countries in the game map object
+     *
      * @param words array of names of connected countries
      * @return list of country objects as objects to be set in the game map object
      */
-    private ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
+    private static ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
 
         ArrayList<GameMap> returnCountryList = new ArrayList<>();
 
-        for (int i=4; i<words.length; i++) {
+        for (int i = 4; i < words.length; i++) {
             if (countryGameMapList.containsKey(words[i])) {
                 returnCountryList.add(countryGameMapList.get(words[i]));
             } else {
@@ -209,14 +216,15 @@ public class MapReader {
 
     /**
      * Check if the continent that the country belongs to is part of the continent list
+     *
      * @param continentName name of the continent
      * @return true if continent belongs to continent list, false otherwise
      */
-    private boolean continentBelongsToContinentList(String continentName) {
+    private static boolean continentBelongsToContinentList(String continentName) {
 
         int flag = 0;
 
-        if(continentList.isEmpty()) {
+        if (continentList.isEmpty()) {
             System.out.println("Error: Continent list is empty.");
             return false;
         } else {
@@ -226,7 +234,7 @@ public class MapReader {
             }
         }
 
-        if (flag==1)
+        if (flag == 1)
             return true;
         else
             return false;
@@ -234,10 +242,11 @@ public class MapReader {
 
     /**
      * Return a continent object from a list if its name equals the name of the continent passed as parameter
+     *
      * @param continentName name of the continent
      * @return continent object which has the same name as the parameter
      */
-    private Continent getContinentByName (String continentName) {
+    private static Continent getContinentByName(String continentName) {
 
         if (continentList.isEmpty()) {
             System.out.println("Error: Continent list is empty");
