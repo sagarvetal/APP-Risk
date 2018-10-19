@@ -13,5 +13,6 @@ public class FileConstants {
     public static final String LOG_FILE_NAME = "logs.txt";
 
     //Maps
-    public static final String MAP_FILE_PATH = "maps";
+    public static final String MAP_FILE_PATH = "app_maps";
+    public static final String MAP_FILE_EXTENSTION = ".map";
 }

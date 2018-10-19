@@ -48,29 +48,26 @@ public class PlayScreenActivity extends AppCompatActivity {
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
 
+        gamePlay = (new MapReader()).returnGamePlayFromFile(this.getApplicationContext(), mapName);
+        final StartupPhaseController startupPhaseController = new StartupPhaseController();
+        startupPhaseController.setPlayers(playerNames, gamePlay);
+        startupPhaseController.assignInitialCountries(gamePlay);
+        startupPhaseController.assignInitialArmies(gamePlay);
+        startupPhaseController.placeInitialArmies(gamePlay);
+        gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
 
-//        gamePlay = MapReader.readMap(getResources().openRawResource(R.raw.map1));
-//        final StartupPhaseController startupPhaseController = new StartupPhaseController();
-//        startupPhaseController.setPlayers(playerNames, gamePlay);
-//        startupPhaseController.assignInitialCountries(gamePlay);
-//        startupPhaseController.assignInitialArmies(gamePlay);
-//        startupPhaseController.placeInitialArmies(gamePlay);
-//        gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
+        final ArrayList<Country> countries = startupPhaseController.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId(), gamePlay);
 
-//        final ArrayList<Country> countries = startupPhaseController.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId(), gamePlay);
-//
-//        final LinearLayoutManager layout = new LinearLayoutManager(this);
-//        final PlayScreenRVAdapter adapter = new PlayScreenRVAdapter(this, gamePlay, countries);
-//
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(layout);
-//        recyclerView.setNestedScrollingEnabled(true);
-//        recyclerView.setHasFixedSize(false);
-//
-//        pName.setText(gamePlay.getCurrentPlayer().getName());
-//        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
-//        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
+        final LinearLayoutManager layout = new LinearLayoutManager(this);
+        final PlayScreenRVAdapter adapter = new PlayScreenRVAdapter(this, gamePlay, countries);
 
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layout);
+        recyclerView.setNestedScrollingEnabled(true);
+        recyclerView.setHasFixedSize(false);
 
+        pName.setText(gamePlay.getCurrentPlayer().getName());
+        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
+        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
     }
 }
