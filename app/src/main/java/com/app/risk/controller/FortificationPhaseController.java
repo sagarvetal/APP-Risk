@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Fortification phase class: Player can move his armies from a country he owns to another country
  * through a path formed by countries belonging to him.
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
@@ -20,6 +21,7 @@ public class FortificationPhaseController {
 
     /**
      * This parameterized constructor initializes the GamePlay object.
+     *
      * @param gamePlay The GamePlay object.
      */
     public FortificationPhaseController(final GamePlay gamePlay) {
@@ -29,8 +31,9 @@ public class FortificationPhaseController {
     /**
      * This method is to perform DFS on the list of countries that belong to the player and find a path between two countries.
      * The path should also be formed by countries belonging to the same player
+     *
      * @param fromCountry The object of from country
-     * @param toCountry The object of to country
+     * @param toCountry   The object of to country
      * @return true if there exists a path between two countries pertaining to the conditions, false otherwise
      */
     public boolean findPathBetweenCountries(final Country fromCountry, final Country toCountry) {
@@ -39,7 +42,7 @@ public class FortificationPhaseController {
         final List<Country> countriesVisited = new ArrayList<>();
         final List<Country> countriesBelongToPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
 
-        if(countriesBelongToPlayer.contains(fromCountry)) {
+        if (countriesBelongToPlayer.contains(fromCountry)) {
 
             depthFirstTraversalStack.push(fromCountry);
 
@@ -65,7 +68,7 @@ public class FortificationPhaseController {
             System.out.print(fromCountry.getNameOfCountry() + " does not belong to player.");
         }
 
-        if(countriesVisited.contains(fromCountry) && countriesVisited.contains(toCountry))
+        if (countriesVisited.contains(fromCountry) && countriesVisited.contains(toCountry))
             return true;
         else
             return false;
