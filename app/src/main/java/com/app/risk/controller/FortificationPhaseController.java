@@ -36,7 +36,7 @@ public class FortificationPhaseController {
      * @param toCountry   The object of to country
      * @return true if there exists a path between two countries pertaining to the conditions, false otherwise
      */
-    public boolean findPathBetweenCountries(final Country fromCountry, final Country toCountry) {
+    public boolean isCountriesConneted(final Country fromCountry, final Country toCountry) {
 
         final Stack<Country> depthFirstTraversalStack = new Stack<>();
         final List<Country> countriesVisited = new ArrayList<>();
@@ -78,6 +78,17 @@ public class FortificationPhaseController {
     public void assignCards() {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         gamePlay.getCurrentPlayer().setCards(gamePlay.getCards().get(randomIndex));
+    }
+
+    public ArrayList<String> getReachableCountries(final Country fromCountry, final ArrayList<Country> countriesOwnedByPlayer){
+        final ArrayList<String> reachableCountries = new ArrayList<>();
+        for(final Country toCountry : countriesOwnedByPlayer) {
+            if(!fromCountry.getNameOfCountry().equalsIgnoreCase(toCountry.getNameOfCountry()) &&
+                    isCountriesConneted(fromCountry, toCountry)) {
+                reachableCountries.add(toCountry.getNameOfCountry() + " : " + toCountry.getNoOfArmies());
+            }
+        }
+        return reachableCountries;
     }
 
 }
