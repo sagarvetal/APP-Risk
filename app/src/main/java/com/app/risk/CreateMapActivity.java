@@ -104,6 +104,9 @@ public class CreateMapActivity extends Activity  {
             canvas = surfaceView.getHolder().lockCanvas();
             canvas.drawColor( Color.WHITE);
             surfaceView.getHolder().unlockCanvasAndPost(canvas);
+            if (isEditMode){
+                renderMap();
+            }
         }
 
         /**
@@ -136,7 +139,6 @@ public class CreateMapActivity extends Activity  {
                 handleTapOnListView(countryList.indexOf(item));
             }
         }
-        renderMap();
 
     }
     /**
@@ -283,7 +285,9 @@ public class CreateMapActivity extends Activity  {
             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String mapName = edittext.getText().toString();
-                    handleMapVerificationSucced(mapName);
+                    if(mapName.trim()!=""){
+                        handleMapVerificationSucced(mapName);
+                    }
                 }
             });
 
@@ -300,6 +304,12 @@ public class CreateMapActivity extends Activity  {
                     "Verification Failed", Toast.LENGTH_LONG).show();
         }
     }
+
+    /**
+     *
+     * Saves verified map on success
+     * @param filename filename passeb by user
+     */
 
     public void handleMapVerificationSucced(String filename){
         WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
@@ -333,6 +343,12 @@ public class CreateMapActivity extends Activity  {
             }
         }
     }
+
+    /**
+     * Find index of object in array of game map object recieved according to country
+     * @param country country object
+     * @return index object
+     */
     public  int findIndexInarrCountriesRepresentationOnGraphFromCountry(Country country){
 
         for (GameMap map : arrCountriesRepresentationOnGraph ){
@@ -342,6 +358,7 @@ public class CreateMapActivity extends Activity  {
         }
         return  -1;
     }
+
     /**
      *Finds index of game map object according to index of object according to countrylist
      * @param index - index of object in countrylist
@@ -354,9 +371,6 @@ public class CreateMapActivity extends Activity  {
             }
         }
         return -1;
-
-
-        //Comment
     }
 
     /**
@@ -430,13 +444,16 @@ public class CreateMapActivity extends Activity  {
                 Toast.LENGTH_LONG).show();
     }
     /**
-     *
+     *Interface to define Item
      */
     public interface Item {
         public boolean isSection();
         public String getTitle();
     }
 
+    /**
+     * Class that defines section item for listview
+     */
     public class SectionItem implements CreateMapActivity.Item {
         Continent continent;
         private final String title;
@@ -453,6 +470,9 @@ public class CreateMapActivity extends Activity  {
         }
     }
 
+    /**
+     * Class defines Entry  for listview
+     */
     public class EntryItem implements CreateMapActivity.Item {
         Country country;
         public final String title;
