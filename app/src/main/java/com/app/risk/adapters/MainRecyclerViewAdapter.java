@@ -13,9 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.EditMap;
-import com.app.risk.UserDrivenMaps;
+import com.app.risk.view.UserDrivenMaps;
 import com.app.risk.view.MapSelectionActivity;
-import com.app.risk.view.PlaceArmiesActivity;
 import com.app.risk.R;
 
 import java.util.ArrayList;
