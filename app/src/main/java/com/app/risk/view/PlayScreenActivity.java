@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class PlayScreenActivity extends AppCompatActivity implements PhaseManager {
 
     private ImageView pImage;
-    private TextView pName,pArmies,pCountries;
+    private TextView pName, pArmies, pCountries;
     private RecyclerView recyclerView;
     private CardView cardView;
     private GamePlay gamePlay;
@@ -64,17 +64,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         recyclerView.setLayoutManager(layout);
     }
 
-    public void startGame(){
+    public void startGame() {
         changePhase(GamePlayConstants.STARTUP_PHASE);
     }
 
     @Override
     public void changePhase(final String phase) {
-        if(phase != null){
-            switch(phase) {
+        if (phase != null) {
+            switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
-                    Toast.makeText(this, phase , Toast.LENGTH_SHORT).show();
-                    gamePlay = (new MapReader()).returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    Toast.makeText(this, phase, Toast.LENGTH_SHORT).show();
+                    gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCurrentPhase(phase);
                     gamePlay.setPlayers(playerNames);
                     final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
@@ -99,7 +99,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
-                    Toast.makeText(PlayScreenActivity.this, phase , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlayScreenActivity.this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -111,7 +111,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
-                    Toast.makeText(this, phase , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     new Handler().postDelayed(new Runnable() {
                         @Override
