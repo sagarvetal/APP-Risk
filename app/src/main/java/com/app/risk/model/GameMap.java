@@ -1,5 +1,6 @@
 package com.app.risk.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * @author Akshita Angara
  * @version 1.0.0
  */
-public class GameMap {
+public class GameMap implements Serializable {
 
     private Country fromCountry;
     private float coordinateX = 0;

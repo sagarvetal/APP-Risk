@@ -62,6 +62,16 @@ public class CreateMapActivity extends Activity  {
     private HashMap<Continent,ArrayList<Country>> userCreatedMapData = new HashMap<Continent,ArrayList<Country>>();
     private int currentIndexCountrySelected;
 
+    private Context context;
+
+//save the context recievied via constructor in a local variable
+
+    public CreateMapActivity(Context context){
+        this.context=context;
+    }
+    public CreateMapActivity(){
+        super();
+    }
     @SuppressLint("ClickableViewAccessibility")
     @Override
 
