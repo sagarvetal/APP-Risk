@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -69,9 +70,19 @@ public class CreateMapActivity extends Activity  {
         setContentView(R.layout.activity_create_map);
         listCountry = (ListView) findViewById(R.id.lvCountry);
         surfaceView = (SurfaceView) findViewById(R.id.surface);
-        userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
 
         surfaceView.getHolder().addCallback(surfaceCallback);
+
+        isEditMode = (Boolean)getIntent().getExtras().getBoolean("isEditMode");
+
+        if(isEditMode){
+            Intent intent = this.getIntent();
+            Bundle bundle = intent.getExtras();
+            arrCountriesRepresentationOnGraph =  (ArrayList<GameMap>)bundle.getSerializable("arrGameData");
+            userCreatedMapData = (HashMap<Continent,ArrayList<Country>>)bundle.getSerializable("maps");
+        }else{
+            userCreatedMapData = (HashMap<Continent,ArrayList<Country>>) getIntent().getSerializableExtra("maps");
+        }
 
         prepareDataForList();
 
@@ -80,9 +91,8 @@ public class CreateMapActivity extends Activity  {
         setSurfaceViewListener();
 
         setAddButtonListener();
-        isEditMode = (Boolean)getIntent().getExtras().getBoolean("isEditMode");
-        if(isEditMode){
-            arrCountriesRepresentationOnGraph = (ArrayList<GameMap>)getIntent().getSerializableExtra("arrGameData");
+
+        if (isEditMode){
             handleEditMode();
         }
 
@@ -122,7 +132,7 @@ public class CreateMapActivity extends Activity  {
     public void handleEditMode(){
 
         for (Item item : countryList){
-            if (item instanceof EntryItem ){
+            if (item instanceof EntryItem){
                 handleTapOnListView(countryList.indexOf(item));
             }
         }
