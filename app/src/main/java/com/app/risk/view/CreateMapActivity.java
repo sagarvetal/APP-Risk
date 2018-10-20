@@ -37,7 +37,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Creates Map and saves map after verification
+ * Creates and Edits  Map and saves map after verification
  */
 
 public class CreateMapActivity extends Activity {
@@ -62,6 +62,7 @@ public class CreateMapActivity extends Activity {
     private float height;
     private  float mWidth;
     private float mHeight;
+    private String fileName;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -81,11 +82,12 @@ public class CreateMapActivity extends Activity {
             Bundle bundle = intent.getExtras();
             arrCountriesRepresentationOnGraph = (ArrayList<GameMap>) bundle.getSerializable("arrGameData");
             userCreatedMapData = (HashMap<Continent, ArrayList<Country>>) bundle.getSerializable("maps");
+            fileName = bundle.getString("fileName");
         } else {
             userCreatedMapData = (HashMap<Continent, ArrayList<Country>>) getIntent().getSerializableExtra("maps");
         }
 
-        findMinMaxCoordinates();
+
 
         prepareDataForList();
 
@@ -96,14 +98,21 @@ public class CreateMapActivity extends Activity {
         setAddButtonListener();
 
         if (isEditMode) {
+
+            findMinMaxCoordinates();
+
             handleEditMode();
         }
 
     }
 
+    /**
+     * Find min and max co ordinates from array
+     */
+
     public void findMinMaxCoordinates(){
         float minX,minY,maxX,maxY;
-        float minScreenX,minScreenY,maxScreenX,maxScreenY;
+        float maxScreenX,maxScreenY;
         minX = arrCountriesRepresentationOnGraph.get(0).getCoordinateX();
         minY = arrCountriesRepresentationOnGraph.get(0).getCoordinateY();
         maxX = arrCountriesRepresentationOnGraph.get(0).getCoordinateX();
@@ -111,8 +120,7 @@ public class CreateMapActivity extends Activity {
 
         Display display = getWindowManager().getDefaultDisplay();
 
-        minScreenX = 142;
-        minScreenY = 0;
+
         Point size = new Point();
         display.getSize(size);
         maxScreenX = size.x;
@@ -144,6 +152,11 @@ public class CreateMapActivity extends Activity {
 
     }
 
+    /**
+     * Scales co ordinates
+     * @param map
+     * @return
+     */
     public GameMap mapCoordinates(GameMap map){
         float percent_width = Float.valueOf(map.getCoordinateX()) / width;
         float percent_height = Float.valueOf(map.getCoordinateY()) / height;
@@ -357,28 +370,33 @@ public class CreateMapActivity extends Activity {
 
         MapVerification mapVerification = new MapVerification();
         if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true) {
-            final EditText edittext = new EditText(CreateMapActivity.this);
-            AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
-            alert.setMessage("");
-            alert.setTitle("Enter Map name");
-            alert.setView(edittext);
+            if (isEditMode){
+                handleMapVerificationSucced(fileName);
+            }else{
+                final EditText edittext = new EditText(CreateMapActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
+                alert.setMessage("");
+                alert.setTitle("Enter Map name");
+                alert.setView(edittext);
 
-            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    String mapName = edittext.getText().toString();
-                    if (mapName.trim() != "") {
-                        handleMapVerificationSucced(mapName);
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        String mapName = edittext.getText().toString();
+                        if (mapName.trim() != "") {
+                            handleMapVerificationSucced(mapName);
+                        }
                     }
-                }
-            });
+                });
 
-            alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // what ever you want to do with No option.
-                }
-            });
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // what ever you want to do with No option.
+                    }
+                });
 
-            alert.show();
+                alert.show();
+            }
+
 
         } else {
             Toast.makeText(CreateMapActivity.this,
@@ -420,6 +438,9 @@ public class CreateMapActivity extends Activity {
                     }else{
                         GameMap map1 = arrCountriesRepresentationOnGraph.get(indexInarrCountriesRepresentation);
                         map1 = mapCoordinates(map1);
+                        for (GameMap neighbour : map1.getConnectedToCountries()){
+                            neighbour = mapCoordinates(neighbour);
+                        }
                         map1.setIndexOfCountryInList(position);
                         map1.setContinentColor(((EntryItem) item).color);
                         if (indexInarrCountriesRepresentation != -1) {
@@ -477,6 +498,12 @@ public class CreateMapActivity extends Activity {
         return Math.sqrt((xCountry - xTouched) * (xCountry - xTouched) + (yCountry - yTouched) * (yCountry - yTouched)) <= RADIUS;
     }
 
+    /**
+     * Removes connection btw countries
+     * @param toCountry
+     * @param fromCountry
+     */
+
     public void removeConnection(GameMap toCountry,GameMap fromCountry) {
 
         canvas = surfaceView.getHolder().lockCanvas();
@@ -499,6 +526,11 @@ public class CreateMapActivity extends Activity {
 
     }
 
+    /**
+     * Removes Connection btw countries
+     * @param toCountry
+     * @param fromCountry
+     */
     public void removeNieghbour(GameMap toCountry,GameMap fromCountry){
 
         Iterator<GameMap> itr = toCountry.getConnectedToCountries().iterator();
@@ -613,5 +645,6 @@ public class CreateMapActivity extends Activity {
     }
 
 }
+
 
 

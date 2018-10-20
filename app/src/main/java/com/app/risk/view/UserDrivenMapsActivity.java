@@ -41,7 +41,7 @@ import static java.sql.DriverManager.println;
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class UserDrivenMaps extends AppCompatActivity implements View.OnClickListener {
+public class UserDrivenMapsActivity extends AppCompatActivity implements View.OnClickListener {
     String continentSelected = "";
     String countrySelected = "";
     int continentValueSelected;
@@ -52,7 +52,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     Button connectMap = null;
     Button addCustomValue = null;
     ListView selectedCountryList = null;
-    UserDrivenMaps currentobj = null;
+    UserDrivenMapsActivity currentobj = null;
     CountryAdaptor countryListAdapter = null;
     ArrayAdapter<String> countryAdapter = null;
     boolean continentFlag = false;
@@ -61,7 +61,8 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     ArrayAdapter<String> continentAdapter = null;
     String currentContinent = "";
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
-    ArrayList<UserDrivenMaps.Item> countryList = new ArrayList<UserDrivenMaps.Item>();
+    ArrayList<UserDrivenMapsActivity.Item> countryList = new ArrayList<UserDrivenMapsActivity.Item>();
+    private  String fileName;
     Bundle sendBundle = new Bundle();
     Boolean editMode = false;
 
@@ -173,6 +174,9 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         editMode = bundle.getBoolean("edit Mode");
         if (editMode) {
             setTheListView(bundle);
+            fileName = intent.getExtras().getString("fileName");
+
+            intent.putExtra("fileName", fileName);
             sendBundle.putBoolean("isEditMode", true);
             sendBundle.putSerializable("arrGameData", intent.getSerializableExtra("arrGameData"));
         }
@@ -232,7 +236,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
      */
     public void addSelectedCountry() {
         if (continentSelected.trim().equalsIgnoreCase("")) {
-            AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
+            AlertDialog builder = new AlertDialog.Builder(UserDrivenMapsActivity.this).create();
             builder.setTitle("Continent");
             builder.setMessage("Please Enter Continent.");
             builder.setButton(AlertDialog.BUTTON_NEUTRAL, "ok",
@@ -245,7 +249,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             builder.show();
         }
         if (countrySelected.equalsIgnoreCase("")) {
-            AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
+            AlertDialog builder = new AlertDialog.Builder(UserDrivenMapsActivity.this).create();
             builder.setTitle("Country");
             builder.setMessage("Please Enter Country.");
             builder.setButton(AlertDialog.BUTTON_NEUTRAL, "ok",
@@ -258,7 +262,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
         }
         if (continentValue.getText().toString().trim().equalsIgnoreCase("") || continentValue.getText().toString().trim().length() == 0) {
             println("hello:::::::::::::::::::::::::::::::::in dialog box");
-            AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
+            AlertDialog builder = new AlertDialog.Builder(UserDrivenMapsActivity.this).create();
             builder.setTitle("Continent Value");
             builder.setMessage("Please Enter Continent Value.");
             builder.setButton(AlertDialog.BUTTON_NEUTRAL, "ok",
@@ -275,7 +279,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             ArrayList<Country> checkCountry = maps.get(checkContinent);
             for (Country eachCountry : checkCountry) {
                 if (eachCountry.getNameOfCountry().equalsIgnoreCase(countrySelected)) {
-                    AlertDialog builder = new AlertDialog.Builder(UserDrivenMaps.this).create();
+                    AlertDialog builder = new AlertDialog.Builder(UserDrivenMapsActivity.this).create();
                     builder.setTitle("Country");
                     builder.setMessage("Country is already Selected");
                     builder.setButton(AlertDialog.BUTTON_NEUTRAL, "ok",
@@ -305,7 +309,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             } else {
                 System.out.println("::::::::::::::::::::::::::resultof contains:::::::::::::::::" + countryList.contains(new SectionItem(continentSelected)));
                 int i = 0;
-                for (UserDrivenMaps.Item entry : countryList) {
+                for (UserDrivenMapsActivity.Item entry : countryList) {
                     if (entry instanceof SectionItem) {
                         if (((SectionItem) entry).getTitle().equalsIgnoreCase(continentSelected)) {
                             break;
@@ -355,7 +359,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
      */
     public void addUserCustomValue() {
         final View inflaterView = getLayoutInflater().inflate(R.layout.custom_values_layout, null);
-        new AlertDialog.Builder(UserDrivenMaps.this)
+        new AlertDialog.Builder(UserDrivenMapsActivity.this)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -378,7 +382,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
                             presentcountryList.add(s.trim().toString());
                             countryAdapter.notifyDataSetChanged();
                         }
-                        Toast.makeText(UserDrivenMaps.this, "" + s + " is added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UserDrivenMapsActivity.this, "" + s + " is added", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -391,10 +395,12 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
      * This method allows the user to redirect to another activity where countries are connected.
      */
     public void connectCountries() {
-        Intent userMapConnect = new Intent(UserDrivenMaps.this, CreateMapActivity.class);
+        Intent userMapConnect = new Intent(UserDrivenMapsActivity.this, CreateMapActivity.class);
         userMapConnect.putExtra("maps", maps);
+
         if (editMode) {
             userMapConnect.putExtras(sendBundle);
+            userMapConnect.putExtra("fileName",fileName);
         }
         startActivity(userMapConnect);
     }
@@ -417,7 +423,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     /**
      * class which manages the section of the list
      */
-    public class SectionItem implements UserDrivenMaps.Item {
+    public class SectionItem implements UserDrivenMapsActivity.Item {
         private final String title;
 
         /**
@@ -478,7 +484,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     /**
      * class which manges the entry of the list
      */
-    public class EntryItem implements UserDrivenMaps.Item {
+    public class EntryItem implements UserDrivenMapsActivity.Item {
         public final String title;
 
         /**
@@ -538,8 +544,8 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
     public class CountryAdaptor extends BaseAdapter {
 
         private Context context;
-        private ArrayList<UserDrivenMaps.Item> item;
-        private ArrayList<UserDrivenMaps.Item> orignalItem;
+        private ArrayList<UserDrivenMapsActivity.Item> item;
+        private ArrayList<UserDrivenMapsActivity.Item> orignalItem;
 
         /**
          * non parameterized Contructor of Custom adapter to create its instance
@@ -554,7 +560,7 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
          * @param context of the Activity
          * @param item    ArrayList which stores the items in the list
          */
-        public CountryAdaptor(Context context, ArrayList<UserDrivenMaps.Item> item) {
+        public CountryAdaptor(Context context, ArrayList<UserDrivenMapsActivity.Item> item) {
             this.context = context;
             this.item = item;
         }
@@ -600,11 +606,11 @@ public class UserDrivenMaps extends AppCompatActivity implements View.OnClickLis
             if (item.get(position).isSection()) {
                 convertView = inflater.inflate(R.layout.layout_section, parent, false);
                 TextView tvSectionTitle = (TextView) convertView.findViewById(R.id.tvSectionTitle);
-                tvSectionTitle.setText(((UserDrivenMaps.SectionItem) item.get(position)).getTitle());
+                tvSectionTitle.setText(((UserDrivenMapsActivity.SectionItem) item.get(position)).getTitle());
             } else {
                 convertView = inflater.inflate(R.layout.layout_item, parent, false);
                 TextView tvItemTitle = (TextView) convertView.findViewById(R.id.tvItemTitle);
-                tvItemTitle.setText(((UserDrivenMaps.EntryItem) item.get(position)).getTitle());
+                tvItemTitle.setText(((UserDrivenMapsActivity.EntryItem) item.get(position)).getTitle());
             }
             return convertView;
         }
