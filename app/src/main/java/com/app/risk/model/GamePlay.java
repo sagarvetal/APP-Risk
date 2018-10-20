@@ -1,5 +1,7 @@
 package com.app.risk.model;
 
+import android.graphics.Color;
+
 import com.app.risk.constants.GamePlayConstants;
 
 import java.io.Serializable;
@@ -27,6 +29,8 @@ public class GamePlay implements Serializable {
     private String currentPhase;
     private List<Card> cards;
     private Queue<Integer> playerIdQueue;
+    private final int[] colorCodes = {Color.RED,Color.GREEN,Color.BLUE
+            ,Color.DKGRAY,Color.MAGENTA,Color.YELLOW};
 
     /**
      * This is a default constructor.
@@ -227,6 +231,7 @@ public class GamePlay implements Serializable {
         for (final String playerName : playerNames) {
             final Player player = new Player();
             player.setId(id++);
+            player.setColorCode(colorCodes[player.getId()]);
             player.setName(playerName);
             player.setActive(true);
             players.put(player.getId(), player);
