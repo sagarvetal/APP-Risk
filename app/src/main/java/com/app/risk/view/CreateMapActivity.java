@@ -24,12 +24,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.app.risk.R;
+import com.app.risk.controller.MapDriverController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
-import com.app.risk.utility.MapWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -411,8 +411,8 @@ public class CreateMapActivity extends Activity {
      */
 
     public void handleMapVerificationSucced(String filename) {
-        MapWriter writeGameMapToFile = new MapWriter();
-        writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+        MapDriverController mapDriverController = new MapDriverController();
+        mapDriverController.writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
     }
 
     /**
