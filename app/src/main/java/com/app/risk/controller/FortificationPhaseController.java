@@ -75,11 +75,20 @@ public class FortificationPhaseController {
 
     }
 
+    /**
+     * This method picks random card from game play and assign it to player.
+     */
     public void assignCards() {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         gamePlay.getCurrentPlayer().setCards(gamePlay.getCards().get(randomIndex));
     }
 
+    /**
+     * This method gives list country names which are connected to given country of same player.
+     * @param fromCountry The country from which it needs to find other connected countries.
+     * @param countriesOwnedByPlayer List of countries owned by player.
+     * @return List of connected countries from given country.
+     */
     public ArrayList<String> getReachableCountries(final Country fromCountry, final ArrayList<Country> countriesOwnedByPlayer){
         final ArrayList<String> reachableCountries = new ArrayList<>();
         for(final Country toCountry : countriesOwnedByPlayer) {
