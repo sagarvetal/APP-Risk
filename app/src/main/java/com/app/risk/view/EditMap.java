@@ -60,11 +60,12 @@ public class EditMap extends AppCompatActivity {
                 List<GameMap> listOfGameMapList=MapReader.returnGameMapFromFile(getApplicationContext(),fileName);
                 listOfGameMap.addAll(listOfGameMapList);
                 maps=convertIntoHashMap(listOfGameMap);
-                Intent editMap = new Intent(EditMap.this, UserDrivenMaps.class);
+                Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("edit Mode",true);
                 bundle.putSerializable("maps",maps);
                 bundle.putSerializable("arrGameData",listOfGameMap);
+                editMap.putExtra("fileName", fileName);
                 editMap.putExtras(bundle);
                 startActivity(editMap);
 
@@ -98,7 +99,7 @@ public class EditMap extends AppCompatActivity {
                     listOfGameMap.addAll(listOfGameMapList);
                     System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::"+listOfGameMap.size());
                     maps=convertIntoHashMap(listOfGameMap);
-                    Intent editMap = new Intent(EditMap.this, UserDrivenMaps.class);
+                    Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("edit Mode",true);
                     bundle.putSerializable("maps",maps);
