@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
@@ -30,6 +32,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     private Context context;
     private ArrayList<String> neighbouringCountries;
     private PhaseManager phaseManager;
+    private boolean flagTransfer;
 
     /**
      * The constructor of the class which sets the context and arraylist
@@ -125,9 +128,28 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         break;
 
                     case GamePlayConstants.ATTACK_PHASE:
+                        Toast.makeText(context, "Still Working", Toast.LENGTH_SHORT).show();
                         break;
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
+
+                        if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
+                            final FortificationPhaseController fortificationPhase = new FortificationPhaseController(gamePlay);
+                            final ArrayList<String> reachableCountries  = fortificationPhase.getReachableCountries(countries.get(getAdapterPosition()), countries);
+                            final String[] reachableCountryArray = new String[reachableCountries.size()];
+                            reachableCountries.toArray(reachableCountryArray);
+
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Move Armies")
+                                    .setItems((CharSequence[]) reachableCountryArray, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int position) {
+                                            moveArmies(reachableCountryArray[position],getAdapterPosition());
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                        }
                         break;
                 }
             }
@@ -165,6 +187,42 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         reinforcementDialogBox.create();
         reinforcementDialogBox.show();
     }
+
+    public void moveArmies(String countryNameDestination,final int adapterPostion){
+
+        if(flagTransfer == true){
+            final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
+            reinforcementDialogBox.setTitle("Place Armies");
+            countryNameDestination = countryNameDestination.split(":")[0].trim();
+            final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+            reinforcementDialogBox.setView(view);
+
+            final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+            numberPicker.setMinValue(1);
+            numberPicker.setMaxValue(countries.get(adapterPostion).getNoOfArmies() - 1);
+            numberPicker.setWrapSelectorWheel(false);
+
+            final String finalCountryNameDestination = countryNameDestination;
+            reinforcementDialogBox.setPositiveButton("Move", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    gamePlay.getCountries().get(finalCountryNameDestination).incrementArmies(numberPicker.getValue());
+                    countries.get(adapterPostion).decrementReinforcementArmies(numberPicker.getValue());
+                    notifyDataSetChanged();
+                    Toast.makeText(context, "Armies moved from" + countries.get(adapterPostion).getNameOfCountry() + " to "
+                            + finalCountryNameDestination, Toast.LENGTH_SHORT).show();
+                    flagTransfer = false;
+                }
+            });
+            reinforcementDialogBox.setNegativeButton("Cancel",null);
+            reinforcementDialogBox.create();
+            reinforcementDialogBox.show();
+        }
+        else{
+            Toast.makeText(context, "Countries moved once and \n click next button to proceed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     public PhaseManager getPhaseManager() {
         return phaseManager;

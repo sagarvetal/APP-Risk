@@ -1,17 +1,20 @@
 package com.app.risk.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
@@ -19,9 +22,7 @@ import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
-import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
-import com.app.risk.model.Player;
 import com.app.risk.utility.MapReader;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private String mapName;
     private ArrayList<String> playerNames;
     private ActionBar actionBar;
+    private FloatingActionButton floatingActionButton;
+    private String currentPhase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +47,40 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         setContentView(R.layout.activity_play_screen);
         actionBar = getSupportActionBar();
         init();
+        manageFloatingButtonTransitions();
         startGame();
+    }
+
+    private void manageFloatingButtonTransitions() {
+
+
+        floatingActionButton = findViewById(R.id.activity_play_screen_floating_button);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                switch (currentPhase){
+                    case GamePlayConstants.REINFORCEMENT_PHASE:
+
+                        View view = getLayoutInflater().inflate(R.layout.player_selection_option,null);
+                        new AlertDialog.Builder(PlayScreenActivity.this)
+                                .setTitle("Card Exchange")
+                                .setView(view)
+                                .create()
+                                .show();
+
+                        break;
+                    case GamePlayConstants.ATTACK_PHASE:
+                        changePhase(GamePlayConstants.FORTIFICATION_PHASE);
+                        break;
+                    case GamePlayConstants.FORTIFICATION_PHASE:
+                        changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
+                        break;
+                }
+
+            }
+        });
     }
 
     public void init() {
@@ -83,7 +119,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
-                    Toast.makeText(this, phase, Toast.LENGTH_SHORT).show();
+                    floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
+                    currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     gamePlay.setCurrentPhase(phase);
                     gamePlay.setCurrentPlayer();
@@ -99,27 +136,19 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
+                    floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
+                    currentPhase = GamePlayConstants.ATTACK_PHASE;
+                    gamePlay.setCurrentPhase(phase);
                     Toast.makeText(PlayScreenActivity.this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            changePhase(GamePlayConstants.FORTIFICATION_PHASE);
-                        }
-                    }, 5000);
-                    //changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                     break;
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
+                    floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
+                    currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
+                    gamePlay.setCurrentPhase(phase);
                     Toast.makeText(this, phase, Toast.LENGTH_SHORT).show();
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
-                        }
-                    }, 5000);
-
                     break;
             }
         }
