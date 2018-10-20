@@ -1,9 +1,8 @@
-package com.app.risk;
+package com.app.risk.view;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -21,12 +20,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.app.risk.R;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
-import com.app.risk.utility.MapWriter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,18 +54,6 @@ public class CreateMapActivity extends Activity {
     private Canvas canvas;
     private HashMap<Continent, ArrayList<Country>> userCreatedMapData = new HashMap<Continent, ArrayList<Country>>();
     private int currentIndexCountrySelected;
-
-    private Context context;
-
-//save the context recievied via constructor in a local variable
-
-    public CreateMapActivity(Context context) {
-        this.context = context;
-    }
-
-    public CreateMapActivity() {
-        super();
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -110,6 +97,9 @@ public class CreateMapActivity extends Activity {
             canvas = surfaceView.getHolder().lockCanvas();
             canvas.drawColor(Color.WHITE);
             surfaceView.getHolder().unlockCanvasAndPost(canvas);
+            if (isEditMode) {
+                renderMap();
+            }
         }
 
         /**
@@ -142,7 +132,6 @@ public class CreateMapActivity extends Activity {
                 handleTapOnListView(countryList.indexOf(item));
             }
         }
-        renderMap();
 
     }
 
@@ -158,7 +147,7 @@ public class CreateMapActivity extends Activity {
                 if (totalCountries == totalCountriesAddedInGraph) {
                     handleAddMapAction();
                 } else {
-                    showToast("Add All Countries First");
+                    showToast(getString(R.string.add_all_countries));
                 }
             }
         });
@@ -235,7 +224,7 @@ public class CreateMapActivity extends Activity {
                         if (indexOfToButton == -1) {
                             indexOfToButton = arrCountriesRepresentationOnGraph.indexOf(map);
                             renderMap();
-                            showToast("To Country Selected");
+                            showToast(getString(R.string.to_country_selected));
                             break;
                         } else {
                             indexOfFromButton = arrCountriesRepresentationOnGraph.indexOf(map);
@@ -243,7 +232,7 @@ public class CreateMapActivity extends Activity {
                                 if (isEditMode) {
                                     removeConnection(map);
                                 } else {
-                                    showToast("To Country and From Country cannot be same");
+                                    showToast(getString(R.string.from_country_selected));
                                 }
                                 break;
                             } else {
@@ -259,11 +248,11 @@ public class CreateMapActivity extends Activity {
                                     arrCountriesRepresentationOnGraph.set(indexOfToButton, toCountryMap);
                                     arrCountriesRepresentationOnGraph.set(indexOfFromButton, fromCountryMap);
                                     renderMap();
-                                    showToast("From Country Selected");
+                                    showToast(getString(R.string.from_country_selected));
                                     indexOfToButton = -1;
                                     break;
                                 } else {
-                                    showToast("Countries Already Connected");
+                                    showToast(getString(R.string.countries_connected));
                                 }
                             }
 
@@ -290,7 +279,9 @@ public class CreateMapActivity extends Activity {
             alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String mapName = edittext.getText().toString();
-                    handleMapVerificationSucced(mapName);
+                    if (mapName.trim() != "") {
+                        handleMapVerificationSucced(mapName);
+                    }
                 }
             });
 
@@ -308,9 +299,15 @@ public class CreateMapActivity extends Activity {
         }
     }
 
+    /**
+     * Saves verified map on success
+     *
+     * @param filename filename passed by user
+     */
+
     public void handleMapVerificationSucced(String filename) {
-        MapWriter mapWriter = new MapWriter();
-        mapWriter.writeGameMapToFile(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+//        WriteGameMapToFile writeGameMapToFile = new WriteGameMapToFile();
+//        writeGameMapToFile.writeGameMapToFile(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
     }
 
     /**
@@ -342,6 +339,12 @@ public class CreateMapActivity extends Activity {
         }
     }
 
+    /**
+     * Find index of object in array of game map object recieved according to country
+     *
+     * @param country country object
+     * @return index object
+     */
     public int findIndexInarrCountriesRepresentationOnGraphFromCountry(Country country) {
 
         for (GameMap map : arrCountriesRepresentationOnGraph) {
@@ -365,9 +368,6 @@ public class CreateMapActivity extends Activity {
             }
         }
         return -1;
-
-
-        //Comment
     }
 
     /**
@@ -444,7 +444,7 @@ public class CreateMapActivity extends Activity {
     }
 
     /**
-     *
+     * Interface to define Item
      */
     public interface Item {
         public boolean isSection();
@@ -452,6 +452,9 @@ public class CreateMapActivity extends Activity {
         public String getTitle();
     }
 
+    /**
+     * Class that defines section item for listview
+     */
     public class SectionItem implements CreateMapActivity.Item {
         Continent continent;
         private final String title;
@@ -471,6 +474,9 @@ public class CreateMapActivity extends Activity {
         }
     }
 
+    /**
+     * Class defines Entry  for listview
+     */
     public class EntryItem implements CreateMapActivity.Item {
         Country country;
         public final String title;
@@ -492,4 +498,5 @@ public class CreateMapActivity extends Activity {
     }
 
 }
+
 

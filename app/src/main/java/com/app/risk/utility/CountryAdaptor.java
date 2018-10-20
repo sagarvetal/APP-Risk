@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.app.risk.CreateMapActivity;
+import com.app.risk.view.CreateMapActivity;
 import com.app.risk.R;
 
 import java.util.ArrayList;
