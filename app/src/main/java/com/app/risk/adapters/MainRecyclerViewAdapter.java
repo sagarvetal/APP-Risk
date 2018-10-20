@@ -1,5 +1,6 @@
 package com.app.risk.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.risk.EditMap;
+import com.app.risk.view.EditMap;
 import com.app.risk.view.UserDrivenMaps;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.R;
@@ -21,16 +22,35 @@ import com.app.risk.R;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * MainRecyclerView Adapter which iterates the recyclerview multiple times
+ * @author Himanshu Kohli
+ * @version 1.0.0
+ */
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.CardViewHolder> {
 
     private ArrayList<String> cardArrayList;
     private Context invokingActivity;
 
+
+    /**
+     * Parameterized constructor of the adapter
+     * @param cardArrayList : initializes the arraylist of the menu
+     * @param invokingActivity: The context of the activity
+     */
     public MainRecyclerViewAdapter(ArrayList<String> cardArrayList, Context invokingActivity) {
         this.cardArrayList = cardArrayList;
         this.invokingActivity = invokingActivity;
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param parent : parent of the class
+     * @param viewType
+     * @return: Object of the cardview holder
+     */
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,23 +59,40 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         return cardViewHolder;
     }
 
+    /**
+     * {@inheritDoc}
+     * Bind View to data
+     * @param holder: CardHolder class object
+     * @param position: position of the adapter
+     */
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
         holder.textView.setText(cardArrayList.get(position));
     }
 
+    /**
+     * Gets the item count of the adapter
+     * @return: gets the item count of adapter
+     */
     @Override
     public int getItemCount() {
         return cardArrayList.size();
     }
 
-
+    /**
+     * CardViewHolder inner class of the recyclerview
+     * Holds the referrence to the elements of the card
+     */
     public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private CardView cardView;
         private TextView textView;
         private View layoutView;
 
+        /**
+         * Constructor of the CardViewHolder class
+         * @param itemView : holds the view
+         */
         public CardViewHolder(final View itemView) {
             super(itemView);
 
@@ -67,6 +104,11 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
         }
 
+        /**
+         * {@inheritDoc}
+         * Click listner method
+         * @param v: view of the
+         */
         @Override
         public void onClick(View v) {
 
@@ -95,6 +137,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
                     case "Exit":
+                        ((Activity)invokingActivity).finishAffinity();
                             System.exit(0);
                         break;
                 }

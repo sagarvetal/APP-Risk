@@ -80,23 +80,25 @@ public class MapReader {
 
             while ((line = bufferedReader.readLine()) != null) {
 
-                if (line.equals("[Map]")) {
+                if (line.equalsIgnoreCase("[Map]")) {
                     while (true) {
 
                         line = bufferedReader.readLine();
 
                         if (line.startsWith("image=")) {
                             finalGamePlay.setMapName(line.split("=")[1].trim());
-                        } else
+                        }
+
+                        if (line.isEmpty())
                             break;
                     }
                 }
 
-                if (line.equals("[Continents]")) {
+                if (line.equalsIgnoreCase("[Continents]")) {
                     while (true) {
 
                         line = bufferedReader.readLine();
-                        if (line.equals(""))
+                        if (line.isEmpty())
                             break;
 
                         String[] words = line.split("=");
@@ -107,13 +109,16 @@ public class MapReader {
                     finalGamePlay.setContinents(continentHashMap);
                 }
 
-                if (line.equals("[Territories]")) {
+                if (line.equalsIgnoreCase("[Territories]") || line.equalsIgnoreCase("[countries]")) {
                     while (true) {
 
                         line = bufferedReader.readLine();
 
-                        if ((line == null) || (line.equals("")))
+                        if (line == null)
                             break;
+
+                        if(line.isEmpty())
+                            continue;
 
                         String[] words = line.split(",");
 
@@ -124,7 +129,6 @@ public class MapReader {
                             if (tempContinent != null) {
 
                                 if (countryGameMapList != null && countryGameMapList.containsKey(words[0])) {
-
                                     countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
                                 } else {
                                     countryGameMapList.put(words[0], new GameMap(new Country(words[0], tempContinent)));
@@ -133,8 +137,8 @@ public class MapReader {
                                 GameMap gameMapForFinalList = countryGameMapList.get(words[0]);
 
                                 gameMapForFinalList.setFromCountry(countryGameMapList.get(words[0]).getFromCountry());
-                                gameMapForFinalList.setCoordinateX(Integer.parseInt(words[1]));
-                                gameMapForFinalList.setCoordinateY(Integer.parseInt(words[2]));
+                                gameMapForFinalList.setCoordinateX(Float.parseFloat(words[1]));
+                                gameMapForFinalList.setCoordinateY(Float.parseFloat(words[2]));
                                 gameMapForFinalList.setConnectedToCountries(setAdjacentCountriesList(words));
 
                                 finalGameMapList.add(gameMapForFinalList);

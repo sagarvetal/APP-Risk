@@ -27,16 +27,17 @@
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="110dp"
-                android:src="@mipmap/ic_launcher_round"
-                android:layout_weight="0.25"
+                android:src="@drawable/sample_image"
+                android:layout_weight="0.33"
+                android:scaleType="fitXY"
                 android:id="@+id/play_screen_image"
-                android:layout_marginLeft="5dp"
+                android:layout_margin="5dp"
                 />
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.75"
+                android:layout_weight="0.67"
                 android:orientation="vertical"
                 android:layout_margin="10dp"
                 >

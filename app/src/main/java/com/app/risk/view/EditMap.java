@@ -1,19 +1,19 @@
-package com.app.risk;
+package com.app.risk.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.app.risk.R;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.MapReader;
+import com.app.risk.view.UserDrivenMaps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
