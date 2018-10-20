@@ -74,14 +74,24 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        //View view = getLayoutInflater().inflate(R.layout.player_selection_option,null);
-
                         if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
-                            Card card = gamePlay.getCurrentPlayer().getCards().get(gamePlay.getCurrentPlayer().getCards().size() - 1);
+                            String cards = "";
+
+                            for(final Card card : gamePlay.getCurrentPlayer().getCards()){
+                                if(cards.isEmpty()){
+                                    cards = card.getType();
+                                } else {
+                                    cards += "\n" + card.getType();
+                                }
+                            }
+
+                            if(cards.isEmpty()){
+                                cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                            }
 
                             new AlertDialog.Builder(PlayScreenActivity.this)
-                                    .setTitle("Card Award")
-                                    .setMessage(gamePlay.getCurrentPlayer().getName() + " is awarded one " + card.getType())
+                                    .setTitle("Available Cards")
+                                    .setMessage(cards)
                                     .create()
                                     .show();
                         }
