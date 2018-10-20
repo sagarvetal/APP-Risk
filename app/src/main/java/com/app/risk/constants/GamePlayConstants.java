@@ -9,7 +9,7 @@ package com.app.risk.constants;
  */
 public class GamePlayConstants {
 
-    public static final int AMRIES_MULTIPLIER = 3;
+    public static final int AMRIES_MULTIPLIER = 2;
 
     public static final int MIN_REINFORCEMENT_AMRIES = 3;
 
