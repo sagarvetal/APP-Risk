@@ -222,6 +222,8 @@ public class GamePlay implements Serializable {
      */
     public void setPlayers(final ArrayList<String> playerNames) {
         int id = 0;
+        players.clear();
+        playerIdQueue.clear();
         for (final String playerName : playerNames) {
             final Player player = new Player();
             player.setId(id++);
