@@ -19,6 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * MainScreenActivity display the main screen of the display
+ * @author Akhila
+ * @version 1.0.0
+ */
 public class EditMap extends AppCompatActivity {
     Intent intent ;
     private ListView listView;
@@ -30,28 +35,9 @@ public class EditMap extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_map_layout);
-        /*Continent asia=new Continent("Asia",1);
-        ArrayList<Country> FirstContinent=new ArrayList<Country>();
-        FirstContinent.add(new Country("India",asia));
-        FirstContinent.add(new Country("Malayasia",asia));
-        FirstContinent.add(new Country("SriLanka",asia));
-        Continent Africa=new Continent("Africa",1);
-        ArrayList<Country> SecondContinent=new ArrayList<Country>();
-        SecondContinent.add(new Country("gana",Africa));
-        SecondContinent.add(new Country("peru",Africa));
-        SecondContinent.add(new Country("mexico",Africa));
-        maps.put(asia,FirstContinent);
-        maps.put(Africa,SecondContinent);*/
-      /*  intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*//*");
-        startActivityForResult(intent, 7);*/
+
         listView = findViewById(R.id.edit_map_listview);
         mapList=MapReader.getMapList(getApplicationContext());
-        // final ArrayList<String> sample = new ArrayList();
-       /*
-        for (int i=0;i<20;i++){
-            sample.add("sample " + i);
-        }*/
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mapList));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,14 +55,19 @@ public class EditMap extends AppCompatActivity {
                 editMap.putExtra("fileName", fileName);
                 editMap.putExtras(bundle);
                 startActivity(editMap);
-
-                // Toast.makeText(EditMap.this, "" + sample.get(i), Toast.LENGTH_SHORT).show();
             }
         });
 
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void  onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
@@ -115,6 +106,11 @@ public class EditMap extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method convert the gamemap arraylist to hashmap
+     * @param listOfGameMap list of gamemap
+     * @return hashmap of the gamemap list
+     */
     private HashMap<Continent, ArrayList<Country>> convertIntoHashMap(List<GameMap> listOfGameMap) {
         HashMap<Continent, ArrayList<Country>> userMaps = new HashMap<Continent, ArrayList<Country>>();
         for(GameMap gm:listOfGameMap)

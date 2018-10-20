@@ -28,4 +28,7 @@ public class GamePlayConstants {
     public static final String REINFORCEMENT_MSG = "%s armies are holding %s countries. \n" +
                                                     "So %s has been awarded with %s additional armies";
 
+    public static final String NO_CARDS_AVAILABLE = "No Cards Available";
+
+
 }

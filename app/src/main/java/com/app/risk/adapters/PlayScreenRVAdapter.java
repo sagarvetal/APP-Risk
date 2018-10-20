@@ -229,6 +229,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                     gamePlay.getCountries().get(finalCountryNameDestination).incrementArmies(numberPicker.getValue());
                     countries.get(adapterPostion).decrementReinforcementArmies(numberPicker.getValue());
                     notifyDataSetChanged();
+                    FortificationPhaseController phaseController = new FortificationPhaseController(gamePlay);
+                    phaseController.assignCards();
                     Toast.makeText(context, "Armies moved from " + countries.get(adapterPostion).getNameOfCountry() + " to "
                             + finalCountryNameDestination, Toast.LENGTH_SHORT).show();
                     phaseManager.changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
