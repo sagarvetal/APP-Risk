@@ -33,7 +33,7 @@
             android:label="@string/title_activity_create_map"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".EditMap"></activity>
+        <activity android:name=".view.EditMap"></activity>
     </application>
 
 </manifest>
