@@ -20,12 +20,24 @@ public class CustomArrayAdapter extends ArrayAdapter{
     private GamePlay gamePlay;
     private ArrayList<String> objects;
 
+    /**
+     * This the paramertized constructor
+     * @param context
+     * @param resource
+     * @param textViewResourceId
+     * @param objects
+     * @param gamePlay
+     */
     public CustomArrayAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull ArrayList<String> objects, GamePlay gamePlay) {
         super(context, resource, textViewResourceId, objects);
         this.gamePlay = gamePlay;
         this.objects = objects;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
