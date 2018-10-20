@@ -560,6 +560,10 @@ public class CreateMapActivity extends Activity {
         canvas = surfaceView.getHolder().lockCanvas();
         canvas.drawColor(Color.WHITE);
         Paint connectionLine = new Paint();
+        Paint text = new Paint();
+        text.setTextSize(40);
+        text.setColor(Color.BLACK);
+        connectionLine.setTextSize(40);
         connectionLine.setColor(Color.YELLOW);
         connectionLine.setStrokeWidth(10);
         for (GameMap map : arrCountriesRepresentationOnGraph) {
@@ -569,6 +573,8 @@ public class CreateMapActivity extends Activity {
             for (GameMap nieghbourCountry : map.getConnectedToCountries()) {
                 canvas.drawLine(map.getCoordinateX(), map.getCoordinateY(), nieghbourCountry.getCoordinateX(), nieghbourCountry.getCoordinateY(), connectionLine);
             }
+            canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,3),map.getCoordinateX()-20,map.getCoordinateY(),text);
+
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
         currentIndexCountrySelected = -1;
