@@ -1,5 +1,7 @@
 package com.app.risk.model;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -159,4 +161,26 @@ public class GameMap implements Serializable {
 
         this.coordinateY = coordinateY;
     }
+
+//    public int hashCode() {
+//
+//        return fromCountry.hashCode();
+//    }
+//
+//    public boolean equals(Object obj) {
+//        if (obj instanceof GameMap) {
+//            if (this.fromCountry.equals(((GameMap) obj).fromCountry)) ;
+//            {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//
+//    public int compareTo(@NonNull GameMap gameMap) {
+//        if (this.fromCountry.equals(gameMap.fromCountry))
+//            return 0;
+//        return this.fromCountry.compareTo(gameMap.fromCountry);
+//    }
 }
