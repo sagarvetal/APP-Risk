@@ -3,6 +3,7 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
+
 
     /**
      * This method is the main creation method of the activity
