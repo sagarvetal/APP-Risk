@@ -23,6 +23,7 @@ import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
+import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.MapReader;
@@ -73,13 +74,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        View view = getLayoutInflater().inflate(R.layout.player_selection_option,null);
-                        new AlertDialog.Builder(PlayScreenActivity.this)
-                                .setTitle("Card Exchange")
-                                .setView(view)
-                                .create()
-                                .show();
+                        //View view = getLayoutInflater().inflate(R.layout.player_selection_option,null);
 
+                        if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
+                            Card card = gamePlay.getCurrentPlayer().getCards().get(gamePlay.getCurrentPlayer().getCards().size() - 1);
+
+                            new AlertDialog.Builder(PlayScreenActivity.this)
+                                    .setTitle("Card Award")
+                                    .setMessage(gamePlay.getCurrentPlayer().getName() + " is awarded one " + card.getType())
+                                    .create()
+                                    .show();
+                        }
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
