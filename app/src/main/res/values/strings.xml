@@ -26,13 +26,23 @@
     <string name="title_activity_custom_country">CustomCountry</string>
     <string name="add_custom_value">Add Custom Value</string>
     <string name="custom_name">Custom Name</string>
+
     <string name="to_country_selected">To Country Selected</string>
     <string name="from_country_selected">From Country Selected</string>
     <string name="to_from_same">To Country and From Country cannot be same</string>
     <string name="countries_connected">Countries Already Connected</string>
     <string name="add_all_countries">Add All Countries First</string>
 
-
-
+    <string name="move_armies_string">Move Armies</string>
+    <string name="place_string">Place</string>
+    <string name="place_armies_string">Place Armies</string>
+    <string name="move_string">Move</string>
+    <string name="cancel_string">Cancel</string>
+    <string name="fortification_again_error_string">Countries moved once and   click next button to proceed</string>
+    <string name="load_map_string">Load Map</string>
+    <string name="player_name">Player Name</string>
+    <string name="player_string">Player</string>
+    <string name="alert_string">Alert</string>
+    <string name="greater_than_one_error">Country must have armies greater than 1</string>
 
 </resources>
