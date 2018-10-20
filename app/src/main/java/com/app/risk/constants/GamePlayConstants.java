@@ -24,5 +24,8 @@ public class GamePlayConstants {
     public static final String CAVALRY_CARD = "Cavalry Card";
     public static final String ARTILLERY_CARD = "Artillery Card";
 
+    //Message
+    public static final String REINFORCEMENT_MSG = "%s armies are holding %s countries. \n" +
+                                                    "So %s has been awarded with %s additional armies";
 
 }

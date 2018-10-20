@@ -19,6 +19,11 @@ import com.app.risk.R;
 
 import java.util.ArrayList;
 
+/**
+ * PlayerSelectionActivity display the player selection screen of the display
+ * @author Himanshu Kohli
+ * @version 1.0.0
+ */
 public class PlayerSelectionActivity extends AppCompatActivity {
 
     private String mapInfo = "";
@@ -29,6 +34,10 @@ public class PlayerSelectionActivity extends AppCompatActivity {
     private ArrayList<String> playerNames;
     private String playerName = "";
 
+    /**
+     * This method is the main creation method of the activity
+     * @param savedInstanceState: instance of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,19 +48,18 @@ public class PlayerSelectionActivity extends AppCompatActivity {
         getMapInfo();
     }
 
-    /*
+    /**
      * This method gets the map information from the previous
      * activity using an intent
      */
     public void getMapInfo() {
         Intent intent = getIntent();
         mapInfo = intent.getStringExtra("MAP_NAME");
-        Toast.makeText(this, "" + mapInfo, Toast.LENGTH_SHORT).show();
     }
 
 
-    /*
-     * This method initialize the elements of the view
+    /**
+     * This method initialize the elements of view and listeners
      * such as listview, seekbar and no. of players on display
      * activity using an intent
      */
@@ -75,7 +83,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                 final View inflaterView = getLayoutInflater().inflate(R.layout.player_selection_option, null);
                 new AlertDialog.Builder(PlayerSelectionActivity.this)
                         .setView(inflaterView)
-                        .setTitle("Player Name")
+                        .setTitle(R.string.player_name)
                         .setPositiveButton("Ok",
                                 new DialogInterface.OnClickListener() {
                                     @Override
@@ -103,7 +111,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                 int display = Integer.parseInt(playerDisplay.getText().toString().trim());
                 if (display > playerNames.size()) {
                     for (int i = playerNames.size(); i < display; i++) {
-                        playerNames.add("Player " + (i + 1));
+                        playerNames.add(getString(R.string.player_string) + (i + 1));
                     }
                     adapter.notifyDataSetChanged();
                 } else if (display < playerNames.size()) {
@@ -117,17 +125,15 @@ public class PlayerSelectionActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
     }
 
-    /*
+    /**
      * This method sets up the button which connects one activity to another
      * activity using an intent
      */
@@ -139,7 +145,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 new AlertDialog.Builder(PlayerSelectionActivity.this)
-                        .setTitle("Alert")
+                        .setTitle(R.string.alert_string)
                         .setMessage("Are You sure?")
                         .setNegativeButton("No", null)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
