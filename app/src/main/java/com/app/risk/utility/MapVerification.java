@@ -178,17 +178,30 @@ public class MapVerification {
             if (countriesVisited != null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())) {
                 continue;
             } else {
-
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
 
                 for (GameMap neighbourCountry : countryVisited.getConnectedToCountries()) {
-                    if (traversableCountries.contains(neighbourCountry)
+                    if (isCountryANeighbour(traversableCountries, neighbourCountry)
                             && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())) {
                         depthFirstTraversalStack.push(neighbourCountry);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Method to check if the adjacent neighbour country can be traversed to find a path
+     * @param traversableCountries list of traversable countries
+     * @param neighbourCountry adjacent neighbour country
+     * @return true if the neighbour country belongs to the list of trversable countries, false otherwise
+     */
+    private boolean isCountryANeighbour(List<GameMap> traversableCountries, GameMap neighbourCountry) {
+        for(GameMap country: traversableCountries){
+            if(country.getFromCountry().getNameOfCountry().equals(neighbourCountry.getFromCountry().getNameOfCountry()))
+                return true;
+        }
+        return false;
     }
 
     /**
