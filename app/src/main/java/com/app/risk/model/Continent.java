@@ -81,11 +81,19 @@ public class Continent implements Serializable {
         this.armyControlValue = armyControlValue;
     }
 
+    /**
+     * This method returns the hashcode of continent.
+     * @return The hashcode of continent.
+     */
     public int hashCode() {
-
         return nameOfContinent.hashCode();
     }
 
+    /**
+     * This is overridden method to check two continents are equal .
+     * @param obj The object of continent.
+     * @return true if two continents are equal; otherwise return false.
+     */
     public boolean equals(Object obj) {
         if (obj instanceof Continent) {
             if (this.nameOfContinent.equalsIgnoreCase(((Continent) obj).nameOfContinent)) {
@@ -95,8 +103,12 @@ public class Continent implements Serializable {
         return false;
     }
 
+    /**
+     * This is overridden method to compare two continents are equal .
+     * @param obj The object of continent.
+     * @return 0 if two continents are equal; 1 if it is greater; -1 if it is smaller.
+     */
     public int compareTo(Continent new_continent) {
-
         if (this.nameOfContinent.equals(new_continent.nameOfContinent))
             return 0;
         return this.nameOfContinent.compareToIgnoreCase(new_continent.nameOfContinent);

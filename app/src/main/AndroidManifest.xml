@@ -23,7 +23,7 @@
         <activity android:name=".view.MapSelectionActivity" />
         <activity android:name=".view.PlayScreenActivity" />
         <activity
-            android:name=".view.UserDrivenMaps"
+            android:name=".view.UserDrivenMapsActivity"
             android:label="@string/title_activity_user_driven_maps"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar"

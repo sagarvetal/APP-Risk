@@ -1,5 +1,7 @@
 package com.app.risk.model;
 
+import android.graphics.Color;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +18,7 @@ public class Player implements Serializable {
 
     private int id;
     private String name;
-    private String colorCode;
+    private int colorCode;
     private int noOfCountries;
     private int noOfArmies;
     private int reinforcementArmies;
@@ -71,7 +73,7 @@ public class Player implements Serializable {
      *
      * @return color code of the player
      */
-    public String getColorCode() {
+    public int getColorCode() {
         return colorCode;
     }
 
@@ -80,7 +82,7 @@ public class Player implements Serializable {
      *
      * @param colorCode The unique color code of the player
      */
-    public void setColorCode(String colorCode) {
+    public void setColorCode(int colorCode) {
         this.colorCode = colorCode;
     }
 

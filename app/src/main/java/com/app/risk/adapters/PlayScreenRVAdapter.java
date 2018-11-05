@@ -73,15 +73,16 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     @Override
     public void onBindViewHolder(@NonNull PlayScreenViewHolder holder, int position) {
         holder.countryName.setText(countries.get(position).getNameOfCountry());
+        holder.countryName.setTextColor(gamePlay.getCurrentPlayer().getColorCode());
         holder.continentName.setText(countries.get(position).getBelongsToContinent().getNameOfContinent());
         holder.armies.setText(""+countries.get(position).getNoOfArmies());
 
         neighbouringCountries = gamePlay.getCountries().get(countries.get(position).getNameOfCountry()).getAdjacentCountries();
-        ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, neighbouringCountries);
+        CustomArrayAdapter adapter = new CustomArrayAdapter(context, R.layout.adapters_textview,R.id.adapter_textview_text, neighbouringCountries,gamePlay);
         holder.adjacentCountries.setAdapter(adapter);
 
         ViewGroup.LayoutParams layoutParams = holder.adjacentCountries.getLayoutParams();
-        layoutParams.height = neighbouringCountries.size() * 173;
+        layoutParams.height = neighbouringCountries.size() * 158;
         holder.adjacentCountries.setLayoutParams(layoutParams);
         holder.adjacentCountries.requestLayout();
 
@@ -229,6 +230,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                     gamePlay.getCountries().get(finalCountryNameDestination).incrementArmies(numberPicker.getValue());
                     countries.get(adapterPostion).decrementReinforcementArmies(numberPicker.getValue());
                     notifyDataSetChanged();
+                    FortificationPhaseController phaseController = new FortificationPhaseController(gamePlay);
+                    phaseController.assignCards();
                     Toast.makeText(context, "Armies moved from " + countries.get(adapterPostion).getNameOfCountry() + " to "
                             + finalCountryNameDestination, Toast.LENGTH_SHORT).show();
                     phaseManager.changePhase(GamePlayConstants.REINFORCEMENT_PHASE);

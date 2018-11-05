@@ -3,6 +3,7 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
+import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.MapReader;
@@ -47,6 +49,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
+
 
     /**
      * This method is the main creation method of the activity
@@ -73,13 +76,27 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        View view = getLayoutInflater().inflate(R.layout.player_selection_option,null);
-                        new AlertDialog.Builder(PlayScreenActivity.this)
-                                .setTitle("Card Exchange")
-                                .setView(view)
-                                .create()
-                                .show();
+                        if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
+                            String cards = "";
 
+                            for(final Card card : gamePlay.getCurrentPlayer().getCards()){
+                                if(cards.isEmpty()){
+                                    cards = card.getType();
+                                } else {
+                                    cards += "\n" + card.getType();
+                                }
+                            }
+
+                            if(cards.isEmpty()){
+                                cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                            }
+
+                            new AlertDialog.Builder(PlayScreenActivity.this)
+                                    .setTitle("Available Cards")
+                                    .setMessage(cards)
+                                    .create()
+                                    .show();
+                        }
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);

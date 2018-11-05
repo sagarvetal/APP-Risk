@@ -84,13 +84,14 @@ public class MapReader {
                     while (true) {
 
                         line = bufferedReader.readLine();
-
-                        if (line.startsWith("image=")) {
-                            finalGamePlay.setMapName(line.split("=")[1].trim());
-                        }
-
                         if (line.isEmpty())
                             break;
+
+//                        if (line.startsWith("image=")) {
+//                            finalGamePlay.setMapName(line.split("=")[1].trim());
+//                        }
+
+
                     }
                 }
 

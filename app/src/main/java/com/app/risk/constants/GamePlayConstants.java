@@ -9,7 +9,7 @@ package com.app.risk.constants;
  */
 public class GamePlayConstants {
 
-    public static final int AMRIES_MULTIPLIER = 3;
+    public static final int AMRIES_MULTIPLIER = 2;
 
     public static final int MIN_REINFORCEMENT_AMRIES = 3;
 
@@ -27,5 +27,8 @@ public class GamePlayConstants {
     //Message
     public static final String REINFORCEMENT_MSG = "%s armies are holding %s countries. \n" +
                                                     "So %s has been awarded with %s additional armies";
+
+    public static final String NO_CARDS_AVAILABLE = "No Cards Available";
+
 
 }
