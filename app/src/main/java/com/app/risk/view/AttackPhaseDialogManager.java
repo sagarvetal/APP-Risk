@@ -126,7 +126,7 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
                             countries.add(defendingCountry);
 
                             recyclerView.getAdapter().notifyDataSetChanged();
-                            
+
                             final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
                             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                             alertDialog.setView(view);
