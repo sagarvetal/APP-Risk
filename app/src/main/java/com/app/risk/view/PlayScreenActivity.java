@@ -161,7 +161,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     final ReinforcementPhaseController reinforcementPhase = new ReinforcementPhaseController(gamePlay);
                     reinforcementPhase.setReinforcementArmies();
 
-                    adapter = new PlayScreenRVAdapter(PlayScreenActivity.this, gamePlay);
+                    adapter = new PlayScreenRVAdapter(PlayScreenActivity.this, gamePlay,recyclerView);
                     recyclerView.setAdapter(adapter);
                     adapter.setPhaseManager(this);
                     pName.setText(gamePlay.getCurrentPlayer().getName());

@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -21,6 +21,7 @@ import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.view.AttackPhaseDialogManager;
 
 import java.util.ArrayList;
 
@@ -38,17 +39,21 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     private ArrayList<String> neighbouringCountries;
     private PhaseManager phaseManager;
     private boolean flagTransfer = true;
+    private final RecyclerView recyclerView;
+
 
     /**
      * This is the paramerized constructor
      * @param context It is used to call any activity methods using reference
      * @param gamePlay The GamePlay object
+     * @param recyclerView
      */
-    public PlayScreenRVAdapter(Context context, GamePlay gamePlay) {
+    public PlayScreenRVAdapter(Context context, GamePlay gamePlay, RecyclerView recyclerView) {
         this.context = context;
         this.gamePlay = gamePlay;
         this.countries = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
         this.neighbouringCountries = new ArrayList<>();
+        this.recyclerView = recyclerView;
     }
 
     /**
@@ -60,8 +65,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     @Override
     public PlayScreenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_screen_card,parent,false);
-        final PlayScreenViewHolder adapter = new PlayScreenViewHolder(view);
-        return adapter;
+        final PlayScreenViewHolder mainAdapter = new PlayScreenViewHolder(view);
+        return mainAdapter;
     }
 
     /**
@@ -101,7 +106,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      * Inner class of recyclerview adapter which gets the reference to
      * view holder and add functionality to the views
      */
-    public class PlayScreenViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PlayScreenViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, AdapterView.OnItemClickListener {
 
         private CardView cardView;
         private TextView countryName,armies, continentName;
@@ -124,6 +129,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             continentName = itemView.findViewById(R.id.play_screen_card_continent);
             adjacentCountries = itemView.findViewById(R.id.play_screen_card_neighbours);
 
+            adjacentCountries.setOnItemClickListener(this);
             cardView.setOnClickListener(this);
         }
 
@@ -141,7 +147,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         break;
 
                     case GamePlayConstants.ATTACK_PHASE:
-                        Toast.makeText(context, "Work in Progress", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Select Country from List", Toast.LENGTH_SHORT).show();
                         break;
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
@@ -153,7 +159,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                             reachableCountries.toArray(reachableCountryArray);
 
                             new AlertDialog.Builder(context)
-                                    .setTitle(R.string.move_armies_string)
+                                    .setTitle("Move Armies")
                                     .setItems((CharSequence[]) reachableCountryArray, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int position) {
@@ -164,11 +170,34 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                                     .show();
                         }
                         else{
-                            Toast.makeText(context, R.string.greater_than_one_error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
                         }
                         break;
                 }
             }
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if(gamePlay.getCurrentPhase().equals(GamePlayConstants.ATTACK_PHASE)){
+                    if(!gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)).getPlayer().equals(gamePlay.getCurrentPlayer())){
+
+                        if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
+
+                            AttackPhaseDialogManager attackPhaseDialogManager = new AttackPhaseDialogManager(context,gamePlay,countries.get(getAdapterPosition()),
+                                    gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)),recyclerView,countries);
+                            attackPhaseDialogManager.initiateAttack();
+                        }
+                        else{
+
+                        }
+                    }
+                    else{
+                        Toast.makeText(context, "Cannot Attack your own country", Toast.LENGTH_SHORT).show();
+                    }
+            }
+
         }
     }
 
@@ -188,7 +217,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         numberPicker.setMaxValue(gamePlay.getCurrentPlayer().getReinforcementArmies());
         numberPicker.setWrapSelectorWheel(false);
 
-        reinforcementDialogBox.setPositiveButton(R.string.place_string, new DialogInterface.OnClickListener() {
+        reinforcementDialogBox.setPositiveButton("Place", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
@@ -213,7 +242,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     public void moveArmies(String countryNameDestination,final int adapterPostion){
 
             final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
-            reinforcementDialogBox.setTitle(R.string.place_armies_string);
+            reinforcementDialogBox.setTitle("Place Armies");
             countryNameDestination = countryNameDestination.split(":")[0].trim();
             final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
             reinforcementDialogBox.setView(view);
@@ -224,20 +253,20 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             numberPicker.setWrapSelectorWheel(false);
 
             final String finalCountryNameDestination = countryNameDestination;
-            reinforcementDialogBox.setPositiveButton(R.string.move_string, new DialogInterface.OnClickListener() {
+            reinforcementDialogBox.setPositiveButton("Move", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     gamePlay.getCountries().get(finalCountryNameDestination).incrementArmies(numberPicker.getValue());
                     countries.get(adapterPostion).decrementReinforcementArmies(numberPicker.getValue());
                     notifyDataSetChanged();
                     FortificationPhaseController phaseController = new FortificationPhaseController(gamePlay);
-                    phaseController.assignCards();
+                    //phaseController.assignCards();
                     Toast.makeText(context, "Armies moved from " + countries.get(adapterPostion).getNameOfCountry() + " to "
                             + finalCountryNameDestination, Toast.LENGTH_SHORT).show();
                     phaseManager.changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                 }
             });
-            reinforcementDialogBox.setNegativeButton(R.string.cancel_string,null);
+            reinforcementDialogBox.setNegativeButton("cancel",null);
             reinforcementDialogBox.create();
             reinforcementDialogBox.show();
 
@@ -258,4 +287,6 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
     public void setPhaseManager(PhaseManager phaseManager) {
         this.phaseManager = phaseManager;
     }
+
+
 }
