@@ -9,11 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.app.risk.R;
+import com.app.risk.controller.MapDriverController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
 import com.app.risk.utility.MapReader;
-import com.app.risk.view.UserDrivenMaps;
+import com.app.risk.view.UserDrivenMapsActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +45,8 @@ public class EditMap extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String fileName=mapList.get(i);
-                List<GameMap> listOfGameMapList=MapReader.returnGameMapFromFile(getApplicationContext(),fileName);
+                MapDriverController mapDriverController = new MapDriverController();
+                List<GameMap> listOfGameMapList=mapDriverController.readmap(getApplicationContext(),fileName);
                 listOfGameMap.addAll(listOfGameMapList);
                 maps=convertIntoHashMap(listOfGameMap);
                 Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);

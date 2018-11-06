@@ -127,8 +127,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         invokingActivity.startActivity(userMapCreate);
                         break;
                     case "Edit Map":
-                        //Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
-                        //invokingActivity.startActivity(editMap);
+                        Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
+                        invokingActivity.startActivity(editMap);
                         break;
                     case "Help":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
