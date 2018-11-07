@@ -1,12 +1,21 @@
 package com.app.risk.controller;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.view.View;
+import android.widget.NumberPicker;
 
+import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.view.PlayScreenActivity;
+
+import java.util.ArrayList;
 
 /**
- * This class is used to start the reinforcement phase.
+ * This class is used for the reinforcement phase.
  * It calculates the reinforcement armies for current player whose turn is going on.
  *
  * @author Sagar Vetal
@@ -58,4 +67,44 @@ public class ReinforcementPhaseController {
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay);
     }
 
+    /**
+     * This method shows the dailog box to place the reinforcement armies.
+     * @param position The position of country in list owned by the player.
+     * @param countries The list of countries owned by current player.
+     */
+    public void showReinforcementDialogBox(final int position, final ArrayList<Country> countries){
+        final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
+        reinforcementDialogBox.setTitle("Place Armies");
+
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+        reinforcementDialogBox.setView(view);
+
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(gamePlay.getCurrentPlayer().getReinforcementArmies());
+        numberPicker.setWrapSelectorWheel(false);
+
+        reinforcementDialogBox.setPositiveButton("Place", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
+                countries.get(position).incrementArmies(numberPicker.getValue());
+                getActivity().notifyPlayScreenRVAdapter();
+                if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
+                    getActivity().changePhase(GamePlayConstants.ATTACK_PHASE);
+                }
+            }
+        });
+        reinforcementDialogBox.setNegativeButton("Cancel",null);
+        reinforcementDialogBox.create();
+        reinforcementDialogBox.show();
+    }
+
+    /**
+     * This method cast the context and returns PlayScreenActivity object.
+     * @return The PlayScreenActivity object.
+     */
+    public PlayScreenActivity getActivity() {
+        return (PlayScreenActivity) context;
+    }
 }
