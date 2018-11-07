@@ -174,7 +174,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.ATTACK_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
-                    currentPhase = GamePlayConstants.ATTACK_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Attack : " + gamePlay.getCurrentPlayer().getName());
@@ -182,13 +182,20 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
-                    currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Fortification : " + gamePlay.getCurrentPlayer().getName());
                     break;
             }
         }
+    }
+
+    /**
+     * This method notify the adapter regarding data change.
+     */
+    public void notifyPlayScreenRVAdapter() {
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -231,4 +238,5 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .create().show();
 
     }
+
 }
