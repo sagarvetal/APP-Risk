@@ -1,51 +1,61 @@
 package com.app.risk.controller;
 
-import com.app.risk.constants.GamePlayConstants;
-import com.app.risk.model.Country;
-import com.app.risk.model.GamePlay;
+import android.content.Context;
 
-import java.util.ArrayList;
+import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.GamePlay;
 
 /**
  * This class is used to start the reinforcement phase.
  * It calculates the reinforcement armies for current player whose turn is going on.
  *
  * @author Sagar Vetal
- * @version 1.0.0 (Date: 015/10/2018)
+ * @version 2.0.0 (Date: 05/11/2018)
  */
 public class ReinforcementPhaseController {
 
     private GamePlay gamePlay;
+    private Context context;
+    private static ReinforcementPhaseController reinforcementPhaseController;
 
     /**
-     * This parameterized constructor initializes the GamePlay object.
-     *
-     * @param gamePlay The GamePlay object.
+     * This is default constructor.
      */
-    public ReinforcementPhaseController(final GamePlay gamePlay) {
-        this.gamePlay = gamePlay;
+    private ReinforcementPhaseController() {
     }
 
     /**
-     * This method sets the no of reinforcement armies given to player
-     * based on no of countries player owns.
+     * This method implements the singleton pattern for ReinforcementPhaseController
+     * @return The static reference of ReinforcementPhaseController.
      */
-    public void setReinforcementArmies() {
-        final int reinforcementArmies = calculateReinforcementArmies();
-        gamePlay.getCurrentPlayer().setReinforcementArmies(reinforcementArmies);
-        gamePlay.getCurrentPlayer().incrementArmies(reinforcementArmies);
-    }
-
-    /**
-     * This method calculates the no of reinforcement armies.
-     */
-    public int calculateReinforcementArmies() {
-        final ArrayList<Country> countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
-        final int reinforcementArmies = countriesOwnedByPlayer.size() / 3;
-        if (reinforcementArmies > GamePlayConstants.MIN_REINFORCEMENT_AMRIES) {
-            return reinforcementArmies;
+    public static ReinforcementPhaseController getInstance(){
+        if(reinforcementPhaseController == null){
+            reinforcementPhaseController = new ReinforcementPhaseController();
         }
-        return GamePlayConstants.MIN_REINFORCEMENT_AMRIES;
+        return reinforcementPhaseController;
+    }
+
+    /**
+     * This method implements the singleton pattern for ReinforcementPhaseController and
+     * also sets GamePlay and Context object.
+     * @param gamePlay The GamePlay object
+     * @param context The Context object
+     * @return The static reference of ReinforcementPhaseController.
+     */
+    public static ReinforcementPhaseController init(final Context context, final GamePlay gamePlay) {
+        getInstance();
+        reinforcementPhaseController.context = context;
+        reinforcementPhaseController.gamePlay = gamePlay;
+        return reinforcementPhaseController;
+    }
+
+    /**
+     * This method starts the reinforcement phase.
+     */
+    public void start() {
+        gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
+        gamePlay.setCurrentPlayer();
+        gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay);
     }
 
 }
