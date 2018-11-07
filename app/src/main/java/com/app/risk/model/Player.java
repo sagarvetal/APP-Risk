@@ -1,12 +1,9 @@
 package com.app.risk.model;
 
-import android.graphics.Color;
-
 import com.app.risk.constants.GamePlayConstants;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -144,6 +141,15 @@ public class Player implements Serializable {
     }
 
     /**
+     * This function is to decrement no of armies by given count.
+     *
+     * @param count The decrement count by which the no of armies to be decremented.
+     */
+    public void decrementArmies(final int count) {
+        this.noOfArmies -= count;
+    }
+
+    /**
      * Getter function to return the no of reinforcement armies given to the player
      *
      * @return no of reinforcement armies
@@ -245,7 +251,7 @@ public class Player implements Serializable {
      * @param gamePlay The GamePlay object.
      */
     public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies, final GamePlay gamePlay){
-        fromCountry.decrementReinforcementArmies(noOfArmies);
+        fromCountry.decrementArmies(noOfArmies);
         toCountry.incrementArmies(noOfArmies);
 
         assignCards(gamePlay);
