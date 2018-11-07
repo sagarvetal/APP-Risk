@@ -19,6 +19,23 @@
             android:src="@drawable/ic_card_white_24dp"
             android:id="@+id/activity_play_screen_floating_button"
             />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/activity_play_screen_floating_button"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginBottom="3dp"
+        >
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/activity_play_screen_logview"
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="true"
+            />
+    </LinearLayout>
     </RelativeLayout>
 
 
