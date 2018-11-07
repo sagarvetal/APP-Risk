@@ -240,7 +240,7 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
             for(int i=0;i<max_defend;i++){
                 defendRollsArrayListAllOut.add(generateRandom(1,6));
             }
-            
+
             performAllOutAttack(attackRollsArrayListAllOut,defendRollsArrayListAllOut);
         }
 
