@@ -1,6 +1,7 @@
 package com.app.risk.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Card model to store card details like card type
@@ -43,5 +44,25 @@ public class Card implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean cardsExchangeable(List<Card> cardsToExchange){
+
+        if(cardsToExchange.size() == 3){
+            if(cardsToExchange.get(0).type.equals(cardsToExchange.get(1).type) &&
+                    cardsToExchange.get(0).type.equals(cardsToExchange.get(2).type)){
+                return true;
+            } else if(!cardsToExchange.get(0).type.equals(cardsToExchange.get(1).type) &&
+                    !cardsToExchange.get(0).type.equals(cardsToExchange.get(2).type) &&
+                    !cardsToExchange.get(1).type.equals(cardsToExchange.get(2).type)){
+                return true;
+            } else {
+                System.out.println("Card similarity rule not satisfied.");
+                return false;
+            }
+        } else {
+            System.out.println("Didn't choose enough cards");
+            return false;
+        }
     }
 }

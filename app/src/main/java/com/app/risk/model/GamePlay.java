@@ -32,6 +32,16 @@ public class GamePlay implements Serializable {
     private final int[] colorCodes = {Color.RED,Color.GREEN,Color.BLUE
             ,Color.DKGRAY,Color.MAGENTA,Color.YELLOW};
 
+    public int getArmiesInExchangeOfCards() {
+        return armiesInExchangeOfCards;
+    }
+
+    public void setArmiesInExchangeOfCards(int armiesInExchangeOfCards) {
+        this.armiesInExchangeOfCards = armiesInExchangeOfCards;
+    }
+
+    private int armiesInExchangeOfCards;
+
     /**
      * This is a default constructor.
      * It initializes the continent, country, player and card list.
@@ -42,6 +52,7 @@ public class GamePlay implements Serializable {
         this.players = new HashMap<>();
         this.cards = new ArrayList<>();
         this.playerIdQueue = new LinkedList<Integer>();
+        this.armiesInExchangeOfCards = 0;
     }
 
     /**
