@@ -153,8 +153,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                     case GamePlayConstants.FORTIFICATION_PHASE:
 
                         if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
-                            final FortificationPhaseController fortificationPhase = new FortificationPhaseController(gamePlay);
-                            final ArrayList<String> reachableCountries  = fortificationPhase.getReachableCountries(countries.get(getAdapterPosition()), countries);
+                            final ArrayList<String> reachableCountries  = FortificationPhaseController.getInstance().init(context, gamePlay).getReachableCountries(countries.get(getAdapterPosition()), countries);
                             final String[] reachableCountryArray = new String[reachableCountries.size()];
                             reachableCountries.toArray(reachableCountryArray);
 
@@ -238,7 +237,6 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      * @param countryNameDestination The position of country owned by the player.
      * @param adapterPostion The position of the invoking recyclerview elements
      */
-
     public void moveArmies(String countryNameDestination,final int adapterPostion){
 
             final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
@@ -256,11 +254,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             reinforcementDialogBox.setPositiveButton("Move", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    gamePlay.getCountries().get(finalCountryNameDestination).incrementArmies(numberPicker.getValue());
-                    countries.get(adapterPostion).decrementReinforcementArmies(numberPicker.getValue());
+                    FortificationPhaseController.getInstance().fortifyCountry(countries.get(adapterPostion), gamePlay.getCountries().get(finalCountryNameDestination), numberPicker.getValue());
                     notifyDataSetChanged();
-                    FortificationPhaseController phaseController = new FortificationPhaseController(gamePlay);
-                    //phaseController.assignCards();
                     Toast.makeText(context, "Armies moved from " + countries.get(adapterPostion).getNameOfCountry() + " to "
                             + finalCountryNameDestination, Toast.LENGTH_SHORT).show();
                     phaseManager.changePhase(GamePlayConstants.REINFORCEMENT_PHASE);

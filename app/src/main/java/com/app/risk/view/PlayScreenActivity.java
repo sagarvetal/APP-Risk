@@ -145,23 +145,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setPlayers(playerNames);
-                    final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
-                    startupPhase.start();
+                    StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
-                    currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
+                    currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setCurrentPlayer();
-                    final ReinforcementPhaseController reinforcementPhase = new ReinforcementPhaseController(gamePlay);
-                    reinforcementPhase.setReinforcementArmies();
+                    ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
-                    adapter = new PlayScreenRVAdapter(PlayScreenActivity.this, gamePlay,recyclerView);
+                    adapter = new PlayScreenRVAdapter(this, gamePlay, recyclerView);
                     recyclerView.setAdapter(adapter);
                     adapter.setPhaseManager(this);
                     pName.setText(gamePlay.getCurrentPlayer().getName());
