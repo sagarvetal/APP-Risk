@@ -169,7 +169,7 @@ public class Country implements Serializable, Comparable<Country> {
      *
      * @param count The decrement count by which the no of armies to be decremented.
      */
-    public void decrementReinforcementArmies(final int count) {
+    public void decrementArmies(final int count) {
         this.noOfArmies -= count;
     }
 
