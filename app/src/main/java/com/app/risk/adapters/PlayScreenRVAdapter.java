@@ -18,9 +18,12 @@ import android.widget.Toast;
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Player;
 import com.app.risk.view.AttackPhaseDialogManager;
 
 import java.util.ArrayList;
@@ -143,7 +146,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             if(v == cardView){
                 switch (gamePlay.getCurrentPhase()) {
                     case GamePlayConstants.REINFORCEMENT_PHASE:
-                        showReinforcementDialogBox(getAdapterPosition());
+                        //showReinforcementDialogBox(getAdapterPosition());
+                        ReinforcementPhaseController.getInstance().showReinforcementDialogBox(getAdapterPosition(), countries);
                         break;
 
                     case GamePlayConstants.ATTACK_PHASE:
@@ -152,7 +156,8 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
 
-                        if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
+                        FortificationPhaseController.getInstance().init(context, gamePlay).showFortificationDialogBox(getAdapterPosition(),countries);
+                        /*if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
                             final ArrayList<String> reachableCountries  = FortificationPhaseController.getInstance().init(context, gamePlay).getReachableCountries(countries.get(getAdapterPosition()), countries);
                             final String[] reachableCountryArray = new String[reachableCountries.size()];
                             reachableCountries.toArray(reachableCountryArray);
@@ -170,7 +175,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         }
                         else{
                             Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
-                        }
+                        }*/
                         break;
                 }
             }
@@ -178,25 +183,27 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (gamePlay.getCurrentPhase()) {
+                case GamePlayConstants.ATTACK_PHASE:
+                    final Player attacker = gamePlay.getCurrentPlayer();
+                    final Player defender = gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)).getPlayer();
+                    final Country attackingCountry = countries.get(getAdapterPosition());
+                    final Country defendingCountry = gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position));
 
-            if(gamePlay.getCurrentPhase().equals(GamePlayConstants.ATTACK_PHASE)){
-                    if(!gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)).getPlayer().equals(gamePlay.getCurrentPlayer())){
-
-                        if(countries.get(getAdapterPosition()).getNoOfArmies() > 1){
-
-                            AttackPhaseDialogManager attackPhaseDialogManager = new AttackPhaseDialogManager(context,gamePlay,countries.get(getAdapterPosition()),
-                                    gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)),recyclerView,countries);
-                            attackPhaseDialogManager.initiateAttack();
-                        }
-                        else{
-
+                    if(attacker.equals(defender)){
+                        Toast.makeText(context, "Attacker can not attack on their own country", Toast.LENGTH_SHORT).show();
+                    } else{
+                        if(attackingCountry.getNoOfArmies() > 1){
+                            AttackPhaseController.getInstance().init(context, gamePlay).initiateAttack(attackingCountry, defendingCountry, recyclerView, countries);
+                        /*AttackPhaseDialogManager attackPhaseDialogManager = new AttackPhaseDialogManager(context,gamePlay,countries.get(getAdapterPosition()),
+                                gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position)),recyclerView,countries);
+                        attackPhaseDialogManager.initiateAttack();*/
+                        } else{
+                            Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    else{
-                        Toast.makeText(context, "Cannot Attack your own country", Toast.LENGTH_SHORT).show();
-                    }
+                    break;
             }
-
         }
     }
 
@@ -204,7 +211,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      * This method shows the dailog box to place the reinforcement armies.
      * @param adapterPostion The position of country owned by the player.
      */
-    public void showReinforcementDialogBox(final int adapterPostion){
+    /*public void showReinforcementDialogBox(final int adapterPostion){
         final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
 
@@ -230,14 +237,14 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         reinforcementDialogBox.setNegativeButton("Cancel",null);
         reinforcementDialogBox.create();
         reinforcementDialogBox.show();
-    }
+    }*/
 
     /**
      * This method shows the selection box to move the armies.
      * @param countryNameDestination The position of country owned by the player.
      * @param adapterPostion The position of the invoking recyclerview elements
      */
-    public void moveArmies(String countryNameDestination,final int adapterPostion){
+    /*public void moveArmies(String countryNameDestination,final int adapterPostion){
 
             final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
             reinforcementDialogBox.setTitle("Place Armies");
@@ -265,7 +272,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             reinforcementDialogBox.create();
             reinforcementDialogBox.show();
 
-    }
+    }*/
 
 
     /**
@@ -275,13 +282,11 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
         return phaseManager;
     }
 
-
     /**
      * This method sets the current phase of the game
      */
     public void setPhaseManager(PhaseManager phaseManager) {
         this.phaseManager = phaseManager;
     }
-
 
 }
