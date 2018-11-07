@@ -2,10 +2,13 @@ package com.app.risk.model;
 
 import android.graphics.Color;
 
+import com.app.risk.constants.GamePlayConstants;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Player model to capture player details
@@ -203,4 +206,57 @@ public class Player implements Serializable {
         isActive = active;
     }
 
+    /**
+     * This is reinforcement method.
+     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
+     * @param gamePlay The GamePlay object.
+     */
+    public void reinforcementPhase(final GamePlay gamePlay) {
+        final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
+        setReinforcementArmies(reinforcementArmies);
+        incrementArmies(reinforcementArmies);
+    }
+
+    /**
+     * This method calculates the no of reinforcement armies.
+     */
+    public int calculateReinforcementArmies(final GamePlay gamePlay) {
+        final ArrayList<Country> countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        final int reinforcementArmies = countriesOwnedByPlayer.size() / 3;
+        if (reinforcementArmies > GamePlayConstants.MIN_REINFORCEMENT_AMRIES) {
+            return reinforcementArmies;
+        }
+        return GamePlayConstants.MIN_REINFORCEMENT_AMRIES;
+    }
+
+    /**
+     * This is attack method.
+     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
+     * @param gamePlay The GamePlay object.
+     */
+    public void attackPhase(final GamePlay gamePlay){
+
+    }
+
+    /**
+     * This is fortification method.
+     * It moves armies from one country to another country,
+     * and award card to player if player conquer the country.
+     * @param gamePlay The GamePlay object.
+     */
+    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies, final GamePlay gamePlay){
+        fromCountry.decrementReinforcementArmies(noOfArmies);
+        toCountry.incrementArmies(noOfArmies);
+
+        assignCards(gamePlay);
+    }
+
+    /**
+     * This method picks random card from game play and assign it to player.
+     * @param gamePlay The GamePlay object.
+     */
+    public void assignCards(final GamePlay gamePlay) {
+        final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
+        setCards(gamePlay.getCards().get(randomIndex));
+    }
 }
