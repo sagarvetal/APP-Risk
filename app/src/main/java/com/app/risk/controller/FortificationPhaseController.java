@@ -1,5 +1,7 @@
 package com.app.risk.controller;
 
+import android.content.Context;
+
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
@@ -12,20 +14,44 @@ import java.util.concurrent.ThreadLocalRandom;
  * Fortification phase class: Player can move his armies from a country he owns to another country
  * through a path formed by countries belonging to him.
  *
- * @author Akshita Angara
- * @version 1.0.0
+ * @author Sagar Vetal
+ * @version 2.0.0 (Date: 05/11/2018)
  */
 public class FortificationPhaseController {
 
     private GamePlay gamePlay;
+    private Context context;
+    private static FortificationPhaseController fortificationPhaseController;
 
     /**
-     * This parameterized constructor initializes the GamePlay object.
-     *
-     * @param gamePlay The GamePlay object.
+     * This is default constructor.
      */
-    public FortificationPhaseController(final GamePlay gamePlay) {
-        this.gamePlay = gamePlay;
+    private FortificationPhaseController() {
+    }
+
+    /**
+     * This method implements the singleton pattern for FortificationPhaseController
+     * @return The static reference of FortificationPhaseController.
+     */
+    public static FortificationPhaseController getInstance() {
+        if(fortificationPhaseController == null) {
+            fortificationPhaseController = new FortificationPhaseController();
+        }
+        return fortificationPhaseController;
+    }
+
+    /**
+     * This method implements the singleton pattern for FortificationPhaseController and
+     * also sets GamePlay and Context object.
+     * @param gamePlay The GamePlay object
+     * @param context The Context object
+     * @return The static reference of FortificationPhaseController.
+     */
+    public static FortificationPhaseController init(final Context context, final GamePlay gamePlay) {
+        getInstance();
+        fortificationPhaseController.context = context;
+        fortificationPhaseController.gamePlay = gamePlay;
+        return fortificationPhaseController;
     }
 
     /**
@@ -76,14 +102,6 @@ public class FortificationPhaseController {
     }
 
     /**
-     * This method picks random card from game play and assign it to player.
-     */
-    public void assignCards() {
-        final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
-        gamePlay.getCurrentPlayer().setCards(gamePlay.getCards().get(randomIndex));
-    }
-
-    /**
      * This method gives list country names which are connected to given country of same player.
      * @param fromCountry The country from which it needs to find other connected countries.
      * @param countriesOwnedByPlayer List of countries owned by player.
@@ -100,4 +118,13 @@ public class FortificationPhaseController {
         return reachableCountries;
     }
 
+    /**
+     * This method starts the fortification.
+     * @param fromCountry The country from which armies need to be moved.
+     * @param toCountry The country where armies need to be moved.
+     * @param noOfArmies The no of armies to be moved.
+     */
+    public void fortifyCountry(final Country fromCountry, final Country toCountry, final int noOfArmies) {
+        gamePlay.getCurrentPlayer().fortificationPhase(fromCountry, toCountry, noOfArmies, gamePlay);
+    }
 }
