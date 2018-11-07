@@ -36,10 +36,6 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.EditMap" />
-        <activity
-            android:name=".view.PhaseViewActivity"
-            android:label="@string/title_activity_phase_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
