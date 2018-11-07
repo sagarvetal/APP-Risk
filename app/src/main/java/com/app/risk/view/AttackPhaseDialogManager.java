@@ -104,12 +104,12 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
         while(!defendRollsArrayList.isEmpty() && !attackRollsArrayList.isEmpty() ){
 
             if(defendRollsArrayList.get(0) >= attackRollsArrayList.get(0)){
-                attackingCountry.decrementReinforcementArmies(1);
+                attackingCountry.decrementArmies(1);
                 stringBuilder.append("Defender : " + defendRollsArrayList.get(0) + " Attacker : " + attackRollsArrayList.get(0));
                 stringBuilder.append("\n Defender wins \n");
             }
             else{
-                defendingCountry.decrementReinforcementArmies(1);
+                defendingCountry.decrementArmies(1);
                 stringBuilder.append("Defender : " + defendRollsArrayList.get(0) + " Attacker : " + attackRollsArrayList.get(0));
                 stringBuilder.append("\n Attacker wins \n");
             }
@@ -162,7 +162,7 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
             alertDialog.setPositiveButton("Move", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    attackingCountry.decrementReinforcementArmies(numberPicker.getValue());
+                    attackingCountry.decrementArmies(numberPicker.getValue());
                     defendingCountry.incrementArmies(numberPicker.getValue());
                     recyclerView.getAdapter().notifyDataSetChanged();
                     Toast.makeText(context, numberPicker.getValue() +" Armies moved from " + attackingCountry.getNameOfCountry() +
@@ -266,12 +266,12 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
         while(!defendRollsArrayListAllOut.isEmpty() && !attackRollsArrayListAllOut.isEmpty() ){
 
             if(defendRollsArrayListAllOut.get(0) >= attackRollsArrayListAllOut.get(0)){
-                attackingCountry.decrementReinforcementArmies(1);
+                attackingCountry.decrementArmies(1);
                 stringBuilder.append("Defender : " + defendRollsArrayListAllOut.get(0) + " Attacker : " + attackRollsArrayListAllOut.get(0));
                 stringBuilder.append("\n Defender wins \n");
             }
             else{
-                defendingCountry.decrementReinforcementArmies(1);
+                defendingCountry.decrementArmies(1);
                 stringBuilder.append("Defender : " + defendRollsArrayListAllOut.get(0) + " Attacker : " + attackRollsArrayListAllOut.get(0));
                 stringBuilder.append("\n Attacker wins \n");
             }
