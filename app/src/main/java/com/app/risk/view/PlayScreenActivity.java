@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
+import com.app.risk.adapters.PlayerStateAdapter;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
@@ -57,6 +58,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     public ListView logView;
     public static ArrayAdapter<String> logViewAdapter;
     public static ArrayList<String> logViewArrayList;
+    PlayerStateAdapter playerStateAdapter;
+    ListView listPlayerState ;
 
     /**
      * This method is the main creation method of the activity
@@ -93,6 +96,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         init();
         manageFloatingButtonTransitions();
         startGame();
+
+        playerStateAdapter = new PlayerStateAdapter(gamePlay.getPlayers(),this);
+        listPlayerState = findViewById(R.id.list_play_view);
+        listPlayerState.setAdapter(playerStateAdapter);
     }
 /**
  * This method initalizes and listens the evenets of the floating Button
@@ -153,7 +160,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         pArmies = findViewById(R.id.play_screen_armies);
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
-
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
     }

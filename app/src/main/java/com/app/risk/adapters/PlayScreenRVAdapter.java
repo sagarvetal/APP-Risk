@@ -123,7 +123,6 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             armies = itemView.findViewById(R.id.play_screen_card_armies);
             continentName = itemView.findViewById(R.id.play_screen_card_continent);
             adjacentCountries = itemView.findViewById(R.id.play_screen_card_neighbours);
-
             cardView.setOnClickListener(this);
         }
 
@@ -242,7 +241,6 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             reinforcementDialogBox.show();
 
     }
-
 
     /**
      * This method returns the current phase of the game

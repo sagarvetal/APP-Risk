@@ -97,7 +97,6 @@ public class MapReader {
 
                 if (line.equalsIgnoreCase("[Continents]")) {
                     while (true) {
-
                         line = bufferedReader.readLine();
                         if (line.isEmpty())
                             break;

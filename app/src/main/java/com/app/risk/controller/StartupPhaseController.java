@@ -22,7 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class StartupPhaseController {
 
     private GamePlay gamePlay;
-
     /**
      * This parameterized constructor initializes the GamePlay object.
      *
@@ -31,7 +30,6 @@ public class StartupPhaseController {
     public StartupPhaseController(final GamePlay gamePlay) {
         this.gamePlay = gamePlay;
     }
-
     /**
      * This method starts the startup phase.
      */
