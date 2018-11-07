@@ -14,21 +14,26 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
+import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
+import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -49,7 +54,9 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
-
+    public ListView logView;
+    public static ArrayAdapter<String> logViewAdapter;
+    public static ArrayList<String> logViewArrayList;
 
     /**
      * This method is the main creation method of the activity
@@ -59,6 +66,29 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
+        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH).readLog();
+        logView=findViewById(R.id.activity_play_screen_logview);
+        logViewArrayList = new ArrayList<>();
+        /*logViewArrayList.add("Sample 1");
+        logViewArrayList.add("Sample 2");
+        logViewArrayList.add("Sample 3");
+        logViewArrayList.add("Sample 4");
+        logViewArrayList.add("Sample 5");*/
+
+        logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
+        logView.setAdapter(logViewAdapter);
+        LogManager.getInstance().deleteLog();
+        LogManager.getInstance().writeLog("hello APP");
+        LogManager.getInstance().writeLog("I am FIne..u?");
+        LogManager.getInstance().writeLog("Before1 reading");
+        LogManager.getInstance().readLog();
+        LogManager.getInstance().writeLog("Before delete");
+        LogManager.getInstance().deleteLog();
+        LogManager.getInstance().writeLog("After delte");
+        LogManager.getInstance().writeLog("hello APP");
+        LogManager.getInstance().writeLog("I am FIne..u?");
+        LogManager.getInstance().writeLog("Before2 reading");
+        LogManager.getInstance().readLog();
         actionBar = getSupportActionBar();
         init();
         manageFloatingButtonTransitions();
