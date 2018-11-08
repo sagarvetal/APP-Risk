@@ -29,19 +29,22 @@ import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Log;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * PlayScreenActivity display the play screen of the display
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager {
+public class PlayScreenActivity extends AppCompatActivity implements PhaseManager,Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -66,17 +69,12 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
-        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH).readLog();
+        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
         logView=findViewById(R.id.activity_play_screen_logview);
         logViewArrayList = new ArrayList<>();
-        /*logViewArrayList.add("Sample 1");
-        logViewArrayList.add("Sample 2");
-        logViewArrayList.add("Sample 3");
-        logViewArrayList.add("Sample 4");
-        logViewArrayList.add("Sample 5");*/
-
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
+
         LogManager.getInstance().deleteLog();
         LogManager.getInstance().writeLog("hello APP");
         LogManager.getInstance().writeLog("I am FIne..u?");
@@ -266,5 +264,19 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .create().show();
 
     }
-
+    /**
+     * This method is called when ever observable model is changed
+     * and these changes are notified to the observer with the changes made
+     * @param observable model class that has its data changed
+     * @param object value that is changed of type Object
+     */
+    @Override
+    public void update(Observable observable, Object object) {
+       if(observable instanceof Log)
+       {
+           String message=((Log)observable).getMessage();
+           logViewArrayList.add(0,message);
+           logViewAdapter.notifyDataSetChanged();
+       }
+    }
 }
