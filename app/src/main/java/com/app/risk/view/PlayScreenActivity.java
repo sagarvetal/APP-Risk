@@ -3,8 +3,6 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -18,11 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
+import com.app.risk.adapters.PlayerStateAdapter;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.CardExchangeController;
@@ -45,7 +43,7 @@ import java.util.Observer;
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager,Observer {
+public class PlayScreenActivity extends AppCompatActivity implements PhaseManager, Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -61,6 +59,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     public ListView logView;
     public static ArrayAdapter<String> logViewAdapter;
     public static ArrayList<String> logViewArrayList;
+    PlayerStateAdapter playerStateAdapter;
+    ListView listPlayerState ;
 
     /**
      * This method is the main creation method of the activity
@@ -93,9 +93,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         manageFloatingButtonTransitions();
         startGame();
     }
-/**
- * This method initalizes and listens the evenets of the floating Button
- */
+
+    /**
+     * This method initalizes and listens the evenets of the floating Button
+     */
     private void manageFloatingButtonTransitions() {
         floatingActionButton = findViewById(R.id.activity_play_screen_floating_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +192,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                                                          currentPlayer.getReinforcementArmies());
                     displayAlert("", message);
                     displaySnackBar("Reinforcement : " + gamePlay.getCurrentPlayer().getName());
+                    ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
+                    playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
+                    listPlayerState = findViewById(R.id.list_play_view);
+                    listPlayerState.setAdapter(playerStateAdapter);
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
@@ -268,11 +273,13 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
      */
     @Override
     public void update(Observable observable, Object object) {
-       if(observable instanceof Log)
-       {
+       if(observable instanceof Log) {
            String message=((Log)observable).getMessage();
            logViewArrayList.add(0,message);
            logViewAdapter.notifyDataSetChanged();
+       } else if(observable instanceof Player) {
+           playerStateAdapter.notifyDataSetChanged();
        }
     }
+
 }
