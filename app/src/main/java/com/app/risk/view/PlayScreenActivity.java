@@ -104,27 +104,24 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
-                            String cards = "";
-
-                            for(final Card card : gamePlay.getCurrentPlayer().getCards()){
-                                if(cards.isEmpty()){
-                                    cards = card.getType();
-                                } else {
-                                    cards += "\n" + card.getType();
-                                }
-                            }
-
+                        String cards = "";
+                        for(final Card card : gamePlay.getCurrentPlayer().getCards()){
                             if(cards.isEmpty()){
-                                cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                                cards = card.getType();
+                            } else {
+                                cards += "\n" + card.getType();
                             }
-
-                            new AlertDialog.Builder(PlayScreenActivity.this)
-                                    .setTitle("Available Cards")
-                                    .setMessage(cards)
-                                    .create()
-                                    .show();
                         }
+
+                        if(cards.isEmpty()){
+                            cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                        }
+
+                        new AlertDialog.Builder(PlayScreenActivity.this)
+                                .setTitle("Available Cards")
+                                .setMessage(cards)
+                                .create()
+                                .show();
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
@@ -173,6 +170,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    gamePlay.setCards();
                     StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
