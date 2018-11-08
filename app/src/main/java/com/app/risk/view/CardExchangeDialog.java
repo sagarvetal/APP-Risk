@@ -15,9 +15,12 @@ import com.app.risk.R;
 import com.app.risk.adapters.CardExchangeAdapter;
 import com.app.risk.controller.CardExchangeController;
 import com.app.risk.model.Card;
+import com.app.risk.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Dialog which provides UI to facilitate exchange of cards by player
@@ -25,7 +28,7 @@ import java.util.List;
  * @author Akshita Angara
  * @version 1.0.0
  */
-public class CardExchangeDialog extends AlertDialog {
+public class CardExchangeDialog extends AlertDialog implements Observer {
 
     private Context context;
     CardExchangeController cardExchangeController;
@@ -88,21 +91,43 @@ public class CardExchangeDialog extends AlertDialog {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 List<Card> selectedCards = new ArrayList<>();
+
                 for(Card card: cardList){
                     if(card.isSelected())
                         selectedCards.add(card);
                 }
-                if(selectedCards.size()==3){
-                    String message = cardExchangeController.exchangeArmiesForCards(selectedCards) +
-                            " armies have been exchanged for cards.";
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                } else if (selectedCards.size()<3){
-                    Toast.makeText(context, "Less than 3 cards have been selected!", Toast.LENGTH_SHORT).show();
+
+                if(cardList.size()==0){
+                    CardExchangeDialog.super.dismiss();
                 } else {
-                    Toast.makeText(context, "More than 3 cards have been selected!", Toast.LENGTH_SHORT).show();
+                    if (selectedCards.size() == 3) {
+                        String message = cardExchangeController.exchangeArmiesForCards(selectedCards) +
+                                " armies have been exchanged for cards.";
+                        new AlertDialog.Builder(context)
+                                .setTitle("Cards exchanged").setMessage(message)
+                                .setPositiveButton("Ok",null).create().show();
+                    } else if (selectedCards.size() < 3) {
+                        Toast.makeText(context, "Less than 3 cards have been selected!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "More than 3 cards have been selected!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param o Object to be observed
+     * @param arg value that is changed of type object
+     */
+    @Override
+    public void update(Observable o, Object arg) {
+        if(o instanceof Player){
+            cardList = cardExchangeController.getCardList();
+            setUp();
+        }
     }
 }

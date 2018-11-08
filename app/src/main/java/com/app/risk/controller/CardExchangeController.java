@@ -1,7 +1,7 @@
 package com.app.risk.controller;
 
 import com.app.risk.model.Card;
-import com.app.risk.model.GamePlay;
+import com.app.risk.model.Player;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ import java.util.List;
  */
 public class CardExchangeController {
 
-    GamePlay gamePlay;
+    Player player;
 
     /**
      * Default constructor
-     * @param gamePlay current gameplay object
+     * @param player current gameplay object
      */
-    public CardExchangeController(GamePlay gamePlay) {
-        this.gamePlay = gamePlay;
+    public CardExchangeController(Player player) {
+        this.player = player;
     }
 
     /**
@@ -28,7 +28,7 @@ public class CardExchangeController {
      * @return list of cards owned by the current player
      */
     public List<Card> getCardList(){
-        return gamePlay.getCards();
+        return player.getCards();
     }
 
     /**
@@ -38,12 +38,13 @@ public class CardExchangeController {
      */
     public int exchangeArmiesForCards(List<Card> cardsToExchange){
 
-        if(gamePlay.cardsExchangeable(cardsToExchange)){
-            gamePlay.setArmiesInExchangeOfCards(gamePlay.getArmiesInExchangeOfCards() + 5);
+        if(player.cardsExchangeable(cardsToExchange)){
+            player.setArmiesInExchangeOfCards(player.getArmiesInExchangeOfCards() + 5);
+            player.setNoOfArmies(player.getNoOfArmies() + player.getArmiesInExchangeOfCards());
             removeExchangedCards(cardsToExchange);
         }
 
-        return gamePlay.getArmiesInExchangeOfCards();
+        return player.getArmiesInExchangeOfCards();
     }
 
     /**
@@ -52,6 +53,8 @@ public class CardExchangeController {
      */
     public void removeExchangedCards(List<Card> cardsToExchange){
 
-        gamePlay.getCards().removeAll(cardsToExchange);
+        List<Card> updatedCards = player.getCards();
+        updatedCards.removeAll(cardsToExchange);
+        player.setCards(updatedCards);
     }
 }
