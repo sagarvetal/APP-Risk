@@ -3,8 +3,6 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -18,13 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
@@ -35,6 +33,7 @@ import com.app.risk.utility.MapReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * PlayScreenActivity display the play screen of the display
@@ -183,6 +182,13 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
+
+                    CardExchangeController cardExchangeController = new CardExchangeController(gamePlay);
+
+                    CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(this, cardExchangeController);
+                    cardExchangeDialog.setContentView(R.layout.card_exchange);
+                    cardExchangeDialog.show();
+
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                     currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
