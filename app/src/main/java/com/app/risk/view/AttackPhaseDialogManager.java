@@ -201,7 +201,6 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
                    attackerDiceTextView.setText(attackRollsArrayList.toString());
                    defenderDiceTextView.setText(defendRollsArrayList.toString());
                    performAttack();
-
                }
                else{
                    Toast.makeText(context, "Attacker must have greater than one armies", Toast.LENGTH_SHORT).show();

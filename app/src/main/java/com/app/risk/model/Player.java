@@ -7,6 +7,7 @@ import com.app.risk.constants.GamePlayConstants;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.ThreadLocalRandom;
@@ -124,9 +125,7 @@ public class Player extends Observable implements Serializable  {
     public int getNoOfContinents() {
         return noOfContinents;
     }
-    public void test(){
-        incrementArmies(10);
-    }
+
     /**
      * This function is to increment no of countries by given count.
      *
@@ -284,4 +283,36 @@ public class Player extends Observable implements Serializable  {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         setCards(gamePlay.getCards().get(randomIndex));
     }
+
+    /**
+     * Returns number of continents owned by player
+     * @param gamePlay current gameplay object
+     * @return
+     */
+    public int getContinentsOwnedByPlayer(GamePlay gamePlay){
+        int continentsOwnedByPlayer = 0;
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        for (Continent continent : gamePlay.getContinents().values()) {
+            if(continent.getArrCountriesInContinent().containsAll(arrCountiesOwnedByPlayer)){
+                continentsOwnedByPlayer++;
+            }
+        }
+
+        return  continentsOwnedByPlayer;
+    }
+
+    /**
+     * Returns Percentage of map occupied by player
+     * @param gamePlay
+     * @return
+     */
+
+    public int getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        int totalCountries = gamePlay.getCountries().values().size();
+        return (arrCountiesOwnedByPlayer.size()/totalCountries)*100;
+    }
+
+
+
 }

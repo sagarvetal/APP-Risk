@@ -1,6 +1,7 @@
 package com.app.risk.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Continent model to save details of each continent
@@ -12,6 +13,7 @@ public class Continent implements Serializable {
 
     private String nameOfContinent;
     private int armyControlValue;
+    private ArrayList<Country> arrCountriesInContinent;
 
     /**
      * This is a default constructor.
@@ -41,6 +43,22 @@ public class Continent implements Serializable {
     public Continent(String new_nameOfContinent) {
 
         nameOfContinent = new_nameOfContinent;
+    }
+
+    /**
+     * Set countries of continent
+     * @param arrCountriesInContinent
+     */
+    public void setArrCountriesInContinent(ArrayList<Country> arrCountriesInContinent) {
+        this.arrCountriesInContinent = arrCountriesInContinent;
+    }
+
+    /**
+     * Get countries in continent
+     * @return
+     */
+    public ArrayList<Country> getArrCountriesInContinent() {
+        return arrCountriesInContinent;
     }
 
     /**

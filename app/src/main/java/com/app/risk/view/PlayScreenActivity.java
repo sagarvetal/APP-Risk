@@ -222,7 +222,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     displayAlert("", message);
                     displaySnackBar("Reinforcement : " + gamePlay.getCurrentPlayer().getName());
                     ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
-                    playerStateAdapter = new PlayerStateAdapter(arrPlayer,this);
+                    playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
                     listPlayerState = findViewById(R.id.list_play_view);
                     listPlayerState.setAdapter(playerStateAdapter);
 

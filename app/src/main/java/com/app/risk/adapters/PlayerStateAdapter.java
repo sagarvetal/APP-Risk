@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.app.risk.R;
+import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
 import java.util.List;
@@ -19,16 +20,18 @@ import java.util.List;
 public class PlayerStateAdapter extends BaseAdapter {
     List<Player> playerList;
     private final Context context;
+    GamePlay gamePlay;
 
     /**
      * This is parametrized constructor
      * @param playerList - array of player
      * @param context - activity context
      */
-    public PlayerStateAdapter(List<Player> playerList, Context context){
+    public PlayerStateAdapter(List<Player> playerList, GamePlay gamePlay, Context context){
 
         this.playerList = playerList;
         this.context = context;
+        this.gamePlay = gamePlay;
     }
 
     /**
@@ -76,9 +79,9 @@ public class PlayerStateAdapter extends BaseAdapter {
         TextView textView1 = view.findViewById(R.id.txt_player_data1);
         textView1.setText("Player "+Integer.toString(player.getId()+1));
         TextView textView2 = view.findViewById(R.id.txt_player_data2);
-        textView2.setText("Armies " + Integer.toString(player.getNoOfArmies()));
+        textView2.setText("Continents " + Integer.toString(player.getContinentsOwnedByPlayer(gamePlay)));
         TextView textView3 = view.findViewById(R.id.txt_player_data3);
-        textView3.setText("Countries " + Integer.toString(player.getNoOfCountries()));
+        textView3.setText("Percentage Of Map Owned " + Integer.toString(player.getPercentageOfMapOwnedByPlayer(gamePlay)));
 
         return view;
     }
