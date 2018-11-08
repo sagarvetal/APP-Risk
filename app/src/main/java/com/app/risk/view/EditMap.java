@@ -80,10 +80,6 @@ public class EditMap extends AppCompatActivity {
                 if(resultCode==RESULT_OK){
 
                     String PathHolder = data.getData().getPath();
-                    //ReadGameMapFromFile readGameMap=new ReadGameMapFromFile();
-
-                    //  List<GameMap> listOfGameMap=readGameMap.readGameMapFromFile(getApplicationContext(),PathHolder);
-                    //  maps=convertIntoHashMap(listOfGameMap);
 
                     System.out.println("::::::::::::::::::::::my path:::::::::::::::::"+PathHolder);
 
