@@ -445,11 +445,30 @@ public class Player extends Observable implements Serializable {
         int continentsOwnedByPlayer = 0;
         ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
         for (Continent continent : gamePlay.getContinents().values()) {
-            if(continent.getCountries().containsAll(arrCountiesOwnedByPlayer)){
+            ArrayList<Country> arrCountry = continent.getCountries();
+            if(checkIfAllCountriesInContinents(arrCountiesOwnedByPlayer,arrCountry)){
                 continentsOwnedByPlayer++;
             }
         }
-        return  continentsOwnedByPlayer;
+        return continentsOwnedByPlayer;
+    }
+
+    boolean checkIfAllCountriesInContinents(ArrayList<Country> arrCountiesOwnedByPlayer,ArrayList<Country> arrCountriesOfContinent){
+        for (Country countryContinent : arrCountriesOfContinent){
+            if (!checkIfCountryIsContainedWithPlayer(arrCountiesOwnedByPlayer,countryContinent)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    boolean checkIfCountryIsContainedWithPlayer(ArrayList<Country> arrCountry,Country country){
+        for(Country countryPlayer : arrCountry){
+            if (country == countryPlayer){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -460,7 +479,11 @@ public class Player extends Observable implements Serializable {
     public int getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
         ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
         int totalCountries = gamePlay.getCountries().values().size();
-        return (arrCountiesOwnedByPlayer.size()/totalCountries)*100;
+        float size=arrCountiesOwnedByPlayer.size();
+        float countriesSize=totalCountries;
+        float percentage = (size/countriesSize) *100;
+        int result = (int)percentage;
+        return result;
     }
 
 }

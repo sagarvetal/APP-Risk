@@ -92,11 +92,6 @@ public class MapReader {
                         if (line.isEmpty())
                             break;
 
-//                        if (line.startsWith("image=")) {
-//                            finalGamePlay.setMapName(line.split("=")[1].trim());
-//                        }
-
-
                     }
                 }
 
