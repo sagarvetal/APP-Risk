@@ -77,7 +77,7 @@ public class PlayerStateAdapter extends BaseAdapter {
         }
         Player player =  playerList.get(position);
         TextView textView1 = view.findViewById(R.id.txt_player_data1);
-        textView1.setText("Player : " + player.getName()));
+        textView1.setText("Player : " + player.getName());
         TextView textView2 = view.findViewById(R.id.txt_player_data2);
         textView2.setText("Continents : " + Integer.toString(player.getContinentsOwnedByPlayer(gamePlay)));
         TextView textView3 = view.findViewById(R.id.txt_player_data3);
