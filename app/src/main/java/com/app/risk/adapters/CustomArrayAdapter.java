@@ -42,7 +42,6 @@ public class CustomArrayAdapter extends ArrayAdapter{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view =  super.getView(position, convertView, parent);
-
         TextView textView = view.findViewById(R.id.adapter_textview_text);
         int colorCode = gamePlay.getCountries().get(objects.get(position)).getPlayer().getColorCode();
         textView.setTextColor(colorCode);

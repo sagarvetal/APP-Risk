@@ -1,10 +1,14 @@
 package com.app.risk.model;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.AttackPhaseController;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -14,27 +18,73 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 04/10/2018)
  */
-public class Player implements Serializable {
+public class Player extends Observable implements Serializable {
 
     private int id;
     private String name;
     private int colorCode;
     private int noOfCountries;
     private int noOfArmies;
+    private int noOfContinents;
     private int reinforcementArmies;
     private List<Card> cards;
     private boolean isActive;
+    private int armiesInExchangeOfCards;
 
     /**
      * This is a default constructor and it initializes the card list.
      */
     public Player() {
+
         this.cards = new ArrayList<>();
+        this.armiesInExchangeOfCards = 0;
+    }
+
+    /**
+     * Getter to return number of armies that should be awarded in exchange of cards
+     *
+     * @return number of armies to be awarded in exchange of cards
+     */
+    public int getArmiesInExchangeOfCards() {
+        return armiesInExchangeOfCards;
+    }
+
+    /**
+     * Setter to set the number of armies that should be awarded in exchange of cards
+     *
+     * @param armiesInExchangeOfCards number of armies that should be awarded in exchange of cards
+     */
+    public void setArmiesInExchangeOfCards(int armiesInExchangeOfCards) {
+        this.armiesInExchangeOfCards = armiesInExchangeOfCards;
+    }
+
+    /**
+     * Check if the cards selected by the player can be exchanged based on if they're similar or not
+     * @param cardsToExchange list of cards selected by the player
+     * @return true if all cards are same or all cards are completely different, false otherwise
+     */
+    public boolean cardsExchangeable(List<Card> cardsToExchange){
+
+        if(cardsToExchange.size() == 3){
+            if(cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else if(!cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    !cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType()) &&
+                    !cardsToExchange.get(1).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else {
+                System.out.println("Card similarity rule not satisfied.");
+                return false;
+            }
+        } else {
+            System.out.println("Didn't choose enough cards");
+            return false;
+        }
     }
 
     /**
      * Getter function to return the unique id of the player
-     *
      * @return id of player
      */
     public int getId() {
@@ -43,7 +93,6 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the unique id of the player
-     *
      * @param id The unique id of player
      */
     public void setId(int id) {
@@ -52,7 +101,6 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the name of the player
-     *
      * @return name of the player
      */
     public String getName() {
@@ -61,7 +109,6 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the name of the player
-     *
      * @param name The name of the player
      */
     public void setName(String name) {
@@ -70,7 +117,6 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the color code of the player
-     *
      * @return color code of the player
      */
     public int getColorCode() {
@@ -105,12 +151,30 @@ public class Player implements Serializable {
     }
 
     /**
+     * This is function to set no of continents
+     * @param noOfContinents
+     */
+    public void setNoOfContinents(int noOfContinents) {
+        this.noOfContinents = noOfContinents;
+    }
+
+    /**
+     * This is function to get  no of continents
+     * @return
+     */
+    public int getNoOfContinents() {
+        return noOfContinents;
+    }
+
+    /**
      * This function is to increment no of countries by given count.
      *
      * @param count The increment count by which the no of countries to be incremented.
      */
     public void incrementCountries(final int count) {
         this.noOfCountries += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -129,6 +193,8 @@ public class Player implements Serializable {
      */
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -138,6 +204,8 @@ public class Player implements Serializable {
      */
     public void incrementArmies(final int count) {
         this.noOfArmies += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -195,6 +263,16 @@ public class Player implements Serializable {
     }
 
     /**
+     * Setter function to update the list of cards owned by the player after exchange
+     * @param cards list of cards owned by the player after exchange
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    /**
      * Getter function to get the flag to determine game is over on not for respective player
      *
      * @return true if player's game is not over; otherwise return false.
@@ -215,6 +293,7 @@ public class Player implements Serializable {
     /**
      * This is reinforcement method.
      * It sets the no of reinforcement armies given to the player based on no of countries player owns.
+     *
      * @param gamePlay The GamePlay object.
      */
     public void reinforcementPhase(final GamePlay gamePlay) {
@@ -236,25 +315,101 @@ public class Player implements Serializable {
     }
 
     /**
-     * This is attack method.
-     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
-     * @param gamePlay The GamePlay object.
+     * This is all out attack method in which attacker continues to attack
+     * until either all his armies or all the defending armies have been eliminated.
+     * If all the defender's armies are eliminated the attacker captures the territory.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     * @return The attack result of type StringBuilder.
      */
-    public void attackPhase(final GamePlay gamePlay){
+    public StringBuilder performAllOutAttack(final Country attackingCountry, final Country defendingCountry){
+        final StringBuilder attackResult = new StringBuilder();
+        while(attackingCountry.getNoOfArmies() > 1 && defendingCountry.getNoOfArmies() != 0){
+            final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
+            final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
+            final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
+            attackResult.append(result);
+            attackResult.append("-------------------------------------------\n");
+        }
+        return attackResult;
+    }
 
+    /**
+     * This is attack method in which given no of dices are rolled for attacker and defender.
+     * If the defender rolls greater or equal to the attacker then the attacker loses an army,
+     * otherwise the defender loses an army.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     * @param noOfAttackerDice The no of dices chosen by attacker
+     * @param noOfDefenderDice The no of dices chosen by defender
+     * @return The attack result of type StringBuilder.
+     */
+    public StringBuilder performAttack(final Country attackingCountry, final Country defendingCountry, final int noOfAttackerDice, final int noOfDefenderDice){
+
+        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
+        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
+
+        final StringBuilder attackResult = new StringBuilder();
+        attackResult.append("\nBefore Attack : \n");
+        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + ", Defender armies : " + defendingCountry.getNoOfArmies() + "\n\n");
+
+        while(!defenderDiceRollsOutputList.isEmpty() && !attackerDiceRollsOutputList.isEmpty() ){
+
+            attackResult.append("Attacker dice : " + attackerDiceRollsOutputList.get(0) + ", Defender dice : " + defenderDiceRollsOutputList.get(0));
+
+            if(defenderDiceRollsOutputList.get(0) >= attackerDiceRollsOutputList.get(0)){
+                attackingCountry.decrementArmies(1);
+                attackingCountry.getPlayer().decrementArmies(1);
+                attackResult.append("\nDefender won \n");
+            } else{
+                defendingCountry.decrementArmies(1);
+                defendingCountry.getPlayer().decrementArmies(1);
+                attackResult.append("\nAttacker won \n");
+            }
+            defenderDiceRollsOutputList.remove(0);
+            attackerDiceRollsOutputList.remove(0);
+        }
+
+        attackResult.append("\nAfter Attack : \n");
+        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
+
+        return attackResult;
+    }
+
+    /**
+     * This method returns the dice roll output for given no of dices.
+     * @param noOfDices The number of dices to be rolled.
+     * @return The dice roll output for given no of dices.
+     */
+    public ArrayList<Integer> getDiceRollsOutput(final int noOfDices) {
+        final ArrayList<Integer> diceRollsOutput = new ArrayList<>();
+        for(int i = 0; i < noOfDices; i++) {
+            diceRollsOutput.add(generateRandom(1, 6));
+        }
+        Collections.sort(diceRollsOutput, Collections.<Integer>reverseOrder());
+        return diceRollsOutput;
+    }
+
+    /**
+     * Generates a random number for dice
+     * @param lower : lower bound for the dice
+     * @param upper: upper bound for the dice
+     * @return Random integer between given lower and upper bound.
+     */
+    public int generateRandom(int lower,int upper){
+        return (int)((Math.random() * upper) + lower);
     }
 
     /**
      * This is fortification method.
-     * It moves armies from one country to another country,
-     * and award card to player if player conquer the country.
-     * @param gamePlay The GamePlay object.
+     * It moves armies from one country to another country.
+     * @param fromCountry The country from where player wants to move armies.
+     * @param toCountry The country to where player wants to move armies.
+     * @param noOfArmies The no of armies to be moved.
      */
-    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies, final GamePlay gamePlay){
+    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies){
         fromCountry.decrementArmies(noOfArmies);
         toCountry.incrementArmies(noOfArmies);
-
-        assignCards(gamePlay);
     }
 
     /**
@@ -265,4 +420,32 @@ public class Player implements Serializable {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         setCards(gamePlay.getCards().get(randomIndex));
     }
+
+    /**
+     * Returns number of continents owned by player
+     * @param gamePlay current gameplay object
+     * @return
+     */
+    public int getContinentsOwnedByPlayer(GamePlay gamePlay){
+        int continentsOwnedByPlayer = 0;
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        for (Continent continent : gamePlay.getContinents().values()) {
+            if(continent.getCountries().containsAll(arrCountiesOwnedByPlayer)){
+                continentsOwnedByPlayer++;
+            }
+        }
+        return  continentsOwnedByPlayer;
+    }
+
+    /**
+     * Returns Percentage of map occupied by player
+     * @param gamePlay
+     * @return
+     */
+    public int getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        int totalCountries = gamePlay.getCountries().values().size();
+        return (arrCountiesOwnedByPlayer.size()/totalCountries)*100;
+    }
+
 }

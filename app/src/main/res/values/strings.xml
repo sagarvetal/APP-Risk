@@ -44,7 +44,7 @@ main screen strings
     <string name="player_string">Player</string>
     <string name="alert_string">Alert</string>
     <string name="greater_than_one_error">Country must have armies greater than 1</string>
-
+    
 
 
 </resources>
