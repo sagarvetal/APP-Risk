@@ -248,6 +248,8 @@ public class Player extends Observable implements Serializable {
      */
     public void setReinforcementArmies(int reinforcementArmies) {
         this.reinforcementArmies = reinforcementArmies;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**

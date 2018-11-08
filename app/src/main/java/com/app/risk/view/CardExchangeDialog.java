@@ -45,6 +45,7 @@ public class CardExchangeDialog extends AlertDialog implements Observer {
         this.context = context;
         this.cardExchangeController = cardExchangeController;
         cardList = cardExchangeController.getCardList();
+        cardExchangeController.getPlayer().addObserver(this);
     }
 
     /**

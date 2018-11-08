@@ -93,7 +93,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         manageFloatingButtonTransitions();
         startGame();
 
-
+        addObserversToPlayer();
     }
 
     /**
@@ -108,13 +108,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
-
                         if(gamePlay.getCurrentPlayer().getCards().size()>0 && gamePlay.getCurrentPlayer().isCardsExchangedInRound()==false) {
 
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
@@ -123,8 +116,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
 
                             cardExchangeDialog.show();
-                        } else {
+                        } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
                             displayAlert("No cards", "No cards to show.");
+                        } else if (gamePlay.getCurrentPlayer().isCardsExchangedInRound()){
+                            displayAlert("Exchanged", "Cards have already been exchanged for this round.");
                         }
 
                         break;
@@ -291,7 +286,16 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();
+           pArmies.setText("" + ((Player) observable).getNoOfArmies());
        }
     }
 
+    /**
+     * Bind each player with the observer object
+     */
+    public void addObserversToPlayer(){
+        for(Player player: gamePlay.getPlayers().values()){
+            player.addObserver(this);
+        }
+    }
 }
