@@ -92,6 +92,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         init();
         manageFloatingButtonTransitions();
         startGame();
+
+        addObserversToPlayer();
     }
 
     /**
@@ -106,15 +108,18 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size()>0) {
+                        if(gamePlay.getCurrentPlayer().getCards().size()>0 && gamePlay.getCurrentPlayer().isCardsExchangedInRound()==false) {
+
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
 
                             cardExchangeDialog.show();
-                        } else {
+                        } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
                             displayAlert("No cards", "No cards to show.");
+                        } else if (gamePlay.getCurrentPlayer().isCardsExchangedInRound()){
+                            displayAlert("Exchanged", "Cards have already been exchanged for this round.");
                         }
 
                         break;
@@ -122,6 +127,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
                 }
@@ -199,6 +205,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
+                    gamePlay.getCurrentPlayer().setCardsExchangedInRound(false);
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
@@ -279,7 +286,16 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();
+           pArmies.setText("" + ((Player) observable).getNoOfArmies());
        }
     }
 
+    /**
+     * Bind each player with the observer object
+     */
+    public void addObserversToPlayer(){
+        for(Player player: gamePlay.getPlayers().values()){
+            player.addObserver(this);
+        }
+    }
 }
