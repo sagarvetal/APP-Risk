@@ -1,86 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.PlayScreenActivity"
-    android:orientation="vertical"
-    android:nestedScrollingEnabled="true"
-    >
-    <android.support.v7.widget.CardView
+    <RelativeLayout
+        tools:context=".view.PlayScreenActivity"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/play_screen_cardview"
-        android:clickable="true"
-        xmlns:card_view ="http://schemas.android.com/apk/res-auto"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="10dp"
-        card_view:cardBackgroundColor="#FFFFFF"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <include layout="@layout/content_play_screen"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:src="@mipmap/ic_launcher_round"
-                android:layout_weight="0.25"
-                android:id="@+id/play_screen_image"
-                android:layout_marginLeft="5dp"
-                />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.75"
-                android:orientation="vertical"
-                android:layout_margin="10dp"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Player Name"
-                    android:id="@+id/play_screen_player_name"
-                    />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="10dp"
-                    >
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="No. of Armies"
-                        android:layout_weight="0.5"
-                        android:id="@+id/play_screen_armies"
-                        />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="No of Territories"
-                        android:layout_weight="0.5"
-                        android:id="@+id/play_screen_territories"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.RecyclerView
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_card_white_24dp"
+            android:id="@+id/activity_play_screen_floating_button"
+            />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:id="@+id/play_screen_reyclerview"
-        android:nestedScrollingEnabled="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/activity_play_screen_floating_button"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginBottom="3dp"
         >
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/activity_play_screen_logview"
+            android:scrollbars="vertical"
+            android:nestedScrollingEnabled="true"
+            />
+    </LinearLayout>
+    </RelativeLayout>
 
-</android.support.v7.widget.RecyclerView>
-</LinearLayout>
+

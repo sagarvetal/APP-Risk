@@ -5,7 +5,7 @@ android {
     defaultConfig {
         applicationId "com.app.risk"
         targetSdkVersion 27
-        minSdkVersion 15
+        minSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,6 +17,7 @@ android {
         }
     }
 
+    sourceSets { main { resources.srcDirs = ['src/main/resources', 'src/main/resources/'] } }
 }
 
 dependencies {

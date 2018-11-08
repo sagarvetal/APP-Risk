@@ -26,7 +26,6 @@
             android:id="@+id/player_selection_option_edittext"
             android:hint="Enter a name "
             />
-
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

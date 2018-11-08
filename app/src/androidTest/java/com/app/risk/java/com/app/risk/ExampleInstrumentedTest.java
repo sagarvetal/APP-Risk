@@ -1,4 +1,4 @@
-package com.app.risk;
+package com.app.risk.java.com.app.risk;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

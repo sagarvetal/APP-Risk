@@ -1,13 +1,17 @@
 package com.app.risk.model;
 
+import android.support.annotation.NonNull;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * GameMap class to store each node (country) of the game map graph
+ *
  * @author Akshita Angara
  * @version 1.0.0
  */
-public class GameMap {
+public class GameMap implements Serializable {
 
     private Country fromCountry;
     private float coordinateX = 0;
@@ -24,9 +28,10 @@ public class GameMap {
 
     /**
      * Constructor to create a GameMap object with the given country, its coordinates and its list of connected countries
-     * @param fromCountry From country
-     * @param coordinateX X-coordinate in the location of the country on map
-     * @param coordinateY Y-coordinate in the location of the country on map
+     *
+     * @param fromCountry          From country
+     * @param coordinateX          X-coordinate in the location of the country on map
+     * @param coordinateY          Y-coordinate in the location of the country on map
      * @param connectedToCountries List of GameMap objects of the countries that the fromCountry is connected to
      */
     public GameMap(Country fromCountry, float coordinateX, float coordinateY, ArrayList<GameMap> connectedToCountries) {
@@ -38,17 +43,18 @@ public class GameMap {
 
     /**
      * Constructor to create a GameMap object with the given fromCountry
+     *
      * @param fromCountry From country
      */
     public GameMap(Country fromCountry) {
         this.fromCountry = fromCountry;
     }
 
-    public int getIndexOfCountryInList(){
+    public int getIndexOfCountryInList() {
         return indexOfCountryInList;
     }
 
-    public int getContinentColor(){
+    public int getContinentColor() {
         return continentColor;
     }
 
@@ -62,6 +68,7 @@ public class GameMap {
 
     /**
      * Getter function to return the from country
+     *
      * @return from country
      */
     public Country getFromCountry() {
@@ -71,6 +78,7 @@ public class GameMap {
 
     /**
      * Setter function to set the from country
+     *
      * @param fromCountry From country
      */
     public void setFromCountry(Country fromCountry) {
@@ -80,6 +88,7 @@ public class GameMap {
 
     /**
      * Getter function to return list of all the countries that the from country is connected to (adjacency list)
+     *
      * @return List of GameMap objects of the countries that the fromCountry is connected to
      */
     public ArrayList<GameMap> getConnectedToCountries() {
@@ -89,20 +98,23 @@ public class GameMap {
 
     /**
      * Return list of all connected countries as a comma separated string
+     *
      * @return comma separated string of all connected countries
      */
     public String getConnectedCountriesAsString() {
 
         String returnString = "";
-        for(GameMap map: connectedToCountries) {
+        for (GameMap map : connectedToCountries) {
             returnString += map.fromCountry.getNameOfCountry() + ",";
 
         }
+
         return returnString;
     }
 
     /**
      * Setter function to set the list of all countries that the from country is connected to (adjacency list)
+     *
      * @param connectedToCountries List of GameMap objects of the countries that the fromCountry is connected to
      */
     public void setConnectedToCountries(ArrayList<GameMap> connectedToCountries) {
@@ -112,6 +124,7 @@ public class GameMap {
 
     /**
      * Getter function to return the x-coordinate of the position of the from country
+     *
      * @return X-coordinate in the location of the country on map
      */
     public float getCoordinateX() {
@@ -121,6 +134,7 @@ public class GameMap {
 
     /**
      * Setter function to set the x-coordinate of the position of the from country
+     *
      * @param coordinateX X-coordinate in the location of the country on map
      */
     public void setCoordinateX(float coordinateX) {
@@ -130,6 +144,7 @@ public class GameMap {
 
     /**
      * Getter function to return the y-coordinate of the position of the from country
+     *
      * @return Y-coordinate in the location of the country on map
      */
     public float getCoordinateY() {
@@ -139,10 +154,13 @@ public class GameMap {
 
     /**
      * Setter function to set the y-coordinate of the position of the from country
+     *
      * @param coordinateY Y-coordinate in the location of the country on map
      */
     public void setCoordinateY(float coordinateY) {
 
         this.coordinateY = coordinateY;
     }
+
+
 }

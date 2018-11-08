@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateMapActivity">
+    tools:context=".view.CreateMapActivity">
 
     <include layout="@layout/content_create_map" />
 
@@ -13,19 +13,22 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="horizontal"
+        android:background="@android:color/white"
         >
 
         <ListView
             android:id="@+id/lvCountry"
-            android:layout_width="100dp"
+            android:layout_width="142dp"
             android:layout_height="match_parent"
             android:headerDividersEnabled="false"></ListView>
+
         <SurfaceView
             android:id="@+id/surface"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingRight="100dp"
             />
+
 
     </LinearLayout>
 
