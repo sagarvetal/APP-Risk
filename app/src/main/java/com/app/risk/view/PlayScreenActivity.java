@@ -72,12 +72,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
         logView=findViewById(R.id.activity_play_screen_logview);
         logViewArrayList = new ArrayList<>();
-        /*logViewArrayList.add("Sample 1");
-        logViewArrayList.add("Sample 2");
-        logViewArrayList.add("Sample 3");
-        logViewArrayList.add("Sample 4");
-        logViewArrayList.add("Sample 5");*/
-
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
 
@@ -272,9 +266,14 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .create().show();
 
     }
-
+    /**
+     * This method is called when ever observable model is changed
+     * and these changes are notified to the observer with the changes made
+     * @param observable model class that has its data changed
+     * @param object value that is changed of type Object
+     */
     @Override
-    public void update(Observable observable, Object o) {
+    public void update(Observable observable, Object object) {
        if(observable instanceof Log)
        {
            String message=((Log)observable).getMessage();
