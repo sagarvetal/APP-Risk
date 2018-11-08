@@ -76,12 +76,9 @@ public class MapReader {
 
         try {
 
-            //String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
-            //File mapDirectory = new File(mapDir);
-            InputStream inputStream = context.getResources().openRawResource(
-                    context.getResources().getIdentifier(fileName,
-                            "raw", context.getPackageName()));
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
+            File mapDirectory = new File(mapDir);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(mapDir)));
 
             while ((line = bufferedReader.readLine()) != null) {
 
@@ -192,19 +189,11 @@ public class MapReader {
     public static ArrayList<String> getMapList(Context context) {
 
         final ArrayList<String> mapList = new ArrayList<>();
-        /*final String rootPath = context.getFilesDir().getAbsolutePath();
+        final String rootPath = context.getFilesDir().getAbsolutePath();
         final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         System.out.println(mapDir);
         for (final String file : mapDir.list()) {
             mapList.add(file);
-        }*/
-        /*mapList.add("cliff.map");
-        mapList.add("twin.map");
-        mapList.add("world.map");*/
-
-        Field[] fields = R.raw.class.getFields();
-        for(int count=0; count < fields.length; count++){
-            mapList.add(fields[count].getName());
         }
 
         return mapList;
