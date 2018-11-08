@@ -1,16 +1,13 @@
 package com.app.risk.utility;
 
-import android.content.Context;
 
 import com.app.risk.constants.FileConstants;
-//import com.app.risk.controller.PhaseController;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -49,6 +46,7 @@ public class LogManager {
             File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
             boolean result=false;
             try {
+
                result=file.createNewFile();
                 System.out.println("::::::::::::::::::::::::::::::::write LOg result::::::::::::::::::"+result);
             } catch (IOException e) {
@@ -75,7 +73,7 @@ public class LogManager {
                 } catch (IOException e) {
 
                 }
-                PlayScreenActivity.logViewArrayList.add(text);
+                PlayScreenActivity.logViewArrayList.add(0,text);
                 PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
                // PhaseController.getInstance().update();
             }

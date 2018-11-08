@@ -33,20 +33,18 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
-import java.util.Observable;
-import java.util.Observer;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * PlayScreenActivity display the play screen of the display
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager , Observer {
+public class PlayScreenActivity extends AppCompatActivity implements PhaseManager, Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -66,6 +64,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     ListView listPlayerState ;
 
 
+
     /**
      * This method is the main creation method of the activity
      * @param savedInstanceState: instance of the activity
@@ -82,7 +81,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         logViewArrayList.add("Sample 3");
         logViewArrayList.add("Sample 4");
         logViewArrayList.add("Sample 5");*/
-
 
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
@@ -102,24 +100,22 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         init();
         manageFloatingButtonTransitions();
         startGame();
-
-
     }
+
     @Override
     public void update(Observable o, Object arg) {
         try {
             if (arg != null) {
-                    if (o instanceof Player) {
-                        playerStateAdapter.notifyDataSetChanged();
-                        return;
-                    }
+                if (o instanceof Player) {
+                    playerStateAdapter.notifyDataSetChanged();
+                    return;
+                }
             }
         } catch (Exception ex) {
 
         }
     }
-
-    /**
+/**
  * This method initalizes and listens the evenets of the floating Button
  */
     private void manageFloatingButtonTransitions() {
@@ -178,6 +174,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         pArmies = findViewById(R.id.play_screen_armies);
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
+
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
     }
@@ -199,24 +196,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setPlayers(playerNames);
-                    final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
-                    startupPhase.start();
-                    setPlayerObserver();
+                    StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
-                    currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
+                    currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setCurrentPlayer();
-                    final ReinforcementPhaseController reinforcementPhase = new ReinforcementPhaseController(gamePlay);
-                    reinforcementPhase.setReinforcementArmies();
+                    ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
-                    adapter = new PlayScreenRVAdapter(PlayScreenActivity.this, gamePlay);
+                    adapter = new PlayScreenRVAdapter(this, gamePlay, recyclerView);
                     recyclerView.setAdapter(adapter);
                     adapter.setPhaseManager(this);
                     pName.setText(gamePlay.getCurrentPlayer().getName());
@@ -240,7 +230,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.ATTACK_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
-                    currentPhase = GamePlayConstants.ATTACK_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Attack : " + gamePlay.getCurrentPlayer().getName());
@@ -248,7 +238,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
-                    currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Fortification : " + gamePlay.getCurrentPlayer().getName());
@@ -258,13 +248,12 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     }
 
     /**
-     * Assign observer to all player objects
+     * This method notify the adapter regarding data change.
      */
-    public void setPlayerObserver(){
-        for (Player player : new ArrayList<>(gamePlay.getPlayers().values())){
-            player.addObserver(this);
-        }
+    public void notifyPlayScreenRVAdapter() {
+        adapter.notifyDataSetChanged();
     }
+
     /**
      * This method is used to display given using snackbar
      * @param message : main message to be displayed
@@ -305,4 +294,5 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .create().show();
 
     }
+
 }

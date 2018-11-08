@@ -1,5 +1,7 @@
 package com.app.risk.controller;
 
+import android.content.Context;
+
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -17,23 +19,48 @@ import java.util.concurrent.ThreadLocalRandom;
  * place armies on countries in round-robbin fashion.
  *
  * @author Sagar Vetal
- * @version 1.0.0 (Date: 07/10/2018)
+ * @version 2.0.0 (Date: 05/11/2018)
  */
 public class StartupPhaseController {
 
     private GamePlay gamePlay;
+    private static StartupPhaseController startupPhaseController;
+
     /**
-     * This parameterized constructor initializes the GamePlay object.
-     *
-     * @param gamePlay The GamePlay object.
+     * This is default constructor.
      */
-    public StartupPhaseController(final GamePlay gamePlay) {
-        this.gamePlay = gamePlay;
+    private StartupPhaseController() {
     }
+
+    /**
+     * This method implements the singleton pattern for StartupPhaseController
+     * @return The static reference of StartupPhaseController.
+     */
+    public static StartupPhaseController getInstance(){
+        if(startupPhaseController == null){
+            startupPhaseController = new StartupPhaseController();
+        }
+        return startupPhaseController;
+    }
+
+    /**
+     * This method implements the singleton pattern for StartupPhaseController and
+     * also sets GamePlay object.
+     * @param gamePlay The GamePlay object
+     * @return The static reference of StartupPhaseController.
+     */
+    public static StartupPhaseController init(final GamePlay gamePlay) {
+        getInstance();
+        startupPhaseController.gamePlay = gamePlay;
+        return startupPhaseController;
+    }
+
     /**
      * This method starts the startup phase.
      */
-    public void start() {
+    public void start(final ArrayList<String> playerNames) {
+        gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
+        gamePlay.setPlayers(playerNames);
         assignInitialCountries();
         assignInitialArmies();
         placeInitialArmies();

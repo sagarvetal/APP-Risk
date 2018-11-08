@@ -74,11 +74,11 @@ public class PlayerStateAdapter extends BaseAdapter {
         }
         Player player =  playerList.get(position);
         TextView textView1 = view.findViewById(R.id.txt_player_data1);
-        textView1.setText(Integer.toString(player.getNoOfCountries()));
+        textView1.setText("Player "+Integer.toString(player.getId()+1));
         TextView textView2 = view.findViewById(R.id.txt_player_data2);
-        textView1.setText(Integer.toString(player.getNoOfArmies()));
+        textView2.setText("Armies " + Integer.toString(player.getNoOfArmies()));
         TextView textView3 = view.findViewById(R.id.txt_player_data3);
-        textView3.setText("Player"+Integer.toString(player.getId()+1));
+        textView3.setText("Countries " + Integer.toString(player.getNoOfCountries()));
 
         return view;
     }
