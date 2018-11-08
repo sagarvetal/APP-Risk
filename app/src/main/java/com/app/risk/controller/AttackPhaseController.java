@@ -33,7 +33,6 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private AlertDialog mainAlertDialog;
-    private TextView attackerDiceTextView, defenderDiceTextView;
     private Button rollButton,allOutButton;
 
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
@@ -101,9 +100,6 @@ public class AttackPhaseController implements View.OnClickListener {
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
         defenderNumberPicker.setWrapSelectorWheel(false);
 
-        attackerDiceTextView = view.findViewById(R.id.attack_alert_dialog_attacker_dices);
-        defenderDiceTextView = view.findViewById(R.id.attack_alert_dialog_defender_dices);
-
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
         allOutButton = view.findViewById(R.id.attack_alert_dialog_all_out);
         rollButton.setOnClickListener(this);
@@ -135,9 +131,9 @@ public class AttackPhaseController implements View.OnClickListener {
             }
 
             if(defendingCountry.getNoOfArmies() == 0) {
-                attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry());
+                attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
             } else if(attackingCountry.getNoOfArmies() == 1) {
-                attackResult.append("\n\n You lose the attack on " + defendingCountry.getNameOfCountry());
+                attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
             }
 
             final boolean isCountryConquered = defendingCountry.getNoOfArmies() == 0 ? true : false;
