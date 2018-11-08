@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Player model to capture player details
@@ -14,13 +15,14 @@ import java.util.List;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 04/10/2018)
  */
-public class Player implements Serializable {
+public class Player extends Observable implements Serializable  {
 
     private int id;
     private String name;
     private int colorCode;
     private int noOfCountries;
     private int noOfArmies;
+    private int noOfContinents;
     private int reinforcementArmies;
     private List<Card> cards;
     private boolean isActive;
@@ -105,12 +107,33 @@ public class Player implements Serializable {
     }
 
     /**
+     * This is function to set no of continents
+     * @param noOfContinents
+     */
+    public void setNoOfContinents(int noOfContinents) {
+        this.noOfContinents = noOfContinents;
+    }
+
+    /**
+     * This is function to get  no of continents
+     * @return
+     */
+    public int getNoOfContinents() {
+        return noOfContinents;
+    }
+    public void test(){
+        incrementArmies(10);
+    }
+    /**
      * This function is to increment no of countries by given count.
      *
      * @param count The increment count by which the no of countries to be incremented.
      */
+
     public void incrementCountries(final int count) {
         this.noOfCountries += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -129,6 +152,7 @@ public class Player implements Serializable {
      */
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
+
     }
 
     /**
@@ -138,6 +162,8 @@ public class Player implements Serializable {
      */
     public void incrementArmies(final int count) {
         this.noOfArmies += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**

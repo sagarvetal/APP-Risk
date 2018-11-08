@@ -33,16 +33,20 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
+import java.util.Observable;
+import java.util.Observer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * PlayScreenActivity display the play screen of the display
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager {
+public class PlayScreenActivity extends AppCompatActivity implements PhaseManager , Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -61,6 +65,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     PlayerStateAdapter playerStateAdapter;
     ListView listPlayerState ;
 
+
     /**
      * This method is the main creation method of the activity
      * @param savedInstanceState: instance of the activity
@@ -77,6 +82,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         logViewArrayList.add("Sample 3");
         logViewArrayList.add("Sample 4");
         logViewArrayList.add("Sample 5");*/
+
 
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
@@ -97,11 +103,23 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         manageFloatingButtonTransitions();
         startGame();
 
-        playerStateAdapter = new PlayerStateAdapter(gamePlay.getPlayers(),this);
-        listPlayerState = findViewById(R.id.list_play_view);
-        listPlayerState.setAdapter(playerStateAdapter);
+
     }
-/**
+    @Override
+    public void update(Observable o, Object arg) {
+        try {
+            if (arg != null) {
+                    if (o instanceof Player) {
+                        playerStateAdapter.notifyDataSetChanged();
+                        return;
+                    }
+            }
+        } catch (Exception ex) {
+
+        }
+    }
+
+    /**
  * This method initalizes and listens the evenets of the floating Button
  */
     private void manageFloatingButtonTransitions() {
@@ -185,6 +203,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     gamePlay.setPlayers(playerNames);
                     final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
                     startupPhase.start();
+                    setPlayerObserver();
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
@@ -212,6 +231,11 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                                                          currentPlayer.getReinforcementArmies());
                     displayAlert("", message);
                     displaySnackBar("Reinforcement : " + gamePlay.getCurrentPlayer().getName());
+                    ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
+                    playerStateAdapter = new PlayerStateAdapter(arrPlayer,this);
+                    listPlayerState = findViewById(R.id.list_play_view);
+                    listPlayerState.setAdapter(playerStateAdapter);
+
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
@@ -233,6 +257,14 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         }
     }
 
+    /**
+     * Assign observer to all player objects
+     */
+    public void setPlayerObserver(){
+        for (Player player : new ArrayList<>(gamePlay.getPlayers().values())){
+            player.addObserver(this);
+        }
+    }
     /**
      * This method is used to display given using snackbar
      * @param message : main message to be displayed
