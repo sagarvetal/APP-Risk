@@ -2,6 +2,7 @@ package com.app.risk.utility;
 
 
 import com.app.risk.constants.FileConstants;
+import com.app.risk.model.Log;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.io.BufferedWriter;
@@ -17,6 +18,7 @@ import java.util.Scanner;
 public class LogManager {
     private static LogManager logManager;
     private String dirPath;
+    public static Log logmsg;
     private LogManager() {
     }
     public static LogManager getInstance() {
@@ -25,10 +27,12 @@ public class LogManager {
         }
         return logManager;
     }
-    public static LogManager getInstance(String dirPath) {
+    public static LogManager getInstance(String dirPath,PlayScreenActivity view) {
         if (logManager == null) {
             logManager = new LogManager();
             logManager.dirPath=dirPath;
+            logmsg=new Log();
+            logmsg.addObserver(view);
        /*     File logDirectory = new File(dirPath);
             if (!logDirectory.exists())
                 logDirectory.mkdirs();
@@ -73,8 +77,10 @@ public class LogManager {
                 } catch (IOException e) {
 
                 }
-                PlayScreenActivity.logViewArrayList.add(0,text);
-                PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
+
+                logmsg.setMessage(text);
+                //PlayScreenActivity.logViewArrayList.add(0,text);
+               // PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
                // PhaseController.getInstance().update();
             }
         }
