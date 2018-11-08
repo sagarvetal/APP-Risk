@@ -459,14 +459,13 @@ public class Player extends Observable implements Serializable {
      * @param gamePlay
      * @return
      */
-    public int getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
+    public float getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
         ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
         int totalCountries = gamePlay.getCountries().values().size();
         float size=arrCountiesOwnedByPlayer.size();
         float countriesSize=totalCountries;
         float percentage = (size/countriesSize) *100;
-        int result = (int)percentage;
-        return result;
+        return percentage;
     }
 
 }
