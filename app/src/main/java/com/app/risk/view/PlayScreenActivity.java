@@ -23,6 +23,7 @@ import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.adapters.PlayerStateAdapter;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
@@ -105,24 +106,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        String cards = "";
-                        for(final Card card : gamePlay.getCurrentPlayer().getCards()){
-                            if(cards.isEmpty()){
-                                cards = card.getType();
-                            } else {
-                                cards += "\n" + card.getType();
-                            }
+                        if(gamePlay.getCurrentPlayer().getCards().size()>0) {
+                            CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
+
+                            CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
+                            cardExchangeDialog.setContentView(R.layout.card_exchange);
+
+                            cardExchangeDialog.show();
+                        } else {
+                            displayAlert("No cards", "No cards to show.");
                         }
 
-                        if(cards.isEmpty()){
-                            cards = GamePlayConstants.NO_CARDS_AVAILABLE;
-                        }
-
-                        new AlertDialog.Builder(PlayScreenActivity.this)
-                                .setTitle("Available Cards")
-                                .setMessage(cards)
-                                .create()
-                                .show();
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
@@ -177,6 +171,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
+
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                     currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
