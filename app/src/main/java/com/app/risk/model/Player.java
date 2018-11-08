@@ -1,11 +1,11 @@
 package com.app.risk.model;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.AttackPhaseController;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 04/10/2018)
  */
-public class Player extends Observable implements Serializable  {
+public class Player extends Observable implements Serializable {
 
     private int id;
     private String name;
@@ -29,12 +29,58 @@ public class Player extends Observable implements Serializable  {
     private int reinforcementArmies;
     private List<Card> cards;
     private boolean isActive;
+    private int armiesInExchangeOfCards;
 
     /**
      * This is a default constructor and it initializes the card list.
      */
     public Player() {
+
         this.cards = new ArrayList<>();
+        this.armiesInExchangeOfCards = 0;
+    }
+
+    /**
+     * Getter to return number of armies that should be awarded in exchange of cards
+     *
+     * @return number of armies to be awarded in exchange of cards
+     */
+    public int getArmiesInExchangeOfCards() {
+        return armiesInExchangeOfCards;
+    }
+
+    /**
+     * Setter to set the number of armies that should be awarded in exchange of cards
+     *
+     * @param armiesInExchangeOfCards number of armies that should be awarded in exchange of cards
+     */
+    public void setArmiesInExchangeOfCards(int armiesInExchangeOfCards) {
+        this.armiesInExchangeOfCards = armiesInExchangeOfCards;
+    }
+
+    /**
+     * Check if the cards selected by the player can be exchanged based on if they're similar or not
+     * @param cardsToExchange list of cards selected by the player
+     * @return true if all cards are same or all cards are completely different, false otherwise
+     */
+    public boolean cardsExchangeable(List<Card> cardsToExchange){
+
+        if(cardsToExchange.size() == 3){
+            if(cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else if(!cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    !cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType()) &&
+                    !cardsToExchange.get(1).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else {
+                System.out.println("Card similarity rule not satisfied.");
+                return false;
+            }
+        } else {
+            System.out.println("Didn't choose enough cards");
+            return false;
+        }
     }
 
     /**
@@ -79,6 +125,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the color code of the player to identify them
+     *
      * @param colorCode The unique color code of the player
      */
     public void setColorCode(int colorCode) {
@@ -87,6 +134,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Getter function to return the no of countries assigned to the player
+     *
      * @return no of countries
      */
     public int getNoOfCountries() {
@@ -95,6 +143,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the no of countries assigned to the player
+     *
      * @param noOfCountries The number of countries assigned
      */
     public void setNoOfCountries(int noOfCountries) {
@@ -119,6 +168,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * This function is to increment no of countries by given count.
+     *
      * @param count The increment count by which the no of countries to be incremented.
      */
     public void incrementCountries(final int count) {
@@ -138,6 +188,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the no of armies assigned to the player
+     *
      * @param noOfArmies The number of armies assigned
      */
     public void setNoOfArmies(int noOfArmies) {
@@ -146,6 +197,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * This function is to increment no of armies by given count.
+     *
      * @param count The increment count by which the no of armies to be incremented.
      */
     public void incrementArmies(final int count) {
@@ -156,6 +208,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * This function is to decrement no of armies by given count.
+     *
      * @param count The decrement count by which the no of armies to be decremented.
      */
     public void decrementArmies(final int count) {
@@ -164,6 +217,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Getter function to return the no of reinforcement armies given to the player
+     *
      * @return no of reinforcement armies
      */
     public int getReinforcementArmies() {
@@ -172,6 +226,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the no of reinforcement armies given to the player
+     *
      * @param reinforcementArmies The number of reinforcement armies
      */
     public void setReinforcementArmies(int reinforcementArmies) {
@@ -180,6 +235,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * This function is to decrement no of reinforcement armies by given count.
+     *
      * @param count The decrement count by which the no of reinforcement armies to be decremented.
      */
     public void decrementReinforcementArmies(final int count) {
@@ -188,6 +244,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Getter function to return the list of cards earned by player
+     *
      * @return list of cards
      */
     public List<Card> getCards() {
@@ -196,6 +253,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the card earned by player
+     *
      * @param card The card earned by player
      */
     public void setCards(Card card) {
@@ -203,7 +261,18 @@ public class Player extends Observable implements Serializable  {
     }
 
     /**
+     * Setter function to update the list of cards owned by the player after exchange
+     * @param cards list of cards owned by the player after exchange
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    /**
      * Getter function to get the flag to determine game is over on not for respective player
+     *
      * @return true if player's game is not over; otherwise return false.
      */
     public boolean isActive() {
@@ -212,6 +281,7 @@ public class Player extends Observable implements Serializable  {
 
     /**
      * Setter function to set the flag to determine game is over on not for respective player
+     *
      * @param active It is true if player's game is not over; otherwise false.
      */
     public void setActive(boolean active) {
@@ -221,6 +291,7 @@ public class Player extends Observable implements Serializable  {
     /**
      * This is reinforcement method.
      * It sets the no of reinforcement armies given to the player based on no of countries player owns.
+     *
      * @param gamePlay The GamePlay object.
      */
     public void reinforcementPhase(final GamePlay gamePlay) {

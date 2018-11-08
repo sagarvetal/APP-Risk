@@ -207,4 +207,13 @@ public class Country implements Serializable, Comparable<Country> {
             return 0;
         return this.nameOfCountry.compareToIgnoreCase(country.nameOfCountry);
     }
+
+    public boolean checkAftereachAttack(Country country)
+    {
+        if(this.noOfArmies>1&&country.noOfArmies>=1)
+        {
+            return true;
+        }
+        return false;
+    }
 }
