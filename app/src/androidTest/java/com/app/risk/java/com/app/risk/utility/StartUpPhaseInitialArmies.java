@@ -39,7 +39,7 @@ public class StartUpPhaseInitialArmies {
         countries.put("nepal",new Country("nepal",new Continent("europe",3)));
         countries.put("butan",new Country("butan",new Continent("USA",4)));
         gamePlay.setCountries(countries);
-        startupphase =new StartupPhaseController(gamePlay);
+        startupphase = new StartupPhaseController(gamePlay);
     }
 
     @Test

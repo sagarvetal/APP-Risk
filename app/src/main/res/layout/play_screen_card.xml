@@ -2,77 +2,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/play_screen_card_carview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        xmlns:card_view ="http://schemas.android.com/apk/res-auto"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="10dp"
         card_view:cardBackgroundColor="#FFFFFF"
-        android:id="@+id/play_screen_card_carview"
-        >
+        card_view:cardElevation="10dp"
+        card_view:cardUseCompatPadding="true">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:nestedScrollingEnabled="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            >
-            <TextView
-                android:layout_width="0dp"
+            android:nestedScrollingEnabled="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="Country Name"
-                android:textSize="30dp"
-                android:id="@+id/play_screen_card_country_name"
-                />
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/play_screen_card_country_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Country Name"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="Armies: "
+                    android:textSize="25dp" />
+
+                <TextView
+                    android:id="@+id/play_screen_card_armies"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.2"
+                    android:text="Armies"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/play_screen_card_continent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:text="Armies: "
-                android:textSize="25dp"
-                />
-            <TextView
-                android:layout_width="0dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="Continent Name"
+                android:textSize="20dp" />
+
+            <ListView
+                android:id="@+id/play_screen_card_neighbours"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:text="Armies"
-                android:textSize="25dp"
-                android:id="@+id/play_screen_card_armies"
-                />
+                android:fastScrollEnabled="true"></ListView>
+
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Continent Name"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:textSize="20dp"
-            android:id="@+id/play_screen_card_continent"
-            />
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/play_screen_card_neighbours"
-            android:fastScrollEnabled="true"
-
-            >
-        </ListView>
-
-</LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
