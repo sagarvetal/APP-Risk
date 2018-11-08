@@ -1,9 +1,11 @@
 package com.app.risk.model;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.AttackPhaseController;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -236,25 +238,101 @@ public class Player implements Serializable {
     }
 
     /**
-     * This is attack method.
-     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
-     * @param gamePlay The GamePlay object.
+     * This is all out attack method in which attacker continues to attack
+     * until either all his armies or all the defending armies have been eliminated.
+     * If all the defender's armies are eliminated the attacker captures the territory.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     * @return The attack result of type StringBuilder.
      */
-    public void attackPhase(final GamePlay gamePlay){
+    public StringBuilder performAllOutAttack(final Country attackingCountry, final Country defendingCountry){
+        final StringBuilder attackResult = new StringBuilder();
+        while(attackingCountry.getNoOfArmies() > 1 && defendingCountry.getNoOfArmies() != 0){
+            final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
+            final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
+            final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
+            attackResult.append(result);
+            attackResult.append("-------------------------------------------\n");
+        }
+        return attackResult;
+    }
 
+    /**
+     * This is attack method in which given no of dices are rolled for attacker and defender.
+     * If the defender rolls greater or equal to the attacker then the attacker loses an army,
+     * otherwise the defender loses an army.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     * @param noOfAttackerDice The no of dices chosen by attacker
+     * @param noOfDefenderDice The no of dices chosen by defender
+     * @return The attack result of type StringBuilder.
+     */
+    public StringBuilder performAttack(final Country attackingCountry, final Country defendingCountry, final int noOfAttackerDice, final int noOfDefenderDice){
+
+        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
+        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
+
+        final StringBuilder attackResult = new StringBuilder();
+        attackResult.append("\nBefore Attack : \n");
+        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + ", Defender armies : " + defendingCountry.getNoOfArmies() + "\n\n");
+
+        while(!defenderDiceRollsOutputList.isEmpty() && !attackerDiceRollsOutputList.isEmpty() ){
+
+            attackResult.append("Attacker dice : " + attackerDiceRollsOutputList.get(0) + ", Defender dice : " + defenderDiceRollsOutputList.get(0));
+
+            if(defenderDiceRollsOutputList.get(0) >= attackerDiceRollsOutputList.get(0)){
+                attackingCountry.decrementArmies(1);
+                attackingCountry.getPlayer().decrementArmies(1);
+                attackResult.append("\nDefender won \n");
+            } else{
+                defendingCountry.decrementArmies(1);
+                defendingCountry.getPlayer().decrementArmies(1);
+                attackResult.append("\nAttacker won \n");
+            }
+            defenderDiceRollsOutputList.remove(0);
+            attackerDiceRollsOutputList.remove(0);
+        }
+
+        attackResult.append("\nAfter Attack : \n");
+        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
+
+        return attackResult;
+    }
+
+    /**
+     * This method returns the dice roll output for given no of dices.
+     * @param noOfDices The number of dices to be rolled.
+     * @return The dice roll output for given no of dices.
+     */
+    public ArrayList<Integer> getDiceRollsOutput(final int noOfDices) {
+        final ArrayList<Integer> diceRollsOutput = new ArrayList<>();
+        for(int i = 0; i < noOfDices; i++) {
+            diceRollsOutput.add(generateRandom(1, 6));
+        }
+        Collections.sort(diceRollsOutput, Collections.<Integer>reverseOrder());
+        return diceRollsOutput;
+    }
+
+    /**
+     * Generates a random number for dice
+     * @param lower : lower bound for the dice
+     * @param upper: upper bound for the dice
+     * @return Random integer between given lower and upper bound.
+     */
+    public int generateRandom(int lower,int upper){
+        return (int)((Math.random() * upper) + lower);
     }
 
     /**
      * This is fortification method.
-     * It moves armies from one country to another country,
-     * and award card to player if player conquer the country.
-     * @param gamePlay The GamePlay object.
+     * It moves armies from one country to another country.
+     * @param fromCountry The country from where player wants to move armies.
+     * @param toCountry The country to where player wants to move armies.
+     * @param noOfArmies The no of armies to be moved.
      */
-    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies, final GamePlay gamePlay){
+    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies){
         fromCountry.decrementArmies(noOfArmies);
         toCountry.incrementArmies(noOfArmies);
-
-        assignCards(gamePlay);
     }
 
     /**

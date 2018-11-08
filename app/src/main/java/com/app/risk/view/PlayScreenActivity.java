@@ -3,6 +3,8 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -16,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
@@ -34,7 +37,6 @@ import com.app.risk.utility.MapReader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -103,27 +105,24 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
-                            String cards = "";
-
-                            for(final Card card : gamePlay.getCurrentPlayer().getCards()){
-                                if(cards.isEmpty()){
-                                    cards = card.getType();
-                                } else {
-                                    cards += "\n" + card.getType();
-                                }
-                            }
-
+                        String cards = "";
+                        for(final Card card : gamePlay.getCurrentPlayer().getCards()){
                             if(cards.isEmpty()){
-                                cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                                cards = card.getType();
+                            } else {
+                                cards += "\n" + card.getType();
                             }
-
-                            new AlertDialog.Builder(PlayScreenActivity.this)
-                                    .setTitle("Available Cards")
-                                    .setMessage(cards)
-                                    .create()
-                                    .show();
                         }
+
+                        if(cards.isEmpty()){
+                            cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                        }
+
+                        new AlertDialog.Builder(PlayScreenActivity.this)
+                                .setTitle("Available Cards")
+                                .setMessage(cards)
+                                .create()
+                                .show();
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
@@ -172,6 +171,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    gamePlay.setCards();
                     StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
@@ -272,6 +272,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .create().show();
 
     }
+
     /**
      * This method is called when ever observable model is changed
      * and these changes are notified to the observer with the changes made
