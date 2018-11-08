@@ -109,7 +109,7 @@ public class Continent implements Serializable {
 
     /**
      * This is overridden method to compare two continents are equal .
-     * @param obj The object of continent.
+     * @param new_continent The object of continent.
      * @return 0 if two continents are equal; 1 if it is greater; -1 if it is smaller.
      */
     public int compareTo(Continent new_continent) {

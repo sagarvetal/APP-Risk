@@ -2,7 +2,10 @@ package com.app.risk.utility;
 
 
 import com.app.risk.constants.FileConstants;
+<<<<<<< HEAD
+=======
 import com.app.risk.model.Log;
+>>>>>>> master
 import com.app.risk.view.PlayScreenActivity;
 
 import java.io.BufferedWriter;
@@ -85,8 +88,14 @@ public class LogManager {
                 } catch (IOException e) {
 
                 }
+<<<<<<< HEAD
+                PlayScreenActivity.logViewArrayList.add(0,text);
+                PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
+               // PhaseController.getInstance().update();
+=======
 
                 logmsg.setMessage(text);
+>>>>>>> master
             }
         }
     }
