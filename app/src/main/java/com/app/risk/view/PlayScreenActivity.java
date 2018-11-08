@@ -225,7 +225,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
                     listPlayerState = findViewById(R.id.list_play_view);
                     listPlayerState.setAdapter(playerStateAdapter);
-
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
