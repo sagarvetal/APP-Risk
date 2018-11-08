@@ -50,53 +50,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Attacker : "
-            android:textSize="18dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 0 , 0 "
-            android:id="@+id/attack_alert_dialog_attacker_dices"
-            android:textSize="18dp"
-            />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Defender : "
-            android:textSize="18dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" 0 , 0 , 0"
-            android:id="@+id/attack_alert_dialog_defender_dices"
-            android:textSize="18dp"
-            />
-
-    </LinearLayout>
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

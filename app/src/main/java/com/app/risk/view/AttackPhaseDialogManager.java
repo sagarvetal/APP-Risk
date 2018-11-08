@@ -28,7 +28,6 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
     private final RecyclerView recyclerView;
     private AlertDialog mainAlertDialog;
     private ArrayList<Country> countries;
-    private TextView attackerDiceTextView, defenderDiceTextView;
     private Button rollButton,allOutButton;
     private ArrayList<Integer> attackRollsArrayList, defendRollsArrayList;
 
@@ -80,9 +79,6 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
         defenderNumberPicker.setMinValue(1);
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
         defenderNumberPicker.setWrapSelectorWheel(false);
-
-        attackerDiceTextView = view.findViewById(R.id.attack_alert_dialog_attacker_dices);
-        defenderDiceTextView = view.findViewById(R.id.attack_alert_dialog_defender_dices);
 
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
         allOutButton = view.findViewById(R.id.attack_alert_dialog_all_out);
@@ -197,10 +193,9 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
                        defendRollsArrayList.add(generateRandom(1,6));
                    }
 
-                   sortDices();
-                   attackerDiceTextView.setText(attackRollsArrayList.toString());
-                   defenderDiceTextView.setText(defendRollsArrayList.toString());
+                   sortDices(attackRollsArrayList,defendRollsArrayList);
                    performAttack();
+
                }
                else{
                    Toast.makeText(context, "Attacker must have greater than one armies", Toast.LENGTH_SHORT).show();
@@ -219,6 +214,11 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
             }
         }
     }
+
+    /**
+     * This method performs the automation of the attack between attacker
+     * and defender
+     */
 
     public void performAllOutOperation() {
 
@@ -253,11 +253,17 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
 
     }
 
+
+    /**
+     * This method reduce the number of armies from the attacker and
+     * defender seeing as who wins or looses
+     * @param attackRollsArrayListAllOut : Attacking dice rolls
+     * @param defendRollsArrayListAllOut : Defending dice rolls
+     */
     public void performAllOutAttack(ArrayList<Integer> attackRollsArrayListAllOut, ArrayList<Integer> defendRollsArrayListAllOut){
         StringBuilder stringBuilder = new StringBuilder();
 
-        Collections.sort(attackRollsArrayListAllOut,Collections.<Integer>reverseOrder());
-        Collections.sort(defendRollsArrayListAllOut,Collections.<Integer>reverseOrder());
+        sortDices(attackRollsArrayListAllOut,defendRollsArrayListAllOut);
 
         stringBuilder.append("\nBefore Attack\n");
         stringBuilder.append("Attacker armies : " + attackingCountry.getNoOfArmies()
@@ -301,8 +307,8 @@ public class AttackPhaseDialogManager implements View.OnClickListener {
      * Sorts the dice arraylist in increasing order
      */
 
-    public void sortDices(){
-        Collections.sort(attackRollsArrayList,Collections.<Integer>reverseOrder());
-        Collections.sort(defendRollsArrayList,Collections.<Integer>reverseOrder());
+    public void sortDices(ArrayList<Integer> attackerArrayList,ArrayList<Integer> defenderArrayList){
+        Collections.sort(attackerArrayList,Collections.<Integer>reverseOrder());
+        Collections.sort(defenderArrayList,Collections.<Integer>reverseOrder());
     }
 }

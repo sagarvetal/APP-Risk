@@ -15,7 +15,6 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * This class is used for the attack phase.
@@ -34,11 +33,9 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private RecyclerView recyclerView;
     private AlertDialog mainAlertDialog;
-    private TextView attackerDiceTextView, defenderDiceTextView;
     private Button rollButton,allOutButton;
 
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
-    private ArrayList<Integer> attackRollsArrayList, defendRollsArrayList;
 
     /**
      * This is default constructor.
@@ -71,6 +68,9 @@ public class AttackPhaseController implements View.OnClickListener {
         return attackPhaseController;
     }
 
+    /**
+     * This method inflates the Attack dialog box
+     */
     public void initiateAttack(final Country attackingCountry, final Country defendingCountry, final RecyclerView recyclerView, final ArrayList<Country> countries){
         this.attackingCountry = attackingCountry;
         this.defendingCountry = defendingCountry;
@@ -81,13 +81,15 @@ public class AttackPhaseController implements View.OnClickListener {
         final AlertDialog.Builder mainAlertDialogBuilder = new AlertDialog.Builder(context);
         mainAlertDialogBuilder.setView(view);
         mainAlertDialogBuilder.create();
-
         mainAlertDialog = mainAlertDialogBuilder.show();
-
         setUpViews(view);
     }
 
-    public void setUpViews(final View view){
+    /**
+     * This method gets the reference of the elements of dialog box
+     * @param view It gets the reference main dialog view
+     */
+    private void setUpViews(final View view){
         attackerNumberPicker = (NumberPicker) view.findViewById(R.id.attack_alert_dialog_attacker_picker);
         attackerNumberPicker.setMinValue(1);
         attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3: attackingCountry.getNoOfArmies() - 1);
@@ -98,135 +100,106 @@ public class AttackPhaseController implements View.OnClickListener {
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
         defenderNumberPicker.setWrapSelectorWheel(false);
 
-        attackerDiceTextView = view.findViewById(R.id.attack_alert_dialog_attacker_dices);
-        defenderDiceTextView = view.findViewById(R.id.attack_alert_dialog_defender_dices);
-
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
         allOutButton = view.findViewById(R.id.attack_alert_dialog_all_out);
-
-        attackRollsArrayList = new ArrayList<>();
-        defendRollsArrayList = new ArrayList<>();
-
         rollButton.setOnClickListener(this);
         allOutButton.setOnClickListener(this);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param v: invoking view of the layout
+     */
     @Override
     public void onClick(View v) {
 
-        if(v == rollButton){
+        if(v == rollButton || v == allOutButton){
+            final StringBuilder attackResult = new StringBuilder();
+            if(v == rollButton){
+                final int noOfAttackerDice = attackerNumberPicker.getValue();
+                final int noOfDefenderDice = defenderNumberPicker.getValue();
 
-            if(attackingCountry.getPlayer() != defendingCountry.getPlayer()){
-                if(attackingCountry.getNoOfArmies() > 1){
-                    final int noOfAttackerDice = attackerNumberPicker.getValue();
-                    final int noOfDefenderDice = defenderNumberPicker.getValue();
+                final String result = gamePlay.getCurrentPlayer().performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
+                attackResult.append(result);
 
-                    attackRollsArrayList.clear();
-                    defendRollsArrayList.clear();
-
-                    for(int i=0; i<noOfAttackerDice; i++){
-                        attackRollsArrayList.add(generateRandom(1,6));
-                    }
-                    for(int i=0;i<noOfDefenderDice;i++){
-                        defendRollsArrayList.add(generateRandom(1,6));
-                    }
-
-                    attackerDiceTextView.setText(attackRollsArrayList.toString());
-                    defenderDiceTextView.setText(defendRollsArrayList.toString());
-
-                    performAttack();
-                }
-                else{
-                    Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
-                }
+                attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1);
+                defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies());
             }
-            else{
-                Toast.makeText(context, "You already won the country", Toast.LENGTH_SHORT).show();
+            else if(v == allOutButton){
+                final String result = gamePlay.getCurrentPlayer().performAllOutAttack(attackingCountry, defendingCountry).toString();
+                attackResult.append(result);
             }
-        }
-        else if(v == allOutButton){
 
+            if(defendingCountry.getNoOfArmies() == 0) {
+                attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
+            } else if(attackingCountry.getNoOfArmies() == 1) {
+                attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
+            }
+
+            final boolean isCountryConquered = defendingCountry.getNoOfArmies() == 0 ? true : false;
+            showAttackResultDialogBox(isCountryConquered, attackResult.toString());
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
 
-    public void performAttack(){
-        Collections.sort(attackRollsArrayList, Collections.<Integer>reverseOrder());
-        Collections.sort(defendRollsArrayList, Collections.<Integer>reverseOrder());
-
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Before Attack : \n");
-        stringBuilder.append("Attacker : " + attackingCountry.getNoOfArmies() + " Defender : " + defendingCountry.getNoOfArmies() + "\n\n");
-
-        while(!defendRollsArrayList.isEmpty() && !attackRollsArrayList.isEmpty() ){
-            if(defendRollsArrayList.get(0) >= attackRollsArrayList.get(0)){
-                attackingCountry.decrementArmies(1);
-                attackingCountry.getPlayer().decrementArmies(1);
-                stringBuilder.append("Defender : " + defendRollsArrayList.get(0) + " Attacker : " + attackRollsArrayList.get(0));
-                stringBuilder.append("\n Defender wins \n");
-            } else{
-                defendingCountry.decrementArmies(1);
-                defendingCountry.getPlayer().decrementArmies(1);
-                stringBuilder.append("Defender : " + defendRollsArrayList.get(0) + " Attacker : " + attackRollsArrayList.get(0));
-                stringBuilder.append("\n Attacker wins \n");
-            }
-            defendRollsArrayList.remove(0);
-            attackRollsArrayList.remove(0);
-        }
-
-        stringBuilder.append("\nAfter Attack : \n");
-        stringBuilder.append("Attacker : " + attackingCountry.getNoOfArmies() + " Defender : " + defendingCountry.getNoOfArmies() + "\n");
-
-        recyclerView.getAdapter().notifyDataSetChanged();
+    /**
+     * This method displays the dialog box to show attack result.
+     * @param isCountryConquered Boolean flag whether country is conquered or not.
+     * @param message The attack result to show into dialog box.
+     */
+    private void showAttackResultDialogBox(final boolean isCountryConquered, final String message) {
         new AlertDialog.Builder(context)
-            .setMessage(stringBuilder.toString().trim())
-            .setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+            .setMessage(message.trim())
+            .setNeutralButton(isCountryConquered ? "Move Armies" : "OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
                     if(defendingCountry.getNoOfArmies() == 0){
                         mainAlertDialog.dismiss();
-                        Toast.makeText(context, "You won the country", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "You won the country " + defendingCountry.getNameOfCountry(), Toast.LENGTH_SHORT).show();
                         defendingCountry.setPlayer(attackingCountry.getPlayer());
                         countries.add(defendingCountry);
-
-                        recyclerView.getAdapter().notifyDataSetChanged();
-
-                        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
-                        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                        alertDialog.setView(view);
-                        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
-                        numberPicker.setMinValue(attackerNumberPicker.getValue());
-                        numberPicker.setMaxValue(attackingCountry.getNoOfArmies() - 1);
-                        numberPicker.setWrapSelectorWheel(false);
-
-                        alertDialog.setPositiveButton("Move", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                attackingCountry.decrementArmies(numberPicker.getValue());
-                                defendingCountry.incrementArmies(numberPicker.getValue());
-                                recyclerView.getAdapter().notifyDataSetChanged();
-                                Toast.makeText(context, numberPicker.getValue() +" Armies moved from " + attackingCountry.getNameOfCountry() +
-                                        " to " + defendingCountry.getNameOfCountry(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        alertDialog.setCancelable(false);
-                        alertDialog.setTitle("Select armies to move");
-                        alertDialog.create().show();
+                        showDialogBoxToMoveArmiesAfterAttack();
+                    } else if(attackingCountry.getNoOfArmies() == 1) {
+                        mainAlertDialog.dismiss();
+                        Toast.makeText(context, "You lose the attack on", Toast.LENGTH_SHORT).show();
                     }
+                    recyclerView.getAdapter().notifyDataSetChanged();
                 }
             })
-            .setTitle("Dice Rolls")
+            .setTitle("Dice Rolls Result")
             .setCancelable(false)
             .create().show();
-
-        attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3: attackingCountry.getNoOfArmies() - 1);
-        defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
     }
 
 
-    public int generateRandom(int lower,int upper){
-        return (int)((Math.random() * upper) + lower);
+    /**
+     * This method displays the dialog box to move the armies after attack.
+     */
+    private void showDialogBoxToMoveArmiesAfterAttack(){
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setView(view);
+
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+        numberPicker.setMinValue(attackerNumberPicker.getValue());
+        numberPicker.setMaxValue(attackingCountry.getNoOfArmies() - 1);
+        numberPicker.setWrapSelectorWheel(false);
+
+        alertDialog.setPositiveButton("Move", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                attackingCountry.decrementArmies(numberPicker.getValue());
+                defendingCountry.incrementArmies(numberPicker.getValue());
+                recyclerView.getAdapter().notifyDataSetChanged();
+                Toast.makeText(context, numberPicker.getValue() +" Armies moved from " + attackingCountry.getNameOfCountry() +
+                        " to " + defendingCountry.getNameOfCountry(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        alertDialog.setCancelable(false);
+        alertDialog.setTitle("Select armies to move on newly conquered country");
+        alertDialog.create().show();
     }
 
 }

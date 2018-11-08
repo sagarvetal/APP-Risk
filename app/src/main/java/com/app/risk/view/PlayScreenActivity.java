@@ -3,8 +3,6 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -18,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
@@ -30,6 +27,7 @@ import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Log;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
@@ -63,8 +61,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     PlayerStateAdapter playerStateAdapter;
     ListView listPlayerState ;
 
-
-
     /**
      * This method is the main creation method of the activity
      * @param savedInstanceState: instance of the activity
@@ -73,17 +69,12 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
-        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH).readLog();
+        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
         logView=findViewById(R.id.activity_play_screen_logview);
         logViewArrayList = new ArrayList<>();
-        /*logViewArrayList.add("Sample 1");
-        logViewArrayList.add("Sample 2");
-        logViewArrayList.add("Sample 3");
-        logViewArrayList.add("Sample 4");
-        logViewArrayList.add("Sample 5");*/
-
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
+
         LogManager.getInstance().deleteLog();
         LogManager.getInstance().writeLog("hello APP");
         LogManager.getInstance().writeLog("I am FIne..u?");
@@ -102,22 +93,9 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         startGame();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        try {
-            if (arg != null) {
-                if (o instanceof Player) {
-                    playerStateAdapter.notifyDataSetChanged();
-                    return;
-                }
-            }
-        } catch (Exception ex) {
-
-        }
-    }
-/**
- * This method initalizes and listens the evenets of the floating Button
- */
+    /**
+     * This method initalizes and listens the evenets of the floating Button
+     */
     private void manageFloatingButtonTransitions() {
         floatingActionButton = findViewById(R.id.activity_play_screen_floating_button);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -127,27 +105,24 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size() != 0) {
-                            String cards = "";
-
-                            for(final Card card : gamePlay.getCurrentPlayer().getCards()){
-                                if(cards.isEmpty()){
-                                    cards = card.getType();
-                                } else {
-                                    cards += "\n" + card.getType();
-                                }
-                            }
-
+                        String cards = "";
+                        for(final Card card : gamePlay.getCurrentPlayer().getCards()){
                             if(cards.isEmpty()){
-                                cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                                cards = card.getType();
+                            } else {
+                                cards += "\n" + card.getType();
                             }
-
-                            new AlertDialog.Builder(PlayScreenActivity.this)
-                                    .setTitle("Available Cards")
-                                    .setMessage(cards)
-                                    .create()
-                                    .show();
                         }
+
+                        if(cards.isEmpty()){
+                            cards = GamePlayConstants.NO_CARDS_AVAILABLE;
+                        }
+
+                        new AlertDialog.Builder(PlayScreenActivity.this)
+                                .setTitle("Available Cards")
+                                .setMessage(cards)
+                                .create()
+                                .show();
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
@@ -196,6 +171,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    gamePlay.setCards();
                     StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
@@ -292,6 +268,23 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .setNegativeButton("No",null)
                 .create().show();
 
+    }
+
+    /**
+     * This method is called when ever observable model is changed
+     * and these changes are notified to the observer with the changes made
+     * @param observable model class that has its data changed
+     * @param object value that is changed of type Object
+     */
+    @Override
+    public void update(Observable observable, Object object) {
+       if(observable instanceof Log) {
+           String message=((Log)observable).getMessage();
+           logViewArrayList.add(0,message);
+           logViewAdapter.notifyDataSetChanged();
+       } else if(observable instanceof Player) {
+           playerStateAdapter.notifyDataSetChanged();
+       }
     }
 
 }
