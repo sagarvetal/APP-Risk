@@ -40,7 +40,7 @@ public class CardExchangeController {
 
         if(player.cardsExchangeable(cardsToExchange)){
             player.setArmiesInExchangeOfCards(player.getArmiesInExchangeOfCards() + 5);
-            player.setNoOfArmies(player.getNoOfArmies() + player.getArmiesInExchangeOfCards());
+            player.incrementArmies(player.getArmiesInExchangeOfCards());
             removeExchangedCards(cardsToExchange);
         }
 

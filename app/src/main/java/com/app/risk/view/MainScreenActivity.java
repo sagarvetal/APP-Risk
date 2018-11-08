@@ -54,12 +54,7 @@ public class MainScreenActivity extends AppCompatActivity {
      */
     public void recyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recyclerview);
-        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 2);
-
-        /*StaggeredGridLayoutManager linearLayoutManager = new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL);
-        */
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
