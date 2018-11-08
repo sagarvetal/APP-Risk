@@ -17,6 +17,7 @@ android {
         }
     }
 
+    sourceSets { main { resources.srcDirs = ['src/main/resources', 'src/main/resources/'] } }
 }
 
 dependencies {

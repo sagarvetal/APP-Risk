@@ -76,7 +76,7 @@ public class MapReader {
 
             String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
             File mapDirectory = new File(mapDir);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(mapDirectory, fileName))));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(mapDir)));
 
             while ((line = bufferedReader.readLine()) != null) {
 
@@ -86,11 +86,6 @@ public class MapReader {
                         line = bufferedReader.readLine();
                         if (line.isEmpty())
                             break;
-
-//                        if (line.startsWith("image=")) {
-//                            finalGamePlay.setMapName(line.split("=")[1].trim());
-//                        }
-
 
                     }
                 }
@@ -198,6 +193,7 @@ public class MapReader {
         for (final String file : mapDir.list()) {
             mapList.add(file);
         }
+
         return mapList;
     }
 

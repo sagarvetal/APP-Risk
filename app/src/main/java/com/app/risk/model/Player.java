@@ -30,14 +30,31 @@ public class Player extends Observable implements Serializable {
     private List<Card> cards;
     private boolean isActive;
     private int armiesInExchangeOfCards;
+    private boolean cardsExchangedInRound;
+
+    /**
+     * Check if the player has exchanged cards in ongoing round
+     * @return true if cards have been exchanged, false otherwise
+     */
+    public boolean isCardsExchangedInRound() {
+        return cardsExchangedInRound;
+    }
+
+    /**
+     * Set true or false depending on if the player has exchanged cards in ongoing round
+     * @param cardsExchangedInRound true if cards have been exchanged, false otherwise
+     */
+    public void setCardsExchangedInRound(boolean cardsExchangedInRound) {
+        this.cardsExchangedInRound = cardsExchangedInRound;
+    }
 
     /**
      * This is a default constructor and it initializes the card list.
      */
     public Player() {
-
         this.cards = new ArrayList<>();
         this.armiesInExchangeOfCards = 0;
+        cardsExchangedInRound = false;
     }
 
     /**
@@ -193,8 +210,6 @@ public class Player extends Observable implements Serializable {
      */
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
-        setChanged();
-        notifyObservers(this);
     }
 
     /**
@@ -233,6 +248,8 @@ public class Player extends Observable implements Serializable {
      */
     public void setReinforcementArmies(int reinforcementArmies) {
         this.reinforcementArmies = reinforcementArmies;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -418,7 +435,7 @@ public class Player extends Observable implements Serializable {
      */
     public void assignCards(final GamePlay gamePlay) {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
-        setCards(gamePlay.getCards().get(randomIndex));
+        setCards(new Card(gamePlay.getCards().get(randomIndex).getType()));
     }
 
     /**
