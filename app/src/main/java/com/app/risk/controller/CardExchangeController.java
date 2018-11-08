@@ -8,19 +8,27 @@ import java.util.List;
 public class CardExchangeController {
 
     GamePlay gamePlay;
-    Card card;
 
     public CardExchangeController(GamePlay gamePlay) {
         this.gamePlay = gamePlay;
-        this.card = new Card();
+    }
+
+    public List<Card> getCardList(){
+        return gamePlay.getCards();
     }
 
     public int exchangeArmiesForCards(List<Card> cardsToExchange){
 
-        if(card.cardsExchangeable(cardsToExchange)){
+        if(gamePlay.cardsExchangeable(cardsToExchange)){
             gamePlay.setArmiesInExchangeOfCards(gamePlay.getArmiesInExchangeOfCards() + 5);
+            removeExchangedCards(cardsToExchange);
         }
 
         return gamePlay.getArmiesInExchangeOfCards();
+    }
+
+    public void removeExchangedCards(List<Card> cardsToExchange){
+
+        gamePlay.getCards().removeAll(cardsToExchange);
     }
 }
