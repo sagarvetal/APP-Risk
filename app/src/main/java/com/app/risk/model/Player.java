@@ -325,15 +325,14 @@ public class Player implements Serializable {
 
     /**
      * This is fortification method.
-     * It moves armies from one country to another country,
-     * and award card to player if player conquer the country.
-     * @param gamePlay The GamePlay object.
+     * It moves armies from one country to another country.
+     * @param fromCountry The country from where player wants to move armies.
+     * @param toCountry The country to where player wants to move armies.
+     * @param noOfArmies The no of armies to be moved.
      */
-    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies, final GamePlay gamePlay){
+    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies){
         fromCountry.decrementArmies(noOfArmies);
         toCountry.incrementArmies(noOfArmies);
-
-        assignCards(gamePlay);
     }
 
     /**

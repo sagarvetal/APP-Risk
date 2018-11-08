@@ -79,7 +79,7 @@ public class FortificationPhaseController {
                     .setItems((CharSequence[]) reachableCountryArray, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
-                            showPlaceArmiesDialogBox(reachableCountryArray[index], position, countries);
+                            showDialogBoxToPlaceArmies(reachableCountryArray[index], position, countries);
                         }
                     })
                     .create()
@@ -96,7 +96,7 @@ public class FortificationPhaseController {
      * @param position The position of country in list owned by the player from where player wants to move armies.
      * @param countries The list of countries owned by current player.
      */
-    public void showPlaceArmiesDialogBox(String toCountry, final int position, final ArrayList<Country> countries){
+    public void showDialogBoxToPlaceArmies(String toCountry, final int position, final ArrayList<Country> countries){
 
         final AlertDialog.Builder placeArmiesDialogBox = new AlertDialog.Builder(context);
         placeArmiesDialogBox.setTitle("Place Armies");
@@ -196,7 +196,8 @@ public class FortificationPhaseController {
      * @param noOfArmies The no of armies to be moved.
      */
     public void fortifyCountry(final Country fromCountry, final Country toCountry, final int noOfArmies) {
-        gamePlay.getCurrentPlayer().fortificationPhase(fromCountry, toCountry, noOfArmies, gamePlay);
+        gamePlay.getCurrentPlayer().fortificationPhase(fromCountry, toCountry, noOfArmies);
+        gamePlay.getCurrentPlayer().assignCards(gamePlay);
     }
 
     /**
