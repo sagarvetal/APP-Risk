@@ -4,7 +4,6 @@ package com.app.risk.utility;
 import android.content.Context;
 
 
-import com.app.risk.R;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
