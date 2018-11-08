@@ -202,4 +202,17 @@ public class AttackPhaseController implements View.OnClickListener {
         alertDialog.create().show();
     }
 
+    public boolean canCountryAttack(Country defenderCountry,Country attackerCountry)
+    {
+        if(defenderCountry.getNoOfArmies()>=1&&attackerCountry.getNoOfArmies()>1)
+        {
+            return true;
+        }
+        return false;
+    }
+    public boolean isCountryAdjacent(Country fromCountry,Country toCountry)
+    {
+        FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
+        return fc.isCountriesConneted(fromCountry,toCountry);
+    }
 }
