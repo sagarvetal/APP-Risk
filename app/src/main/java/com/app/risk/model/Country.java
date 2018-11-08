@@ -169,15 +169,24 @@ public class Country implements Serializable, Comparable<Country> {
      *
      * @param count The decrement count by which the no of armies to be decremented.
      */
-    public void decrementReinforcementArmies(final int count) {
+    public void decrementArmies(final int count) {
         this.noOfArmies -= count;
     }
 
+    /**
+     * This function is to holds the address of the object which is generated
+     * based on the country
+     */
     public int hashCode() {
 
         return nameOfCountry.hashCode();
     }
 
+    /**
+     * This function is to check whether the two objects of the country are equal or not
+     *
+     * @param obj another object of the country with which its compared
+     */
     public boolean equals(Object obj) {
         if (obj instanceof Country) {
             if (this.nameOfCountry.equalsIgnoreCase(((Country) obj).nameOfCountry)) ;
@@ -188,7 +197,11 @@ public class Country implements Serializable, Comparable<Country> {
         return false;
     }
 
-    @Override
+    /**
+     * This function is to compare the two country objects
+     *
+     * @param country another object of the country with which its compared
+     */
     public int compareTo(@NonNull Country country) {
         if (this.nameOfCountry.equals(country.nameOfCountry))
             return 0;

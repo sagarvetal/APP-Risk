@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.app.risk.view.EditMap;
 import com.app.risk.view.UserDrivenMapsActivity;
 import com.app.risk.view.MapSelectionActivity;

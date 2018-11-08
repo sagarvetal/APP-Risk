@@ -27,6 +27,7 @@ import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Log;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
@@ -34,13 +35,15 @@ import com.app.risk.utility.MapReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * PlayScreenActivity display the play screen of the display
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager {
+public class PlayScreenActivity extends AppCompatActivity implements PhaseManager,Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -65,17 +68,12 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
-        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH).readLog();
+        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
         logView=findViewById(R.id.activity_play_screen_logview);
         logViewArrayList = new ArrayList<>();
-        /*logViewArrayList.add("Sample 1");
-        logViewArrayList.add("Sample 2");
-        logViewArrayList.add("Sample 3");
-        logViewArrayList.add("Sample 4");
-        logViewArrayList.add("Sample 5");*/
-
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
+
         LogManager.getInstance().deleteLog();
         LogManager.getInstance().writeLog("hello APP");
         LogManager.getInstance().writeLog("I am FIne..u?");
@@ -174,10 +172,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setPlayers(playerNames);
-                    final StartupPhaseController startupPhase = new StartupPhaseController(gamePlay);
-                    startupPhase.start();
+                    StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
@@ -190,14 +185,11 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     cardExchangeDialog.show();
 
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
-                    currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
+                    currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    gamePlay.setCurrentPhase(phase);
-                    gamePlay.setCurrentPlayer();
-                    final ReinforcementPhaseController reinforcementPhase = new ReinforcementPhaseController(gamePlay);
-                    reinforcementPhase.setReinforcementArmies();
+                    ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
-                    adapter = new PlayScreenRVAdapter(PlayScreenActivity.this, gamePlay);
+                    adapter = new PlayScreenRVAdapter(this, gamePlay, recyclerView);
                     recyclerView.setAdapter(adapter);
                     adapter.setPhaseManager(this);
                     pName.setText(gamePlay.getCurrentPlayer().getName());
@@ -216,7 +208,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.ATTACK_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
-                    currentPhase = GamePlayConstants.ATTACK_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Attack : " + gamePlay.getCurrentPlayer().getName());
@@ -224,13 +216,20 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
-                    currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
+                    currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     displaySnackBar("Fortification : " + gamePlay.getCurrentPlayer().getName());
                     break;
             }
         }
+    }
+
+    /**
+     * This method notify the adapter regarding data change.
+     */
+    public void notifyPlayScreenRVAdapter() {
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -272,5 +271,20 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 .setNegativeButton("No",null)
                 .create().show();
 
+    }
+    /**
+     * This method is called when ever observable model is changed
+     * and these changes are notified to the observer with the changes made
+     * @param observable model class that has its data changed
+     * @param object value that is changed of type Object
+     */
+    @Override
+    public void update(Observable observable, Object object) {
+       if(observable instanceof Log)
+       {
+           String message=((Log)observable).getMessage();
+           logViewArrayList.add(0,message);
+           logViewAdapter.notifyDataSetChanged();
+       }
     }
 }
