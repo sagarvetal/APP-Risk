@@ -36,6 +36,6 @@ public class MapDriverController {
     public void writeMap(Context context, String mapName, List<GameMap> gameMapList) {
         final MapWriter mapWriter = new MapWriter();
         mapWriter.writeGameMapToFile(context, mapName, gameMapList);
-    }
+        }
 
     }

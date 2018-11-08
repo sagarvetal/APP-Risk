@@ -1,6 +1,7 @@
 package com.app.risk.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Continent model to save details of each continent
@@ -12,12 +13,14 @@ public class Continent implements Serializable {
 
     private String nameOfContinent;
     private int armyControlValue;
+    private ArrayList<Country> countries;
 
     /**
      * This is a default constructor.
      */
     public Continent() {
         super();
+        countries = new ArrayList<>();
     }
 
     /**
@@ -30,6 +33,7 @@ public class Continent implements Serializable {
     public Continent(String new_nameOfContinent, int new_armyControlValue) {
         nameOfContinent = new_nameOfContinent;
         armyControlValue = new_armyControlValue;
+        countries = new ArrayList<>();
     }
 
     /**
@@ -105,7 +109,7 @@ public class Continent implements Serializable {
 
     /**
      * This is overridden method to compare two continents are equal .
-     * @param obj The object of continent.
+     * @param new_continent The object of continent.
      * @return 0 if two continents are equal; 1 if it is greater; -1 if it is smaller.
      */
     public int compareTo(Continent new_continent) {
@@ -113,4 +117,22 @@ public class Continent implements Serializable {
             return 0;
         return this.nameOfContinent.compareToIgnoreCase(new_continent.nameOfContinent);
     }
+
+    /**
+     * Getter function to return list of countries belongs to this continents
+     * @return List of countries belongs to this continents
+     */
+    public ArrayList<Country> getCountries() {
+        return countries;
+    }
+
+    /**
+     * Setter function to add country into list belonging countries
+     * @param country The country belongs to this continents
+     */
+    public void setCountries(Country country) {
+        this.countries.add(country);
+    }
+
+
 }

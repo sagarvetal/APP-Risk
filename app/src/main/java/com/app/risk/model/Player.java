@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -16,27 +18,73 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 04/10/2018)
  */
-public class Player implements Serializable {
+public class Player extends Observable implements Serializable {
 
     private int id;
     private String name;
     private int colorCode;
     private int noOfCountries;
     private int noOfArmies;
+    private int noOfContinents;
     private int reinforcementArmies;
     private List<Card> cards;
     private boolean isActive;
+    private int armiesInExchangeOfCards;
 
     /**
      * This is a default constructor and it initializes the card list.
      */
     public Player() {
+
         this.cards = new ArrayList<>();
+        this.armiesInExchangeOfCards = 0;
+    }
+
+    /**
+     * Getter to return number of armies that should be awarded in exchange of cards
+     *
+     * @return number of armies to be awarded in exchange of cards
+     */
+    public int getArmiesInExchangeOfCards() {
+        return armiesInExchangeOfCards;
+    }
+
+    /**
+     * Setter to set the number of armies that should be awarded in exchange of cards
+     *
+     * @param armiesInExchangeOfCards number of armies that should be awarded in exchange of cards
+     */
+    public void setArmiesInExchangeOfCards(int armiesInExchangeOfCards) {
+        this.armiesInExchangeOfCards = armiesInExchangeOfCards;
+    }
+
+    /**
+     * Check if the cards selected by the player can be exchanged based on if they're similar or not
+     * @param cardsToExchange list of cards selected by the player
+     * @return true if all cards are same or all cards are completely different, false otherwise
+     */
+    public boolean cardsExchangeable(List<Card> cardsToExchange){
+
+        if(cardsToExchange.size() == 3){
+            if(cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else if(!cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    !cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType()) &&
+                    !cardsToExchange.get(1).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else {
+                System.out.println("Card similarity rule not satisfied.");
+                return false;
+            }
+        } else {
+            System.out.println("Didn't choose enough cards");
+            return false;
+        }
     }
 
     /**
      * Getter function to return the unique id of the player
-     *
      * @return id of player
      */
     public int getId() {
@@ -45,7 +93,6 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the unique id of the player
-     *
      * @param id The unique id of player
      */
     public void setId(int id) {
@@ -54,7 +101,6 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the name of the player
-     *
      * @return name of the player
      */
     public String getName() {
@@ -63,7 +109,6 @@ public class Player implements Serializable {
 
     /**
      * Setter function to set the name of the player
-     *
      * @param name The name of the player
      */
     public void setName(String name) {
@@ -72,7 +117,6 @@ public class Player implements Serializable {
 
     /**
      * Getter function to return the color code of the player
-     *
      * @return color code of the player
      */
     public int getColorCode() {
@@ -107,12 +151,30 @@ public class Player implements Serializable {
     }
 
     /**
+     * This is function to set no of continents
+     * @param noOfContinents
+     */
+    public void setNoOfContinents(int noOfContinents) {
+        this.noOfContinents = noOfContinents;
+    }
+
+    /**
+     * This is function to get  no of continents
+     * @return
+     */
+    public int getNoOfContinents() {
+        return noOfContinents;
+    }
+
+    /**
      * This function is to increment no of countries by given count.
      *
      * @param count The increment count by which the no of countries to be incremented.
      */
     public void incrementCountries(final int count) {
         this.noOfCountries += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -131,6 +193,8 @@ public class Player implements Serializable {
      */
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -140,6 +204,8 @@ public class Player implements Serializable {
      */
     public void incrementArmies(final int count) {
         this.noOfArmies += count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -197,6 +263,16 @@ public class Player implements Serializable {
     }
 
     /**
+     * Setter function to update the list of cards owned by the player after exchange
+     * @param cards list of cards owned by the player after exchange
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    /**
      * Getter function to get the flag to determine game is over on not for respective player
      *
      * @return true if player's game is not over; otherwise return false.
@@ -217,6 +293,7 @@ public class Player implements Serializable {
     /**
      * This is reinforcement method.
      * It sets the no of reinforcement armies given to the player based on no of countries player owns.
+     *
      * @param gamePlay The GamePlay object.
      */
     public void reinforcementPhase(final GamePlay gamePlay) {
@@ -343,4 +420,32 @@ public class Player implements Serializable {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         setCards(gamePlay.getCards().get(randomIndex));
     }
+
+    /**
+     * Returns number of continents owned by player
+     * @param gamePlay current gameplay object
+     * @return
+     */
+    public int getContinentsOwnedByPlayer(GamePlay gamePlay){
+        int continentsOwnedByPlayer = 0;
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        for (Continent continent : gamePlay.getContinents().values()) {
+            if(continent.getCountries().containsAll(arrCountiesOwnedByPlayer)){
+                continentsOwnedByPlayer++;
+            }
+        }
+        return  continentsOwnedByPlayer;
+    }
+
+    /**
+     * Returns Percentage of map occupied by player
+     * @param gamePlay
+     * @return
+     */
+    public int getPercentageOfMapOwnedByPlayer(GamePlay gamePlay){
+        ArrayList<Country> arrCountiesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
+        int totalCountries = gamePlay.getCountries().values().size();
+        return (arrCountiesOwnedByPlayer.size()/totalCountries)*100;
+    }
+
 }
