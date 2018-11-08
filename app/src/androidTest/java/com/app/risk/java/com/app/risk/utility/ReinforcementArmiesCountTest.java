@@ -17,13 +17,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
-
+/**
+ * This class is used check the army count in the reinforcement phase
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
 public class ReinforcementArmiesCountTest {
     GamePlay gamePlay;
     Context context=null;
     StartupPhaseController startupphase=null;
     ReinforcementPhaseController reinforcementPhaseController=null;
     ArrayList<String> playerNames=new ArrayList<String>();
+
+    /**
+     * This method gets executed before the test case
+     * sets the gameplay instance with the values required for the testing
+     * and sets the context of the test case
+     */
     @Before
     public void setUp() {
         gamePlay=new GamePlay();
@@ -40,23 +51,29 @@ public class ReinforcementArmiesCountTest {
         countries.put("nepal",new Country("nepal",new Continent("europe",3)));
         countries.put("butan",new Country("butan",new Continent("USA",4)));
         gamePlay.setCountries(countries);
-        startupphase =new StartupPhaseController(gamePlay);
-        reinforcementPhaseController=new ReinforcementPhaseController(gamePlay);
+        startupphase =StartupPhaseController.getInstance().init(gamePlay);
+        reinforcementPhaseController=ReinforcementPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(),gamePlay);
     }
-
+    /**
+     * This method checks the army count in the reinforcement phase
+     */
     @Test
     public void reinforcementArmiesCountTest() {
         startupphase.assignInitialCountries();
         startupphase.assignInitialCountries();
         startupphase.placeInitialArmies();
         gamePlay.setCurrentPlayer();
-        assertTrue(reinforcementPhaseController.calculateReinforcementArmies()==3);
+        assertTrue(gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay)==3);
 
 
     }
-
+    /**
+     * This method gets executed after the test case has been executed
+     * its sets the gameplay to null
+     */
     @After
-    public void cleanUp() {
+    public void cleanUp()
+    {
         gamePlay=null;
     }
 }

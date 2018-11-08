@@ -15,16 +15,27 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
+/**
+ * This class is used check whether the graph is valid or not
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
 public class ValidConnectedGraphTest {
     private String fileLocation;
     Context context=null;
+    /**
+     * This method gets executed before the test case
+     * sets the file location and the context of the test case
+     */
     @Before
     public void setUp() {
         fileLocation = "3D.map";
         context = InstrumentationRegistry.getTargetContext();
     }
-
+    /**
+     * This method checks whether the graph is valid or not
+     */
     @Test
     public void connectedGraphTest() {
         MapReader mapReader=new MapReader();
@@ -37,9 +48,13 @@ public class ValidConnectedGraphTest {
             assertFalse(false);
         }
     }
-
+    /**
+     * This method gets executed after the test case has been executed
+     * its sets the file location to null
+     */
     @After
-    public void cleanUp() {
+    public void cleanUp()
+    {
         fileLocation = null;
     }
 }

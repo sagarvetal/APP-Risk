@@ -19,18 +19,32 @@ import java.io.InputStream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * This class is used check whether the map is read properly or not
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
 public class MapReaderTest {
     private String fileLocation;
-    Context context=null;
+    Context context = null;
+
+    /**
+     * This method gets executed before the test case
+     * sets the file location and the context of the test case
+     */
     @Before
     public void setUp() {
         fileLocation = "Test Read Map File.map";
         context = InstrumentationRegistry.getTargetContext();
     }
 
+    /**
+     * This method checks whether  the map is read properly or not
+     */
     @Test
     public void mapReaderTest() {
-        GamePlay gamePlay = MapReader.returnGamePlayFromFile(context,fileLocation);
+        GamePlay gamePlay = MapReader.returnGamePlayFromFile(context, fileLocation);
         assertNotNull(gamePlay);
         System.out.println("Continent list: " + gamePlay.getContinents().size());
         System.out.println("Territory list size: " + gamePlay.getCountries().size());
@@ -39,8 +53,13 @@ public class MapReaderTest {
 
     }
 
+    /**
+     * This method gets executed after the test case has been executed
+     * its sets the file location to null
+     */
     @After
-    public void cleanUp() {
+    public void cleanUp()
+    {
         fileLocation = null;
     }
 }

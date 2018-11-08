@@ -1,13 +1,21 @@
 package com.app.risk.java.com.app.risk;
 
+import com.app.risk.java.com.app.risk.utility.AllOutAttackTest;
+import com.app.risk.java.com.app.risk.utility.AttackPhaseTest;
+import com.app.risk.java.com.app.risk.utility.CardExchangePossibleTest;
+import com.app.risk.java.com.app.risk.utility.CheckAfterEachAttackTest;
 import com.app.risk.java.com.app.risk.utility.ConnectedGraphTest;
 import com.app.risk.java.com.app.risk.utility.DisConnectedGraphTest;
+import com.app.risk.java.com.app.risk.utility.ExchangeCardForArmiesTest;
 import com.app.risk.java.com.app.risk.utility.FortificationConnectedTest;
 import com.app.risk.java.com.app.risk.utility.FortificationUnConnectedTest;
 import com.app.risk.java.com.app.risk.utility.InvalidMapTest;
 import com.app.risk.java.com.app.risk.utility.MapReaderTest;
 import com.app.risk.java.com.app.risk.utility.OneContinentCheckTest;
+import com.app.risk.java.com.app.risk.utility.PreAttackAdjacentCountryTest;
+import com.app.risk.java.com.app.risk.utility.PreAttackSufficientArmyTest;
 import com.app.risk.java.com.app.risk.utility.ReinforcementArmiesCountTest;
+import com.app.risk.java.com.app.risk.utility.RemoveCardsAfterExchange;
 import com.app.risk.java.com.app.risk.utility.SaveMapTest;
 import com.app.risk.java.com.app.risk.utility.StartUpPhaseAssignArmiesTest;
 import com.app.risk.java.com.app.risk.utility.StartUpPhaseAssignCountriesTest;
@@ -20,11 +28,13 @@ import com.app.risk.java.com.app.risk.utility.ValidConnectedGraphTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/**
- * Created by Akhila Chilukuri on 07-Nov-17.
- * Tests for Map Validation
- */
 
+/**
+ * This class is the test suite for all the test cases
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
 @RunWith(Suite.class)
 
 /**
@@ -46,6 +56,14 @@ import org.junit.runners.Suite;
         StartUpPhaseAssignArmiesTest.class,
         StartUpPhaseAssignCountriesTest.class,
         StartUpPhaseInitialArmies.class,
+        PreAttackAdjacentCountryTest.class,
+        PreAttackSufficientArmyTest.class,
+        CheckAfterEachAttackTest.class,
+        AttackPhaseTest.class,
+        AllOutAttackTest.class,
+        CardExchangePossibleTest.class,
+        ExchangeCardForArmiesTest.class,
+        RemoveCardsAfterExchange.class,
 })
 public class MapValidationTestSuite {
 }

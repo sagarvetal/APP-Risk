@@ -193,11 +193,15 @@ public class MapReader {
 
         final ArrayList<String> mapList = new ArrayList<>();
         final String rootPath = context.getFilesDir().getAbsolutePath();
-        final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
+        /*final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         System.out.println(mapDir);
         for (final String file : mapDir.list()) {
             mapList.add(file);
-        }
+        }*/
+        mapList.add("cliff.map");
+        mapList.add("twin.map");
+        mapList.add("world.map");
+
         return mapList;
     }
 
