@@ -103,8 +103,9 @@ public class MapReader {
                             break;
 
                         String[] words = line.split("=");
-                        continentList.add(new Continent(words[0], Integer.parseInt(words[1])));
-                        continentHashMap.put(words[0], new Continent(words[0], Integer.parseInt(words[1])));
+                        final Continent continent = new Continent(words[0].trim(), Integer.parseInt(words[1]));
+                        continentList.add(continent);
+                        continentHashMap.put(continent.getNameOfContinent(), continent);
                     }
 
                     finalGamePlay.setContinents(continentHashMap);
@@ -126,13 +127,17 @@ public class MapReader {
                         countryHashMap.put(words[0], new Country(words[0], finalGamePlay.getContinents().get(words[3]), setAdjacentCountriesListString(words)));
 
                         if (continentBelongsToContinentList(words[3])) {
-                            Continent tempContinent = getContinentByName(words[3]);
-                            if (tempContinent != null) {
+                            Continent continent = finalGamePlay.getContinents().get(words[3]);
+                            if (continent != null) {
+
+                                final Country country = new Country(words[0].trim(), continent, setAdjacentCountriesListString(words));
+                                continent.setCountries(country);
+                                countryHashMap.put(country.getNameOfCountry(), country);
 
                                 if (countryGameMapList != null && countryGameMapList.containsKey(words[0])) {
-                                    countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(tempContinent);
+                                    countryGameMapList.get(words[0]).getFromCountry().setBelongsToContinent(continent);
                                 } else {
-                                    countryGameMapList.put(words[0], new GameMap(new Country(words[0], tempContinent)));
+                                    countryGameMapList.put(words[0], new GameMap(new Country(words[0], continent)));
                                 }
 
                                 GameMap gameMapForFinalList = countryGameMapList.get(words[0]);
