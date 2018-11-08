@@ -249,4 +249,24 @@ public class GamePlay implements Serializable {
             playerIdQueue.add(player.getId());
         }
     }
+
+    public boolean cardsExchangeable(List<Card> cardsToExchange){
+
+        if(cardsToExchange.size() == 3){
+            if(cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else if(!cardsToExchange.get(0).getType().equals(cardsToExchange.get(1).getType()) &&
+                    !cardsToExchange.get(0).getType().equals(cardsToExchange.get(2).getType()) &&
+                    !cardsToExchange.get(1).getType().equals(cardsToExchange.get(2).getType())){
+                return true;
+            } else {
+                System.out.println("Card similarity rule not satisfied.");
+                return false;
+            }
+        } else {
+            System.out.println("Didn't choose enough cards");
+            return false;
+        }
+    }
 }

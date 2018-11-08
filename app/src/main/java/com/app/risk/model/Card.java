@@ -12,7 +12,7 @@ import java.util.List;
 public class Card implements Serializable {
 
     private String type;
-
+    private boolean isSelected;
     /**
      * This is default constructor.
      */
@@ -46,23 +46,19 @@ public class Card implements Serializable {
         this.type = type;
     }
 
-    public boolean cardsExchangeable(List<Card> cardsToExchange){
+    /**
+     *
+     * @return
+     */
+    public boolean isSelected() {
+        return isSelected;
+    }
 
-        if(cardsToExchange.size() == 3){
-            if(cardsToExchange.get(0).type.equals(cardsToExchange.get(1).type) &&
-                    cardsToExchange.get(0).type.equals(cardsToExchange.get(2).type)){
-                return true;
-            } else if(!cardsToExchange.get(0).type.equals(cardsToExchange.get(1).type) &&
-                    !cardsToExchange.get(0).type.equals(cardsToExchange.get(2).type) &&
-                    !cardsToExchange.get(1).type.equals(cardsToExchange.get(2).type)){
-                return true;
-            } else {
-                System.out.println("Card similarity rule not satisfied.");
-                return false;
-            }
-        } else {
-            System.out.println("Didn't choose enough cards");
-            return false;
-        }
+    /**
+     *
+     * @param selected
+     */
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
