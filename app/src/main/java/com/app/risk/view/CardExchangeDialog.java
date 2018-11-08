@@ -19,20 +19,34 @@ import com.app.risk.model.Card;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dialog which provides UI to facilitate exchange of cards by player
+ *
+ * @author Akshita Angara
+ * @version 1.0.0
+ */
 public class CardExchangeDialog extends AlertDialog {
 
     private Context context;
     CardExchangeController cardExchangeController;
     List<Card> cardList;
 
+    /**
+     * Default Construtor
+     * @param context current application context
+     * @param cardExchangeController card exchange controller
+     */
     public CardExchangeDialog(@NonNull Context context, CardExchangeController cardExchangeController) {
         super(context);
         this.context = context;
         this.cardExchangeController = cardExchangeController;
         cardList = cardExchangeController.getCardList();
-
     }
 
+    /**
+     * {@inheritDoc}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +54,9 @@ public class CardExchangeDialog extends AlertDialog {
         setUp();
     }
 
+    /**
+     * Class to set up the dialog with the adapter, buttons, bind it with data and provide listeners.
+     */
     public void setUp() {
 
         final ListView exchangeCards = findViewById(R.id.player_exchange_cardlist);

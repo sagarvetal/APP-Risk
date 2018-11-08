@@ -31,16 +31,23 @@ public class GamePlay implements Serializable {
     private Queue<Integer> playerIdQueue;
     private final int[] colorCodes = {Color.RED,Color.GREEN,Color.BLUE
             ,Color.DKGRAY,Color.MAGENTA,Color.YELLOW};
+    private int armiesInExchangeOfCards;
 
+    /**
+     * Getter method to set the number of armies to be awarded in exchange of cards
+     * @return number of armies that will be awarded in exchange of cards
+     */
     public int getArmiesInExchangeOfCards() {
         return armiesInExchangeOfCards;
     }
 
+    /**
+     * Setter method to set number of armies to be awarded in exchange of cards
+     * @param armiesInExchangeOfCards number of armies that will be awarded in exchange of cards
+     */
     public void setArmiesInExchangeOfCards(int armiesInExchangeOfCards) {
         this.armiesInExchangeOfCards = armiesInExchangeOfCards;
     }
-
-    private int armiesInExchangeOfCards;
 
     /**
      * This is a default constructor.
@@ -250,6 +257,11 @@ public class GamePlay implements Serializable {
         }
     }
 
+    /**
+     * Check if the cards selected by the player can be exchanged based on if they're similar or not
+     * @param cardsToExchange list of cards selected by the player
+     * @return true if all cards are same or all cards are completely different, false otherwise
+     */
     public boolean cardsExchangeable(List<Card> cardsToExchange){
 
         if(cardsToExchange.size() == 3){

@@ -14,31 +14,63 @@ import com.app.risk.model.Card;
 
 import java.util.List;
 
+/**
+ * Adapter class to display the list of cards owned by the player to facilitate exchange
+ *
+ * @author Akshita Angara
+ * @version 1.0.0
+ */
 public class CardExchangeAdapter extends BaseAdapter {
 
     List<Card> cardsOfPlayer;
     private Context context;
 
+    /**
+     * Default constructor
+     * @param cardsOfPlayer list of cards owned by the player
+     * @param context application context
+     */
     public CardExchangeAdapter(List<Card> cardsOfPlayer, Context context) {
         this.cardsOfPlayer = cardsOfPlayer;
         this.context = context;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return count of number of cards of player
+     */
     @Override
     public int getCount() {
         return cardsOfPlayer.size();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param position index of card
+     * @return card at index passed as parameter
+     */
     @Override
     public Card getItem(int position) {
         return cardsOfPlayer.get(position);
     }
 
+    /**
+     * {@inheritDoc}
+     * @param position
+     * @return position
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Returns the view after binding cards to the view
+     * @param position index of card
+     * @param convertView convert view
+     * @param parent parent
+     * @return view
+     */
     @SuppressLint("ResourceAsColor")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

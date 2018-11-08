@@ -47,16 +47,16 @@ public class Card implements Serializable {
     }
 
     /**
-     *
-     * @return
+     * Getter method to return if the card is selected or not
+     * @return check if card is selected
      */
     public boolean isSelected() {
         return isSelected;
     }
 
     /**
-     *
-     * @param selected
+     * Setter method to set the card as selected or not
+     * @param selected selected value of card
      */
     public void setSelected(boolean selected) {
         isSelected = selected;
