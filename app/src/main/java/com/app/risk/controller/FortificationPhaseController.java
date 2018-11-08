@@ -114,6 +114,7 @@ public class FortificationPhaseController {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 fortifyCountry(countries.get(position), gamePlay.getCountries().get(destinationCountry), numberPicker.getValue());
+                gamePlay.getCurrentPlayer().assignCards(gamePlay);
                 getActivity().notifyPlayScreenRVAdapter();
                 Toast.makeText(context, "Armies moved from " + countries.get(position).getNameOfCountry() + " to "
                         + destinationCountry, Toast.LENGTH_SHORT).show();
@@ -197,7 +198,6 @@ public class FortificationPhaseController {
      */
     public void fortifyCountry(final Country fromCountry, final Country toCountry, final int noOfArmies) {
         gamePlay.getCurrentPlayer().fortificationPhase(fromCountry, toCountry, noOfArmies);
-        gamePlay.getCurrentPlayer().assignCards(gamePlay);
     }
 
     /**

@@ -92,6 +92,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         init();
         manageFloatingButtonTransitions();
         startGame();
+
+
     }
 
     /**
@@ -106,7 +108,15 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size()>0) {
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+
+                        if(gamePlay.getCurrentPlayer().getCards().size()>0 && gamePlay.getCurrentPlayer().isCardsExchangedInRound()==false) {
+
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
@@ -122,6 +132,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
                 }
@@ -199,6 +210,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
+                    gamePlay.getCurrentPlayer().setCardsExchangedInRound(false);
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);

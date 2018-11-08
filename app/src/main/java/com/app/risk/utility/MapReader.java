@@ -4,6 +4,7 @@ package com.app.risk.utility;
 import android.content.Context;
 
 
+import com.app.risk.R;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,9 +76,12 @@ public class MapReader {
 
         try {
 
-            String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
-            File mapDirectory = new File(mapDir);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(mapDirectory, fileName))));
+            //String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
+            //File mapDirectory = new File(mapDir);
+            InputStream inputStream = context.getResources().openRawResource(
+                    context.getResources().getIdentifier(fileName,
+                            "raw", context.getPackageName()));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             while ((line = bufferedReader.readLine()) != null) {
 
@@ -192,12 +197,21 @@ public class MapReader {
     public static ArrayList<String> getMapList(Context context) {
 
         final ArrayList<String> mapList = new ArrayList<>();
-        final String rootPath = context.getFilesDir().getAbsolutePath();
+        /*final String rootPath = context.getFilesDir().getAbsolutePath();
         final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         System.out.println(mapDir);
         for (final String file : mapDir.list()) {
             mapList.add(file);
+        }*/
+        /*mapList.add("cliff.map");
+        mapList.add("twin.map");
+        mapList.add("world.map");*/
+
+        Field[] fields = R.raw.class.getFields();
+        for(int count=0; count < fields.length; count++){
+            mapList.add(fields[count].getName());
         }
+
         return mapList;
     }
 
