@@ -196,6 +196,17 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
+     * This function is to decrement no of countries by given count.
+     *
+     * @param count The decrement count by which the no of countries to be incremented.
+     */
+    public void decrementCountries(final int count) {
+        this.noOfCountries -= count;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    /**
      * Getter function to return the no of armies assigned to the player
      *
      * @return no of armies
@@ -230,7 +241,10 @@ public class Player extends Observable implements Serializable {
      * @param count The decrement count by which the no of armies to be decremented.
      */
     public void decrementArmies(final int count) {
+
         this.noOfArmies -= count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**

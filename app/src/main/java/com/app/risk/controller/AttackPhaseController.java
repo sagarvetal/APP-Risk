@@ -165,7 +165,9 @@ public class AttackPhaseController implements View.OnClickListener {
                     if(defendingCountry.getNoOfArmies() == 0){
                         mainAlertDialog.dismiss();
                         Toast.makeText(context, "You won the country " + defendingCountry.getNameOfCountry(), Toast.LENGTH_SHORT).show();
+                        defendingCountry.getPlayer().decrementCountries(1);
                         defendingCountry.setPlayer(attackingCountry.getPlayer());
+                        defendingCountry.getPlayer().incrementCountries(1);
                         countries.add(defendingCountry);
                         showDialogBoxToMoveArmiesAfterAttack();
                     } else if(attackingCountry.getNoOfArmies() == 1) {
