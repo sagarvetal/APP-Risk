@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.UtilityOld;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -15,14 +15,13 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 /**
- * This class is used check whether the country in the map is unique or not
+ * This class is used check whether the subgraph is connected or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class MapReaderTest {
+public class SubGraphConnectedTest {
     private String fileLocation;
     Context context = null;
     /**
@@ -31,19 +30,19 @@ public class MapReaderTest {
      */
     @Before
     public void setUp() {
-        fileLocation = "Read Map File.map";
+        fileLocation = "src\\test\\java\\com\\app\\risk\\resources\\Test Read Map File.map";
         context = InstrumentationRegistry.getTargetContext();
     }
     /**
-     * This method checks whether the country in the map is unique or not
+     * This method checks whether the subgraph is connected or not
      */
     @Test
-    public void uniqueCountryTest() {
+    public void subGraphConnectedTest() {
         MapReader mapReader=new MapReader();
         MapVerification mapVerification = new MapVerification();
         List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context,fileLocation);
         mapVerification.mapVerification(listGameMap);
-        if (mapVerification.uniqueCountries()) {
+        if (mapVerification.checkContinentIsConnectedSubgraph()) {
             assertTrue(true);
         } else {
             assertFalse(false);

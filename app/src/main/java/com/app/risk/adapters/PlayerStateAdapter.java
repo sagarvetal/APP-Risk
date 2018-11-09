@@ -81,7 +81,7 @@ public class PlayerStateAdapter extends BaseAdapter {
         TextView textView2 = view.findViewById(R.id.txt_player_data2);
         textView2.setText("Continents : " + Integer.toString(player.getContinentsOwnedByPlayer(gamePlay)));
         TextView textView3 = view.findViewById(R.id.txt_player_data3);
-        textView3.setText("Percentage Of Map Owned : " + Integer.toString(player.getPercentageOfMapOwnedByPlayer(gamePlay)));
+        textView3.setText("Percentage Of Map Owned : " + Float.toString(player.getPercentageOfMapOwnedByPlayer(gamePlay)));
         TextView textView4 = view.findViewById(R.id.txt_player_data4);
         textView4.setText("Armies : " + Integer.toString(player.getNoOfArmies()));
 

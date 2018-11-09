@@ -1,7 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+package com.app.risk.java.com.app.risk.UtilityOld;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -82,7 +79,7 @@ public class PercentageOfMapOwnedByPlayerTest {
      */
     @Test
     public void percentageOwnedByPlayerTest() {
-        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50 );
+        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50.0 );
     }
 
     /**

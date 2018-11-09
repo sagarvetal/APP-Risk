@@ -1,7 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+package com.app.risk.java.com.app.risk.view;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -19,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Class to test continents owned by player
  */
-public class ContinentsOwnedByPlayerTest {
+public class PlayScreenActivityTest {
     GamePlay gamePlay = new GamePlay();
 
     /**
