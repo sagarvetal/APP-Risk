@@ -128,7 +128,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        if(gamePlay.getCurrentPlayer().isNewCountryConquered()){
+                            gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                            gamePlay.getCurrentPlayer().setNewCountryConquered(false);
+                        }
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
