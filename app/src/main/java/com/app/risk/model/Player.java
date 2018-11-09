@@ -6,6 +6,7 @@ import com.app.risk.utility.LogManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 
@@ -508,8 +509,8 @@ public class Player extends Observable implements Serializable {
      * @param countries List of countries owned by player.
      * @return true if the player conquered the whole map, otherwise false.
      */
-    public boolean isPlayerWon(final ArrayList<Country> countries) {
-        for(final Country country : countries) {
+    public boolean isPlayerWon(final HashMap<String, Country> countries) {
+        for(final Country country : countries.values()) {
             if(country.getPlayer().getId() != getId()){
                 return false;
             }
