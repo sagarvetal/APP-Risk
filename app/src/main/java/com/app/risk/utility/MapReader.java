@@ -75,8 +75,8 @@ public class MapReader {
         try {
 
             String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
-            File mapDirectory = new File(mapDir);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(mapDir)));
+            File mapDirectory = new File(mapDir, fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(mapDirectory)));
 
             while ((line = bufferedReader.readLine()) != null) {
 

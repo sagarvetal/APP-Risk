@@ -284,6 +284,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();
            pArmies.setText("" + ((Player) observable).getNoOfArmies());
+           pCountries.setText("" + ((Player) observable).getNoOfCountries());
        }
     }
 
