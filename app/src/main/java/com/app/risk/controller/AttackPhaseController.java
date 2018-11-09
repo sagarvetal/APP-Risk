@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.R;
@@ -169,6 +168,7 @@ public class AttackPhaseController implements View.OnClickListener {
                         defendingCountry.setPlayer(attackingCountry.getPlayer());
                         defendingCountry.getPlayer().incrementCountries(1);
                         countries.add(defendingCountry);
+                        gamePlay.getCurrentPlayer().setNewCountryConquered(true);
                         showDialogBoxToMoveArmiesAfterAttack();
                     } else if(attackingCountry.getNoOfArmies() == 1) {
                         mainAlertDialog.dismiss();

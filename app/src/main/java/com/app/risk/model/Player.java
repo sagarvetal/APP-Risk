@@ -1,7 +1,6 @@
 package com.app.risk.model;
 
 import com.app.risk.constants.GamePlayConstants;
-import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.utility.LogManager;
 
 import java.io.Serializable;
@@ -32,6 +31,7 @@ public class Player extends Observable implements Serializable {
     private boolean isActive;
     private int armiesInExchangeOfCards;
     private boolean cardsExchangedInRound;
+    private boolean isNewCountryConquered;
 
     /**
      * Check if the player has exchanged cards in ongoing round
@@ -322,6 +322,24 @@ public class Player extends Observable implements Serializable {
         isActive = active;
     }
 
+
+    /**
+     * Getter function to get the flag to determine whether player conquered new country.
+     * @return true if player conquered new country, otherwise return false.
+     */
+    public boolean isNewCountryConquered() {
+        return isNewCountryConquered;
+    }
+
+    /**
+     * Setter function to set the flag to determine whether player conquered new country.
+     * @param isNewCountryConquered true if player conquered new country, otherwise false.
+     */
+    public void setNewCountryConquered(boolean isNewCountryConquered) {
+        this.isNewCountryConquered = isNewCountryConquered;
+    }
+
+
     /**
      * This is reinforcement method.
      * It sets the no of reinforcement armies given to the player based on no of countries player owns.
@@ -330,13 +348,17 @@ public class Player extends Observable implements Serializable {
      */
     public void reinforcementPhase(final GamePlay gamePlay) {
         final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
-        LogManager.getInstance().writeLog("Reinforcement armies awarded : " + reinforcementArmies);
-        setReinforcementArmies(reinforcementArmies);
-        incrementArmies(reinforcementArmies);
+        final int continentValue = getContinentValue(gamePlay);
+        LogManager.getInstance().writeLog("Total reinforcement armies awarded : " + reinforcementArmies);
+        LogManager.getInstance().writeLog("Total continent control value awarded : " + continentValue);
+        setReinforcementArmies(reinforcementArmies + continentValue);
+        incrementArmies(reinforcementArmies + continentValue);
     }
 
     /**
      * This method calculates the no of reinforcement armies.
+     * @param gamePlay The GamePlay object.
+     * @return The no of reinforcement armies given to the player based on no of countries player owns.
      */
     public int calculateReinforcementArmies(final GamePlay gamePlay) {
         final ArrayList<Country> countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(getId());
@@ -345,6 +367,30 @@ public class Player extends Observable implements Serializable {
             return reinforcementArmies;
         }
         return GamePlayConstants.MIN_REINFORCEMENT_AMRIES;
+    }
+
+    /**
+     * This method gets continent value if player holds the complete continent.
+     * @param gamePlay The GamePlay object.
+     * @return The continent value if player holds the complete continent.
+     */
+    public int getContinentValue(final GamePlay gamePlay){
+        int continentValue = 0;
+        for(final Continent continent : gamePlay.getContinents().values()){
+            boolean isWholeContinentOccupied = true;
+            for(final Country country : continent.getCountries()) {
+                if(getId() != gamePlay.getCountries().get(country.getNameOfCountry()).getPlayer().getId()) {
+                    isWholeContinentOccupied = false;
+                    break;
+                }
+            }
+            if(isWholeContinentOccupied) {
+                LogManager.getInstance().writeLog(getName() + " holds complete continent " + continent);
+                LogManager.getInstance().writeLog(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
+                continentValue += continent.getArmyControlValue();
+            }
+        }
+        return continentValue;
     }
 
     /**
