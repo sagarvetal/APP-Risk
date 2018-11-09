@@ -11,6 +11,7 @@ import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -70,6 +71,8 @@ public class FortificationPhaseController {
      */
     public void showFortificationDialogBox(final int position, final ArrayList<Country> countries){
         if(countries.get(position).getNoOfArmies() > 1){
+            LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
+
             final ArrayList<String> reachableCountries  = getReachableCountries(countries.get(position), countries);
             final String[] reachableCountryArray = new String[reachableCountries.size()];
             reachableCountries.toArray(reachableCountryArray);
@@ -86,6 +89,7 @@ public class FortificationPhaseController {
                     .show();
         }
         else{
+            LogManager.getInstance().writeLog(countries.get(position) + " must have armies more than one to move.");
             Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
         }
     }
@@ -114,10 +118,13 @@ public class FortificationPhaseController {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 fortifyCountry(countries.get(position), gamePlay.getCountries().get(destinationCountry), numberPicker.getValue());
+
+                final String message = numberPicker.getValue() + " armies moved from " + countries.get(position).getNameOfCountry() + " to " + destinationCountry;
+                LogManager.getInstance().writeLog(message);
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+
                 gamePlay.getCurrentPlayer().assignCards(gamePlay);
                 getActivity().notifyPlayScreenRVAdapter();
-                Toast.makeText(context, "Armies moved from " + countries.get(position).getNameOfCountry() + " to "
-                        + destinationCountry, Toast.LENGTH_SHORT).show();
                 getActivity().changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
             }
         });
