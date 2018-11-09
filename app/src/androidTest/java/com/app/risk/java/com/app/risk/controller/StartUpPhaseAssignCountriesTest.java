@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -6,10 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
-import com.app.risk.model.GameMap;
 import com.app.risk.model.GamePlay;
-import com.app.risk.utility.MapReader;
-import com.app.risk.utility.MapVerification;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,11 +14,8 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * This class is used check number of countries assigned in the startup phase

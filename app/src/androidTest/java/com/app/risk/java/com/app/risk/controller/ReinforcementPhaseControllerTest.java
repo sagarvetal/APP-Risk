@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used check the army count in the reinforcement phase
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class ReinforcementArmiesCountTest {
+public class ReinforcementPhaseControllerTest {
     GamePlay gamePlay;
     Context context=null;
     StartupPhaseController startupphase=null;
