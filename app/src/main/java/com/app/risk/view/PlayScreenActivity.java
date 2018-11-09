@@ -114,7 +114,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
-
+                            cardExchangeDialog.setCancelable(false);
                             cardExchangeDialog.show();
                         } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
                             displayAlert("No cards", "No cards to show.");
