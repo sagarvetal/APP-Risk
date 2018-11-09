@@ -92,6 +92,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         init();
         manageFloatingButtonTransitions();
         startGame();
+
+        addObserversToPlayer();
     }
 
     /**
@@ -106,22 +108,28 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        if(gamePlay.getCurrentPlayer().getCards().size()>0) {
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
+                        if(gamePlay.getCurrentPlayer().getCards().size()>0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
 
                             cardExchangeDialog.show();
-                        } else {
+                        } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
                             displayAlert("No cards", "No cards to show.");
+                        } else if (gamePlay.getCurrentPlayer().isCardsExchangedInRound()){
+                            displayAlert("Exchanged", "Cards have already been exchanged for this round.");
                         }
 
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.FORTIFICATION_PHASE+" phase.");
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
+                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
                 }
@@ -171,10 +179,16 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
-
+                    LogManager.getInstance().deleteLog();
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                     currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
+                    gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
+                    gamePlay.setCurrentPlayer();
+
+                    LogManager.getInstance().writeLog("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
+                    LogManager.getInstance().writeLog("\nPhase : " + phase);
+
                     ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
                     adapter = new PlayScreenRVAdapter(this, gamePlay, recyclerView);
@@ -191,7 +205,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                                                          currentPlayer.getName(),
                                                          currentPlayer.getReinforcementArmies());
                     displayAlert("", message);
-                    displaySnackBar("Reinforcement : " + gamePlay.getCurrentPlayer().getName());
                     ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
                     playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
                     listPlayerState = findViewById(R.id.list_play_view);
@@ -199,19 +212,20 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
+                    gamePlay.getCurrentPlayer().setCardsExchangedInRound(false);
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
+                    LogManager.getInstance().writeLog("\nPhase : " + phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    displaySnackBar("Attack : " + gamePlay.getCurrentPlayer().getName());
                     break;
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
+                    LogManager.getInstance().writeLog("\nPhase : " + phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                    displaySnackBar("Fortification : " + gamePlay.getCurrentPlayer().getName());
                     break;
             }
         }
@@ -223,16 +237,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     public void notifyPlayScreenRVAdapter() {
         adapter.notifyDataSetChanged();
     }
-
-    /**
-     * This method is used to display given using snackbar
-     * @param message : main message to be displayed
-     */
-    public void displaySnackBar(String message){
-        final Snackbar make = Snackbar.make(cardView, message, Snackbar.LENGTH_LONG);
-        make.show();
-    }
-
 
     /**
      * This method is used to display the data using alert dialog
@@ -279,7 +283,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();
+           pArmies.setText("" + ((Player) observable).getNoOfArmies());
+           pCountries.setText("" + ((Player) observable).getNoOfCountries());
        }
     }
 
+    /**
+     * Bind each player with the observer object
+     */
+    public void addObserversToPlayer(){
+        for(Player player: gamePlay.getPlayers().values()){
+            player.addObserver(this);
+        }
+    }
 }

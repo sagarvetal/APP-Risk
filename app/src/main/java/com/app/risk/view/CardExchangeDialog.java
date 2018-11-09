@@ -2,6 +2,7 @@ package com.app.risk.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,6 +45,7 @@ public class CardExchangeDialog extends AlertDialog implements Observer {
         this.context = context;
         this.cardExchangeController = cardExchangeController;
         cardList = cardExchangeController.getCardList();
+        cardExchangeController.getPlayer().addObserver(this);
     }
 
     /**
@@ -103,11 +105,20 @@ public class CardExchangeDialog extends AlertDialog implements Observer {
                     CardExchangeDialog.super.dismiss();
                 } else {
                     if (selectedCards.size() == 3) {
-                        String message = cardExchangeController.exchangeArmiesForCards(selectedCards) +
-                                " armies have been exchanged for cards.";
-                        new AlertDialog.Builder(context)
-                                .setTitle("Cards exchanged").setMessage(message)
-                                .setPositiveButton("Ok",null).create().show();
+                        int armiesAwarded = cardExchangeController.exchangeArmiesForCards(selectedCards);
+                        if(armiesAwarded != -1) {
+                            String message = armiesAwarded + " armies have been exchanged for cards.";
+                            new AlertDialog.Builder(context)
+                                    .setTitle("Cards exchanged").setMessage(message)
+                                    .setPositiveButton("Ok", new OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            CardExchangeDialog.super.dismiss();
+                                        }
+                                    }).create().show();
+                        } else {
+                            Toast.makeText(context, "Selected cards can't be exchanged.", Toast.LENGTH_SHORT).show();
+                        }
                     } else if (selectedCards.size() < 3) {
                         Toast.makeText(context, "Less than 3 cards have been selected!", Toast.LENGTH_SHORT).show();
                     } else {

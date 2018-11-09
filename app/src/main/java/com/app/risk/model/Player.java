@@ -2,6 +2,7 @@ package com.app.risk.model;
 
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.utility.LogManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,14 +31,31 @@ public class Player extends Observable implements Serializable {
     private List<Card> cards;
     private boolean isActive;
     private int armiesInExchangeOfCards;
+    private boolean cardsExchangedInRound;
+
+    /**
+     * Check if the player has exchanged cards in ongoing round
+     * @return true if cards have been exchanged, false otherwise
+     */
+    public boolean isCardsExchangedInRound() {
+        return cardsExchangedInRound;
+    }
+
+    /**
+     * Set true or false depending on if the player has exchanged cards in ongoing round
+     * @param cardsExchangedInRound true if cards have been exchanged, false otherwise
+     */
+    public void setCardsExchangedInRound(boolean cardsExchangedInRound) {
+        this.cardsExchangedInRound = cardsExchangedInRound;
+    }
 
     /**
      * This is a default constructor and it initializes the card list.
      */
     public Player() {
-
         this.cards = new ArrayList<>();
         this.armiesInExchangeOfCards = 0;
+        cardsExchangedInRound = false;
     }
 
     /**
@@ -179,6 +197,17 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
+     * This function is to decrement no of countries by given count.
+     *
+     * @param count The decrement count by which the no of countries to be incremented.
+     */
+    public void decrementCountries(final int count) {
+        this.noOfCountries -= count;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    /**
      * Getter function to return the no of armies assigned to the player
      *
      * @return no of armies
@@ -211,6 +240,7 @@ public class Player extends Observable implements Serializable {
      * @param count The decrement count by which the no of armies to be decremented.
      */
     public void decrementArmies(final int count) {
+
         this.noOfArmies -= count;
         setChanged();
         notifyObservers(this);
@@ -232,6 +262,8 @@ public class Player extends Observable implements Serializable {
      */
     public void setReinforcementArmies(int reinforcementArmies) {
         this.reinforcementArmies = reinforcementArmies;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -296,6 +328,7 @@ public class Player extends Observable implements Serializable {
      */
     public void reinforcementPhase(final GamePlay gamePlay) {
         final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
+        LogManager.getInstance().writeLog("Reinforcement armies awarded : " + reinforcementArmies);
         setReinforcementArmies(reinforcementArmies);
         incrementArmies(reinforcementArmies);
     }
@@ -322,9 +355,15 @@ public class Player extends Observable implements Serializable {
      */
     public StringBuilder performAllOutAttack(final Country attackingCountry, final Country defendingCountry){
         final StringBuilder attackResult = new StringBuilder();
+        int attackCount = 0;
         while(attackingCountry.getNoOfArmies() > 1 && defendingCountry.getNoOfArmies() != 0){
             final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
             final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
+
+            LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
+            LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
+            LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+
             final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
             attackResult.append(result);
             attackResult.append("-------------------------------------------\n");
@@ -370,7 +409,7 @@ public class Player extends Observable implements Serializable {
 
         attackResult.append("\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
-
+        LogManager.getInstance().writeLog(attackResult.toString());
         return attackResult;
     }
 
@@ -399,6 +438,41 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
+     * This method checks whether any country belonging to player has more than one armies.
+     * @param gamePlay The GamePlay object.
+     * @param countries List of countries owned by player.
+     * @return true if any country belonging to player has more than one armies, otherwise false.
+     */
+    public boolean isMoreAttackPossible(final GamePlay gamePlay, final ArrayList<Country> countries) {
+        for(final Country country : countries) {
+            if(country.getNoOfArmies() > 1){
+                for(final String adjacentCountry : country.getAdjacentCountries()){
+                    if(gamePlay.getCountries().get(adjacentCountry).getPlayer().getId() != getId()){
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * This method checks whether the player conquered the whole map.
+     * @param countries List of countries owned by player.
+     * @return true if the player conquered the whole map, otherwise false.
+     */
+    public boolean isPlayerWon(final ArrayList<Country> countries) {
+        for(final Country country : countries) {
+            if(country.getPlayer().getId() != getId()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * This is fortification method.
      * It moves armies from one country to another country.
      * @param fromCountry The country from where player wants to move armies.
@@ -416,7 +490,9 @@ public class Player extends Observable implements Serializable {
      */
     public void assignCards(final GamePlay gamePlay) {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
-        setCards(gamePlay.getCards().get(randomIndex));
+        final Card card = new Card(gamePlay.getCards().get(randomIndex).getType());
+        setCards(card);
+        LogManager.getInstance().writeLog(card.getType() + " has been awarded to " + getName());
     }
 
     /**

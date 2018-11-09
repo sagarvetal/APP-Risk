@@ -3,6 +3,7 @@ package com.app.risk.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +25,10 @@ import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.AttackPhaseDialogManager;
+import com.app.risk.view.MainScreenActivity;
+import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
 
@@ -169,15 +173,50 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                     final Country attackingCountry = countries.get(getAdapterPosition());
                     final Country defendingCountry = gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position));
 
+                    LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
                     if(attacker.equals(defender)){
+                        LogManager.getInstance().writeLog("Attacker can not attack on their own country");
                         Toast.makeText(context, "Attacker can not attack on their own country", Toast.LENGTH_SHORT).show();
                     } else{
                         if(attackingCountry.getNoOfArmies() > 1){
                             AttackPhaseController.getInstance().init(context, gamePlay).initiateAttack(attackingCountry, defendingCountry, recyclerView, countries);
                         } else{
+                            LogManager.getInstance().writeLog("Attacking country must have more than one armies");
                             Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
                         }
                     }
+
+                    if(gamePlay.getCurrentPlayer().isPlayerWon((ArrayList<Country>) gamePlay.getCountries().values())) {
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has won the game.");
+                        Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(context)
+                                .setMessage("You won the game!!!")
+                                .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        context.startActivity(new Intent(context.getApplicationContext(), MainScreenActivity.class));
+                                    }
+                                })
+                                .setTitle("Congratulations!!!")
+                                .setCancelable(false)
+                                .create().show();
+
+                    } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
+                        Toast.makeText(context, "You can not do more attacks as you do not have enough armies.", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(context)
+                                .setMessage("You can not do more attacks as you do not have enough armies.")
+                                .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        phaseManager.changePhase(GamePlayConstants.FORTIFICATION_PHASE);
+                                    }
+                                })
+                                .setTitle("Alert")
+                                .setCancelable(false)
+                                .create().show();
+                    }
+
                     break;
             }
         }

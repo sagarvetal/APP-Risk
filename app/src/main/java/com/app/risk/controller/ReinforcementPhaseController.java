@@ -10,6 +10,7 @@ import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -62,8 +63,6 @@ public class ReinforcementPhaseController {
      * This method starts the reinforcement phase.
      */
     public void start() {
-        gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
-        gamePlay.setCurrentPlayer();
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay);
     }
 
@@ -75,6 +74,7 @@ public class ReinforcementPhaseController {
     public void showReinforcementDialogBox(final int position, final ArrayList<Country> countries){
         final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
+        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + countries.get(position).getNameOfCountry());
 
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
         reinforcementDialogBox.setView(view);
@@ -89,8 +89,12 @@ public class ReinforcementPhaseController {
             public void onClick(DialogInterface dialog, int which) {
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
                 countries.get(position).incrementArmies(numberPicker.getValue());
+
+                LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + countries.get(position).getNameOfCountry());
+
                 getActivity().notifyPlayScreenRVAdapter();
                 if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
+                    LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
                     getActivity().changePhase(GamePlayConstants.ATTACK_PHASE);
                 }
             }
