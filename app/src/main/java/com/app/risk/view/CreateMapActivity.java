@@ -210,7 +210,9 @@ public class CreateMapActivity extends Activity {
         }
     };
 
-
+    /**
+     * Method to manage view while the map is being edited
+     */
     public void handleEditMode() {
 
         for (Item item : countryList) {
@@ -355,6 +357,12 @@ public class CreateMapActivity extends Activity {
         }
     }
 
+    /**
+     * Check if a country is connected
+     * @param arrGame List of game map objects
+     * @param map game map
+     * @return true if country is connected, false otherwise
+     */
     public boolean isCountryConnected(ArrayList<GameMap> arrGame,GameMap map){
         for (GameMap map1 : arrGame ){
             if (map1.getFromCountry().getNameOfCountry().equals(map.getFromCountry().getNameOfCountry())){
@@ -591,6 +599,10 @@ public class CreateMapActivity extends Activity {
         return Color.parseColor(allColors[index]);
     }
 
+    /**
+     * Method to create and show toast
+     * @param msg message to be displayed on toast
+     */
     public void showToast(String msg) {
         Toast.makeText(CreateMapActivity.this, msg,
                 Toast.LENGTH_LONG).show();

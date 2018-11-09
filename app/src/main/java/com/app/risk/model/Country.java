@@ -208,9 +208,14 @@ public class Country implements Serializable, Comparable<Country> {
         return this.nameOfCountry.compareToIgnoreCase(country.nameOfCountry);
     }
 
+    /**
+     * Check if attack is possible by the country passed as parameter on the current country based on the number of armies in both countries
+     * @param country country that is attacking
+     * @return true if attack is possible, false otherwise
+     */
     public boolean checkAftereachAttack(Country country)
     {
-        if(this.noOfArmies>1&&country.noOfArmies>=1)
+        if(this.noOfArmies>1 && country.noOfArmies>=1)
         {
             return true;
         }

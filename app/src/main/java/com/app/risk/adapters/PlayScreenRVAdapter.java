@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +25,7 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
-import com.app.risk.view.AttackPhaseDialogManager;
 import com.app.risk.view.MainScreenActivity;
-import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
 
