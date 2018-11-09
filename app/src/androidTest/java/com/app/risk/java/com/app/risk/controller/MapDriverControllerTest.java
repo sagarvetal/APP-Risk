@@ -1,28 +1,26 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
+
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.app.risk.model.GameMap;
+import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
-import com.app.risk.utility.MapVerification;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
- * This class is used check whether the graph is connected or not
+ * This class is used check whether the map is read properly or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class ConnectedGraphTest {
+public class MapDriverControllerTest {
     private String fileLocation;
     Context context = null;
 
@@ -37,19 +35,17 @@ public class ConnectedGraphTest {
     }
 
     /**
-     * This method checks whether the graph is connected or not
+     * This method checks whether  the map is read properly or not
      */
     @Test
-    public void connectedGraphTest() {
-        MapReader mapReader = new MapReader();
-        MapVerification mapVerification = new MapVerification();
-        List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context, fileLocation);
-        mapVerification.mapVerification(listGameMap);
-        if (mapVerification.checkMapIsConnectedGraph()) {
-            assertTrue(true);
-        } else {
-            assertFalse(false);
-        }
+    public void mapReaderTest() {
+        GamePlay gamePlay = MapReader.returnGamePlayFromFile(context, fileLocation);
+        assertNotNull(gamePlay);
+        System.out.println("Continent list: " + gamePlay.getContinents().size());
+        System.out.println("Territory list size: " + gamePlay.getCountries().size());
+        assertEquals(3, gamePlay.getContinents().size());
+        assertEquals(3, gamePlay.getCountries().size());
+
     }
 
     /**
@@ -61,5 +57,4 @@ public class ConnectedGraphTest {
     {
         fileLocation = null;
     }
-
 }

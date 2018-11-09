@@ -123,7 +123,10 @@ public class FortificationPhaseController {
                 LogManager.getInstance().writeLog(message);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
-                gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                if(gamePlay.getCurrentPlayer().isNewCountryConquered()){
+                    gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                    gamePlay.getCurrentPlayer().setNewCountryConquered(false);
+                }
                 getActivity().notifyPlayScreenRVAdapter();
                 getActivity().changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
             }

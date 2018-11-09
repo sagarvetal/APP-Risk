@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.UtilityOld;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -15,35 +15,34 @@ import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 /**
- * This class is used check whether the country in the map is unique or not
+ * This class is used check whether the graph is valid or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class MapReaderTest {
+public class ValidConnectedGraphTest {
     private String fileLocation;
-    Context context = null;
+    Context context=null;
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case
      */
     @Before
     public void setUp() {
-        fileLocation = "Read Map File.map";
+        fileLocation = "3D.map";
         context = InstrumentationRegistry.getTargetContext();
     }
     /**
-     * This method checks whether the country in the map is unique or not
+     * This method checks whether the graph is valid or not
      */
     @Test
-    public void uniqueCountryTest() {
+    public void connectedGraphTest() {
         MapReader mapReader=new MapReader();
         MapVerification mapVerification = new MapVerification();
         List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context,fileLocation);
         mapVerification.mapVerification(listGameMap);
-        if (mapVerification.uniqueCountries()) {
+        if (mapVerification.checkMapIsConnectedGraph()) {
             assertTrue(true);
         } else {
             assertFalse(false);
@@ -58,5 +57,4 @@ public class MapReaderTest {
     {
         fileLocation = null;
     }
-
 }
