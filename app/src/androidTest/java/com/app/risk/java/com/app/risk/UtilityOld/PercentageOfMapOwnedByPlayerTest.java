@@ -79,7 +79,7 @@ public class PercentageOfMapOwnedByPlayerTest {
      */
     @Test
     public void percentageOwnedByPlayerTest() {
-        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50 );
+        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50.0 );
     }
 
     /**

@@ -75,8 +75,8 @@ public class MapReader {
         try {
 
             String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
-            File mapDirectory = new File(mapDir);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(new File(mapDirectory, fileName))));
+            File mapDirectory = new File(mapDir, fileName);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(mapDirectory)));
 
             while ((line = bufferedReader.readLine()) != null) {
 
@@ -188,14 +188,11 @@ public class MapReader {
 
         final ArrayList<String> mapList = new ArrayList<>();
         final String rootPath = context.getFilesDir().getAbsolutePath();
-        /*final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
+        final File mapDir = new File(rootPath + File.separator + FileConstants.MAP_FILE_PATH);
         System.out.println(mapDir);
         for (final String file : mapDir.list()) {
             mapList.add(file);
-        }*/
-        mapList.add("cliff.map");
-        mapList.add("twin.map");
-        mapList.add("world.map");
+        }
 
         return mapList;
     }
