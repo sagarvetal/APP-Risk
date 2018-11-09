@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.UtilityOld;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -17,38 +17,41 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This class is used check whether the country in the map is unique or not
+ * This class is used check whether the graph is connected or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class MapReaderTest {
+public class ConnectedGraphTest {
     private String fileLocation;
     Context context = null;
+
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case
      */
     @Before
     public void setUp() {
-        fileLocation = "Read Map File.map";
+        fileLocation = "Test Read Map File.map";
         context = InstrumentationRegistry.getTargetContext();
     }
+
     /**
-     * This method checks whether the country in the map is unique or not
+     * This method checks whether the graph is connected or not
      */
     @Test
-    public void uniqueCountryTest() {
-        MapReader mapReader=new MapReader();
+    public void connectedGraphTest() {
+        MapReader mapReader = new MapReader();
         MapVerification mapVerification = new MapVerification();
-        List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context,fileLocation);
+        List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context, fileLocation);
         mapVerification.mapVerification(listGameMap);
-        if (mapVerification.uniqueCountries()) {
+        if (mapVerification.checkMapIsConnectedGraph()) {
             assertTrue(true);
         } else {
             assertFalse(false);
         }
     }
+
     /**
      * This method gets executed after the test case has been executed
      * its sets the file location to null

@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -17,16 +17,16 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 /**
- * This class is used check whether the fortification is done between connected countries or not
+ * This class is used check whether the fortification is not done between unconnected countries or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
 @RunWith(AndroidJUnit4.class)
-public class FortificationConnectedTest {
+public class FortificationUnConnectedTest {
     private String fileLocation;
     Context context = null;
     GamePlay gm = null;
@@ -75,7 +75,7 @@ public class FortificationConnectedTest {
         gm.setCountries(countryList);
         gm.setPlayers(playerNames);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
-        gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(0));
+        gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(1));
         gm.getCountries().get("Bhutan").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
         gm.getCountries().get("Bangladesh").setPlayer(gm.getPlayers().get(1));
@@ -85,17 +85,18 @@ public class FortificationConnectedTest {
     }
 
     /**
-     * This method checks whether the fortification is done between connected countries or not
+     * This method checks whether the fortification is not done between unconnected countries or not
      */
     @Test
-    public void fortificationConnectedTest() {
+    public void fortificationUnConnectedTest() {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertTrue(fc.isCountriesConneted(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")));
+        assertFalse(fc.isCountriesConneted(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")) && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Bhutan").getPlayer().getId() && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Nepal").getPlayer().getId());
+
     }
 
     /**
      * This method gets executed after the test case has been executed
-     * its sets the game map to null
+     * its sets the file location to null
      */
     @After
     public void cleanUp()

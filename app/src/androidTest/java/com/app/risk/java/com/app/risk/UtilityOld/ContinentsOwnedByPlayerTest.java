@@ -1,7 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+package com.app.risk.java.com.app.risk.UtilityOld;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;

@@ -1,16 +1,10 @@
-package com.app.risk.java.com.app.risk.utility;
-
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+package com.app.risk.java.com.app.risk.view;
 
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
-
 import com.app.risk.model.GamePlay;
 
-
 import org.junit.After;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,14 +14,13 @@ import java.util.HashMap;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Class to test percentage owned by player
+ * Class to test continents owned by player
  */
-
-public class PercentageOfMapOwnedByPlayerTest {
+public class PlayScreenActivityTest {
     GamePlay gamePlay = new GamePlay();
 
     /**
-     * Set's up Game play object to be used to test percentage owned by player
+     * This set's up data for game play object
      */
     @Before
     public void setUp() {
@@ -63,7 +56,7 @@ public class PercentageOfMapOwnedByPlayerTest {
 
         country1.setPlayer(gamePlay.getPlayers().get(0));
         country2.setPlayer(gamePlay.getPlayers().get(0));
-        country3.setPlayer(gamePlay.getPlayers().get(1));
+        country3.setPlayer(gamePlay.getPlayers().get(0));
         country4.setPlayer(gamePlay.getPlayers().get(1));
 
         countries.put("India",country1);
@@ -78,16 +71,17 @@ public class PercentageOfMapOwnedByPlayerTest {
     }
 
     /**
-     * Test percentage of map owned by player
+     * Test continents owned by player and asserts true if test succeds
      */
     @Test
-    public void percentageOwnedByPlayerTest() {
-        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50 );
+    public void continentsOwned() {
+        assertTrue(gamePlay.getPlayers().get(0).getContinentsOwnedByPlayer(gamePlay) == 1 );
     }
 
     /**
-     * Set's gameplay object to null
+     * Sets gamplay object to null
      */
+
     @After
     public void cleanUp() {
         gamePlay = null;
