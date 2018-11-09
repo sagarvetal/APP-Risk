@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -7,7 +7,6 @@ import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
-import com.app.risk.model.Player;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,15 +16,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
- * This class is used check armies count in each country in the startup phase
+ * This class is used check initial armies count in the startup phase
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class StartUpPhaseAssignArmiesTest {
+public class StartupPhaseControllerTest {
     GamePlay gamePlay;
     Context context = null;
     StartupPhaseController startupphase = null;
@@ -56,18 +54,15 @@ public class StartUpPhaseAssignArmiesTest {
     }
 
     /**
-     * This method checks count in each country in the startup phase
+     * This method checks initial armies count in the startup phase
      */
     @Test
-    public void startUpPhaseAssignArmiesTest() {
+    public void startUpPhaseInitialArmies() {
         startupphase.assignInitialCountries();
-        startupphase.assignInitialCountries();
-        startupphase.placeInitialArmies();
-
-        for (Country country : gamePlay.getCountries().values()) {
-            assertTrue(country.getNoOfArmies() >= 1);
-        }
-
+        startupphase.assignInitialArmies();
+        assertEquals(4, gamePlay.getPlayers().get(0).getNoOfArmies());
+        assertEquals(4, gamePlay.getPlayers().get(1).getNoOfArmies());
+        assertEquals(4, gamePlay.getPlayers().get(2).getNoOfArmies());
     }
 
     /**

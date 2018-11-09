@@ -1,10 +1,9 @@
-package com.app.risk.java.com.app.risk.utility;
+package com.app.risk.java.com.app.risk.controller;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
-import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -12,22 +11,22 @@ import com.app.risk.model.GamePlay;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
- * This class is used check whether the fortification is done between connected countries or not
+ * This class is used to check after each attack whether the defender and attacker have enough number of armies to attack
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-@RunWith(AndroidJUnit4.class)
-public class FortificationConnectedTest {
-    private String fileLocation;
+public class CheckAfterEachAttackTest {
+
+
     Context context = null;
     GamePlay gm = null;
 
@@ -41,7 +40,6 @@ public class FortificationConnectedTest {
         ArrayList<String> playerNames = new ArrayList<String>();
         playerNames.add("Player1");
         playerNames.add("Player2");
-        playerNames.add("Player3");
         HashMap<String, Country> countryList = new HashMap<String, Country>();
         countryList.put("India", new Country("India", new Continent("Asia", 1)));
         countryList.put("Pakistan", new Country("Pakistan", new Continent("Asia", 1)));
@@ -79,18 +77,21 @@ public class FortificationConnectedTest {
         gm.getCountries().get("Bhutan").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
         gm.getCountries().get("Bangladesh").setPlayer(gm.getPlayers().get(1));
-        gm.getCountries().get("Myammar").setPlayer(gm.getPlayers().get(2));
+        gm.getCountries().get("Myammar").setPlayer(gm.getPlayers().get(1));
         gm.setCurrentPlayer(gm.getPlayers().get(0));
+        gm.getCountries().get("Pakistan").setNoOfArmies(0);
+        gm.getCountries().get("Myammar").setNoOfArmies(4);
         context = InstrumentationRegistry.getTargetContext();
     }
-
     /**
-     * This method checks whether the fortification is done between connected countries or not
+     * This method checks after each attack whether the defender and attacker have enough number of armies to attack
      */
     @Test
-    public void fortificationConnectedTest() {
-        FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertTrue(fc.isCountriesConneted(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")));
+    public void afterAttackPhaseTest() {
+        AttackPhaseController fc = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
+        assertFalse(gm.getCountries().get("Pakistan").checkAftereachAttack(gm.getCountries().get("Myammar")));
+        gm.getCountries().get("Pakistan").setNoOfArmies(4);
+        assertTrue(gm.getCountries().get("Pakistan").checkAftereachAttack(gm.getCountries().get("Myammar")));
     }
 
     /**

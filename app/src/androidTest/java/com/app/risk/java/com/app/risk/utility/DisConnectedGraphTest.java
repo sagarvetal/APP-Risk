@@ -14,7 +14,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used check whether the graph is disconnected or not
  *

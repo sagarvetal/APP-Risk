@@ -14,41 +14,40 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
- * This class is used check whether the country in the map is unique or not
+ * This class is used check whether map is invalid or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class MapReaderTest {
+public class MapVerificationTest {
     private String fileLocation;
     Context context = null;
+
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case
      */
     @Before
     public void setUp() {
-        fileLocation = "Read Map File.map";
+        fileLocation = "InvalidMapFile.map";
         context = InstrumentationRegistry.getTargetContext();
     }
+
     /**
-     * This method checks whether the country in the map is unique or not
+     * This method checks whether the graph is invalid or not
      */
     @Test
-    public void uniqueCountryTest() {
-        MapReader mapReader=new MapReader();
+    public void connectedGraphTest() {
+        MapReader mapReader = new MapReader();
         MapVerification mapVerification = new MapVerification();
-        List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context,fileLocation);
+        List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context, fileLocation);
         mapVerification.mapVerification(listGameMap);
-        if (mapVerification.uniqueCountries()) {
-            assertTrue(true);
-        } else {
-            assertFalse(false);
-        }
+        assertFalse(mapVerification.checkMapIsConnectedGraph());
+
     }
+
     /**
      * This method gets executed after the test case has been executed
      * its sets the file location to null
@@ -58,5 +57,4 @@ public class MapReaderTest {
     {
         fileLocation = null;
     }
-
 }
