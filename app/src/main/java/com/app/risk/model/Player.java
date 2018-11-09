@@ -42,6 +42,7 @@ public class Player extends Observable implements Serializable {
 
     /**
      * Getter to return number of armies that should be awarded in exchange of cards
+     * Getter to return number of armies that should be awarded in exchange of cards
      *
      * @return number of armies to be awarded in exchange of cards
      */
@@ -185,7 +186,6 @@ public class Player extends Observable implements Serializable {
     public int getNoOfArmies() {
         return noOfArmies;
     }
-
     /**
      * Setter function to set the no of armies assigned to the player
      *
@@ -194,7 +194,6 @@ public class Player extends Observable implements Serializable {
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
     }
-
     /**
      * This function is to increment no of armies by given count.
      *
@@ -213,6 +212,8 @@ public class Player extends Observable implements Serializable {
      */
     public void decrementArmies(final int count) {
         this.noOfArmies -= count;
+        setChanged();
+        notifyObservers(this);
     }
 
     /**
@@ -250,7 +251,6 @@ public class Player extends Observable implements Serializable {
     public List<Card> getCards() {
         return cards;
     }
-
     /**
      * Setter function to set the card earned by player
      *
@@ -436,6 +436,13 @@ public class Player extends Observable implements Serializable {
         return continentsOwnedByPlayer;
     }
 
+    /**
+     * Checks if all countries of continent are owned by player
+     * @param arrCountiesOwnedByPlayer - array of countries owned by player
+     * @param arrCountriesOfContinent - arry of countries of continents
+     * @return true if all countries of of continent are owned by user false otherwise
+     */
+
     boolean checkIfAllCountriesInContinents(ArrayList<Country> arrCountiesOwnedByPlayer,ArrayList<Country> arrCountriesOfContinent){
         for (Country countryContinent : arrCountriesOfContinent){
             if (!checkIfCountryIsContainedWithPlayer(arrCountiesOwnedByPlayer,countryContinent)){
@@ -444,6 +451,13 @@ public class Player extends Observable implements Serializable {
         }
         return true;
     }
+
+    /**
+     * Checks if a country exist in list of countries
+     * @param arrCountry list countries
+     * @param country country to be checked
+     * @return true if country is contained in list of countries
+     */
 
     boolean checkIfCountryIsContainedWithPlayer(ArrayList<Country> arrCountry,Country country){
         for(Country countryPlayer : arrCountry){
