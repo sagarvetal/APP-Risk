@@ -201,7 +201,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                                 .setCancelable(false)
                                 .create().show();
 
-                    } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(countries)) {
+                    } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
                         Toast.makeText(context, "You can not do more attacks as you do not have enough armies.", Toast.LENGTH_SHORT).show();
                         new AlertDialog.Builder(context)

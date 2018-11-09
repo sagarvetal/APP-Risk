@@ -427,15 +427,21 @@ public class Player extends Observable implements Serializable {
 
     /**
      * This method checks whether any country belonging to player has more than one armies.
+     * @param gamePlay The GamePlay object.
      * @param countries List of countries owned by player.
      * @return true if any country belonging to player has more than one armies, otherwise false.
      */
-    public boolean isMoreAttackPossible(final ArrayList<Country> countries) {
+    public boolean isMoreAttackPossible(final GamePlay gamePlay, final ArrayList<Country> countries) {
         for(final Country country : countries) {
             if(country.getNoOfArmies() > 1){
-                return true;
+                for(final String adjacentCountry : country.getAdjacentCountries()){
+                    if(gamePlay.getCountries().get(adjacentCountry).getPlayer().getId() != getId()){
+                        return true;
+                    }
+                }
             }
         }
+
         return false;
     }
 
