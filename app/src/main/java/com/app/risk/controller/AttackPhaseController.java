@@ -215,14 +215,27 @@ public class AttackPhaseController implements View.OnClickListener {
         alertDialog.create().show();
     }
 
+    /**
+     * Check if a country can attack based on the number of armies of the attacking country and defending country
+     * @param defenderCountry defending country
+     * @param attackerCountry attacking country
+     * @return true if the defending country has atleast 1 army and attacking country has more than 1 army, false otherwise
+     */
     public boolean canCountryAttack(Country defenderCountry,Country attackerCountry)
     {
-        if(defenderCountry.getNoOfArmies()>=1&&attackerCountry.getNoOfArmies()>1)
+        if(defenderCountry.getNoOfArmies()>=1 && attackerCountry.getNoOfArmies()>1)
         {
             return true;
         }
         return false;
     }
+
+    /**
+     * Check if a country is connected to another country
+     * @param fromCountry from country
+     * @param toCountry to country
+     * @return true if a path exists between from country and to country, false otherwise
+     */
     public boolean isCountryAdjacent(Country fromCountry,Country toCountry)
     {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
