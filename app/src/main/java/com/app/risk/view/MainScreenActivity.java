@@ -62,8 +62,6 @@ public class MainScreenActivity extends AppCompatActivity {
 
     }
 
-
-
     /**
      * This method handles the back button listener and
      * confirms if user wants to exit or not

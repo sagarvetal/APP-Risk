@@ -31,6 +31,11 @@ public class EditMap extends AppCompatActivity {
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<String> mapList=null;
     ArrayList<GameMap> listOfGameMap=new ArrayList<GameMap>();
+
+    /**
+     * {@inheritDoc}
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
