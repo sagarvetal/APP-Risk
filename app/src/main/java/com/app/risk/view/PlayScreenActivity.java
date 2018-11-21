@@ -76,18 +76,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
 
-        LogManager.getInstance().deleteLog();
-        LogManager.getInstance().writeLog("hello APP");
-        LogManager.getInstance().writeLog("I am FIne..u?");
-        LogManager.getInstance().writeLog("Before1 reading");
-        LogManager.getInstance().readLog();
-        LogManager.getInstance().writeLog("Before delete");
-        LogManager.getInstance().deleteLog();
-        LogManager.getInstance().writeLog("After delte");
-        LogManager.getInstance().writeLog("hello APP");
-        LogManager.getInstance().writeLog("I am FIne..u?");
-        LogManager.getInstance().writeLog("Before2 reading");
-        LogManager.getInstance().readLog();
         actionBar = getSupportActionBar();
         init();
         manageFloatingButtonTransitions();
