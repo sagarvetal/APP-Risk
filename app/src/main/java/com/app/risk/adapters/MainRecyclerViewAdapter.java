@@ -145,7 +145,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                                             int selectedGameIndex = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                                                             GamePlay gamePlay = SaveLoadGameController.loadGame(savedGamesList[selectedGameIndex], invokingActivity);
                                                             Intent intent = new Intent(invokingActivity.getApplicationContext(), PlayScreenActivity.class);
-                                                            intent.putExtra("GAME_OBJECT", gamePlay);
+                                                            intent.putExtra("GAMEPLAY_OBJECT", gamePlay);
                                                             invokingActivity.startActivity(intent);
                                                         }
                                                     })

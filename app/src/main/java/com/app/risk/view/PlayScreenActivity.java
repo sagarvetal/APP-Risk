@@ -83,7 +83,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         actionBar = getSupportActionBar();
         init();
         manageFloatingButtonTransitions();
-        startGame();
 
         addObserversToPlayer();
     }
@@ -138,8 +137,15 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
      */
     public void init() {
         final Intent intent = getIntent();
-        mapName = intent.getStringExtra("MAP_NAME");
-        playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+
+        if(intent.getStringExtra("GAMEPLAY_OBJECT") == null) {
+            mapName = intent.getStringExtra("MAP_NAME");
+            playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+            startGame();
+        } else {
+            gamePlay = (GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT");
+            changePhase(gamePlay.getCurrentPhase());
+        }
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
