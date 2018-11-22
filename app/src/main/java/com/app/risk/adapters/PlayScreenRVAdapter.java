@@ -183,7 +183,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         }
                     }
 
-                    if(gamePlay.getCurrentPlayer().isPlayerWon((ArrayList<Country>) gamePlay.getCountries().values())) {
+                    if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has won the game.");
                         Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
                         new AlertDialog.Builder(context)
