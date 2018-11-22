@@ -11,8 +11,11 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.ReinforcementPhaseController;
+import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
@@ -246,17 +250,51 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
      */
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle("Alert").setMessage("Do you want to exit the game?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+        AlertDialog.Builder backAlertDialogBox = new AlertDialog.Builder(this);
+
+        backAlertDialogBox
+                .setTitle("Alert").setMessage("What would you like to do?")
+                .setPositiveButton("Exit Game", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                         startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
                     }
                 })
-                .setNegativeButton("No",null)
-                .create().show();
+                .setNegativeButton("Cancel",null)
+                .setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        AlertDialog.Builder nameOfGameADB = new AlertDialog.Builder(PlayScreenActivity.this);
+                        nameOfGameADB.setTitle("Name of game");
+                        nameOfGameADB.setMessage("Enter the name of the game: ");
+                        final EditText nameOfGame = new EditText(PlayScreenActivity.this);
+                        nameOfGame.setInputType(InputType.TYPE_CLASS_TEXT);
+                        nameOfGameADB.setView(nameOfGame);
+                        nameOfGameADB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SaveLoadGameController saveLoadGameController = new SaveLoadGameController();
+                                saveLoadGameController.saveGame(gamePlay, nameOfGame.getText().toString(),PlayScreenActivity.this);
+                            }
+                        });
+                        nameOfGameADB.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        nameOfGameADB.show();
+                    }
+                });
+
+        AlertDialog backAlertDialog = backAlertDialogBox.show();
+        Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+        if(true){
+            saveGameButton.setEnabled(false);
+        }
 
     }
 
