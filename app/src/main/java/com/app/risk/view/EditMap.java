@@ -41,7 +41,6 @@ public class EditMap extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_map_layout);
-        listOfGameMap = new ArrayList<>();
         listView = findViewById(R.id.edit_map_listview);
         mapList=MapReader.getMapList(getApplicationContext());
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mapList));
@@ -49,6 +48,7 @@ public class EditMap extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                listOfGameMap = new ArrayList<>();
                 String fileName=mapList.get(i);
                 MapDriverController mapDriverController = new MapDriverController();
                 List<GameMap> listOfGameMapList=mapDriverController.readmap(getApplicationContext(),fileName);
