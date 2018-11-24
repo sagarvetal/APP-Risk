@@ -1,6 +1,7 @@
 package com.app.risk.view;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -9,11 +10,17 @@ import android.widget.NumberPicker;
 
 import com.app.risk.R;
 
+import java.util.ArrayList;
+
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private CardView mapSelectionCard,stratergiesSelectionCard,okayCard;
     private NumberPicker playerRestrictionPicker;
+
+    private ArrayList<String> mapArrayList;
+    private String[] playerStratergies = {"Aggressive","Benevolent"
+                                    ,"Random","Cheater"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,10 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
 
         mapSelectionCard.setOnClickListener(this);
         stratergiesSelectionCard.setOnClickListener(this);
+
+        for(int i=0;i<5;i++){
+            mapArrayList.add("Map " + (i+1));
+        }
     }
 
 
@@ -46,7 +57,18 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         if(v == mapSelectionCard){
 
             new AlertDialog.Builder(this)
-                    .setMultiChoiceItems(null,null,null)
+                    .setMultiChoiceItems((CharSequence[]) mapArrayList.toArray(), null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                            if(isChecked){
+
+                            }
+                            else{
+
+                            }
+                        }
+                    })
                     .setPositiveButton("Ok",null)
                     .setCancelable(false)
                     .create().show();
@@ -55,14 +77,24 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         if(v == stratergiesSelectionCard){
 
             new AlertDialog.Builder(this)
-                    .setMultiChoiceItems(null,null,null)
+                    .setMultiChoiceItems(playerStratergies, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            if(isChecked){
+
+                            }
+                            else{
+
+                            }
+                        }
+                    })
                     .setPositiveButton("Ok",null)
                     .setCancelable(false)
                     .create().show();
 
         }
         if(v == okayCard){
-
+            // start Activity
         }
     }
 }
