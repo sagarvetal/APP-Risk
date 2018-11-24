@@ -62,7 +62,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
 
         }
         if(v == okayCard){
-            
+
         }
     }
 }
