@@ -18,6 +18,8 @@ public class GamePlayConstants {
     public static final String REINFORCEMENT_PHASE = "Reinforcement Phase";
     public static final String ATTACK_PHASE = "Attack Phase";
     public static final String FORTIFICATION_PHASE = "Fortification Phase";
+    public static boolean PRV_PHASE_HAS_ENDED = false;
+    public static boolean PHASE_IN_PROGRESS = false;
 
     //Cards
     public static final String INFANTRY_CARD = "Infantry Card";

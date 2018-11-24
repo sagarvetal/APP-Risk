@@ -147,14 +147,17 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
             if(v == cardView){
                 switch (gamePlay.getCurrentPhase()) {
                     case GamePlayConstants.REINFORCEMENT_PHASE:
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
                         ReinforcementPhaseController.getInstance().showReinforcementDialogBox(getAdapterPosition(), countries);
                         break;
 
                     case GamePlayConstants.ATTACK_PHASE:
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
                         Toast.makeText(context, "Select Country from List", Toast.LENGTH_SHORT).show();
                         break;
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
                         FortificationPhaseController.getInstance().init(context, gamePlay).showFortificationDialogBox(getAdapterPosition(),countries);
                         break;
                 }

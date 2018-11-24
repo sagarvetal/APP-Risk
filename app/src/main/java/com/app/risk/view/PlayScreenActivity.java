@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.controller.StartupPhaseController;
-import com.app.risk.model.Card;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Log;
 import com.app.risk.model.Player;
@@ -81,9 +79,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         logView.setAdapter(logViewAdapter);
 
         actionBar = getSupportActionBar();
-        init();
         manageFloatingButtonTransitions();
-        addObserversToPlayer();
+        init();
     }
 
     /**
@@ -135,16 +132,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
      * This method initialize the the referrences and gets data from previous activity
      */
     public void init() {
-        final Intent intent = getIntent();
-
-        if(intent.getStringExtra("GAMEPLAY_OBJECT") == null) {
-            mapName = intent.getStringExtra("MAP_NAME");
-            playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
-            startGame();
-        } else {
-            gamePlay = (GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT");
-            changePhase(gamePlay.getCurrentPhase());
-        }
 
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
@@ -155,6 +142,17 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
+
+        final Intent intent = getIntent();
+        if(intent.getStringExtra("GAMEPLAY_OBJECT") == null) {
+            mapName = intent.getStringExtra("MAP_NAME");
+            playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+            startGame();
+            addObserversToPlayer();
+        } else {
+            gamePlay = (GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT");
+            changePhase(gamePlay.getCurrentPhase());
+        }
     }
 
     /**
@@ -180,6 +178,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
+                    GamePlayConstants.PHASE_IN_PROGRESS = false;
                     LogManager.getInstance().deleteLog();
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                     currentPhase = phase;
@@ -213,6 +212,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.ATTACK_PHASE:
+                    GamePlayConstants.PHASE_IN_PROGRESS = false;
                     gamePlay.getCurrentPlayer().setCardsExchangedInRound(false);
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = phase;
@@ -222,6 +222,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     break;
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
+                    GamePlayConstants.PHASE_IN_PROGRESS = false;
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
@@ -282,8 +283,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         nameOfGameADB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SaveLoadGameController saveLoadGameController = new SaveLoadGameController();
-                                saveLoadGameController.saveGame(gamePlay, nameOfGame.getText().toString(),PlayScreenActivity.this);
+                                SaveLoadGameController.saveGame(gamePlay, nameOfGame.getText().toString(),PlayScreenActivity.this);
                             }
                         });
                         nameOfGameADB.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -298,10 +298,9 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
         AlertDialog backAlertDialog = backAlertDialogBox.show();
         Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        if(true){
+        if(!GamePlayConstants.PRV_PHASE_HAS_ENDED || GamePlayConstants.PHASE_IN_PROGRESS){
             saveGameButton.setEnabled(false);
         }
-
     }
 
     /**
