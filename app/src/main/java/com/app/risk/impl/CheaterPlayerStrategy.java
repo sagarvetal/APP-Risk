@@ -1,6 +1,8 @@
-package com.app.risk.model;
+package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
+import com.app.risk.model.GamePlay;
+import com.app.risk.model.Player;
 
 /**
  * A concrete strategy class that implements a cheater player strategy.
