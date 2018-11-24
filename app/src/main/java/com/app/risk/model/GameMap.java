@@ -50,18 +50,34 @@ public class GameMap implements Serializable {
         this.fromCountry = fromCountry;
     }
 
+    /**
+     * Returns index of country in the list
+     * @return index of country in the list
+     */
     public int getIndexOfCountryInList() {
         return indexOfCountryInList;
     }
 
+    /**
+     * Returns color of the given continent
+     * @return color of the given continent
+     */
     public int getContinentColor() {
         return continentColor;
     }
 
+    /**
+     * Set the color of the continent
+     * @param continentColor
+     */
     public void setContinentColor(int continentColor) {
         this.continentColor = continentColor;
     }
 
+    /**
+     * Set index of country in list
+     * @param indexOfCountryInList
+     */
     public void setIndexOfCountryInList(int indexOfCountryInList) {
         this.indexOfCountryInList = indexOfCountryInList;
     }

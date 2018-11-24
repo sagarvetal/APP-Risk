@@ -13,6 +13,7 @@ public class Card implements Serializable {
 
     private String type;
     private boolean isSelected;
+
     /**
      * This is default constructor.
      */

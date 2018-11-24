@@ -11,18 +11,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used check whether all the countries belong to
  * one continent or not
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class OneContinentCheckTest{
+public class OneContinentCheckTest {
     private String fileLocation;
     Context context=null;
     /**

@@ -24,6 +24,14 @@ public class CardExchangeController {
     }
 
     /**
+     * Getter method to return the player
+     * @return
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
      * List of cards owned by the current player
      * @return list of cards owned by the current player
      */
@@ -39,9 +47,13 @@ public class CardExchangeController {
     public int exchangeArmiesForCards(List<Card> cardsToExchange){
 
         if(player.cardsExchangeable(cardsToExchange)){
+            player.setCardsExchangedInRound(true);
             player.setArmiesInExchangeOfCards(player.getArmiesInExchangeOfCards() + 5);
             player.incrementArmies(player.getArmiesInExchangeOfCards());
+            player.setReinforcementArmies(player.getReinforcementArmies() + player.getArmiesInExchangeOfCards());
             removeExchangedCards(cardsToExchange);
+        } else {
+            return -1;
         }
 
         return player.getArmiesInExchangeOfCards();
