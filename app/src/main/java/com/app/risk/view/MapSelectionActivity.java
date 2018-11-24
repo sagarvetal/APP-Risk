@@ -28,7 +28,6 @@ public class MapSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_selection);
-
         setUpViewPager();
     }
 
@@ -36,10 +35,9 @@ public class MapSelectionActivity extends AppCompatActivity {
      * This method initialize the pagerview of the activity
      */
     public void setUpViewPager() {
-        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), MapReader.getMapList(this.getApplicationContext()));
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), MapReader.getMapList(this.getApplicationContext()),this);
         final ViewPager viewPager = findViewById(R.id.map_selection_viewpager);
         viewPager.setAdapter(adapter);
-
     }
 
 }

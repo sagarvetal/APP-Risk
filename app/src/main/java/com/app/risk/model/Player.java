@@ -1,5 +1,6 @@
 package com.app.risk.model;
 
+import com.app.risk.Interfaces.Strategy;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.utility.LogManager;
 
@@ -33,6 +34,7 @@ public class Player extends Observable implements Serializable {
     private int armiesInExchangeOfCards;
     private boolean cardsExchangedInRound;
     private boolean isNewCountryConquered;
+    private Strategy strategy;
 
     /**
      * Check if the player has exchanged cards in ongoing round
@@ -338,6 +340,21 @@ public class Player extends Observable implements Serializable {
         this.isNewCountryConquered = isNewCountryConquered;
     }
 
+    /**
+     * Getter function to get the strategy of the player.
+     * @return The strategy object.
+     */
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    /**
+     * Setter function to set the strategy of the player.
+     * @param strategy The strategy object.
+     */
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
 
     /**
      * This is reinforcement method.
