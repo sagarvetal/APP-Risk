@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,9 +25,7 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
-import com.app.risk.view.AttackPhaseDialogManager;
 import com.app.risk.view.MainScreenActivity;
-import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
 
@@ -186,7 +183,7 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
                         }
                     }
 
-                    if(gamePlay.getCurrentPlayer().isPlayerWon((ArrayList<Country>) gamePlay.getCountries().values())) {
+                    if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has won the game.");
                         Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
                         new AlertDialog.Builder(context)

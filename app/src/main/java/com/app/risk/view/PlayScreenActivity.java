@@ -76,18 +76,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
         logView.setAdapter(logViewAdapter);
 
-        LogManager.getInstance().deleteLog();
-        LogManager.getInstance().writeLog("hello APP");
-        LogManager.getInstance().writeLog("I am FIne..u?");
-        LogManager.getInstance().writeLog("Before1 reading");
-        LogManager.getInstance().readLog();
-        LogManager.getInstance().writeLog("Before delete");
-        LogManager.getInstance().deleteLog();
-        LogManager.getInstance().writeLog("After delte");
-        LogManager.getInstance().writeLog("hello APP");
-        LogManager.getInstance().writeLog("I am FIne..u?");
-        LogManager.getInstance().writeLog("Before2 reading");
-        LogManager.getInstance().readLog();
         actionBar = getSupportActionBar();
         init();
         manageFloatingButtonTransitions();
@@ -114,7 +102,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
-
+                            cardExchangeDialog.setCancelable(false);
                             cardExchangeDialog.show();
                         } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
                             displayAlert("No cards", "No cards to show.");
@@ -128,7 +116,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
-                        gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                        if(gamePlay.getCurrentPlayer().isNewCountryConquered()){
+                            gamePlay.getCurrentPlayer().assignCards(gamePlay);
+                            gamePlay.getCurrentPlayer().setNewCountryConquered(false);
+                        }
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
