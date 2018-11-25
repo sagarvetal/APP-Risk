@@ -3,6 +3,11 @@ package com.app.risk.model;
 import android.graphics.Color;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.impl.AggressivePlayerStrategy;
+import com.app.risk.impl.BenevolentPlayerStrategy;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.HumanPlayerStrategy;
+import com.app.risk.impl.RandomPlayerStrategy;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -220,11 +225,11 @@ public class GamePlay implements Serializable {
     }
 
     /**
-     * This method set given players into GamePlaye object and assign ids.
-     *
+     * This method set given players into GamePlay object and assign ids.
      * @param playerNames This is list of player names of type string.
+     * @param playerStrategies This is list of player strategies of type string.
      */
-    public void setPlayers(final ArrayList<String> playerNames) {
+    public void setPlayers(final ArrayList<String> playerNames, final ArrayList<String> playerStrategies) {
         int id = 0;
         players.clear();
         playerIdQueue.clear();
@@ -234,8 +239,34 @@ public class GamePlay implements Serializable {
             player.setColorCode(colorCodes[player.getId()]);
             player.setName(playerName);
             player.setActive(true);
+            setPlayerStrategy(player, playerStrategies.get(player.getId()));
             players.put(player.getId(), player);
             playerIdQueue.add(player.getId());
+        }
+    }
+
+    /**
+     * This method sets the strategy to the player.
+     * @param player The player object.
+     * @param strategyName The name of the strategy.
+     */
+    private void setPlayerStrategy(final Player player, final String strategyName) {
+        switch(strategyName) {
+            case GamePlayConstants.HUMAN_STRATEGY :
+                player.setStrategy(new HumanPlayerStrategy());
+                break;
+            case GamePlayConstants.AGGRESSIVE_STRATEGY :
+                player.setStrategy(new AggressivePlayerStrategy());
+                break;
+            case GamePlayConstants.BENEVOLENT_STRATEGY :
+                player.setStrategy(new BenevolentPlayerStrategy());
+                break;
+            case GamePlayConstants.RANDOM_STRATEGY :
+                player.setStrategy(new RandomPlayerStrategy());
+                break;
+            case GamePlayConstants.CHEATER_STRATEGY :
+                player.setStrategy(new CheaterPlayerStrategy());
+                break;
         }
     }
 }
