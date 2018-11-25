@@ -27,8 +27,13 @@ public class GamePlayConstants {
     //Message
     public static final String REINFORCEMENT_MSG = "%s armies are holding %s countries. \n" +
                                                     "So %s has been awarded with %s additional armies";
-
     public static final String NO_CARDS_AVAILABLE = "No Cards Available";
 
+    //Strategies
+    public static final String HUMAN_STRATEGY = "Human Strategy";
+    public static final String BENEVOLENT_STRATEGY = "Benevolent Strategy";
+    public static final String AGGRESSIVE_STRATEGY = "Aggressive Strategy";
+    public static final String RANDOM_STRATEGY = "Random Strategy";
+    public static final String CHEATER_STRATEGY = "Cheater Strategy";
 
 }
