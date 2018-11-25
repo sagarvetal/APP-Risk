@@ -217,4 +217,11 @@ public class FortificationPhaseController {
     public PlayScreenActivity getActivity() {
         return (PlayScreenActivity) context;
     }
+    /**
+     * This method sets the gameplay object to the fortification controller
+     * @param gamePlay The gamePlay instance
+     */
+    public void setGamePlay(GamePlay gamePlay) {
+        this.gamePlay=gamePlay;
+    }
 }
