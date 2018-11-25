@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
@@ -42,6 +43,7 @@ import java.util.Observer;
 
 /**
  * PlayScreenActivity display the play screen of the display
+ *
  * @author Himanshu Kohli
  * @version 1.0.0
  */
@@ -62,20 +64,21 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     public static ArrayAdapter<String> logViewAdapter;
     public static ArrayList<String> logViewArrayList;
     PlayerStateAdapter playerStateAdapter;
-    ListView listPlayerState ;
+    ListView listPlayerState;
 
     /**
      * This method is the main creation method of the activity
+     *
      * @param savedInstanceState: instance of the activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
-        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
-        logView=findViewById(R.id.activity_play_screen_logview);
+        LogManager.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH, this).readLog();
+        logView = findViewById(R.id.activity_play_screen_logview);
         logViewArrayList = new ArrayList<>();
-        logViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,logViewArrayList);
+        logViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, logViewArrayList);
         logView.setAdapter(logViewAdapter);
 
         actionBar = getSupportActionBar();
@@ -92,34 +95,34 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
             @Override
             public void onClick(View v) {
 
-                switch (currentPhase){
+                switch (currentPhase) {
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
-                        if(gamePlay.getCurrentPlayer().getCards().size()>0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
+                        if (gamePlay.getCurrentPlayer().getCards().size() > 0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
 
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
                             cardExchangeDialog.setCancelable(false);
                             cardExchangeDialog.show();
-                        } else if (gamePlay.getCurrentPlayer().getCards().size()==0){
+                        } else if (gamePlay.getCurrentPlayer().getCards().size() == 0) {
                             displayAlert("No cards", "No cards to show.");
-                        } else if (gamePlay.getCurrentPlayer().isCardsExchangedInRound()){
+                        } else if (gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
                             displayAlert("Exchanged", "Cards have already been exchanged for this round.");
                         }
 
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
-                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.FORTIFICATION_PHASE+" phase.");
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to " + GamePlayConstants.FORTIFICATION_PHASE + " phase.");
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
-                        if(gamePlay.getCurrentPlayer().isNewCountryConquered()){
+                        if (gamePlay.getCurrentPlayer().isNewCountryConquered()) {
                             gamePlay.getCurrentPlayer().assignCards(gamePlay);
                             gamePlay.getCurrentPlayer().setNewCountryConquered(false);
                         }
-                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
+                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to " + GamePlayConstants.REINFORCEMENT_PHASE + " phase.");
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
                 }
@@ -144,7 +147,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         recyclerView.setLayoutManager(layout);
 
         final Intent intent = getIntent();
-        if(intent.getStringExtra("GAMEPLAY_OBJECT") == null) {
+        if (((GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT")) == null) {
             mapName = intent.getStringExtra("MAP_NAME");
             playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
             startGame();
@@ -164,6 +167,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
     /**
      * This method handles the phase transition of the gameplay
+     *
      * @param phase: The string which holds the phase
      */
     @Override
@@ -200,13 +204,13 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                     final Player currentPlayer = gamePlay.getCurrentPlayer();
                     final String message = String.format(GamePlayConstants.REINFORCEMENT_MSG,
-                                                         currentPlayer.getNoOfArmies()-currentPlayer.getReinforcementArmies(),
-                                                         currentPlayer.getNoOfCountries(),
-                                                         currentPlayer.getName(),
-                                                         currentPlayer.getReinforcementArmies());
+                            currentPlayer.getNoOfArmies() - currentPlayer.getReinforcementArmies(),
+                            currentPlayer.getNoOfCountries(),
+                            currentPlayer.getName(),
+                            currentPlayer.getReinforcementArmies());
                     displayAlert("", message);
                     ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
-                    playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
+                    playerStateAdapter = new PlayerStateAdapter(arrPlayer, gamePlay, this);
                     listPlayerState = findViewById(R.id.list_play_view);
                     listPlayerState.setAdapter(playerStateAdapter);
                     break;
@@ -242,13 +246,14 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
     /**
      * This method is used to display the data using alert dialog
-     * @param title title message to be displayed
+     *
+     * @param title   title message to be displayed
      * @param message main message to be displayed
      */
-    public void displayAlert(final String title, final String message){
+    public void displayAlert(final String title, final String message) {
         new AlertDialog.Builder(this)
                 .setTitle(title).setMessage(message)
-                .setPositiveButton("Ok",null).create().show();
+                .setPositiveButton("Ok", null).create().show();
     }
 
     /**
@@ -266,10 +271,10 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                        startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                     }
                 })
-                .setNegativeButton("Cancel",null)
+                .setNegativeButton("Cancel", null)
                 .setNeutralButton("Save Game", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -283,7 +288,20 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         nameOfGameADB.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SaveLoadGameController.saveGame(gamePlay, nameOfGame.getText().toString(),PlayScreenActivity.this);
+                                SaveLoadGameController.saveGame(gamePlay, nameOfGame.getText().toString(), PlayScreenActivity.this);
+                                new AlertDialog.Builder(PlayScreenActivity.this)
+                                        .setTitle("Saved")
+                                        .setMessage("Your game has been saved.")
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                finish();
+                                                startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
+                                            }
+                                        })
+                                        .setCancelable(false)
+                                        .show();
+
                             }
                         });
                         nameOfGameADB.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -298,7 +316,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
         AlertDialog backAlertDialog = backAlertDialogBox.show();
         Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        if(!GamePlayConstants.PRV_PHASE_HAS_ENDED || GamePlayConstants.PHASE_IN_PROGRESS){
+        if (GamePlayConstants.PHASE_IN_PROGRESS) {
             saveGameButton.setEnabled(false);
         }
     }
@@ -306,27 +324,28 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     /**
      * This method is called when ever observable model is changed
      * and these changes are notified to the observer with the changes made
+     *
      * @param observable model class that has its data changed
-     * @param object value that is changed of type Object
+     * @param object     value that is changed of type Object
      */
     @Override
     public void update(Observable observable, Object object) {
-       if(observable instanceof Log) {
-           String message=((Log)observable).getMessage();
-           logViewArrayList.add(0,message);
-           logViewAdapter.notifyDataSetChanged();
-       } else if(observable instanceof Player) {
-           playerStateAdapter.notifyDataSetChanged();
-           pArmies.setText("" + ((Player) observable).getNoOfArmies());
-           pCountries.setText("" + ((Player) observable).getNoOfCountries());
-       }
+        if (observable instanceof Log) {
+            String message = ((Log) observable).getMessage();
+            logViewArrayList.add(0, message);
+            logViewAdapter.notifyDataSetChanged();
+        } else if (observable instanceof Player) {
+            playerStateAdapter.notifyDataSetChanged();
+            pArmies.setText("" + ((Player) observable).getNoOfArmies());
+            pCountries.setText("" + ((Player) observable).getNoOfCountries());
+        }
     }
 
     /**
      * Bind each player with the observer object
      */
-    public void addObserversToPlayer(){
-        for(Player player: gamePlay.getPlayers().values()){
+    public void addObserversToPlayer() {
+        for (Player player : gamePlay.getPlayers().values()) {
             player.addObserver(this);
         }
     }

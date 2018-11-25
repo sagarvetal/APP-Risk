@@ -48,9 +48,9 @@ public class SaveLoadGame {
 
         try {
 
-            String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
-            File mapDirectory = new File(mapDir, fileName);
-            FileInputStream fileInputStream = new FileInputStream(new File(mapDirectory, fileName + FileConstants.GAME_SAVE_LOAD_FILE_EXTENSTION));
+            String mapDir = context.getFilesDir() + File.separator + FileConstants.GAME_SAVE_LOAD_FILE_PATH;
+            File gamePlayFile = new File(mapDir, fileName);
+            FileInputStream fileInputStream = new FileInputStream(gamePlayFile);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             GamePlay gamePlay = (GamePlay) objectInputStream.readObject();
             objectInputStream.close();
