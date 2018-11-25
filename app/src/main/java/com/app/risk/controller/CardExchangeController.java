@@ -1,6 +1,7 @@
 package com.app.risk.controller;
 
 import com.app.risk.model.Card;
+import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
 import java.util.List;
@@ -13,14 +14,22 @@ import java.util.List;
  */
 public class CardExchangeController {
 
-    Player player;
+    private static CardExchangeController cardExchangeController;
+    private Player player;
 
-    /**
-     * Default constructor
-     * @param player current gameplay object
-     */
-    public CardExchangeController(Player player) {
-        this.player = player;
+    private CardExchangeController(){}
+
+    public static CardExchangeController getInstance() {
+        if(cardExchangeController == null) {
+            cardExchangeController = new CardExchangeController();
+        }
+        return cardExchangeController;
+    }
+
+    public static CardExchangeController init(final Player player) {
+        getInstance();
+        cardExchangeController.player = player;
+        return cardExchangeController;
     }
 
     /**

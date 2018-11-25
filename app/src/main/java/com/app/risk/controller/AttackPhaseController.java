@@ -37,6 +37,8 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
 
+    private int variable;
+
     /**
      * This is default constructor.
      */
@@ -240,5 +242,25 @@ public class AttackPhaseController implements View.OnClickListener {
     {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
         return fc.isCountriesConneted(fromCountry,toCountry);
+    }
+
+    public int setUpDiceRollView(int maxDiceValue){
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+
+        variable = -1;
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.human_player_selection_dialog_number_picker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(maxDiceValue);
+        numberPicker.setWrapSelectorWheel(false);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        variable = numberPicker.getValue();
+                    }
+                }).setCancelable(false);
+
+        return variable;
     }
 }

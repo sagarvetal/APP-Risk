@@ -15,7 +15,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class MapReader {
      * @return GamePlay object
      */
     public static GamePlay returnGamePlayFromFile(Context context, String fileName) {
-        readGameMapFromFile(context, fileName);
+        readGameFromFile(context, fileName);
         return finalGamePlay;
     }
 
@@ -60,7 +59,7 @@ public class MapReader {
      * @return List of GameMap object
      */
     public static List<GameMap> returnGameMapFromFile(Context context, String fileName) {
-        readGameMapFromFile(context, fileName);
+        readGameFromFile(context, fileName);
         return finalGameMapList;
     }
 
@@ -70,7 +69,7 @@ public class MapReader {
      * @param context  current state/context of the application
      * @param fileName user requested file name
      */
-    private static void readGameMapFromFile(Context context, String fileName) {
+    private static void readGameFromFile(Context context, String fileName) {
 
         try {
 
