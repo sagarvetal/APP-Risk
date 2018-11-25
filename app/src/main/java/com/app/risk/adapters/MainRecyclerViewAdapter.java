@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.app.risk.view.EditMap;
+import com.app.risk.view.TournamentMenuActivity;
 import com.app.risk.view.UserDrivenMapsActivity;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.R;
@@ -115,8 +116,11 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
                 switch(cardArrayList.get(getAdapterPosition())){
 
-                    case "Play":
+                    case "Single Game":
                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
+                        break;
+                    case "Tournament Game":
+                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(),TournamentMenuActivity.class));
                         break;
                     case "Create Map":
                         final Intent userMapCreate = new Intent(invokingActivity.getApplicationContext(), UserDrivenMapsActivity.class);
@@ -131,9 +135,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         break;
                     case "Help":
                      Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                        break;
-                    case "Setting":
-                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
                     case "Exit":
                         ((Activity)invokingActivity).finishAffinity();
