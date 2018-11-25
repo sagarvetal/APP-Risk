@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.risk.Interfaces.PhaseManager;
@@ -52,7 +53,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private GamePlay gamePlay;
     private PlayScreenRVAdapter adapter;
     private String mapName;
-    private ArrayList<String> playerNames;
+    private ArrayList<String> playerNames,playerStratergies;
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
@@ -136,13 +137,13 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
         final Intent intent = getIntent();
         mapName = intent.getStringExtra("MAP_NAME");
         playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+        playerStratergies = intent.getStringArrayListExtra("STRATERGY_INFO");
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
         pArmies = findViewById(R.id.play_screen_armies);
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
-
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
     }
