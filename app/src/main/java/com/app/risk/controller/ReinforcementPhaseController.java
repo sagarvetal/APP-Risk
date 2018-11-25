@@ -105,6 +105,14 @@ public class ReinforcementPhaseController {
     }
 
     /**
+     * This method sets the gameplay object to the reinforcement controller
+     * @param gamePlay The gamePlay instance
+     */
+    public void setGamePlay(GamePlay gamePlay)
+    {
+        this.gamePlay=gamePlay;
+    }
+    /**
      * This method cast the context and returns PlayScreenActivity object.
      * @return The PlayScreenActivity object.
      */
