@@ -32,8 +32,7 @@ public class BenevolentPlayerStrategy implements Strategy {
     public void reinforcementPhase(final GamePlay gamePlay, final Player player) {
         currentPhase = GamePlayConstants.REINFORCEMENT_PHASE;
 
-        ReinforcementPhaseController reinforcementPhaseController = ReinforcementPhaseController.getInstance();
-        reinforcementPhaseController.setGamePlay(gamePlay);
+        ReinforcementPhaseController reinforcementPhaseController = ReinforcementPhaseController.init(null,gamePlay);
         gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
         /*gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
         gamePlay.setCurrentPlayer();
@@ -130,8 +129,7 @@ public class BenevolentPlayerStrategy implements Strategy {
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player) {
         currentPhase = GamePlayConstants.FORTIFICATION_PHASE;
-        FortificationPhaseController fortificationPhaseController = FortificationPhaseController.getInstance();
-        fortificationPhaseController.setGamePlay(gamePlay);
+        FortificationPhaseController fortificationPhaseController = FortificationPhaseController.init(null,gamePlay);
         gamePlay.setCurrentPhase(GamePlayConstants.FORTIFICATION_PHASE);
         ArrayList<Country> playerCountryList = gamePlay.getCountryListByPlayerId(player.getId());
         HashMap<String, Integer> playerCountryDetails = playerCountryDetails(playerCountryList);
