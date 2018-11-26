@@ -51,6 +51,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private CardView cardView;
     private GamePlay gamePlay;
     private PlayScreenRVAdapter adapter;
+    private String playType;
     private String mapName;
     private ArrayList<String> playerNames;
     private ArrayList<String> playerStrategies;
@@ -62,6 +63,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private PlayerStateAdapter playerStateAdapter;
     private ListView listPlayerState ;
     private ArrayList<Country> countriesOwnedByPlayer;
+
 
     /**
      * This method is the main creation method of the activity
@@ -137,6 +139,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         final Intent intent = getIntent();
         mapName = intent.getStringExtra("MAP_NAME");
         playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+        playerStrategies = intent.getStringArrayListExtra("STRATERGY_INFO");
+        playType = intent.getStringExtra("PLAY_TYPE");
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
