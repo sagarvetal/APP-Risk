@@ -20,13 +20,13 @@ public class CheaterPlayerStrategy implements Strategy {
      * It doubles the number of armies on all its countries.
      * @param gamePlay The GamePlay object.
      * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param toCountry The country where player placing the reinforcement armies.
      */
     @Override
-    public void reinforcementPhase(final GamePlay gamePlay, final Player player) {
+    public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
 
-        ArrayList<Country> countryArrayList = gamePlay.getCountryListByPlayerId(player.getId());
-
-        for(Country country : countryArrayList){
+        for(final Country country : countriesOwnedByPlayer){
             country.setNoOfArmies(country.getNoOfArmies() * 2);
         }
         player.setNoOfArmies(player.getNoOfArmies() * 2);
@@ -37,16 +37,17 @@ public class CheaterPlayerStrategy implements Strategy {
      * It conquers all the neighbors of all its countries.
      * @param gamePlay The GamePlay object.
      * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
      */
     @Override
-    public void attackPhase(final GamePlay gamePlay, final Player player) {
-        ArrayList<Country> countryArrayList = gamePlay.getCountryListByPlayerId(player.getId());
-
-        for(Country country: countryArrayList){
-            ArrayList<String> adjacentCountries = country.getAdjacentCountries();
-            for(String neighbour: adjacentCountries){
-                Country defenderCountry = gamePlay.getCountries().get(neighbour);
-                int noOfArmies = defenderCountry.getNoOfArmies();
+    public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
+        for(final Country country: countriesOwnedByPlayer){
+            final ArrayList<String> adjacentCountries = country.getAdjacentCountries();
+            for(final String neighbour: adjacentCountries){
+                final Country defenderCountry = gamePlay.getCountries().get(neighbour);
+                final int noOfArmies = defenderCountry.getNoOfArmies();
                 defenderCountry.getPlayer().decrementArmies(noOfArmies);
                 defenderCountry.setPlayer(player);
                 defenderCountry.getPlayer().incrementArmies(noOfArmies);
@@ -59,16 +60,16 @@ public class CheaterPlayerStrategy implements Strategy {
      * It doubles the number of armies on its countries that have neighbors that belong to other players.
      * @param gamePlay The GamePlay object.
      * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param fromCountry The country from where player wants to move armies.
      */
     @Override
-    public void fortificationPhase(final GamePlay gamePlay, final Player player) {
-        ArrayList<Country> countryArrayList = gamePlay.getCountryListByPlayerId(player.getId());
-
-        for(Country country : countryArrayList){
-            ArrayList<String> adjacentCountries = country.getAdjacentCountries();
-            for(String neighbour: adjacentCountries){
+    public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
+        for(final Country country : countriesOwnedByPlayer){
+            final ArrayList<String> adjacentCountries = country.getAdjacentCountries();
+            for(final String neighbour : adjacentCountries){
                 if(player.getId() != gamePlay.getCountries().get(neighbour).getPlayer().getId()){
-                    int noOfArmies = country.getNoOfArmies();
+                    final int noOfArmies = country.getNoOfArmies();
                     country.incrementArmies(noOfArmies);
                     player.incrementArmies(noOfArmies);
                     break;
