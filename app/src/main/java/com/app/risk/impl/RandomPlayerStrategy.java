@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -38,6 +39,9 @@ public class RandomPlayerStrategy implements Strategy {
             int reinforcementArmiesToPutInCountry = random.nextInt(player.getReinforcementArmies());
             countriesBelongingToPlayer.get(putCountryIndex).incrementArmies(reinforcementArmiesToPutInCountry);
             player.decrementReinforcementArmies(reinforcementArmiesToPutInCountry);
+            if(player.getCards().size()>2) {
+                CardExchangeController.getInstance().init(player).exchangeCardsStrategyImplementation();
+            }
         }
     }
 
