@@ -56,7 +56,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         MapVerification mapVerification = new MapVerification();
         List<GameMap> arrGamePlay = mapReader.returnGameMapFromFile(context,fileName);
         return  mapVerification.mapVerification(arrGamePlay);
-
     }
 
     /**

@@ -99,7 +99,6 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                         LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
                         if(gamePlay.getCurrentPlayer().getCards().size()>0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
-
                             CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, cardExchangeController);
                             cardExchangeDialog.setContentView(R.layout.card_exchange);
                             cardExchangeDialog.setCancelable(false);
