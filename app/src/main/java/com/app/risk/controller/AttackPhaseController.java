@@ -294,6 +294,6 @@ public class AttackPhaseController implements View.OnClickListener {
     public boolean isCountryAdjacent(Country fromCountry,Country toCountry)
     {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
-        return fc.isCountriesConneted(fromCountry,toCountry);
+        return fc.isCountriesConnected(fromCountry,toCountry);
     }
 }
