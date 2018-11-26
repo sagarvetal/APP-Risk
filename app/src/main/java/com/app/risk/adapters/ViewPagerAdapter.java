@@ -49,7 +49,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         if (isFileValid(mapList.get(index))){
             Fragment fragment = new MapFragment();
             Bundle bundle = new Bundle();
-
             bundle.putString("MAP_NAME", mapList.get(index));
             fragment.setArguments(bundle);
             return fragment;
