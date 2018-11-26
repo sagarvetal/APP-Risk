@@ -97,8 +97,8 @@ public class AggressivePlayerStrategy implements Strategy {
     }
 
     /**
-     *
-     * @return
+     * Gets attacker dice according to its no of armies
+     * @return attacker dice
      */
 
     public int getAttackerDice(){
