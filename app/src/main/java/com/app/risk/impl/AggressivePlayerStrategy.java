@@ -7,7 +7,6 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
@@ -19,9 +18,7 @@ import java.util.Random;
  * @version 1.0.0 (Date: 22/11/2018)
  */
 public class AggressivePlayerStrategy implements Strategy {
-
     Country strongestCountry = new Country();
-
     /**
      * This is reinforcement method for aggressive strategy player.
      * It places the reinforcement armies on the strongest country having higher no of armies.
@@ -37,13 +34,10 @@ public class AggressivePlayerStrategy implements Strategy {
                     strongestCountry = country;
                 }
             }
-
         }
         //handle case where there could be countries with same number of armies
         int maxArmiesForReinforcement = player.calculateReinforcementArmies(gamePlay);
-
         strongestCountry.incrementArmies(maxArmiesForReinforcement);
-
     }
 
     /**
@@ -54,24 +48,31 @@ public class AggressivePlayerStrategy implements Strategy {
      */
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player) {
-
         while (strongestCountry.getNoOfArmies()>1){
             Country toCountry = getToCountry(gamePlay,player);
             int defenderDice = performAttack(player,toCountry);
-            toCountry.getPlayer().decrementCountries(1);
-            toCountry.setPlayer(strongestCountry.getPlayer());
-            gamePlay.getCurrentPlayer().setNewCountryConquered(true);
-            int movingArmies = 0;
-            if (defenderDice <= strongestCountry.getNoOfArmies()){
-                movingArmies = defenderDice;
-            }else {
-                movingArmies = strongestCountry.getNoOfArmies();
+            if (defenderDice > 0){
+                toCountry.getPlayer().decrementCountries(1);
+                toCountry.setPlayer(strongestCountry.getPlayer());
+                gamePlay.getCurrentPlayer().setNewCountryConquered(true);
+                int movingArmies = 0;
+                if (defenderDice <= strongestCountry.getNoOfArmies()){
+                    movingArmies = defenderDice;
+                } else {
+                    movingArmies = strongestCountry.getNoOfArmies();
+                }
+                strongestCountry.decrementArmies(movingArmies);
+                toCountry.incrementArmies(movingArmies);
             }
-            strongestCountry.decrementArmies(movingArmies);
-            toCountry.incrementArmies(movingArmies);
         }
     }
 
+    /**
+     * selects defender country
+     * @param gamePlay - gameplay object
+     * @param player - player object
+     * @return defender country
+     */
     public Country getToCountry(GamePlay gamePlay, Player player){
         Country toCountry = getRandomCountry(gamePlay.getCountries().values());
         while (toCountry.getPlayer() == strongestCountry.getPlayer() && toCountry.getNoOfArmies()>0){
@@ -83,31 +84,25 @@ public class AggressivePlayerStrategy implements Strategy {
     public int performAttack(Player player, Country toCountry){
         int attackCount = 0;
         int noOfAttackerDice = 0;
+
         while(strongestCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() != 0){
             noOfAttackerDice = getAttackerDice();
             final int noOfDefenderDice = getDefenderDice(toCountry);
-
             LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
             LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
             LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
-
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
         }
         return noOfAttackerDice;
     }
 
-    public int getAttackerDice(){
-        int noOfAttackerDice = -1;
-        if (strongestCountry.getNoOfArmies() <2){
-            //no attack possible
-        }
+    /**
+     *
+     * @return
+     */
 
-        if (strongestCountry.getNoOfArmies()>=3){
-            noOfAttackerDice = 3;
-        }else {
-            noOfAttackerDice = strongestCountry.getNoOfArmies() - 1;
-        }
-        return noOfAttackerDice;
+    public int getAttackerDice(){
+        return strongestCountry.getNoOfArmies() > 3 ? 3 : strongestCountry.getNoOfArmies() - 1 ;
     }
 
     public int getDefenderDice(Country toCountry){
@@ -123,7 +118,11 @@ public class AggressivePlayerStrategy implements Strategy {
        return defendingDiceRoll;
     }
 
-
+    /**
+     * returns random country from give collection of countries
+     * @param countries - collection of countries
+     * @return random country form list of collection
+     */
 
     private Country getRandomCountry(Collection countries) {
         Random rnd = new Random();
@@ -149,8 +148,13 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         performFortification(gamePlay , countryMaxNieghbours);
-
     }
+
+    /**
+     * Performs actual fortification, that is increase and decreases country
+     * @param gamePlay- Gameplay object
+     * @param country - countries having maximum armies in neighbour
+     */
 
     public void performFortification(GamePlay gamePlay, Country country){
 
@@ -161,6 +165,13 @@ public class AggressivePlayerStrategy implements Strategy {
         }
     }
 
+    /**
+     * Calculates maximum number of armies in nieghbouring countries for given country
+     * @param gamePlay gameplay object
+     * @param country - country whose nieghbouring countries armies count will be calculated
+     * @return maximum count
+     */
+
     public int nieghbourArmiesCount(GamePlay gamePlay,Country country){
         int count = 0;
         for (String adjacentCountry : country.getAdjacentCountries()){
@@ -169,5 +180,4 @@ public class AggressivePlayerStrategy implements Strategy {
         }
         return  count;
     }
-
 }
