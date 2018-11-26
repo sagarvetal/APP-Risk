@@ -170,7 +170,8 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
 //                intent.putStringArrayListExtra("MAPS",selectedMapList);
 //                intent.putExtra("MAX_TURNS",numberPickerValue);
                 // intent.putExtra("GAMES",gamePickerValue);
-                Toast.makeText(this, ""+gamePickerValue, Toast.LENGTH_SHORT).show();
+                // intent.putExtra("PLAY_TYPE","TOURNAMENT");
+
             }
             else{
                 Toast.makeText(this, "" +

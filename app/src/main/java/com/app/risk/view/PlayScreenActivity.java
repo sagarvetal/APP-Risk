@@ -54,6 +54,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
+    private String playType;
     public ListView logView;
     public static ArrayAdapter<String> logViewAdapter;
     public static ArrayList<String> logViewArrayList;
@@ -135,6 +136,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         mapName = intent.getStringExtra("MAP_NAME");
         playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
         playerStrategies = intent.getStringArrayListExtra("STRATERGY_INFO");
+        playType = intent.getStringExtra("PLAY_TYPE");
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
