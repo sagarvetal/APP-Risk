@@ -3,16 +3,20 @@ package com.app.risk.controller;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.widget.RecyclerView;
+import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.app.risk.R;
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
+import com.app.risk.view.MainScreenActivity;
+import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
 
@@ -31,7 +35,6 @@ public class AttackPhaseController implements View.OnClickListener {
     private ArrayList<Country> countries;
     private Country attackingCountry, defendingCountry;
 
-    private RecyclerView recyclerView;
     private AlertDialog mainAlertDialog;
     private Button rollButton,allOutButton;
 
@@ -71,25 +74,69 @@ public class AttackPhaseController implements View.OnClickListener {
     /**
      * This method inflates the Attack dialog box
      */
-    public void initiateAttack(final Country attackingCountry, final Country defendingCountry, final RecyclerView recyclerView, final ArrayList<Country> countries){
+    public void initiateAttack(final ArrayList<Country> countries, final Country attackingCountry, final Country defendingCountry){
+        this.countries = countries;
         this.attackingCountry = attackingCountry;
         this.defendingCountry = defendingCountry;
-        this.recyclerView = recyclerView;
-        this.countries = countries;
+        final Player attacker = gamePlay.getCurrentPlayer();
+        final Player defender = defendingCountry.getPlayer();
 
+        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
+        if(attacker.equals(defender)){
+            LogManager.getInstance().writeLog("Attacker can not attack on their own country");
+            Toast.makeText(context, "Attacker can not attack on their own country", Toast.LENGTH_SHORT).show();
+        } else{
+            if(attackingCountry.getNoOfArmies() > 1){
+                showAttackView();
+            } else{
+                LogManager.getInstance().writeLog("Attacking country must have more than one armies");
+                Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
+            LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has won the game.");
+            Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(context)
+                    .setMessage("You won the game!!!")
+                    .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            context.startActivity(new Intent(context.getApplicationContext(), MainScreenActivity.class));
+                        }
+                    })
+                    .setTitle("Congratulations!!!")
+                    .setCancelable(false)
+                    .create().show();
+
+        } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
+            LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
+            Toast.makeText(context, "You can not do more attacks as you do not have enough armies.", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(context)
+                    .setMessage("You can not do more attacks as you do not have enough armies.")
+                    .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().changePhase(GamePlayConstants.FORTIFICATION_PHASE);
+                        }
+                    })
+                    .setTitle("Alert")
+                    .setCancelable(false)
+                    .create().show();
+        }
+
+    }
+
+    /**
+     * This method gets the reference of the elements of dialog box
+     */
+    private void showAttackView(){
         final View view = View.inflate(context,R.layout.attack_alert_dialog,null);
         final AlertDialog.Builder mainAlertDialogBuilder = new AlertDialog.Builder(context);
         mainAlertDialogBuilder.setView(view);
         mainAlertDialogBuilder.create();
         mainAlertDialog = mainAlertDialogBuilder.show();
-        setUpViews(view);
-    }
 
-    /**
-     * This method gets the reference of the elements of dialog box
-     * @param view It gets the reference main dialog view
-     */
-    private void setUpViews(final View view){
         attackerNumberPicker = (NumberPicker) view.findViewById(R.id.attack_alert_dialog_attacker_picker);
         attackerNumberPicker.setMinValue(1);
         attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3: attackingCountry.getNoOfArmies() - 1);
@@ -144,7 +191,7 @@ public class AttackPhaseController implements View.OnClickListener {
 
             final boolean isCountryConquered = defendingCountry.getNoOfArmies() == 0 ? true : false;
             showAttackResultDialogBox(isCountryConquered, attackResult.toString());
-            recyclerView.getAdapter().notifyDataSetChanged();
+            getActivity().notifyPlayScreenRVAdapter();
         }
     }
 
@@ -174,7 +221,7 @@ public class AttackPhaseController implements View.OnClickListener {
                         mainAlertDialog.dismiss();
                         Toast.makeText(context, "You lose the attack on", Toast.LENGTH_SHORT).show();
                     }
-                    recyclerView.getAdapter().notifyDataSetChanged();
+                    getActivity().notifyPlayScreenRVAdapter();
                 }
             })
             .setTitle("Dice Rolls Result")
@@ -205,7 +252,7 @@ public class AttackPhaseController implements View.OnClickListener {
                 LogManager.getInstance().writeLog(numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
                         " to " + defendingCountry.getNameOfCountry());
 
-                recyclerView.getAdapter().notifyDataSetChanged();
+                getActivity().notifyPlayScreenRVAdapter();
                 Toast.makeText(context, numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
                         " to " + defendingCountry.getNameOfCountry(), Toast.LENGTH_SHORT).show();
             }
@@ -213,6 +260,14 @@ public class AttackPhaseController implements View.OnClickListener {
         alertDialog.setCancelable(false);
         alertDialog.setTitle("Select armies to move on newly conquered country");
         alertDialog.create().show();
+    }
+
+    /**
+     * This method cast the context and returns PlayScreenActivity object.
+     * @return The PlayScreenActivity object.
+     */
+    public PlayScreenActivity getActivity() {
+        return (PlayScreenActivity) context;
     }
 
     /**

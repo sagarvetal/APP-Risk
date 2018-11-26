@@ -57,10 +57,11 @@ public class StartupPhaseController {
 
     /**
      * This method starts the startup phase.
+     * @param playerNames This is list of player names of type string.
+     * @param playerStrategies This is list of player strategies of type string.
      */
-    public void start(final ArrayList<String> playerNames) {
-        gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
-        gamePlay.setPlayers(playerNames);
+    public void start(final ArrayList<String> playerNames, final ArrayList<String> playerStrategies) {
+        gamePlay.setPlayers(playerNames, playerStrategies);
         assignInitialCountries();
         assignInitialArmies();
         placeInitialArmies();
