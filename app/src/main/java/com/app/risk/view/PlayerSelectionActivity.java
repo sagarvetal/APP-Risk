@@ -199,6 +199,7 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                                 intent.putStringArrayListExtra("PLAYER_INFO", playerNames);
                                 intent.putStringArrayListExtra("STRATERGY_INFO",playerStratergies);
                                 intent.putExtra("MAP_NAME", mapInfo);
+                                intent.putExtra("PLAY_TYPE","SINGLE");
                                 startActivity(intent);
                             }
                         }).create().show();
