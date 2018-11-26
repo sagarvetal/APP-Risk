@@ -37,6 +37,7 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private AlertDialog mainAlertDialog;
     private Button rollButton,allOutButton;
+    private int variable = -1;
 
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
 
@@ -276,10 +277,8 @@ public class AttackPhaseController implements View.OnClickListener {
      * @param attackerCountry attacking country
      * @return true if the defending country has atleast 1 army and attacking country has more than 1 army, false otherwise
      */
-    public boolean canCountryAttack(Country defenderCountry,Country attackerCountry)
-    {
-        if(defenderCountry.getNoOfArmies()>=1 && attackerCountry.getNoOfArmies()>1)
-        {
+    public boolean canCountryAttack(Country defenderCountry,Country attackerCountry) {
+        if(defenderCountry.getNoOfArmies()>=1 && attackerCountry.getNoOfArmies()>1) {
             return true;
         }
         return false;
@@ -291,9 +290,29 @@ public class AttackPhaseController implements View.OnClickListener {
      * @param toCountry to country
      * @return true if a path exists between from country and to country, false otherwise
      */
-    public boolean isCountryAdjacent(Country fromCountry,Country toCountry)
-    {
+    public boolean isCountryAdjacent(Country fromCountry,Country toCountry) {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
         return fc.isCountriesConnected(fromCountry,toCountry);
     }
+
+    public int setUpDiceRollView(int maxDiceValue){
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+
+        variable = -1;
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.human_player_selection_dialog_number_picker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(maxDiceValue);
+        numberPicker.setWrapSelectorWheel(false);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        variable = numberPicker.getValue();
+                    }
+                }).setCancelable(false);
+
+        return variable;
+    }
+
 }

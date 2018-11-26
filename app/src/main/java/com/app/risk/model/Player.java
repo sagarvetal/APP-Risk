@@ -244,7 +244,6 @@ public class Player extends Observable implements Serializable {
      * @param count The decrement count by which the no of armies to be decremented.
      */
     public void decrementArmies(final int count) {
-
         this.noOfArmies -= count;
         setChanged();
         notifyObservers(this);
@@ -516,7 +515,7 @@ public class Player extends Observable implements Serializable {
                 attackingCountry.decrementArmies(1);
                 attackingCountry.getPlayer().decrementArmies(1);
                 attackResult.append("\nDefender won \n");
-            } else{
+            } else {
                 defendingCountry.decrementArmies(1);
                 defendingCountry.getPlayer().decrementArmies(1);
                 attackResult.append("\nAttacker won \n");
@@ -571,7 +570,6 @@ public class Player extends Observable implements Serializable {
                 }
             }
         }
-
         return false;
     }
 
@@ -664,5 +662,4 @@ public class Player extends Observable implements Serializable {
         float percentage = (size/countriesSize) *100;
         return percentage;
     }
-
 }
