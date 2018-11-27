@@ -35,6 +35,16 @@ public class Player extends Observable implements Serializable {
     private boolean cardsExchangedInRound;
     private boolean isNewCountryConquered;
     private Strategy strategy;
+    private boolean isHuman;
+
+    /**
+     * This is a default constructor and it initializes the card list.
+     */
+    public Player() {
+        this.cards = new ArrayList<>();
+        this.armiesInExchangeOfCards = 0;
+        cardsExchangedInRound = false;
+    }
 
     /**
      * Check if the player has exchanged cards in ongoing round
@@ -50,15 +60,6 @@ public class Player extends Observable implements Serializable {
      */
     public void setCardsExchangedInRound(boolean cardsExchangedInRound) {
         this.cardsExchangedInRound = cardsExchangedInRound;
-    }
-
-    /**
-     * This is a default constructor and it initializes the card list.
-     */
-    public Player() {
-        this.cards = new ArrayList<>();
-        this.armiesInExchangeOfCards = 0;
-        cardsExchangedInRound = false;
     }
 
     /**
@@ -218,6 +219,7 @@ public class Player extends Observable implements Serializable {
     public int getNoOfArmies() {
         return noOfArmies;
     }
+
     /**
      * Setter function to set the no of armies assigned to the player
      *
@@ -226,6 +228,7 @@ public class Player extends Observable implements Serializable {
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
     }
+
     /**
      * This function is to increment no of armies by given count.
      *
@@ -243,7 +246,6 @@ public class Player extends Observable implements Serializable {
      * @param count The decrement count by which the no of armies to be decremented.
      */
     public void decrementArmies(final int count) {
-
         this.noOfArmies -= count;
         setChanged();
         notifyObservers(this);
@@ -286,6 +288,7 @@ public class Player extends Observable implements Serializable {
     public List<Card> getCards() {
         return cards;
     }
+
     /**
      * Setter function to set the card earned by player
      *
@@ -323,7 +326,6 @@ public class Player extends Observable implements Serializable {
         isActive = active;
     }
 
-
     /**
      * Getter function to get the flag to determine whether player conquered new country.
      * @return true if player conquered new country, otherwise return false.
@@ -357,12 +359,28 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
-     * This is reinforcement method.
-     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
-     *
+     * Getter function to get the flag to determine whether the player is human or not.
+     * @return true if player is human, otherwise return false.
+     */
+    public boolean isHuman() {
+        return isHuman;
+    }
+
+    /**
+     * Setter function to set the flag used to determine whether the player is human or not.
+     * @isHuman true if player is human, otherwise return false.
+     */
+    public void setHuman(boolean isHuman) {
+        this.isHuman = isHuman;
+    }
+
+    /**
+     * This is calculate the total reinforcement armies.
+     * It sets the no of reinforcement armies given to the player
+     * based on no of countries player owns and no of cards.
      * @param gamePlay The GamePlay object.
      */
-    public void reinforcementPhase(final GamePlay gamePlay) {
+    public void setTotalReinforcementArmies(final GamePlay gamePlay) {
         final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
         final int continentValue = getContinentValue(gamePlay);
         LogManager.getInstance().writeLog("Total reinforcement armies awarded : " + reinforcementArmies);
@@ -408,6 +426,43 @@ public class Player extends Observable implements Serializable {
         }
         return continentValue;
     }
+
+    /**
+     * This is reinforcement method.
+     * It places the no of reinforcement armies given to the player.
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param toCountry The country where player placing the reinforcement armies.
+     */
+    public void reinforcementPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
+        getStrategy().reinforcementPhase(gamePlay, this, countriesOwnedByPlayer, toCountry);
+    }
+
+
+    /**
+     * This is attack method.
+     * Attacker attacks on country according to its strategy.
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     */
+    public void attackPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
+        getStrategy().attackPhase(gamePlay, this, countriesOwnedByPlayer, attackingCountry, defendingCountry);
+    }
+
+
+    /**
+     * This is fortification method.
+     * It moves armies from one country to another country..
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param fromCountry The country from where player wants to move armies.
+     */
+    public void fortificationPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
+        getStrategy().fortificationPhase(gamePlay, this, countriesOwnedByPlayer, fromCountry);
+    }
+
 
     /**
      * This is all out attack method in which attacker continues to attack
@@ -462,7 +517,7 @@ public class Player extends Observable implements Serializable {
                 attackingCountry.decrementArmies(1);
                 attackingCountry.getPlayer().decrementArmies(1);
                 attackResult.append("\nDefender won \n");
-            } else{
+            } else {
                 defendingCountry.decrementArmies(1);
                 defendingCountry.getPlayer().decrementArmies(1);
                 attackResult.append("\nAttacker won \n");
@@ -517,7 +572,6 @@ public class Player extends Observable implements Serializable {
                 }
             }
         }
-
         return false;
     }
 
@@ -535,19 +589,6 @@ public class Player extends Observable implements Serializable {
         return true;
     }
 
-
-    /**
-     * This is fortification method.
-     * It moves armies from one country to another country.
-     * @param fromCountry The country from where player wants to move armies.
-     * @param toCountry The country to where player wants to move armies.
-     * @param noOfArmies The no of armies to be moved.
-     */
-    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies){
-        fromCountry.decrementArmies(noOfArmies);
-        toCountry.incrementArmies(noOfArmies);
-    }
-
     /**
      * This method picks random card from game play and assign it to player.
      * @param gamePlay The GamePlay object.
@@ -558,6 +599,7 @@ public class Player extends Observable implements Serializable {
         setCards(card);
         LogManager.getInstance().writeLog(card.getType() + " has been awarded to " + getName());
     }
+
 
     /**
      * Returns number of continents owned by player
@@ -582,7 +624,6 @@ public class Player extends Observable implements Serializable {
      * @param arrCountriesOfContinent - arry of countries of continents
      * @return true if all countries of of continent are owned by user false otherwise
      */
-
     boolean checkIfAllCountriesInContinents(ArrayList<Country> arrCountiesOwnedByPlayer,ArrayList<Country> arrCountriesOfContinent){
         for (Country countryContinent : arrCountriesOfContinent){
             if (!checkIfCountryIsContainedWithPlayer(arrCountiesOwnedByPlayer,countryContinent)){
@@ -598,7 +639,6 @@ public class Player extends Observable implements Serializable {
      * @param country country to be checked
      * @return true if country is contained in list of countries
      */
-
     boolean checkIfCountryIsContainedWithPlayer(ArrayList<Country> arrCountry,Country country){
         for(Country countryPlayer : arrCountry){
             if (country == countryPlayer){
@@ -621,5 +661,4 @@ public class Player extends Observable implements Serializable {
         float percentage = (size/countriesSize) *100;
         return percentage;
     }
-
 }

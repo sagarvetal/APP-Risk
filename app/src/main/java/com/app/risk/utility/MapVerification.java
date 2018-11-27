@@ -167,7 +167,6 @@ public class MapVerification {
      *
      * @param traversableCountries Countries that belong to either the entire map (forming a map) or a continent (forming a subgraph)
      */
-
     private void depthFirstTraversal(List<GameMap> traversableCountries) {
 
 
