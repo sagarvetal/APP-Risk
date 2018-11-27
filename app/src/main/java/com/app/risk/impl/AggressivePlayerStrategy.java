@@ -2,13 +2,14 @@ package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -36,7 +37,7 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         strongestCountry.incrementArmies(player.getReinforcementArmies());
-        LogManager.getInstance().writeLog("Reinforcement Armies alloted : " + player.getReinforcementArmies());
+        PhaseViewController.getInstance().addAction("Reinforcement Armies alloted : " + player.getReinforcementArmies());
         player.setReinforcementArmies(0);
     }
 
@@ -50,19 +51,23 @@ public class AggressivePlayerStrategy implements Strategy {
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         while (strongestCountry.getNoOfArmies()>1){
             Country toCountry = getToCountry(gamePlay, player);
-            int defenderDice = performAttack(player,toCountry);
-            if (defenderDice > 0){
-                toCountry.getPlayer().decrementCountries(1);
-                toCountry.setPlayer(strongestCountry.getPlayer());
-                gamePlay.getCurrentPlayer().setNewCountryConquered(true);
-                int movingArmies = 0;
-                if (defenderDice <= strongestCountry.getNoOfArmies()){
-                    movingArmies = defenderDice;
-                } else {
-                    movingArmies = strongestCountry.getNoOfArmies();
+            if (toCountry != null){
+                int defenderDice = performAttack(player,toCountry);
+                if (defenderDice > 0){
+                    toCountry.getPlayer().decrementCountries(1);
+                    toCountry.setPlayer(strongestCountry.getPlayer());
+                    gamePlay.getCurrentPlayer().setNewCountryConquered(true);
+                    int movingArmies = 0;
+                    if (defenderDice <= strongestCountry.getNoOfArmies()){
+                        movingArmies = defenderDice;
+                    } else {
+                        movingArmies = strongestCountry.getNoOfArmies();
+                    }
+                    strongestCountry.decrementArmies(movingArmies);
+                    toCountry.incrementArmies(movingArmies);
                 }
-                strongestCountry.decrementArmies(movingArmies);
-                toCountry.incrementArmies(movingArmies);
+            } else {
+                break;
             }
         }
     }
@@ -74,11 +79,13 @@ public class AggressivePlayerStrategy implements Strategy {
      * @return defender country
      */
     public Country getToCountry(GamePlay gamePlay, Player player){
-        Country toCountry = getRandomCountry(gamePlay.getCountries().values());
-        while (toCountry.getPlayer() == strongestCountry.getPlayer() && toCountry.getNoOfArmies()>0){
-            toCountry = getRandomCountry(gamePlay.getCountries().values());
+        HashMap<String,Country> countries = gamePlay.getCountries();
+        for (String countryName :strongestCountry.getAdjacentCountries()){
+            if (countries.get(countryName).getPlayer() != strongestCountry.getPlayer()){
+                return countries.get(countryName);
+            }
         }
-        return toCountry;
+        return null;
     }
 
     public int performAttack(Player player, Country toCountry){
@@ -88,11 +95,11 @@ public class AggressivePlayerStrategy implements Strategy {
         while(strongestCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() != 0){
             noOfAttackerDice = getAttackerDice();
             final int noOfDefenderDice = AttackPhaseController.getInstance().getDefenderDices(toCountry);
-            LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
-            LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
-            LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+            PhaseViewController.getInstance().addAction("\nAttack No : " + (++attackCount));
+            PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+            PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
-            LogManager.getInstance().writeLog("Attack result : " + result);
+            PhaseViewController.getInstance().addAction("Attack result : " + result);
 
         }
         return noOfAttackerDice;
@@ -106,18 +113,6 @@ public class AggressivePlayerStrategy implements Strategy {
         return strongestCountry.getNoOfArmies() > 3 ? 3 : strongestCountry.getNoOfArmies() - 1 ;
     }
 
-
-    /**
-     * returns random country from give collection of countries
-     * @param countries - collection of countries
-     * @return random country form list of collection
-     */
-
-    private Country getRandomCountry(final Collection countries) {
-        Random rnd = new Random();
-        int i = rnd.nextInt(countries.size());
-        return (Country)countries.toArray()[i];
-    }
 
     /**
      * This is fortification method for aggressive strategy player.
@@ -138,7 +133,7 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         performFortification(gamePlay,countryMaxNieghbours,countriesOwnedByPlayer);
-        LogManager.getInstance().writeLog("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
+        PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
 
     }
 
