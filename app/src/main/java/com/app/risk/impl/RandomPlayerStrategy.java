@@ -35,10 +35,10 @@ public class RandomPlayerStrategy implements Strategy {
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
         while(player.getReinforcementArmies()!=0){
-            int putCountryIndex = random.nextInt(countriesOwnedByPlayer.size()+1)-1;
-            int reinforcementArmiesToPutInCountry = random.nextInt(player.getReinforcementArmies());
-            countriesOwnedByPlayer.get(putCountryIndex).incrementArmies(reinforcementArmiesToPutInCountry);
-            player.decrementReinforcementArmies(reinforcementArmiesToPutInCountry);
+            int countryIndex = random.nextInt(countriesOwnedByPlayer.size());
+            int noOfArmies = random.nextInt(player.getReinforcementArmies());
+            countriesOwnedByPlayer.get(countryIndex).incrementArmies(noOfArmies);
+            player.decrementReinforcementArmies(noOfArmies);
             if(player.getCards().size()>2) {
                 CardExchangeController.getInstance().init(player).exchangeCardsStrategyImplementation();
             }
@@ -65,9 +65,9 @@ public class RandomPlayerStrategy implements Strategy {
             }
         }
         countriesOwnedByPlayer.removeAll(countriesWithLessThan2Armies);
-        int numberOfTurns = random.nextInt(countriesNotBelongingToPlayer.size() + 1);
+        int numberOfTurns = random.nextInt(countriesNotBelongingToPlayer.size());
         for (int i = 0; i < numberOfTurns; i++) {
-            int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size() + 1) - 1;
+            int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size());
             Country fromCountry = countriesOwnedByPlayer.get(fromCountryIndex);
             int armiesInFromCountry = countriesOwnedByPlayer.get(fromCountryIndex).getNoOfArmies() - 1;
             List<String> adjacentCountries = fromCountry.getAdjacentCountries();
