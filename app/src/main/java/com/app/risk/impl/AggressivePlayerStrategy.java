@@ -27,6 +27,7 @@ public class AggressivePlayerStrategy implements Strategy {
      */
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
+        strongestCountry = countriesOwnedByPlayer.get(0);
         for (Country country: countriesOwnedByPlayer){
             if (country.getPlayer() == player){
                 if (country.getNoOfArmies() > strongestCountry.getNoOfArmies()){
