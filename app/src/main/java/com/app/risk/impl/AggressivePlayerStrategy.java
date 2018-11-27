@@ -132,7 +132,7 @@ public class AggressivePlayerStrategy implements Strategy {
                 countryMaxNieghbours = country;
             }
         }
-        performFortification(gamePlay,countryMaxNieghbours,countriesOwnedByPlayer);
+        performFortification(gamePlay,countryMaxNieghbours);
         PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
 
     }
@@ -143,10 +143,11 @@ public class AggressivePlayerStrategy implements Strategy {
      * @param country - countries having maximum armies in neighbour
      */
 
-    public void performFortification(GamePlay gamePlay, Country country, final ArrayList<Country> countriesOwnedByPlayer ){
-        for (Country neighbourCountry : countriesOwnedByPlayer){
-            country.incrementArmies(neighbourCountry.getNoOfArmies() - 1);
-            neighbourCountry.decrementArmies(neighbourCountry.getNoOfArmies() - 1);
+    public void performFortification(GamePlay gamePlay, Country country){
+        HashMap<String,Country> countries = gamePlay.getCountries();
+        for (String countryName : country.getAdjacentCountries()){
+            country.incrementArmies(countries.get(countryName).getNoOfArmies() - 1);
+            countries.get(countryName).decrementArmies(countries.get(countryName).getNoOfArmies() - 1);
         }
     }
 
