@@ -9,8 +9,13 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.app.risk.Interfaces.Strategy;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.impl.AggressivePlayerStrategy;
+import com.app.risk.impl.BenevolentPlayerStrategy;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -146,6 +151,7 @@ public class AttackPhaseController implements View.OnClickListener {
         defenderNumberPicker = (NumberPicker) view.findViewById(R.id.attack_alert_dialog_defender_picker);
         defenderNumberPicker.setMinValue(1);
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
+        defenderNumberPicker.setValue(getDefenderDice(defendingCountry));
         defenderNumberPicker.setWrapSelectorWheel(false);
 
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
@@ -175,6 +181,7 @@ public class AttackPhaseController implements View.OnClickListener {
 
                 attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1);
                 defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies());
+                defenderNumberPicker.setValue(getDefenderDice(defendingCountry));
             }
             else if(v == allOutButton){
                 LogManager.getInstance().writeLog("Player has selected all out option for attack.");
@@ -315,4 +322,16 @@ public class AttackPhaseController implements View.OnClickListener {
         return variable;
     }
 
+    public int getDefenderDice(final Country defendingCountry){
+        final Strategy strategy = defendingCountry.getPlayer().getStrategy();
+        if(strategy instanceof AggressivePlayerStrategy ||
+            strategy instanceof RandomPlayerStrategy ||
+            strategy instanceof CheaterPlayerStrategy) {
+            return defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        } else if(strategy instanceof BenevolentPlayerStrategy){
+            return 1;
+        } else {
+            return 1;
+        }
+    }
 }
