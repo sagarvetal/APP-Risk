@@ -64,8 +64,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private ListView logView;
-    private static ArrayAdapter<String> logViewAdapter;
-    private static ArrayList<String> logViewArrayList;
+    public static ArrayAdapter<String> logViewAdapter;
+    public static ArrayList<String> logViewArrayList;
     private PlayerStateAdapter playerStateAdapter;
     private ListView listPlayerState ;
     private ArrayList<Country> countriesOwnedByPlayer;
