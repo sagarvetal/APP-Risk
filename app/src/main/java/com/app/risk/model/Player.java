@@ -502,31 +502,33 @@ public class Player extends Observable implements Serializable {
      */
     public StringBuilder performAttack(final Country attackingCountry, final Country defendingCountry, final int noOfAttackerDice, final int noOfDefenderDice){
 
-        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
-        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
-
         final StringBuilder attackResult = new StringBuilder();
         attackResult.append("\nBefore Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + ", Defender armies : " + defendingCountry.getNoOfArmies() + "\n\n");
+        attackResult.append("No of attacker dice : " + noOfAttackerDice + "\n No of defender dice : " + noOfDefenderDice + "\n");
+
+        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
+        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
+
+        attackResult.append("Attacker Dice Rolls : " + attackerDiceRollsOutputList + "\n");
+        attackResult.append("Defender Dice Rolls : " + defenderDiceRollsOutputList + "\n");
 
         while(!defenderDiceRollsOutputList.isEmpty() && !attackerDiceRollsOutputList.isEmpty() ){
-
-            attackResult.append("Attacker dice : " + attackerDiceRollsOutputList.get(0) + ", Defender dice : " + defenderDiceRollsOutputList.get(0));
 
             if(defenderDiceRollsOutputList.get(0) >= attackerDiceRollsOutputList.get(0)){
                 attackingCountry.decrementArmies(1);
                 attackingCountry.getPlayer().decrementArmies(1);
-                attackResult.append("\nDefender won \n");
+                attackResult.append("\nDefender won");
             } else {
                 defendingCountry.decrementArmies(1);
                 defendingCountry.getPlayer().decrementArmies(1);
-                attackResult.append("\nAttacker won \n");
+                attackResult.append("\nAttacker won");
             }
             defenderDiceRollsOutputList.remove(0);
             attackerDiceRollsOutputList.remove(0);
         }
 
-        attackResult.append("\nAfter Attack : \n");
+        attackResult.append("\n\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
         PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;

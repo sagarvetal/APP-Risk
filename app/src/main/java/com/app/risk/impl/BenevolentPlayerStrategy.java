@@ -163,7 +163,10 @@ public class BenevolentPlayerStrategy implements Strategy {
     private ArrayList<Country> getCountryArrayList(ArrayList<String> reachableCountries, GamePlay gamePlay) {
         ArrayList<Country> countries = new ArrayList<Country>();
         for (String name : reachableCountries) {
-            countries.add(gamePlay.getCountries().get(name));
+            if(gamePlay.getCountries().containsKey(name))
+            {
+             countries.add(gamePlay.getCountries().get(name));
+            }
         }
         return countries;
     }
