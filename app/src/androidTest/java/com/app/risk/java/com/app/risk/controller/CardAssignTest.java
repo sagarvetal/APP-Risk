@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.model.Card;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -17,16 +18,15 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertFalse;
-
+import static org.junit.Assert.assertTrue;
 /**
- * This class is used check whether the fortification is not done between unconnected countries or not
+ * This class is used check whether the card is assigned after the attack
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
 @RunWith(AndroidJUnit4.class)
-public class FortificationUnConnectedTest {
+public class CardAssignTest {
     private String fileLocation;
     Context context = null;
     GamePlay gm = null;
@@ -75,28 +75,36 @@ public class FortificationUnConnectedTest {
         gm.setCountries(countryList);
         gm.setPlayers(playerNames);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
-        gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(1));
+        gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Bhutan").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
         gm.getCountries().get("Bangladesh").setPlayer(gm.getPlayers().get(1));
         gm.getCountries().get("Myammar").setPlayer(gm.getPlayers().get(2));
         gm.setCurrentPlayer(gm.getPlayers().get(0));
+        gm.setCards();
         context = InstrumentationRegistry.getTargetContext();
     }
 
     /**
-     * This method checks whether the fortification is not done between unconnected countries or not
+     * This method checks whether the card is assigned after the attack
      */
     @Test
-    public void fortificationUnConnectedTest() {
+    public void fortificationConnectedTest() {
+        int intialcards=gm.getCards().size();
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertFalse(fc.isCountriesConnected(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")) && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Bhutan").getPlayer().getId() && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Nepal").getPlayer().getId());
-
+        gm.getCurrentPlayer().assignCards(gm);
+        int afterFortification=gm.getCards().size();
+        System.out.println(":::::::::::::initial:::::::::"+intialcards);
+        System.out.println(":::::::::::::after fortification:::::::::"+afterFortification);
+        if(gm.getCurrentPlayer().isNewCountryConquered())
+        assertTrue(afterFortification-intialcards==1);
+        else
+            assertTrue(afterFortification-intialcards==0);
     }
 
     /**
      * This method gets executed after the test case has been executed
-     * its sets the file location to null
+     * its sets the game map to null
      */
     @After
     public void cleanUp()

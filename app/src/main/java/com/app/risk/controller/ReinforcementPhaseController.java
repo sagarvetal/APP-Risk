@@ -63,18 +63,18 @@ public class ReinforcementPhaseController {
      * This method starts the reinforcement phase.
      */
     public void start() {
-        gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay);
+        gamePlay.getCurrentPlayer().setTotalReinforcementArmies(gamePlay);
     }
 
     /**
      * This method shows the dailog box to place the reinforcement armies.
-     * @param position The position of country in list owned by the player.
+     * @param toCountry The country where player wants to place the reinforcement armies.
      * @param countries The list of countries owned by current player.
      */
-    public void showReinforcementDialogBox(final int position, final ArrayList<Country> countries){
+    public void showReinforcementDialogBox(final Country toCountry, final ArrayList<Country> countries){
         final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
-        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + countries.get(position).getNameOfCountry());
+        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + toCountry.getNameOfCountry());
 
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
         reinforcementDialogBox.setView(view);
@@ -88,9 +88,9 @@ public class ReinforcementPhaseController {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
-                countries.get(position).incrementArmies(numberPicker.getValue());
+                toCountry.incrementArmies(numberPicker.getValue());
 
-                LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + countries.get(position).getNameOfCountry());
+                LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + toCountry.getNameOfCountry());
 
                 getActivity().notifyPlayScreenRVAdapter();
                 if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
@@ -103,6 +103,7 @@ public class ReinforcementPhaseController {
         reinforcementDialogBox.create();
         reinforcementDialogBox.show();
     }
+
 
     /**
      * This method cast the context and returns PlayScreenActivity object.

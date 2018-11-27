@@ -29,7 +29,6 @@ import java.util.ArrayList;
  */
 public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapter.PlayScreenViewHolder> {
 
-
     private GamePlay gamePlay;
     private ArrayList<Country> countries;
     private Context context;
@@ -40,11 +39,12 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
      * This is the paramerized constructor
      * @param context It is used to call any activity methods using reference
      * @param gamePlay The GamePlay object
+     * @param countriesOwnedByPlayer The list of countries owned by player.
      */
-    public PlayScreenRVAdapter(Context context, GamePlay gamePlay) {
+    public PlayScreenRVAdapter(final Context context, final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer) {
         this.context = context;
         this.gamePlay = gamePlay;
-        this.countries = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
+        this.countries = countriesOwnedByPlayer;
         this.neighbouringCountries = new ArrayList<>();
     }
 
@@ -132,18 +132,21 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
          */
         @Override
         public void onClick(View v) {
-            if(v == cardView){
+            if(v == cardView && gamePlay.getCurrentPlayer().isHuman()){
                 switch (gamePlay.getCurrentPhase()) {
                     case GamePlayConstants.REINFORCEMENT_PHASE:
-                        ReinforcementPhaseController.getInstance().showReinforcementDialogBox(getAdapterPosition(), countries);
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
+                        gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, countries, countries.get(getAdapterPosition()));
                         break;
 
                     case GamePlayConstants.ATTACK_PHASE:
-                        Toast.makeText(context, "Select Country from List", Toast.LENGTH_SHORT).show();
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
+                        Toast.makeText(context, "Select Country from adjacent country list", Toast.LENGTH_SHORT).show();
                         break;
 
                     case GamePlayConstants.FORTIFICATION_PHASE:
-                        FortificationPhaseController.getInstance().init(context, gamePlay).showFortificationDialogBox(getAdapterPosition(),countries);
+                        GamePlayConstants.PHASE_IN_PROGRESS = true;
+                        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countries, countries.get(getAdapterPosition()));
                         break;
                 }
             }
@@ -151,12 +154,14 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            switch (gamePlay.getCurrentPhase()) {
-                case GamePlayConstants.ATTACK_PHASE:
-                    final Country attackingCountry = countries.get(getAdapterPosition());
-                    final Country defendingCountry = gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position));
-                    AttackPhaseController.getInstance().init(context, gamePlay).initiateAttack(countries, attackingCountry, defendingCountry);
-                    break;
+            if(gamePlay.getCurrentPlayer().isHuman()) {
+                switch (gamePlay.getCurrentPhase()) {
+                    case GamePlayConstants.ATTACK_PHASE:
+                        final Country attackingCountry = countries.get(getAdapterPosition());
+                        final Country defendingCountry = gamePlay.getCountries().get(adjacentCountries.getAdapter().getItem(position));
+                        gamePlay.getCurrentPlayer().attackPhase(gamePlay, countries, attackingCountry, defendingCountry);
+                        break;
+                }
             }
         }
     }
