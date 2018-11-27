@@ -155,7 +155,6 @@ public class BenevolentPlayerStrategy implements Strategy {
     }
     /**
      * This is method gets the list of countries that are reachable for a player
-     *
      * @param reachableCountries ArrayList of the country names which are reachable
      * @param playerCountryList ArrayList of the country owned by the player
      * @return ArrayList of country which are reachable

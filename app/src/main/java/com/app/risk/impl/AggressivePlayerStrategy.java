@@ -35,6 +35,7 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         strongestCountry.incrementArmies(player.getReinforcementArmies());
+        LogManager.getInstance().writeLog("Reinforcement Armies alloted : " + player.getReinforcementArmies());
         player.setReinforcementArmies(0);
     }
 
@@ -90,6 +91,8 @@ public class AggressivePlayerStrategy implements Strategy {
             LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
             LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
+            LogManager.getInstance().writeLog("Attack result : " + result);
+
         }
         return noOfAttackerDice;
     }
@@ -134,6 +137,8 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         performFortification(gamePlay,countryMaxNieghbours,countriesOwnedByPlayer);
+        LogManager.getInstance().writeLog("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
+
     }
 
     /**

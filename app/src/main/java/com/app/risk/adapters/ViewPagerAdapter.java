@@ -46,16 +46,14 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
      */
     @Override
     public Fragment getItem(int index) {
-        if (isFileValid(mapList.get(index))){
-            Fragment fragment = new MapFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("MAP_NAME", mapList.get(index));
-            fragment.setArguments(bundle);
-            return fragment;
-        } else {
-            //Check if this works
-            return  new Fragment();
-        }
+        Boolean isFileValid = isFileValid(mapList.get(index));
+        Fragment fragment = new MapFragment();
+        ((MapFragment) fragment).isFileValid = isFileValid;
+        ((MapFragment) fragment).context = context;
+        Bundle bundle = new Bundle();
+        bundle.putString("MAP_NAME", mapList.get(index));
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     public boolean isFileValid(String fileName) {
@@ -64,17 +62,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         List<GameMap> arrGamePlay = mapReader.returnGameMapFromFile(context,fileName);
         return  mapVerification.mapVerification(arrGamePlay);
     }
-    public void showAlert() {
-        new AlertDialog.Builder(context)
-                .setTitle("Alert").setMessage("Map not valid,Load new file or edit the same.")
-                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create().show();
 
-    }
 
 
     /**
