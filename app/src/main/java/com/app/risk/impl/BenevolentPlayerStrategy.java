@@ -145,7 +145,9 @@ public class BenevolentPlayerStrategy implements Strategy {
                     break;
                 }
             }
-            fortificationPhaseController.fortifyCountry(StrongCountry, weakestCountry, maxInConnected - avgInConnected);
+            final int noOfArmies = maxInConnected - avgInConnected;
+            StrongCountry.decrementArmies(noOfArmies);
+            weakestCountry.incrementArmies(noOfArmies);
             LogManager.getInstance().writeLog(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
         } else {
             LogManager.getInstance().writeLog(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
@@ -153,7 +155,6 @@ public class BenevolentPlayerStrategy implements Strategy {
     }
     /**
      * This is method gets the list of countries that are reachable for a player
-     *
      * @param reachableCountries ArrayList of the country names which are reachable
      * @param playerCountryList ArrayList of the country owned by the player
      * @return ArrayList of country which are reachable
