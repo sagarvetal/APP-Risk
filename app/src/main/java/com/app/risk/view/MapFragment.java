@@ -1,6 +1,7 @@
 package com.app.risk.view;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import org.w3c.dom.Text;
 public class MapFragment extends Fragment {
 
     TextView textView;
+    public Boolean isFileValid;
+    public Context context;
 
     /**
      * {@inheritDoc}
@@ -54,21 +57,37 @@ public class MapFragment extends Fragment {
        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isFileValid){
+                    new AlertDialog.Builder(getActivity())
+                            .setMessage(R.string.load_map_string)
+                            .setNegativeButton("No", null)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(getActivity(), PlayerSelectionActivity.class);
+                                    intent.putExtra("MAP_NAME", textView.getText().toString().trim());
+                                    startActivity(intent);
+                                }
+                            }).create().show();
+                } else {
+                    showAlert();
+                }
 
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(R.string.load_map_string)
-                        .setNegativeButton("No", null)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(getActivity(), PlayerSelectionActivity.class);
-                                intent.putExtra("MAP_NAME", textView.getText().toString().trim());
-                                startActivity(intent);
-                            }
-                        }).create().show();
             }
         });
         return view;
+    }
+
+    public void showAlert() {
+        new AlertDialog.Builder(context)
+                .setTitle("Alert").setMessage("Map not valid,Load new file or edit the same.")
+                .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create().show();
+
     }
 
 

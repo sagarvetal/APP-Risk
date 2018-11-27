@@ -1,5 +1,8 @@
 package com.app.risk.model;
 
+import com.app.risk.view.PlayScreenActivity;
+
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -8,16 +11,16 @@ import java.util.Observable;
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class Log extends Observable {
-    String message;
+public class PhaseModel extends Observable {
+    private ArrayList<String> message=new ArrayList<String>();
 
     /**
      * This method sets the message that has to be displayed in the logger
      *
      * @param msg: message that has to displayed in the logger
      */
-    public void setMessage(String msg) {
-        message = msg;
+    public void setAction(String msg) {
+        message.add(msg);
         setChanged();
         notifyObservers(this);
     }
@@ -27,16 +30,18 @@ public class Log extends Observable {
      *
      * @return message that would be displayed in logger of type string
      */
-    public String getMessage() {
+    public ArrayList<String> getActions() {
         return message;
     }
 
     /**
-     * This method is called when the object is printed
+     * This method clears the logs that is displayed in the logger
      *
-     * @return message that object contains at that time
+     *
      */
-    public String toString() {
-        return message;
+    public void clear() {
+        message.clear();
+        setChanged();
+        notifyObservers(this);
     }
 }
