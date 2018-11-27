@@ -1,7 +1,5 @@
 package com.app.risk.impl;
 
-import android.content.Context;
-
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.CardExchangeController;
