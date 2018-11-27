@@ -1,6 +1,8 @@
 package com.app.risk.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,7 +46,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
      */
     @Override
     public Fragment getItem(int index) {
+        Boolean isFileValid = isFileValid(mapList.get(index));
         Fragment fragment = new MapFragment();
+        ((MapFragment) fragment).isFileValid = isFileValid;
+        ((MapFragment) fragment).context = context;
         Bundle bundle = new Bundle();
         bundle.putString("MAP_NAME", mapList.get(index));
         fragment.setArguments(bundle);
@@ -56,8 +61,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         MapVerification mapVerification = new MapVerification();
         List<GameMap> arrGamePlay = mapReader.returnGameMapFromFile(context,fileName);
         return  mapVerification.mapVerification(arrGamePlay);
-
     }
+
+
 
     /**
      * This method which returns the size of the list

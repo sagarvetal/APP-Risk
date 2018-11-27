@@ -1,11 +1,13 @@
 package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.utility.LogManager;
+import com.app.risk.controller.PhaseViewController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,14 +36,14 @@ public class BenevolentPlayerStrategy implements Strategy {
             int min = findleastArmies(countriesOwnedByPlayer);
             for (Country country : countriesOwnedByPlayer) {
                 if (country.getNoOfArmies() == min) {
-                    LogManager.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
-                    LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
+                    PhaseViewController.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
+                    PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
                     gamePlay.getCurrentPlayer().decrementReinforcementArmies(1);
                     reinforcement-=1;
                     country.incrementArmies(1);
-                    LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed 1 army on " + country.getNameOfCountry());
+                    PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed 1 army on " + country.getNameOfCountry());
                     if (reinforcement == 0) {
-                        LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
+                        PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
                         break;
                     }
                 }
@@ -103,8 +105,7 @@ public class BenevolentPlayerStrategy implements Strategy {
      */
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
-        LogManager.getInstance().addAction("Benevolent never attacks");
-
+        PhaseViewController.getInstance().addAction("Benevolent never attacks");
     }
 
     /**
@@ -117,7 +118,6 @@ public class BenevolentPlayerStrategy implements Strategy {
      */
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
-        FortificationPhaseController fortificationPhaseController = FortificationPhaseController.init(null,gamePlay);
         HashMap<String, Integer> playerCountryDetails = playerCountryDetails(countriesOwnedByPlayer);
         int minimumArmies = playerCountryDetails.get("minimum");
         Country weakestCountry = null;
@@ -127,10 +127,11 @@ public class BenevolentPlayerStrategy implements Strategy {
                 weakestCountry = country;
             break;
         }
-        LogManager.getInstance().addAction(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
-        LogManager.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
 
-        final ArrayList<String> reachableCountries = fortificationPhaseController.getReachableCountries(weakestCountry, countriesOwnedByPlayer);
+        PhaseViewController.getInstance().addAction(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
+        PhaseViewController.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
+
+        final ArrayList<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(weakestCountry, countriesOwnedByPlayer);
         ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, countriesOwnedByPlayer);
         HashMap<String, Integer> strongestCountry = playerCountryDetails(reachableCountryArrayList);
         int maxInConnected = strongestCountry.get("maximum");
@@ -143,15 +144,16 @@ public class BenevolentPlayerStrategy implements Strategy {
                     break;
                 }
             }
-            fortificationPhaseController.fortifyCountry(StrongCountry, weakestCountry, maxInConnected - avgInConnected);
-            LogManager.getInstance().addAction(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
+            final int noOfArmies = maxInConnected - avgInConnected;
+            StrongCountry.decrementArmies(noOfArmies);
+            weakestCountry.incrementArmies(noOfArmies);
+            PhaseViewController.getInstance().addAction(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
         } else {
-            LogManager.getInstance().addAction(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
+            PhaseViewController.getInstance().addAction(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
         }
     }
     /**
      * This is method gets the list of countries that are reachable for a player
-     *
      * @param reachableCountries ArrayList of the country names which are reachable
      * @param playerCountryList ArrayList of the country owned by the player
      * @return ArrayList of country which are reachable

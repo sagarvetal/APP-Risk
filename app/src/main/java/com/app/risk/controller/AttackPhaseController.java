@@ -9,16 +9,22 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.app.risk.Interfaces.Strategy;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.impl.AggressivePlayerStrategy;
+import com.app.risk.impl.BenevolentPlayerStrategy;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.HumanPlayerStrategy;
+import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.utility.LogManager;
 import com.app.risk.view.MainScreenActivity;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class is used for the attack phase.
@@ -37,8 +43,9 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private AlertDialog mainAlertDialog;
     private Button rollButton,allOutButton;
-
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
+
+    private int defenderDices = 1;
 
     /**
      * This is default constructor.
@@ -81,21 +88,21 @@ public class AttackPhaseController implements View.OnClickListener {
         final Player attacker = gamePlay.getCurrentPlayer();
         final Player defender = defendingCountry.getPlayer();
 
-        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
+        PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
         if(attacker.equals(defender)){
-            LogManager.getInstance().addAction("Attacker can not attack on their own country");
+            PhaseViewController.getInstance().addAction("Attacker can not attack on their own country");
             Toast.makeText(context, "Attacker can not attack on their own country", Toast.LENGTH_SHORT).show();
         } else{
             if(attackingCountry.getNoOfArmies() > 1){
                 showAttackView();
             } else{
-                LogManager.getInstance().addAction("Attacking country must have more than one armies");
+                PhaseViewController.getInstance().addAction("Attacking country must have more than one armies");
                 Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
             }
         }
 
         if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
-            LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has won the game.");
+            PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has won the game.");
             Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
             new AlertDialog.Builder(context)
                     .setMessage("You won the game!!!")
@@ -110,7 +117,7 @@ public class AttackPhaseController implements View.OnClickListener {
                     .create().show();
 
         } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
-            LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
+            PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
             Toast.makeText(context, "You can not do more attacks as you do not have enough armies.", Toast.LENGTH_SHORT).show();
             new AlertDialog.Builder(context)
                     .setMessage("You can not do more attacks as you do not have enough armies.")
@@ -145,7 +152,14 @@ public class AttackPhaseController implements View.OnClickListener {
         defenderNumberPicker = (NumberPicker) view.findViewById(R.id.attack_alert_dialog_defender_picker);
         defenderNumberPicker.setMinValue(1);
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
+        defenderNumberPicker.setValue(getNoOfDicesForDefender(defendingCountry));
         defenderNumberPicker.setWrapSelectorWheel(false);
+
+        if(defendingCountry.getPlayer().getStrategy() instanceof HumanPlayerStrategy) {
+            defenderNumberPicker.setEnabled(true);
+        } else {
+            defenderNumberPicker.setEnabled(false);
+        }
 
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
         allOutButton = view.findViewById(R.id.attack_alert_dialog_all_out);
@@ -166,26 +180,27 @@ public class AttackPhaseController implements View.OnClickListener {
                 final int noOfAttackerDice = attackerNumberPicker.getValue();
                 final int noOfDefenderDice = defenderNumberPicker.getValue();
 
-                LogManager.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
-                LogManager.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
+                PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+                PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
 
                 final String result = gamePlay.getCurrentPlayer().performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
                 attackResult.append(result);
 
                 attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1);
                 defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies());
+                defenderNumberPicker.setValue(getNoOfDicesForDefender(defendingCountry));
             }
             else if(v == allOutButton){
-                LogManager.getInstance().addAction("Player has selected all out option for attack.");
+                PhaseViewController.getInstance().addAction("Player has selected all out option for attack.");
                 final String result = gamePlay.getCurrentPlayer().performAllOutAttack(attackingCountry, defendingCountry).toString();
                 attackResult.append(result);
             }
 
             if(defendingCountry.getNoOfArmies() == 0) {
-                LogManager.getInstance().addAction("Player won the country " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction("Player won the country " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
             } else if(attackingCountry.getNoOfArmies() == 1) {
-                LogManager.getInstance().addAction("Player lost the attack on " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction("Player lost the attack on " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
             }
 
@@ -249,7 +264,7 @@ public class AttackPhaseController implements View.OnClickListener {
                 attackingCountry.decrementArmies(numberPicker.getValue());
                 defendingCountry.incrementArmies(numberPicker.getValue());
 
-                LogManager.getInstance().addAction(numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
+                PhaseViewController.getInstance().addAction(numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
                         " to " + defendingCountry.getNameOfCountry());
 
                 getActivity().notifyPlayScreenRVAdapter();
@@ -276,10 +291,8 @@ public class AttackPhaseController implements View.OnClickListener {
      * @param attackerCountry attacking country
      * @return true if the defending country has atleast 1 army and attacking country has more than 1 army, false otherwise
      */
-    public boolean canCountryAttack(Country defenderCountry,Country attackerCountry)
-    {
-        if(defenderCountry.getNoOfArmies()>=1 && attackerCountry.getNoOfArmies()>1)
-        {
+    public boolean canCountryAttack(Country defenderCountry,Country attackerCountry) {
+        if(defenderCountry.getNoOfArmies()>=1 && attackerCountry.getNoOfArmies()>1) {
             return true;
         }
         return false;
@@ -291,9 +304,72 @@ public class AttackPhaseController implements View.OnClickListener {
      * @param toCountry to country
      * @return true if a path exists between from country and to country, false otherwise
      */
-    public boolean isCountryAdjacent(Country fromCountry,Country toCountry)
-    {
+    public boolean isCountryAdjacent(Country fromCountry,Country toCountry) {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
-        return fc.isCountriesConneted(fromCountry,toCountry);
+        return fc.isCountriesConnected(fromCountry,toCountry);
     }
+
+    /**
+     * It returns the no of dices for defender based on its strategy.
+     * @param defendingCountry
+     * @return The no of dices for defender based on its strategy.
+     */
+    public int getNoOfDicesForDefender(final Country defendingCountry){
+        final Random random = new Random();
+        final Strategy strategy = defendingCountry.getPlayer().getStrategy();
+        if(strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy) {
+            return defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        } else if(strategy instanceof RandomPlayerStrategy){
+            return random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * It shows the dialog box for selecting defender dices for human strategy.
+     * @param maxDiceValue Maximum no of dices defender can select.
+     * @return The selected no of dices for defender.
+     */
+    public int showDiceSelectionDialogBox(int maxDiceValue){
+        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+
+        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.human_player_selection_dialog_number_picker);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(maxDiceValue);
+        numberPicker.setWrapSelectorWheel(false);
+        new AlertDialog.Builder(context)
+                .setView(view)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        defenderDices = numberPicker.getValue();
+                    }
+                }).setCancelable(false);
+
+        return defenderDices;
+    }
+
+    /**
+     * It returns the no of dices for defender based on its strategy.
+     * @param defendingCountry
+     * @return The no of dices for defender based on its strategy.
+     */
+    public int getDefenderDices(final Country defendingCountry){
+        final Random random = new Random();
+        int defenderDices = 1;
+        final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
+
+        if (strategy instanceof HumanPlayerStrategy)
+            defenderDices = showDiceSelectionDialogBox(defendingCountry.getNoOfArmies() >= 2 ? 2 : 1);
+        else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
+            defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        else if (strategy instanceof BenevolentPlayerStrategy)
+            defenderDices = 1;
+        else if (strategy instanceof RandomPlayerStrategy)
+            defenderDices = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+
+        return defenderDices;
+    }
+
 }

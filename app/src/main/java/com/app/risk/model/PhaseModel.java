@@ -11,7 +11,7 @@ import java.util.Observable;
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class Log extends Observable {
+public class PhaseModel extends Observable {
     private ArrayList<String> message=new ArrayList<String>();
 
     /**
