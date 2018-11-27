@@ -1,8 +1,8 @@
-package com.app.risk.utility;
+package com.app.risk.controller;
 
 
 import com.app.risk.constants.FileConstants;
-import com.app.risk.model.Log;
+import com.app.risk.model.PhaseModel;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.io.BufferedWriter;
@@ -21,38 +21,38 @@ import java.util.Scanner;
  * @version 1.0.0
  */
 
-public class LogManager {
-    private static LogManager logManager;
+public class PhaseViewController {
+    private static PhaseViewController phaseViewController;
     private String dirPath;
-    public static Log logmsg;
+    public static PhaseModel logmsg;
     /**
      * This is a default constructor.
      *
      */
-    private LogManager() {
+    private PhaseViewController() {
     }
 
     /**
-     * This is a method that returns the same single instance of the LogManager class
+     * This is a method that returns the same single instance of the PhaseViewController class
      * when it is called
      * @param dirPath path in which the file is generated with all the logs
      * @param view on which the observer pattern is implemented
-     * @return LogManager single instance of the class
+     * @return PhaseViewController single instance of the class
      */
-    public static LogManager getInstance(String dirPath, PlayScreenActivity view) {
-        if (logManager == null) {
-            logManager = new LogManager();
-            logManager.dirPath = dirPath;
-            logmsg = new Log();
+    public static PhaseViewController getInstance(String dirPath, PlayScreenActivity view) {
+        if (phaseViewController == null) {
+            phaseViewController = new PhaseViewController();
+            phaseViewController.dirPath = dirPath;
+            logmsg = new PhaseModel();
             logmsg.addObserver(view);
         }
-        return logManager;
+        return phaseViewController;
     }
     /**
      * This is a method that writes the given log in the file and log object
-     * @param text message of the log that would be written into file and displayed on the view
+     * @param action message of the log that would be written into file and displayed on the view
      */
-    public void writeLog(String text) {
+    public void addAction(String action) {
         BufferedWriter output = null;
         try {
 
@@ -71,7 +71,7 @@ public class LogManager {
 
             FileOutputStream f = new FileOutputStream(file, true);
             output = new BufferedWriter(new OutputStreamWriter(f));
-            output.write(text);
+            output.write(action);
             output.newLine();
 
         } catch (IOException e) {
@@ -86,7 +86,7 @@ public class LogManager {
 
                 }
 
-                logmsg.setMessage(text);
+                logmsg.setAction(action);
             }
         }
     }
@@ -98,7 +98,7 @@ public class LogManager {
     public List<String> readLog() {
         Scanner scanner = null;
         ArrayList<String> logs = new ArrayList<String>();
-        File logDirectory = new File(LogManager.getInstance().dirPath);
+        File logDirectory = new File(PhaseViewController.getInstance().dirPath);
         if (!logDirectory.exists())
             logDirectory.mkdirs();
         File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
@@ -122,30 +122,21 @@ public class LogManager {
 
     /**
      * This is a method that delete the log from the file
-     * and the clear the log from the UI
+     * and the clearPhaseView the log from the UI
      */
-    public void deleteLog() {
-        File logDirectory = new File(LogManager.getInstance().dirPath);
-        if (!logDirectory.exists())
-            logDirectory.mkdirs();
-        File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
-        if (file.exists()) {
-            boolean result = file.delete();
-            System.out.println(":::::::::::::::::::::::::delete result::::::::::::::" + result);
-            PlayScreenActivity.logViewArrayList.removeAll(PlayScreenActivity.logViewArrayList);
-            PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
-        }
+    public void clearPhaseView() {
+        logmsg.clear();
     }
 
     /**
-     * This is a method that returns the same single instance of the LogManager class
+     * This is a method that returns the same single instance of the PhaseViewController class
      * when it is called
-     * @return LogManager single instance of the class
+     * @return PhaseViewController single instance of the class
      */
-    public static LogManager getInstance() {
-        if (logManager == null) {
-            logManager = new LogManager();
+    public static PhaseViewController getInstance() {
+        if (phaseViewController == null) {
+            phaseViewController = new PhaseViewController();
         }
-        return logManager;
+        return phaseViewController;
     }
 }

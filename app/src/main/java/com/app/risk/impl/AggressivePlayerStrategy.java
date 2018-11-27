@@ -9,7 +9,6 @@ import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -28,6 +27,7 @@ public class AggressivePlayerStrategy implements Strategy {
      */
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
+        strongestCountry = countriesOwnedByPlayer.get(0);
         for (Country country: countriesOwnedByPlayer){
             if (country.getPlayer() == player){
                 if (country.getNoOfArmies() > strongestCountry.getNoOfArmies()){
@@ -35,8 +35,8 @@ public class AggressivePlayerStrategy implements Strategy {
                 }
             }
         }
-        //handle case where there could be countries with same number of armies
         strongestCountry.incrementArmies(player.getReinforcementArmies());
+        LogManager.getInstance().writeLog("Reinforcement Armies alloted : " + player.getReinforcementArmies());
         player.setReinforcementArmies(0);
     }
 
@@ -49,7 +49,7 @@ public class AggressivePlayerStrategy implements Strategy {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         while (strongestCountry.getNoOfArmies()>1){
-            Country toCountry = getToCountry(gamePlay,player);
+            Country toCountry = getToCountry(gamePlay, player);
             int defenderDice = performAttack(player,toCountry);
             if (defenderDice > 0){
                 toCountry.getPlayer().decrementCountries(1);
@@ -92,6 +92,8 @@ public class AggressivePlayerStrategy implements Strategy {
             LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
             LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
+            LogManager.getInstance().writeLog("Attack result : " + result);
+
         }
         return noOfAttackerDice;
     }
@@ -110,7 +112,8 @@ public class AggressivePlayerStrategy implements Strategy {
      * @param countries - collection of countries
      * @return random country form list of collection
      */
-    private Country getRandomCountry(Collection countries) {
+
+    private Country getRandomCountry(final Collection countries) {
         Random rnd = new Random();
         int i = rnd.nextInt(countries.size());
         return (Country)countries.toArray()[i];
@@ -127,7 +130,7 @@ public class AggressivePlayerStrategy implements Strategy {
         Country countryMaxNieghbours = new Country();
         int maxCount = 0;
         for (Country country : countriesOwnedByPlayer){
-            int nieghbourArmyCount = nieghbourArmiesCount(gamePlay,countriesOwnedByPlayer);
+            int nieghbourArmyCount = neighbourArmiesCount(gamePlay,countriesOwnedByPlayer);
             int totalArmyCount = nieghbourArmyCount + country.getNoOfArmies();
             if (totalArmyCount > maxCount){
                 maxCount = nieghbourArmyCount;
@@ -135,6 +138,8 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         performFortification(gamePlay,countryMaxNieghbours,countriesOwnedByPlayer);
+        LogManager.getInstance().writeLog("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
+
     }
 
     /**
@@ -144,10 +149,9 @@ public class AggressivePlayerStrategy implements Strategy {
      */
 
     public void performFortification(GamePlay gamePlay, Country country, final ArrayList<Country> countriesOwnedByPlayer ){
-
         for (Country neighbourCountry : countriesOwnedByPlayer){
-            neighbourCountry.decrementArmies(neighbourCountry.getNoOfArmies() - 1);
             country.incrementArmies(neighbourCountry.getNoOfArmies() - 1);
+            neighbourCountry.decrementArmies(neighbourCountry.getNoOfArmies() - 1);
         }
     }
 
@@ -157,7 +161,7 @@ public class AggressivePlayerStrategy implements Strategy {
      * @return maximum count
      */
 
-    public int nieghbourArmiesCount(GamePlay gamePlay,final ArrayList<Country> countriesOwnedByPlayer){
+    public int neighbourArmiesCount(GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer){
         int count = 0;
         for (Country  neighbourCountry: countriesOwnedByPlayer){
             count += neighbourCountry.getNoOfArmies();

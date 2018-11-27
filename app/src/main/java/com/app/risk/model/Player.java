@@ -2,7 +2,7 @@ package com.app.risk.model;
 
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.constants.GamePlayConstants;
-import com.app.risk.utility.LogManager;
+import com.app.risk.controller.PhaseViewController;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,6 +35,7 @@ public class Player extends Observable implements Serializable {
     private boolean cardsExchangedInRound;
     private boolean isNewCountryConquered;
     private Strategy strategy;
+    private boolean isHuman;
 
     /**
      * This is a default constructor and it initializes the card list.
@@ -358,16 +359,32 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
-     * This is reinforcement method.
-     * It sets the no of reinforcement armies given to the player based on no of countries player owns.
-     *
+     * Getter function to get the flag to determine whether the player is human or not.
+     * @return true if player is human, otherwise return false.
+     */
+    public boolean isHuman() {
+        return isHuman;
+    }
+
+    /**
+     * Setter function to set the flag used to determine whether the player is human or not.
+     * @isHuman true if player is human, otherwise return false.
+     */
+    public void setHuman(boolean isHuman) {
+        this.isHuman = isHuman;
+    }
+
+    /**
+     * This is calculate the total reinforcement armies.
+     * It sets the no of reinforcement armies given to the player
+     * based on no of countries player owns and no of cards.
      * @param gamePlay The GamePlay object.
      */
-    public void reinforcementPhase(final GamePlay gamePlay) {
+    public void setTotalReinforcementArmies(final GamePlay gamePlay) {
         final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
         final int continentValue = getContinentValue(gamePlay);
-        LogManager.getInstance().writeLog("Total reinforcement armies awarded : " + reinforcementArmies);
-        LogManager.getInstance().writeLog("Total continent control value awarded : " + continentValue);
+        PhaseViewController.getInstance().addAction("Total reinforcement armies awarded : " + reinforcementArmies);
+        PhaseViewController.getInstance().addAction("Total continent control value awarded : " + continentValue);
         setReinforcementArmies(reinforcementArmies + continentValue);
         incrementArmies(reinforcementArmies + continentValue);
     }
@@ -402,13 +419,50 @@ public class Player extends Observable implements Serializable {
                 }
             }
             if(isWholeContinentOccupied) {
-                LogManager.getInstance().writeLog(getName() + " holds complete continent " + continent);
-                LogManager.getInstance().writeLog(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
+                PhaseViewController.getInstance().addAction(getName() + " holds complete continent " + continent);
+                PhaseViewController.getInstance().addAction(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
                 continentValue += continent.getArmyControlValue();
             }
         }
         return continentValue;
     }
+
+    /**
+     * This is reinforcement method.
+     * It places the no of reinforcement armies given to the player.
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param toCountry The country where player placing the reinforcement armies.
+     */
+    public void reinforcementPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
+        getStrategy().reinforcementPhase(gamePlay, this, countriesOwnedByPlayer, toCountry);
+    }
+
+
+    /**
+     * This is attack method.
+     * Attacker attacks on country according to its strategy.
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
+     */
+    public void attackPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
+        getStrategy().attackPhase(gamePlay, this, countriesOwnedByPlayer, attackingCountry, defendingCountry);
+    }
+
+
+    /**
+     * This is fortification method.
+     * It moves armies from one country to another country..
+     * @param gamePlay The GamePlay object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param fromCountry The country from where player wants to move armies.
+     */
+    public void fortificationPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
+        getStrategy().fortificationPhase(gamePlay, this, countriesOwnedByPlayer, fromCountry);
+    }
+
 
     /**
      * This is all out attack method in which attacker continues to attack
@@ -425,9 +479,9 @@ public class Player extends Observable implements Serializable {
             final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
             final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
 
-            LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
-            LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
-            LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+            PhaseViewController.getInstance().addAction("\nAttack No : " + (++attackCount));
+            PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+            PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
 
             final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
             attackResult.append(result);
@@ -474,7 +528,7 @@ public class Player extends Observable implements Serializable {
 
         attackResult.append("\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
-        LogManager.getInstance().writeLog(attackResult.toString());
+        PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;
     }
 
@@ -536,18 +590,6 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
-     * This is fortification method.
-     * It moves armies from one country to another country.
-     * @param fromCountry The country from where player wants to move armies.
-     * @param toCountry The country to where player wants to move armies.
-     * @param noOfArmies The no of armies to be moved.
-     */
-    public void fortificationPhase(final Country fromCountry, final Country toCountry, final int noOfArmies){
-        fromCountry.decrementArmies(noOfArmies);
-        toCountry.incrementArmies(noOfArmies);
-    }
-
-    /**
      * This method picks random card from game play and assign it to player.
      * @param gamePlay The GamePlay object.
      */
@@ -555,8 +597,9 @@ public class Player extends Observable implements Serializable {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         final Card card = new Card(gamePlay.getCards().get(randomIndex).getType());
         setCards(card);
-        LogManager.getInstance().writeLog(card.getType() + " has been awarded to " + getName());
+        PhaseViewController.getInstance().addAction(card.getType() + " has been awarded to " + getName());
     }
+
 
     /**
      * Returns number of continents owned by player
