@@ -90,7 +90,7 @@ public class FortificationConnectedTest {
     @Test
     public void fortificationConnectedTest() {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertTrue(fc.isCountriesConneted(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")));
+        assertTrue(fc.isCountriesConnected(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")));
     }
 
     /**

@@ -153,7 +153,14 @@ public class AttackPhaseController implements View.OnClickListener {
         defenderNumberPicker = (NumberPicker) view.findViewById(R.id.attack_alert_dialog_defender_picker);
         defenderNumberPicker.setMinValue(1);
         defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() >2 ? 2:defendingCountry.getNoOfArmies());
+        defenderNumberPicker.setValue(getNoOfDicesForDefender(defendingCountry));
         defenderNumberPicker.setWrapSelectorWheel(false);
+
+        if(defendingCountry.getPlayer().getStrategy() instanceof HumanPlayerStrategy) {
+            defenderNumberPicker.setEnabled(true);
+        } else {
+            defenderNumberPicker.setEnabled(false);
+        }
 
         rollButton = view.findViewById(R.id.attack_alert_dialog_roll);
         allOutButton = view.findViewById(R.id.attack_alert_dialog_all_out);
@@ -182,6 +189,7 @@ public class AttackPhaseController implements View.OnClickListener {
 
                 attackerNumberPicker.setMaxValue(attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1);
                 defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies());
+                defenderNumberPicker.setValue(getNoOfDicesForDefender(defendingCountry));
             }
             else if(v == allOutButton){
                 LogManager.getInstance().writeLog("Player has selected all out option for attack.");
@@ -299,9 +307,31 @@ public class AttackPhaseController implements View.OnClickListener {
      */
     public boolean isCountryAdjacent(Country fromCountry,Country toCountry) {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(context, gamePlay);
-        return fc.isCountriesConneted(fromCountry,toCountry);
+        return fc.isCountriesConnected(fromCountry,toCountry);
     }
 
+    /**
+     * It returns the no of dices for defender based on its strategy.
+     * @param defendingCountry
+     * @return The no of dices for defender based on its strategy.
+     */
+    public int getNoOfDicesForDefender(final Country defendingCountry){
+        final Random random = new Random();
+        final Strategy strategy = defendingCountry.getPlayer().getStrategy();
+        if(strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy) {
+            return defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        } else if(strategy instanceof RandomPlayerStrategy){
+            return random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * It shows the dialog box for selecting defender dices for human strategy.
+     * @param maxDiceValue Maximum no of dices defender can select.
+     * @return The selected no of dices for defender.
+     */
     public int showDiceSelectionDialogBox(int maxDiceValue){
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
 
@@ -321,6 +351,11 @@ public class AttackPhaseController implements View.OnClickListener {
         return defenderDices;
     }
 
+    /**
+     * It returns the no of dices for defender based on its strategy.
+     * @param defendingCountry
+     * @return The no of dices for defender based on its strategy.
+     */
     public int getDefenderDices(final Country defendingCountry){
         final Random random = new Random();
         int defenderDices = 1;

@@ -116,7 +116,9 @@ public class RandomPlayerStrategy implements Strategy {
             if (fromCountryChosenRandomly.getNoOfArmies() > 1) {
                 List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandomly, countriesOwnedByPlayer);
                 Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size()) - 1));
-                FortificationPhaseController.getInstance().fortifyCountry(fromCountryChosenRandomly, toCountry, random.nextInt(fromCountryChosenRandomly.getNoOfArmies()));
+                final int noOfArmies = random.nextInt(fromCountryChosenRandomly.getNoOfArmies());
+                fromCountryChosenRandomly.decrementArmies(noOfArmies);
+                toCountry.incrementArmies(noOfArmies);
                 break;
             }
         }

@@ -17,7 +17,6 @@ import com.app.risk.view.PlayScreenActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class is used for the fortification phase.
@@ -66,14 +65,14 @@ public class FortificationPhaseController {
 
     /**
      * This method shows the dailog box for fortification phase.
-     * @param position The position of country in list owned by the player from where player wants to move armies.
+     * @param fromCountry The country from where player wants to move armies.
      * @param countries The list of countries owned by current player.
      */
-    public void showFortificationDialogBox(final int position, final ArrayList<Country> countries){
-        if(countries.get(position).getNoOfArmies() > 1){
+    public void showFortificationDialogBox(final Country fromCountry, final ArrayList<Country> countries){
+        if(fromCountry.getNoOfArmies() > 1){
             LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
 
-            final ArrayList<String> reachableCountries  = getReachableCountries(countries.get(position), countries);
+            final ArrayList<String> reachableCountries  = getReachableCountries(fromCountry, countries);
             final String[] reachableCountryArray = new String[reachableCountries.size()];
             reachableCountries.toArray(reachableCountryArray);
 
@@ -82,14 +81,14 @@ public class FortificationPhaseController {
                     .setItems((CharSequence[]) reachableCountryArray, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int index) {
-                            showDialogBoxToPlaceArmies(reachableCountryArray[index], position, countries);
+                            showDialogBoxToPlaceArmies(reachableCountryArray[index], fromCountry, countries);
                         }
                     })
                     .create()
                     .show();
         }
         else{
-            LogManager.getInstance().writeLog(countries.get(position) + " must have armies more than one to move.");
+            LogManager.getInstance().writeLog(fromCountry.getNameOfCountry() + " must have armies more than one to move.");
             Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
         }
     }
@@ -97,10 +96,10 @@ public class FortificationPhaseController {
     /**
      * This method shows the dialog box to place armies on selected country.
      * @param toCountry The country to where player wants to move armies.
-     * @param position The position of country in list owned by the player from where player wants to move armies.
+     * @param fromCountry The country from where player wants to move armies.
      * @param countries The list of countries owned by current player.
      */
-    public void showDialogBoxToPlaceArmies(String toCountry, final int position, final ArrayList<Country> countries){
+    public void showDialogBoxToPlaceArmies(String toCountry, final Country fromCountry, final ArrayList<Country> countries){
 
         final AlertDialog.Builder placeArmiesDialogBox = new AlertDialog.Builder(context);
         placeArmiesDialogBox.setTitle("Place Armies");
@@ -110,16 +109,18 @@ public class FortificationPhaseController {
 
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
         numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(countries.get(position).getNoOfArmies() - 1);
+        numberPicker.setMaxValue(fromCountry.getNoOfArmies() - 1);
         numberPicker.setWrapSelectorWheel(false);
 
         final String destinationCountry = toCountry;
         placeArmiesDialogBox.setPositiveButton("Move", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                fortifyCountry(countries.get(position), gamePlay.getCountries().get(destinationCountry), numberPicker.getValue());
 
-                final String message = numberPicker.getValue() + " armies moved from " + countries.get(position).getNameOfCountry() + " to " + destinationCountry;
+                fromCountry.decrementArmies(numberPicker.getValue());
+                gamePlay.getCountries().get(destinationCountry).incrementArmies(numberPicker.getValue());
+
+                final String message = numberPicker.getValue() + " armies moved from " + fromCountry.getNameOfCountry() + " to " + destinationCountry;
                 LogManager.getInstance().writeLog(message);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
@@ -144,7 +145,7 @@ public class FortificationPhaseController {
      * @param toCountry   The object of to country
      * @return true if there exists a path between two countries pertaining to the conditions, false otherwise
      */
-    public boolean isCountriesConneted(final Country fromCountry, final Country toCountry) {
+    public boolean isCountriesConnected(final Country fromCountry, final Country toCountry) {
 
         final Stack<Country> depthFirstTraversalStack = new Stack<>();
         final List<Country> countriesVisited = new ArrayList<>();
@@ -193,22 +194,13 @@ public class FortificationPhaseController {
         final ArrayList<String> reachableCountries = new ArrayList<>();
         for(final Country toCountry : countriesOwnedByPlayer) {
             if(!fromCountry.getNameOfCountry().equalsIgnoreCase(toCountry.getNameOfCountry()) &&
-                    isCountriesConneted(fromCountry, toCountry)) {
+                    isCountriesConnected(fromCountry, toCountry)) {
                 reachableCountries.add(toCountry.getNameOfCountry() + " : " + toCountry.getNoOfArmies());
             }
         }
         return reachableCountries;
     }
 
-    /**
-     * This method starts the fortification.
-     * @param fromCountry The country from where player wants to move armies.
-     * @param toCountry The country to where player wants to move armies.
-     * @param noOfArmies The no of armies to be moved.
-     */
-    public void fortifyCountry(final Country fromCountry, final Country toCountry, final int noOfArmies) {
-        gamePlay.getCurrentPlayer().fortificationPhase(fromCountry, toCountry, noOfArmies);
-    }
 
     /**
      * This method cast the context and returns PlayScreenActivity object.
