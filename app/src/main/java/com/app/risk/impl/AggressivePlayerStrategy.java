@@ -123,48 +123,43 @@ public class AggressivePlayerStrategy implements Strategy {
      */
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
-        Country countryMaxNieghbours = new Country();
+        Country countryMaxArmyCount = new Country();
         int maxCount = 0;
         for (Country country : countriesOwnedByPlayer){
-            int nieghbourArmyCount = neighbourArmiesCount(gamePlay,countriesOwnedByPlayer);
-            int totalArmyCount = nieghbourArmyCount + country.getNoOfArmies();
-            if (totalArmyCount > maxCount){
-                maxCount = nieghbourArmyCount;
-                countryMaxNieghbours = country;
+            if (country.getNoOfArmies() > maxCount){
+                countryMaxArmyCount= country;
             }
         }
-        performFortification(gamePlay,countryMaxNieghbours);
-        PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
+        Country countryToFortify = new Country();
+        int maxNieghbourCountryCount = 0;
+        for (Country country : countriesOwnedByPlayer){
+            if (country != countryMaxArmyCount){
+                if (checkIfPathExistBetweenCountries(countryMaxArmyCount , country,gamePlay)){
+                    if (country.getNoOfArmies() > maxNieghbourCountryCount){
+                        countryToFortify = country;
+                        maxNieghbourCountryCount = country.getNoOfArmies();
+                    }
+                }
+            }
+        }
+
+        performFortification(countryMaxArmyCount,countryToFortify);
+        PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxArmyCount.getNameOfCountry());
 
     }
 
     /**
      * Performs actual fortification, that is increase and decreases country
-     * @param gamePlay- Gameplay object
+     * @param fortifyCountry- Country whose armies would be used for fortification
      * @param country - countries having maximum armies in neighbour
      */
 
-    public void performFortification(GamePlay gamePlay, Country country){
-        HashMap<String,Country> countries = gamePlay.getCountries();
-        for (String countryName : country.getAdjacentCountries()){
-            country.incrementArmies(countries.get(countryName).getNoOfArmies() - 1);
-            countries.get(countryName).decrementArmies(countries.get(countryName).getNoOfArmies() - 1);
-        }
+    public void performFortification(Country country , Country fortifyCountry){
+        PhaseViewController.getInstance().addAction("Fortified Armies : " + Integer.toString(fortifyCountry.getNoOfArmies()-1));
+        country.incrementArmies(fortifyCountry.getNoOfArmies()-1);
+        fortifyCountry.decrementArmies(fortifyCountry.getNoOfArmies()-1);
     }
 
-    /**
-     * Calculates maximum number of armies in nieghbouring countries for given country
-     * @param gamePlay gameplay object
-     * @return maximum count
-     */
-
-    public int neighbourArmiesCount(GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer){
-        int count = 0;
-        for (Country neighbourCountry: countriesOwnedByPlayer){
-            count += neighbourCountry.getNoOfArmies();
-        }
-        return  count;
-    }
 
     public boolean checkIfPathExistBetweenCountries(Country startCountry,Country endCountry,GamePlay gamePlay){
         ArrayList<Country> nieghbourCountries = addOwnAdjacentCountries(gamePlay,startCountry);
