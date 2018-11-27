@@ -97,6 +97,7 @@ public class RandomPlayerStrategy implements Strategy {
                 player.performAttack(fromCountry, toCountry, attackingDiceRoll, defendingDiceRoll);
             }
             if(toCountry.getNoOfArmies() == 0){
+                player.setNewCountryConquered(true);
                 toCountry.setNoOfArmies(attackingDiceRoll);
                 fromCountry.decrementArmies(attackingDiceRoll);
                 toCountry.setPlayer(player);
@@ -121,13 +122,15 @@ public class RandomPlayerStrategy implements Strategy {
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
         while (true) {
             int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size() + 1) - 1;
-            Country fromCountryChosenRandom = countriesOwnedByPlayer.get(fromCountryIndex);
-            if (fromCountryChosenRandom.getNoOfArmies() > 1) {
-                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandom, countriesOwnedByPlayer);
+            Country fromCountryChosenRandomly = countriesOwnedByPlayer.get(fromCountryIndex);
+            if (fromCountryChosenRandomly.getNoOfArmies() > 1) {
+                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandomly, countriesOwnedByPlayer);
                 Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size()) - 1));
-                FortificationPhaseController.getInstance().fortifyCountry(fromCountryChosenRandom, toCountry, random.nextInt(fromCountryChosenRandom.getNoOfArmies()));
+                FortificationPhaseController.getInstance().fortifyCountry(fromCountryChosenRandomly, toCountry, random.nextInt(fromCountryChosenRandomly.getNoOfArmies()));
                 break;
             }
         }
+        if(player.isNewCountryConquered())
+            player.assignCards(gamePlay);
     }
 }
