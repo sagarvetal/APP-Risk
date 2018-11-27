@@ -10,11 +10,17 @@ import android.widget.NumberPicker;
 import android.widget.Toast;
 
 import com.app.risk.R;
+import com.app.risk.impl.AggressivePlayerStrategy;
+import com.app.risk.impl.BenevolentPlayerStrategy;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.HumanPlayerStrategy;
+import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class is used for the attack phase.
@@ -262,5 +268,22 @@ public class AttackPhaseController implements View.OnClickListener {
                 }).setCancelable(false);
 
         return variable;
+    }
+
+    public int getDefenderDice(Country defendingCountry){
+        Random random = new Random();
+        int defendingDiceRoll = 1;
+        if (defendingCountry.getPlayer().getStrategy() instanceof HumanPlayerStrategy)
+            defendingDiceRoll = AttackPhaseController.getInstance()
+                    .setUpDiceRollView(defendingCountry.getNoOfArmies() >= 2 ? 2 : 1);
+        else if (defendingCountry.getPlayer().getStrategy() instanceof AggressivePlayerStrategy ||
+                defendingCountry.getPlayer().getStrategy() instanceof CheaterPlayerStrategy)
+            defendingDiceRoll = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        else if (defendingCountry.getPlayer().getStrategy() instanceof BenevolentPlayerStrategy)
+            defendingDiceRoll = 1;
+        else if (defendingCountry.getPlayer().getStrategy() instanceof RandomPlayerStrategy)
+            defendingDiceRoll = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+
+        return defendingDiceRoll;
     }
 }

@@ -83,17 +83,7 @@ public class RandomPlayerStrategy implements Strategy {
             int defendingDiceRoll;
             while(fromCountry.getNoOfArmies() == 1 || toCountry.getNoOfArmies() == 0) {
                 attackingDiceRoll = random.nextInt(armiesInFromCountry > 3 ? 3 : armiesInFromCountry);
-                defendingDiceRoll = 1;
-                if (toCountry.getPlayer().getStrategy() instanceof HumanPlayerStrategy)
-                    defendingDiceRoll = AttackPhaseController.getInstance()
-                            .setUpDiceRollView(toCountry.getNoOfArmies() >= 2 ? 2 : 1);
-                else if (toCountry.getPlayer().getStrategy() instanceof AggressivePlayerStrategy ||
-                        toCountry.getPlayer().getStrategy() instanceof CheaterPlayerStrategy)
-                    defendingDiceRoll = toCountry.getNoOfArmies() >= 2 ? 2 : 1;
-                else if (toCountry.getPlayer().getStrategy() instanceof BenevolentPlayerStrategy)
-                    defendingDiceRoll = 1;
-                else if (toCountry.getPlayer().getStrategy() instanceof RandomPlayerStrategy)
-                    defendingDiceRoll = random.nextInt(toCountry.getNoOfArmies() > 2 ? 2 : 1);
+                defendingDiceRoll = AttackPhaseController.getInstance().getDefenderDice(toCountry);
                 player.performAttack(fromCountry, toCountry, attackingDiceRoll, defendingDiceRoll);
             }
             if(toCountry.getNoOfArmies() == 0){
