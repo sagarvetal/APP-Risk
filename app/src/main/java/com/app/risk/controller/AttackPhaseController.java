@@ -9,8 +9,14 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.app.risk.Interfaces.Strategy;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.impl.AggressivePlayerStrategy;
+import com.app.risk.impl.BenevolentPlayerStrategy;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.HumanPlayerStrategy;
+import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -19,6 +25,7 @@ import com.app.risk.view.MainScreenActivity;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class is used for the attack phase.
@@ -37,9 +44,9 @@ public class AttackPhaseController implements View.OnClickListener {
 
     private AlertDialog mainAlertDialog;
     private Button rollButton,allOutButton;
-    private int variable = -1;
-
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
+
+    private int defenderDices = 1;
 
     /**
      * This is default constructor.
@@ -295,10 +302,9 @@ public class AttackPhaseController implements View.OnClickListener {
         return fc.isCountriesConneted(fromCountry,toCountry);
     }
 
-    public int setUpDiceRollView(int maxDiceValue){
+    public int showDiceSelectionDialogBox(int maxDiceValue){
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
 
-        variable = -1;
         final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.human_player_selection_dialog_number_picker);
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(maxDiceValue);
@@ -308,11 +314,28 @@ public class AttackPhaseController implements View.OnClickListener {
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        variable = numberPicker.getValue();
+                        defenderDices = numberPicker.getValue();
                     }
                 }).setCancelable(false);
 
-        return variable;
+        return defenderDices;
+    }
+
+    public int getDefenderDices(final Country defendingCountry){
+        final Random random = new Random();
+        int defenderDices = 1;
+        final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
+
+        if (strategy instanceof HumanPlayerStrategy)
+            defenderDices = showDiceSelectionDialogBox(defendingCountry.getNoOfArmies() >= 2 ? 2 : 1);
+        else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
+            defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
+        else if (strategy instanceof BenevolentPlayerStrategy)
+            defenderDices = 1;
+        else if (strategy instanceof RandomPlayerStrategy)
+            defenderDices = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+
+        return defenderDices;
     }
 
 }

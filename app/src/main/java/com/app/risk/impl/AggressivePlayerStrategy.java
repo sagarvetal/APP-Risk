@@ -87,7 +87,7 @@ public class AggressivePlayerStrategy implements Strategy {
 
         while(strongestCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() != 0){
             noOfAttackerDice = getAttackerDice();
-            final int noOfDefenderDice = getDefenderDice(toCountry);
+            final int noOfDefenderDice = AttackPhaseController.getInstance().getDefenderDices(toCountry);
             LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
             LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
             LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
@@ -100,30 +100,16 @@ public class AggressivePlayerStrategy implements Strategy {
      * Gets attacker dice according to its no of armies
      * @return attacker dice
      */
-
     public int getAttackerDice(){
         return strongestCountry.getNoOfArmies() > 3 ? 3 : strongestCountry.getNoOfArmies() - 1 ;
     }
 
-    public int getDefenderDice(Country toCountry){
-        int defendingDiceRoll = -1;
-        if (toCountry.getPlayer().getStrategy() instanceof HumanPlayerStrategy)
-            defendingDiceRoll = AttackPhaseController.getInstance()
-                    .setUpDiceRollView(toCountry.getNoOfArmies() >= 2 ? 2 : 1);
-        else if (toCountry.getPlayer().getStrategy() instanceof AggressivePlayerStrategy ||
-                toCountry.getPlayer().getStrategy() instanceof CheaterPlayerStrategy)
-            defendingDiceRoll = toCountry.getNoOfArmies() >= 2 ? 2 : 1;
-        else if (toCountry.getPlayer().getStrategy() instanceof BenevolentPlayerStrategy)
-            defendingDiceRoll = 1;
-       return defendingDiceRoll;
-    }
 
     /**
      * returns random country from give collection of countries
      * @param countries - collection of countries
      * @return random country form list of collection
      */
-
     private Country getRandomCountry(Collection countries) {
         Random rnd = new Random();
         int i = rnd.nextInt(countries.size());
