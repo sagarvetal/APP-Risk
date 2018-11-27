@@ -3,6 +3,7 @@ package com.app.risk.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -211,7 +212,6 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                             currentPlayer.getNoOfCountries(),
                             currentPlayer.getName(),
                             currentPlayer.getReinforcementArmies());
-                    displayAlert("", message);
 
                     final ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
                     playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
@@ -220,7 +220,12 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     listPlayerState.setAdapter(playerStateAdapter);
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, countriesOwnedByPlayer, null);
+                        sleep(3000);
+                        changePhase(GamePlayConstants.ATTACK_PHASE);
+                    } else {
+                        displayAlert("", message);
                     }
 
                     break;
@@ -236,6 +241,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().attackPhase(gamePlay, countriesOwnedByPlayer, null, null);
+                        sleep(3000);
+                        changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                     }
 
                     break;
@@ -250,6 +257,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
+                        sleep(3000);
+                        changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     }
 
                     break;
@@ -368,5 +377,14 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         for (Player player : gamePlay.getPlayers().values()) {
             player.addObserver(this);
         }
+    }
+
+    public void sleep(long milliseconds){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        },milliseconds);
     }
 }
