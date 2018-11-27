@@ -145,7 +145,9 @@ public class BenevolentPlayerStrategy implements Strategy {
                     break;
                 }
             }
-            fortificationPhaseController.fortifyCountry(StrongCountry, weakestCountry, maxInConnected - avgInConnected);
+            final int noOfArmies = maxInConnected - avgInConnected;
+            StrongCountry.decrementArmies(noOfArmies);
+            weakestCountry.incrementArmies(noOfArmies);
             LogManager.getInstance().writeLog(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
         } else {
             LogManager.getInstance().writeLog(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
