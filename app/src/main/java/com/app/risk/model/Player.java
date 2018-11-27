@@ -38,6 +38,15 @@ public class Player extends Observable implements Serializable {
     private boolean isHuman;
 
     /**
+     * This is a default constructor and it initializes the card list.
+     */
+    public Player() {
+        this.cards = new ArrayList<>();
+        this.armiesInExchangeOfCards = 0;
+        cardsExchangedInRound = false;
+    }
+
+    /**
      * Check if the player has exchanged cards in ongoing round
      * @return true if cards have been exchanged, false otherwise
      */
@@ -51,15 +60,6 @@ public class Player extends Observable implements Serializable {
      */
     public void setCardsExchangedInRound(boolean cardsExchangedInRound) {
         this.cardsExchangedInRound = cardsExchangedInRound;
-    }
-
-    /**
-     * This is a default constructor and it initializes the card list.
-     */
-    public Player() {
-        this.cards = new ArrayList<>();
-        this.armiesInExchangeOfCards = 0;
-        cardsExchangedInRound = false;
     }
 
     /**
@@ -219,6 +219,7 @@ public class Player extends Observable implements Serializable {
     public int getNoOfArmies() {
         return noOfArmies;
     }
+
     /**
      * Setter function to set the no of armies assigned to the player
      *
@@ -227,6 +228,7 @@ public class Player extends Observable implements Serializable {
     public void setNoOfArmies(int noOfArmies) {
         this.noOfArmies = noOfArmies;
     }
+
     /**
      * This function is to increment no of armies by given count.
      *
@@ -286,6 +288,7 @@ public class Player extends Observable implements Serializable {
     public List<Card> getCards() {
         return cards;
     }
+
     /**
      * Setter function to set the card earned by player
      *
@@ -322,7 +325,6 @@ public class Player extends Observable implements Serializable {
     public void setActive(boolean active) {
         isActive = active;
     }
-
 
     /**
      * Getter function to get the flag to determine whether player conquered new country.
@@ -587,7 +589,6 @@ public class Player extends Observable implements Serializable {
         return true;
     }
 
-
     /**
      * This method picks random card from game play and assign it to player.
      * @param gamePlay The GamePlay object.
@@ -623,7 +624,6 @@ public class Player extends Observable implements Serializable {
      * @param arrCountriesOfContinent - arry of countries of continents
      * @return true if all countries of of continent are owned by user false otherwise
      */
-
     boolean checkIfAllCountriesInContinents(ArrayList<Country> arrCountiesOwnedByPlayer,ArrayList<Country> arrCountriesOfContinent){
         for (Country countryContinent : arrCountriesOfContinent){
             if (!checkIfCountryIsContainedWithPlayer(arrCountiesOwnedByPlayer,countryContinent)){
@@ -639,7 +639,6 @@ public class Player extends Observable implements Serializable {
      * @param country country to be checked
      * @return true if country is contained in list of countries
      */
-
     boolean checkIfCountryIsContainedWithPlayer(ArrayList<Country> arrCountry,Country country){
         for(Country countryPlayer : arrCountry){
             if (country == countryPlayer){

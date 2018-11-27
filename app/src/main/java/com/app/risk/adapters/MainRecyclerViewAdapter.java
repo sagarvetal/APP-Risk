@@ -1,10 +1,11 @@
 package com.app.risk.adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.app.risk.controller.SaveLoadGameController;
+import com.app.risk.model.GamePlay;
 import com.app.risk.view.EditMap;
+import com.app.risk.view.PlayScreenActivity;
 import com.app.risk.view.TournamentMenuActivity;
 import com.app.risk.view.UserDrivenMapsActivity;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -32,7 +36,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     private ArrayList<String> cardArrayList;
     private Context invokingActivity;
 
-
     /**
      * Parameterized constructor of the adapter
      * @param cardArrayList : initializes the arraylist of the menu
@@ -42,7 +45,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         this.cardArrayList = cardArrayList;
         this.invokingActivity = invokingActivity;
     }
-
 
     /**
      * {@inheritDoc}
@@ -106,7 +108,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
         /**
          * {@inheritDoc}
-         * Click listner method
+         * Click listener method
          * @param v: view of the
          */
         @Override
@@ -115,13 +117,50 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             if(v == cardView){
 
                 switch(cardArrayList.get(getAdapterPosition())){
-
                     case "Single Game":
-                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
+                        new AlertDialog.Builder(invokingActivity)
+                                .setTitle("Load").setMessage("What would you like to do?")
+                                .setPositiveButton("Start new game", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
+                                    }
+                                })
+                                .setNeutralButton("Load existing game", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final AlertDialog.Builder savedGamesADB = new AlertDialog.Builder(invokingActivity);
+                                        savedGamesADB.setTitle("Choose game to load: ");
+                                        final String[] savedGamesList = SaveLoadGameController.savedGamesList(invokingActivity);
+                                        if(savedGamesList == null){
+                                            Toast.makeText(invokingActivity, "No saved games to load.", Toast.LENGTH_SHORT).show();
+                                            dialog.dismiss();
+                                        } else {
+                                            savedGamesADB.setSingleChoiceItems(
+                                                    savedGamesList,
+                                                    -1,
+                                                    null)
+                                                    .setPositiveButton("Load", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            int selectedGameIndex = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                                            GamePlay gamePlay = SaveLoadGameController.loadGame(savedGamesList[selectedGameIndex], invokingActivity);
+                                                            Intent intent = new Intent(invokingActivity.getApplicationContext(), PlayScreenActivity.class);
+                                                            intent.putExtra("GAMEPLAY_OBJECT", gamePlay);
+                                                            invokingActivity.startActivity(intent);
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Cancel", null);
+                                            savedGamesADB.create().show();
+                                        }
+                                    }
+                                }).create().show();
                         break;
+
                     case "Tournament Game":
                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(),TournamentMenuActivity.class));
                         break;
+
                     case "Create Map":
                         final Intent userMapCreate = new Intent(invokingActivity.getApplicationContext(), UserDrivenMapsActivity.class);
                         Bundle bundle = new Bundle();
@@ -129,22 +168,22 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         userMapCreate.putExtras(bundle);
                         invokingActivity.startActivity(userMapCreate);
                         break;
+
                     case "Edit Map":
                         Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
                         invokingActivity.startActivity(editMap);
                         break;
+
                     case "Help":
-                     Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
+
                     case "Exit":
                         ((Activity)invokingActivity).finishAffinity();
                             System.exit(0);
                         break;
                 }
-
             }
         }
     }
-
-
 }

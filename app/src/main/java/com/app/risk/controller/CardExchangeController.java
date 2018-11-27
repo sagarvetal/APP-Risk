@@ -1,8 +1,11 @@
 package com.app.risk.controller;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Card;
+import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,14 +16,22 @@ import java.util.List;
  */
 public class CardExchangeController {
 
-    Player player;
+    private static CardExchangeController cardExchangeController;
+    private Player player;
 
-    /**
-     * Default constructor
-     * @param player current gameplay object
-     */
-    public CardExchangeController(Player player) {
-        this.player = player;
+    private CardExchangeController(){}
+
+    public static CardExchangeController getInstance() {
+        if(cardExchangeController == null) {
+            cardExchangeController = new CardExchangeController();
+        }
+        return cardExchangeController;
+    }
+
+    public static CardExchangeController init(final Player player) {
+        getInstance();
+        cardExchangeController.player = player;
+        return cardExchangeController;
     }
 
     /**
@@ -68,5 +79,56 @@ public class CardExchangeController {
         List<Card> updatedCards = player.getCards();
         updatedCards.removeAll(cardsToExchange);
         player.setCards(updatedCards);
+    }
+
+    public void exchangeCardsStrategyImplementation(){
+
+        List<Card> cardList = player.getCards();
+        int infantryCardCount = 0;
+        int cavalryCardCount = 0;
+        int artilleryCardCount = 0;
+        for(int i=0; i<cardList.size(); i++){
+            if(cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD)){
+                artilleryCardCount++;
+                if(artilleryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD)){
+                cavalryCardCount++;
+                if(cavalryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD)){
+                infantryCardCount++;
+                if(infantryCardCount == 3)
+                    break;
+            }
+        }
+        if(artilleryCardCount == 3 || cavalryCardCount == 3 || infantryCardCount == 3 ||
+                (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
+            player.setArmiesInExchangeOfCards(player.getArmiesInExchangeOfCards() + 5);
+            player.incrementArmies(player.getArmiesInExchangeOfCards());
+            player.setReinforcementArmies(player.getReinforcementArmies() + player.getArmiesInExchangeOfCards());
+
+            List<Card> cardsToRemove = new ArrayList<>();
+            for(int i=0; i<cardList.size(); i++){
+                if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(cavalryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(infantryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+            }
+            if(cardsToRemove.size() == 3){
+                removeExchangedCards(cardsToRemove);
+            } else {
+                cardsToRemove.clear();
+                for(int i=0; i<cardList.size(); i++) {
+                    if (cardsToRemove.size() > 0 && cardsToRemove.contains(cardList.get(i)))
+                        break;
+                    else
+                        cardsToRemove.add(cardList.get(i));
+                }
+                removeExchangedCards(cardsToRemove);
+            }
+        }
     }
 }

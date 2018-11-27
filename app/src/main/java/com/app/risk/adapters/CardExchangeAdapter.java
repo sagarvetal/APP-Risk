@@ -78,7 +78,7 @@ public class CardExchangeAdapter extends BaseAdapter {
         View view = convertView;
 
         if (view == null)
-            view = LayoutInflater.from(context).inflate(R.layout.list_row_card_exchange, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.list_row_cards_exchange, parent, false);
 
         TextView txtCardType = view.findViewById(R.id.txt_card_type);
         txtCardType.setText(getItem(position).getType());
