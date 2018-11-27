@@ -226,8 +226,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, countriesOwnedByPlayer, null);
-                        sleep(3000);
-                        changePhase(GamePlayConstants.ATTACK_PHASE);
+                        sleep(5000, GamePlayConstants.ATTACK_PHASE);
+                        //changePhase(GamePlayConstants.ATTACK_PHASE);
                     } else {
                         displayAlert("", message);
                     }
@@ -247,8 +247,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().attackPhase(gamePlay, countriesOwnedByPlayer, null, null);
-                        sleep(3000);
-                        changePhase(GamePlayConstants.FORTIFICATION_PHASE);
+                        sleep(5000, GamePlayConstants.FORTIFICATION_PHASE);
+                        //changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                     }
 
                     break;
@@ -265,8 +265,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
-                        sleep(3000);
-                        changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
+                        sleep(5000, GamePlayConstants.REINFORCEMENT_PHASE);
+                        //changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     }
 
                     break;
@@ -369,7 +369,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     public void update(Observable observable, Object object) {
 
        if(observable instanceof PhaseModel) {
-           logViewArrayList=((PhaseModel)observable).getActions();
+           logViewArrayList.clear();
+           logViewArrayList.addAll(((PhaseModel)observable).getActions());
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();
@@ -388,11 +389,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    public void sleep(long milliseconds){
+    public void sleep(final long milliseconds, final String nextPhase){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                changePhase(nextPhase);
             }
         },milliseconds);
     }

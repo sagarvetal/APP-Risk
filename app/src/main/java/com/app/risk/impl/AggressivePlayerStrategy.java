@@ -2,10 +2,10 @@ package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +36,7 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         strongestCountry.incrementArmies(player.getReinforcementArmies());
-        LogManager.getInstance().writeLog("Reinforcement Armies alloted : " + player.getReinforcementArmies());
+        PhaseViewController.getInstance().addAction("Reinforcement Armies alloted : " + player.getReinforcementArmies());
         player.setReinforcementArmies(0);
     }
 
@@ -88,11 +88,11 @@ public class AggressivePlayerStrategy implements Strategy {
         while(strongestCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() != 0){
             noOfAttackerDice = getAttackerDice();
             final int noOfDefenderDice = AttackPhaseController.getInstance().getDefenderDices(toCountry);
-            LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
-            LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
-            LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+            PhaseViewController.getInstance().addAction("\nAttack No : " + (++attackCount));
+            PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+            PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
-            LogManager.getInstance().writeLog("Attack result : " + result);
+            PhaseViewController.getInstance().addAction("Attack result : " + result);
 
         }
         return noOfAttackerDice;
@@ -138,7 +138,7 @@ public class AggressivePlayerStrategy implements Strategy {
             }
         }
         performFortification(gamePlay,countryMaxNieghbours,countriesOwnedByPlayer);
-        LogManager.getInstance().writeLog("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
+        PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxNieghbours.getNameOfCountry());
 
     }
 
