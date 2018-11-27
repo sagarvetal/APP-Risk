@@ -8,8 +8,6 @@ import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -35,7 +33,6 @@ public class AggressivePlayerStrategy implements Strategy {
                 }
             }
         }
-        //handle case where there could be countries with same number of armies
         strongestCountry.incrementArmies(player.getReinforcementArmies());
         player.setReinforcementArmies(0);
     }
@@ -49,7 +46,7 @@ public class AggressivePlayerStrategy implements Strategy {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         while (strongestCountry.getNoOfArmies()>1){
-            Country toCountry = getToCountry(gamePlay,player);
+            Country toCountry = getToCountry(gamePlay,player,countriesOwnedByPlayer);
             int defenderDice = performAttack(player,toCountry);
             if (defenderDice > 0){
                 toCountry.getPlayer().decrementCountries(1);
@@ -73,10 +70,10 @@ public class AggressivePlayerStrategy implements Strategy {
      * @param player - player object
      * @return defender country
      */
-    public Country getToCountry(GamePlay gamePlay, Player player){
-        Country toCountry = getRandomCountry(gamePlay.getCountries().values());
+    public Country getToCountry(GamePlay gamePlay, Player player,final ArrayList<Country> countriesOwnedByPlayer){
+        Country toCountry = getRandomCountry(countriesOwnedByPlayer);
         while (toCountry.getPlayer() == strongestCountry.getPlayer() && toCountry.getNoOfArmies()>0){
-            toCountry = getRandomCountry(gamePlay.getCountries().values());
+            toCountry = getRandomCountry(countriesOwnedByPlayer);
         }
         return toCountry;
     }
@@ -120,14 +117,14 @@ public class AggressivePlayerStrategy implements Strategy {
 
     /**
      * returns random country from give collection of countries
-     * @param countries - collection of countries
+     * @param countriesOwnedByPlayer - collection of countries
      * @return random country form list of collection
      */
 
-    private Country getRandomCountry(Collection countries) {
+    private Country getRandomCountry(final ArrayList<Country> countriesOwnedByPlayer) {
         Random rnd = new Random();
-        int i = rnd.nextInt(countries.size());
-        return (Country)countries.toArray()[i];
+        int i = rnd.nextInt(countriesOwnedByPlayer.size());
+        return (Country)countriesOwnedByPlayer.toArray()[i];
     }
 
     /**
