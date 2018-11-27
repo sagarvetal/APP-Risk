@@ -74,7 +74,7 @@ public class ReinforcementPhaseController {
     public void showReinforcementDialogBox(final int position, final ArrayList<Country> countries){
         final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
-        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + countries.get(position).getNameOfCountry());
+        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + countries.get(position).getNameOfCountry());
 
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
         reinforcementDialogBox.setView(view);
@@ -90,11 +90,11 @@ public class ReinforcementPhaseController {
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
                 countries.get(position).incrementArmies(numberPicker.getValue());
 
-                LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + countries.get(position).getNameOfCountry());
+                LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + countries.get(position).getNameOfCountry());
 
                 getActivity().notifyPlayScreenRVAdapter();
                 if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
-                    LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
+                    LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
                     getActivity().changePhase(GamePlayConstants.ATTACK_PHASE);
                 }
             }

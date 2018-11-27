@@ -17,7 +17,6 @@ import com.app.risk.view.PlayScreenActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class is used for the fortification phase.
@@ -71,7 +70,7 @@ public class FortificationPhaseController {
      */
     public void showFortificationDialogBox(final int position, final ArrayList<Country> countries){
         if(countries.get(position).getNoOfArmies() > 1){
-            LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
+            LogManager.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
 
             final ArrayList<String> reachableCountries  = getReachableCountries(countries.get(position), countries);
             final String[] reachableCountryArray = new String[reachableCountries.size()];
@@ -89,7 +88,7 @@ public class FortificationPhaseController {
                     .show();
         }
         else{
-            LogManager.getInstance().writeLog(countries.get(position) + " must have armies more than one to move.");
+            LogManager.getInstance().addAction(countries.get(position) + " must have armies more than one to move.");
             Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
         }
     }
@@ -120,7 +119,7 @@ public class FortificationPhaseController {
                 fortifyCountry(countries.get(position), gamePlay.getCountries().get(destinationCountry), numberPicker.getValue());
 
                 final String message = numberPicker.getValue() + " armies moved from " + countries.get(position).getNameOfCountry() + " to " + destinationCountry;
-                LogManager.getInstance().writeLog(message);
+                LogManager.getInstance().addAction(message);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
                 if(gamePlay.getCurrentPlayer().isNewCountryConquered()){

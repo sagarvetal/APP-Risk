@@ -94,7 +94,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 switch (currentPhase){
                     case GamePlayConstants.REINFORCEMENT_PHASE:
 
-                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
+                        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
                         if(gamePlay.getCurrentPlayer().getCards().size()>0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
                             CardExchangeController cardExchangeController = new CardExchangeController(gamePlay.getCurrentPlayer());
 
@@ -110,7 +110,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                         break;
                     case GamePlayConstants.ATTACK_PHASE:
-                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.FORTIFICATION_PHASE+" phase.");
+                        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.FORTIFICATION_PHASE+" phase.");
                         changePhase(GamePlayConstants.FORTIFICATION_PHASE);
                         break;
                     case GamePlayConstants.FORTIFICATION_PHASE:
@@ -118,7 +118,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                             gamePlay.getCurrentPlayer().assignCards(gamePlay);
                             gamePlay.getCurrentPlayer().setNewCountryConquered(false);
                         }
-                        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
+                        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has decided to move to "+GamePlayConstants.REINFORCEMENT_PHASE+" phase.");
                         changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                         break;
                 }
@@ -168,15 +168,15 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
-                    LogManager.getInstance().deleteLog();
+                    LogManager.getInstance().clearPhaseView();
                     floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                     currentPhase = phase;
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     gamePlay.setCurrentPlayer();
 
-                    LogManager.getInstance().writeLog("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
-                    LogManager.getInstance().writeLog("\nPhase : " + phase);
+                    LogManager.getInstance().addAction("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
+                    LogManager.getInstance().addAction("\nPhase : " + phase);
 
                     ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
@@ -204,7 +204,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
-                    LogManager.getInstance().writeLog("\nPhase : " + phase);
+                    LogManager.getInstance().addAction("\nPhase : " + phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
 
                     break;
@@ -213,7 +213,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
                     currentPhase = phase;
                     gamePlay.setCurrentPhase(phase);
-                    LogManager.getInstance().writeLog("\nPhase : " + phase);
+                    LogManager.getInstance().addAction("\nPhase : " + phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     break;
             }
@@ -267,8 +267,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     @Override
     public void update(Observable observable, Object object) {
        if(observable instanceof Log) {
-           String message=((Log)observable).getMessage();
-           logViewArrayList.add(0,message);
+           logViewArrayList=((Log)observable).getActions();
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
            playerStateAdapter.notifyDataSetChanged();

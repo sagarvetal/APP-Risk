@@ -1,9 +1,7 @@
 package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
-import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.FortificationPhaseController;
-import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -36,14 +34,14 @@ public class BenevolentPlayerStrategy implements Strategy {
             int min = findleastArmies(countriesOwnedByPlayer);
             for (Country country : countriesOwnedByPlayer) {
                 if (country.getNoOfArmies() == min) {
-                    LogManager.getInstance().writeLog("\nweak Country found : " + country.getNameOfCountry());
-                    LogManager.getInstance().writeLog("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
+                    LogManager.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
+                    LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
                     gamePlay.getCurrentPlayer().decrementReinforcementArmies(1);
                     reinforcement-=1;
                     country.incrementArmies(1);
-                    LogManager.getInstance().writeLog("\n" + gamePlay.getCurrentPlayer().getName() + " has placed 1 army on " + country.getNameOfCountry());
+                    LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed 1 army on " + country.getNameOfCountry());
                     if (reinforcement == 0) {
-                        LogManager.getInstance().writeLog("\n" + gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
+                        LogManager.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
                         break;
                     }
                 }
@@ -105,7 +103,7 @@ public class BenevolentPlayerStrategy implements Strategy {
      */
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
-        LogManager.getInstance().writeLog("Benevolent never attacks");
+        LogManager.getInstance().addAction("Benevolent never attacks");
 
     }
 
@@ -129,8 +127,8 @@ public class BenevolentPlayerStrategy implements Strategy {
                 weakestCountry = country;
             break;
         }
-        LogManager.getInstance().writeLog(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
-        LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
+        LogManager.getInstance().addAction(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
+        LogManager.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
 
         final ArrayList<String> reachableCountries = fortificationPhaseController.getReachableCountries(weakestCountry, countriesOwnedByPlayer);
         ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, countriesOwnedByPlayer);
@@ -146,9 +144,9 @@ public class BenevolentPlayerStrategy implements Strategy {
                 }
             }
             fortificationPhaseController.fortifyCountry(StrongCountry, weakestCountry, maxInConnected - avgInConnected);
-            LogManager.getInstance().writeLog(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
+            LogManager.getInstance().addAction(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
         } else {
-            LogManager.getInstance().writeLog(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
+            LogManager.getInstance().addAction(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
         }
     }
     /**

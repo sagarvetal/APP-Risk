@@ -81,21 +81,21 @@ public class AttackPhaseController implements View.OnClickListener {
         final Player attacker = gamePlay.getCurrentPlayer();
         final Player defender = defendingCountry.getPlayer();
 
-        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
+        LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName()+" wants to attack from "+attackingCountry.getNameOfCountry()+" to "+defendingCountry.getNameOfCountry());
         if(attacker.equals(defender)){
-            LogManager.getInstance().writeLog("Attacker can not attack on their own country");
+            LogManager.getInstance().addAction("Attacker can not attack on their own country");
             Toast.makeText(context, "Attacker can not attack on their own country", Toast.LENGTH_SHORT).show();
         } else{
             if(attackingCountry.getNoOfArmies() > 1){
                 showAttackView();
             } else{
-                LogManager.getInstance().writeLog("Attacking country must have more than one armies");
+                LogManager.getInstance().addAction("Attacking country must have more than one armies");
                 Toast.makeText(context, "Attacking country must have more than one armies", Toast.LENGTH_SHORT).show();
             }
         }
 
         if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
-            LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has won the game.");
+            LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has won the game.");
             Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
             new AlertDialog.Builder(context)
                     .setMessage("You won the game!!!")
@@ -110,7 +110,7 @@ public class AttackPhaseController implements View.OnClickListener {
                     .create().show();
 
         } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
-            LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
+            LogManager.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");
             Toast.makeText(context, "You can not do more attacks as you do not have enough armies.", Toast.LENGTH_SHORT).show();
             new AlertDialog.Builder(context)
                     .setMessage("You can not do more attacks as you do not have enough armies.")
@@ -166,8 +166,8 @@ public class AttackPhaseController implements View.OnClickListener {
                 final int noOfAttackerDice = attackerNumberPicker.getValue();
                 final int noOfDefenderDice = defenderNumberPicker.getValue();
 
-                LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
-                LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+                LogManager.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+                LogManager.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
 
                 final String result = gamePlay.getCurrentPlayer().performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
                 attackResult.append(result);
@@ -176,16 +176,16 @@ public class AttackPhaseController implements View.OnClickListener {
                 defenderNumberPicker.setMaxValue(defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies());
             }
             else if(v == allOutButton){
-                LogManager.getInstance().writeLog("Player has selected all out option for attack.");
+                LogManager.getInstance().addAction("Player has selected all out option for attack.");
                 final String result = gamePlay.getCurrentPlayer().performAllOutAttack(attackingCountry, defendingCountry).toString();
                 attackResult.append(result);
             }
 
             if(defendingCountry.getNoOfArmies() == 0) {
-                LogManager.getInstance().writeLog("Player won the country " + defendingCountry.getNameOfCountry());
+                LogManager.getInstance().addAction("Player won the country " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
             } else if(attackingCountry.getNoOfArmies() == 1) {
-                LogManager.getInstance().writeLog("Player lost the attack on " + defendingCountry.getNameOfCountry());
+                LogManager.getInstance().addAction("Player lost the attack on " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
             }
 
@@ -249,7 +249,7 @@ public class AttackPhaseController implements View.OnClickListener {
                 attackingCountry.decrementArmies(numberPicker.getValue());
                 defendingCountry.incrementArmies(numberPicker.getValue());
 
-                LogManager.getInstance().writeLog(numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
+                LogManager.getInstance().addAction(numberPicker.getValue() +" armies moved from " + attackingCountry.getNameOfCountry() +
                         " to " + defendingCountry.getNameOfCountry());
 
                 getActivity().notifyPlayScreenRVAdapter();

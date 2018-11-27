@@ -365,8 +365,8 @@ public class Player extends Observable implements Serializable {
     public void reinforcementPhase(final GamePlay gamePlay) {
         final int reinforcementArmies = calculateReinforcementArmies(gamePlay);
         final int continentValue = getContinentValue(gamePlay);
-        LogManager.getInstance().writeLog("Total reinforcement armies awarded : " + reinforcementArmies);
-        LogManager.getInstance().writeLog("Total continent control value awarded : " + continentValue);
+        LogManager.getInstance().addAction("Total reinforcement armies awarded : " + reinforcementArmies);
+        LogManager.getInstance().addAction("Total continent control value awarded : " + continentValue);
         setReinforcementArmies(reinforcementArmies + continentValue);
         incrementArmies(reinforcementArmies + continentValue);
     }
@@ -401,8 +401,8 @@ public class Player extends Observable implements Serializable {
                 }
             }
             if(isWholeContinentOccupied) {
-                LogManager.getInstance().writeLog(getName() + " holds complete continent " + continent);
-                LogManager.getInstance().writeLog(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
+                LogManager.getInstance().addAction(getName() + " holds complete continent " + continent);
+                LogManager.getInstance().addAction(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
                 continentValue += continent.getArmyControlValue();
             }
         }
@@ -424,9 +424,9 @@ public class Player extends Observable implements Serializable {
             final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
             final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
 
-            LogManager.getInstance().writeLog("\nAttack No : " + (++attackCount));
-            LogManager.getInstance().writeLog("No of dice selected for attacker : " + noOfAttackerDice);
-            LogManager.getInstance().writeLog("No of dice selected for defender : " + noOfDefenderDice);
+            LogManager.getInstance().addAction("\nAttack No : " + (++attackCount));
+            LogManager.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
+            LogManager.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
 
             final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
             attackResult.append(result);
@@ -473,7 +473,7 @@ public class Player extends Observable implements Serializable {
 
         attackResult.append("\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
-        LogManager.getInstance().writeLog(attackResult.toString());
+        LogManager.getInstance().addAction(attackResult.toString());
         return attackResult;
     }
 
@@ -556,7 +556,7 @@ public class Player extends Observable implements Serializable {
         final int randomIndex = ThreadLocalRandom.current().nextInt(gamePlay.getCards().size());
         final Card card = new Card(gamePlay.getCards().get(randomIndex).getType());
         setCards(card);
-        LogManager.getInstance().writeLog(card.getType() + " has been awarded to " + getName());
+        LogManager.getInstance().addAction(card.getType() + " has been awarded to " + getName());
     }
 
     /**

@@ -50,9 +50,9 @@ public class LogManager {
     }
     /**
      * This is a method that writes the given log in the file and log object
-     * @param text message of the log that would be written into file and displayed on the view
+     * @param action message of the log that would be written into file and displayed on the view
      */
-    public void writeLog(String text) {
+    public void addAction(String action) {
         BufferedWriter output = null;
         try {
 
@@ -71,7 +71,7 @@ public class LogManager {
 
             FileOutputStream f = new FileOutputStream(file, true);
             output = new BufferedWriter(new OutputStreamWriter(f));
-            output.write(text);
+            output.write(action);
             output.newLine();
 
         } catch (IOException e) {
@@ -86,7 +86,7 @@ public class LogManager {
 
                 }
 
-                logmsg.setMessage(text);
+                logmsg.setAction(action);
             }
         }
     }
@@ -122,19 +122,10 @@ public class LogManager {
 
     /**
      * This is a method that delete the log from the file
-     * and the clear the log from the UI
+     * and the clearPhaseView the log from the UI
      */
-    public void deleteLog() {
-        File logDirectory = new File(LogManager.getInstance().dirPath);
-        if (!logDirectory.exists())
-            logDirectory.mkdirs();
-        File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
-        if (file.exists()) {
-            boolean result = file.delete();
-            System.out.println(":::::::::::::::::::::::::delete result::::::::::::::" + result);
-            PlayScreenActivity.logViewArrayList.removeAll(PlayScreenActivity.logViewArrayList);
-            PlayScreenActivity.logViewAdapter.notifyDataSetChanged();
-        }
+    public void clearPhaseView() {
+        logmsg.clear();
     }
 
     /**
