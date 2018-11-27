@@ -10,6 +10,7 @@ import com.app.risk.model.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -159,9 +160,41 @@ public class AggressivePlayerStrategy implements Strategy {
 
     public int neighbourArmiesCount(GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer){
         int count = 0;
-        for (Country  neighbourCountry: countriesOwnedByPlayer){
+        for (Country neighbourCountry: countriesOwnedByPlayer){
             count += neighbourCountry.getNoOfArmies();
         }
         return  count;
+    }
+
+    public boolean checkIfPathExistBetweenCountries(Country startCountry,Country endCountry,GamePlay gamePlay){
+        ArrayList<Country> nieghbourCountries = addOwnAdjacentCountries(gamePlay,startCountry);
+        boolean isEndCountryFound = false;
+        while(nieghbourCountries.size()>0){
+            Iterator<Country> nieghbourCountryList = nieghbourCountries.iterator();
+            while (nieghbourCountryList.hasNext()){
+                Country country = nieghbourCountryList.next();
+                ArrayList<Country> ownAdjacentCountries = addOwnAdjacentCountries(gamePlay,country);
+                if (ownAdjacentCountries.contains(endCountry)){
+                    isEndCountryFound = true;
+                    break;
+                } else {
+                    nieghbourCountries.addAll(ownAdjacentCountries);
+                    nieghbourCountryList.remove();
+                }
+            }
+        }
+        return isEndCountryFound;
+    }
+
+    public ArrayList<Country> addOwnAdjacentCountries(GamePlay gamePlay,Country country){
+        ArrayList<Country> arrCountry = new ArrayList<>();
+
+        for (String CountryName : country.getAdjacentCountries()){
+            if (gamePlay.getCountries().get(CountryName).getPlayer() == country.getPlayer()){
+                arrCountry.add(gamePlay.getCountries().get(CountryName));
+            }
+        }
+
+        return arrCountry;
     }
 }
