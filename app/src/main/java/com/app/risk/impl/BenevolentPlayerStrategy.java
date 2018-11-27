@@ -1,9 +1,7 @@
 package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
-import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.FortificationPhaseController;
-import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -125,15 +123,16 @@ public class BenevolentPlayerStrategy implements Strategy {
         Country weakestCountry = null;
 
         for (Country country : countriesOwnedByPlayer) {
-            if (country.getNoOfArmies() == minimumArmies)
+            if (country.getNoOfArmies() == minimumArmies){
                 weakestCountry = country;
-            break;
+                break;
+            }
         }
         LogManager.getInstance().writeLog(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
         LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
 
         final ArrayList<String> reachableCountries = fortificationPhaseController.getReachableCountries(weakestCountry, countriesOwnedByPlayer);
-        ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, countriesOwnedByPlayer);
+        ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, gamePlay);
         HashMap<String, Integer> strongestCountry = playerCountryDetails(reachableCountryArrayList);
         int maxInConnected = strongestCountry.get("maximum");
         int avgInConnected = strongestCountry.get("average");
@@ -157,18 +156,13 @@ public class BenevolentPlayerStrategy implements Strategy {
      * This is method gets the list of countries that are reachable for a player
      *
      * @param reachableCountries ArrayList of the country names which are reachable
-     * @param playerCountryList ArrayList of the country owned by the player
+     * @param gamePlay The GamePlay object.
      * @return ArrayList of country which are reachable
      */
-    private ArrayList<Country> getCountryArrayList(ArrayList<String> reachableCountries, ArrayList<Country> playerCountryList) {
+    private ArrayList<Country> getCountryArrayList(ArrayList<String> reachableCountries, GamePlay gamePlay) {
         ArrayList<Country> countries = new ArrayList<Country>();
-        for (Country country : playerCountryList) {
-            for (String name : reachableCountries) {
-                if (country.getNameOfCountry().equalsIgnoreCase(name)) {
-                    countries.add(country);
-                    break;
-                }
-            }
+        for (String name : reachableCountries) {
+            countries.add(gamePlay.getCountries().get(name));
         }
         return countries;
     }
