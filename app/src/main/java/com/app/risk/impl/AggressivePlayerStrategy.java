@@ -123,28 +123,26 @@ public class AggressivePlayerStrategy implements Strategy {
      */
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
-        Country countryMaxArmyCount = new Country();
-        int maxCount = 0;
-        for (Country country : countriesOwnedByPlayer){
-            if (country.getNoOfArmies() > maxCount){
-                countryMaxArmyCount= country;
-            }
-        }
-        Country countryToFortify = new Country();
+        Country countryOne = new Country();
+        Country countryTwo = new Country();
         int maxNieghbourCountryCount = 0;
-        for (Country country : countriesOwnedByPlayer){
-            if (country != countryMaxArmyCount){
-                if (checkIfPathExistBetweenCountries(countryMaxArmyCount , country,gamePlay)){
-                    if (country.getNoOfArmies() > maxNieghbourCountryCount){
-                        countryToFortify = country;
-                        maxNieghbourCountryCount = country.getNoOfArmies();
+        for (Country c1 : countriesOwnedByPlayer){
+            for (Country c2 : countriesOwnedByPlayer){
+                if (c1 != c2){
+                    if (checkIfPathExistBetweenCountries(countryOne,countryTwo,gamePlay)){
+                        if ((c1.getNoOfArmies()+c2.getNoOfArmies()>maxNieghbourCountryCount)){
+                            countryOne = c1;
+                            countryTwo = c2;
+                            maxNieghbourCountryCount = countryOne.getNoOfArmies() + countryTwo.getNoOfArmies();
+                        }
                     }
                 }
             }
+
         }
 
-        performFortification(countryMaxArmyCount,countryToFortify);
-        PhaseViewController.getInstance().addAction("Country fortified : " + countryMaxArmyCount.getNameOfCountry());
+        performFortification(countryOne,countryTwo);
+        PhaseViewController.getInstance().addAction("Country fortified : " + countryOne.getNameOfCountry());
 
     }
 
@@ -159,6 +157,14 @@ public class AggressivePlayerStrategy implements Strategy {
         country.incrementArmies(fortifyCountry.getNoOfArmies()-1);
         fortifyCountry.decrementArmies(fortifyCountry.getNoOfArmies()-1);
     }
+
+    /**
+     * Checks if path exist between 2 given countries
+     * @param startCountry - country with startpoint of path
+     * @param endCountry - country with endpoint fo path
+     * @param gamePlay - gameplayobjec
+     * @return returns true if path exist and false otherwise
+     */
 
 
     public boolean checkIfPathExistBetweenCountries(Country startCountry,Country endCountry,GamePlay gamePlay){
@@ -183,13 +189,11 @@ public class AggressivePlayerStrategy implements Strategy {
 
     public ArrayList<Country> addOwnAdjacentCountries(GamePlay gamePlay,Country country){
         ArrayList<Country> arrCountry = new ArrayList<>();
-
         for (String CountryName : country.getAdjacentCountries()){
             if (gamePlay.getCountries().get(CountryName).getPlayer() == country.getPlayer()){
                 arrCountry.add(gamePlay.getCountries().get(CountryName));
             }
         }
-
         return arrCountry;
     }
 }
