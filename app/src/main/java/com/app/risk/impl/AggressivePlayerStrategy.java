@@ -8,6 +8,7 @@ import com.app.risk.model.Player;
 import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 /**
@@ -46,7 +47,7 @@ public class AggressivePlayerStrategy implements Strategy {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         while (strongestCountry.getNoOfArmies()>1){
-            Country toCountry = getToCountry(gamePlay,player,countriesOwnedByPlayer);
+            Country toCountry = getToCountry(gamePlay, player);
             int defenderDice = performAttack(player,toCountry);
             if (defenderDice > 0){
                 toCountry.getPlayer().decrementCountries(1);
@@ -70,10 +71,10 @@ public class AggressivePlayerStrategy implements Strategy {
      * @param player - player object
      * @return defender country
      */
-    public Country getToCountry(GamePlay gamePlay, Player player,final ArrayList<Country> countriesOwnedByPlayer){
-        Country toCountry = getRandomCountry(countriesOwnedByPlayer);
+    public Country getToCountry(GamePlay gamePlay, Player player){
+        Country toCountry = getRandomCountry(gamePlay.getCountries().values());
         while (toCountry.getPlayer() == strongestCountry.getPlayer() && toCountry.getNoOfArmies()>0){
-            toCountry = getRandomCountry(countriesOwnedByPlayer);
+            toCountry = getRandomCountry(gamePlay.getCountries().values());
         }
         return toCountry;
     }
@@ -104,14 +105,14 @@ public class AggressivePlayerStrategy implements Strategy {
 
     /**
      * returns random country from give collection of countries
-     * @param countriesOwnedByPlayer - collection of countries
+     * @param countries - collection of countries
      * @return random country form list of collection
      */
 
-    private Country getRandomCountry(final ArrayList<Country> countriesOwnedByPlayer) {
+    private Country getRandomCountry(final Collection countries) {
         Random rnd = new Random();
-        int i = rnd.nextInt(countriesOwnedByPlayer.size());
-        return (Country)countriesOwnedByPlayer.toArray()[i];
+        int i = rnd.nextInt(countries.size());
+        return (Country)countries.toArray()[i];
     }
 
     /**
@@ -125,7 +126,7 @@ public class AggressivePlayerStrategy implements Strategy {
         Country countryMaxNieghbours = new Country();
         int maxCount = 0;
         for (Country country : countriesOwnedByPlayer){
-            int nieghbourArmyCount = nieghbourArmiesCount(gamePlay,countriesOwnedByPlayer);
+            int nieghbourArmyCount = neighbourArmiesCount(gamePlay,countriesOwnedByPlayer);
             int totalArmyCount = nieghbourArmyCount + country.getNoOfArmies();
             if (totalArmyCount > maxCount){
                 maxCount = nieghbourArmyCount;
@@ -142,10 +143,9 @@ public class AggressivePlayerStrategy implements Strategy {
      */
 
     public void performFortification(GamePlay gamePlay, Country country, final ArrayList<Country> countriesOwnedByPlayer ){
-
         for (Country neighbourCountry : countriesOwnedByPlayer){
-            neighbourCountry.decrementArmies(neighbourCountry.getNoOfArmies() - 1);
             country.incrementArmies(neighbourCountry.getNoOfArmies() - 1);
+            neighbourCountry.decrementArmies(neighbourCountry.getNoOfArmies() - 1);
         }
     }
 
@@ -155,7 +155,7 @@ public class AggressivePlayerStrategy implements Strategy {
      * @return maximum count
      */
 
-    public int nieghbourArmiesCount(GamePlay gamePlay,final ArrayList<Country> countriesOwnedByPlayer){
+    public int neighbourArmiesCount(GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer){
         int count = 0;
         for (Country  neighbourCountry: countriesOwnedByPlayer){
             count += neighbourCountry.getNoOfArmies();

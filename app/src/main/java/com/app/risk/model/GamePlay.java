@@ -253,18 +253,23 @@ public class GamePlay implements Serializable {
     private void setPlayerStrategy(final Player player, final String strategyName) {
         switch(strategyName) {
             case GamePlayConstants.HUMAN_STRATEGY :
+                player.setHuman(true);
                 player.setStrategy(new HumanPlayerStrategy());
                 break;
             case GamePlayConstants.AGGRESSIVE_STRATEGY :
+                player.setHuman(false);
                 player.setStrategy(new AggressivePlayerStrategy());
                 break;
             case GamePlayConstants.BENEVOLENT_STRATEGY :
+                player.setHuman(false);
                 player.setStrategy(new BenevolentPlayerStrategy());
                 break;
             case GamePlayConstants.RANDOM_STRATEGY :
+                player.setHuman(false);
                 player.setStrategy(new RandomPlayerStrategy());
                 break;
             case GamePlayConstants.CHEATER_STRATEGY :
+                player.setHuman(false);
                 player.setStrategy(new CheaterPlayerStrategy());
                 break;
         }

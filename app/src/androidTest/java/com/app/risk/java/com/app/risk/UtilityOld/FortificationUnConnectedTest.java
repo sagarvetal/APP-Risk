@@ -90,7 +90,7 @@ public class FortificationUnConnectedTest {
     @Test
     public void fortificationUnConnectedTest() {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertFalse(fc.isCountriesConneted(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")) && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Bhutan").getPlayer().getId() && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Nepal").getPlayer().getId());
+        assertFalse(fc.isCountriesConnected(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")) && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Bhutan").getPlayer().getId() && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Nepal").getPlayer().getId());
 
     }
 
