@@ -40,8 +40,8 @@ public class MainScreenActivity extends AppCompatActivity {
      * This method retrieve the data and sets up the mainMenuList
      */
     public void setUpData() {
-        final String mainMenuOptions[] = {"Play", "Create Map", "Edit Map",
-                "Help", "Setting", "Exit"};
+        final String mainMenuOptions[] = {"Single Game","Tournament Game", "Create Map", "Edit Map",
+                "Help", "Exit"};
         mainMenuList = new ArrayList<>();
         for (String i : mainMenuOptions) {
             mainMenuList.add(i);

@@ -19,6 +19,7 @@ import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.model.GamePlay;
 import com.app.risk.view.EditMap;
 import com.app.risk.view.PlayScreenActivity;
+import com.app.risk.view.TournamentMenuActivity;
 import com.app.risk.view.UserDrivenMapsActivity;
 import com.app.risk.view.MapSelectionActivity;
 import com.app.risk.R;
@@ -116,7 +117,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             if(v == cardView){
 
                 switch(cardArrayList.get(getAdapterPosition())){
-                    case "Play":
+                    case "Single Game":
                         new AlertDialog.Builder(invokingActivity)
                                 .setTitle("Load").setMessage("What would you like to do?")
                                 .setPositiveButton("Start new game", new DialogInterface.OnClickListener() {
@@ -155,6 +156,11 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                     }
                                 }).create().show();
                         break;
+
+                    case "Tournament Game":
+                        invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(),TournamentMenuActivity.class));
+                        break;
+
                     case "Create Map":
                         final Intent userMapCreate = new Intent(invokingActivity.getApplicationContext(), UserDrivenMapsActivity.class);
                         Bundle bundle = new Bundle();
@@ -162,16 +168,16 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         userMapCreate.putExtras(bundle);
                         invokingActivity.startActivity(userMapCreate);
                         break;
+
                     case "Edit Map":
                         Intent editMap = new Intent(invokingActivity.getApplicationContext(), EditMap.class);
                         invokingActivity.startActivity(editMap);
                         break;
+
                     case "Help":
                         Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
                         break;
-                    case "Setting":
-                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
-                        break;
+
                     case "Exit":
                         ((Activity)invokingActivity).finishAffinity();
                             System.exit(0);

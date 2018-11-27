@@ -20,7 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.risk.Interfaces.PhaseManager;
 import com.app.risk.R;
 import com.app.risk.adapters.PlayScreenRVAdapter;
 import com.app.risk.adapters.PlayerStateAdapter;
@@ -47,7 +46,7 @@ import java.util.Observer;
  * @author Himanshu Kohli
  * @version 1.0.0
  */
-public class PlayScreenActivity extends AppCompatActivity implements PhaseManager, Observer {
+public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
     private ImageView pImage;
     private TextView pName, pArmies, pCountries;
@@ -57,9 +56,11 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
     private PlayScreenRVAdapter adapter;
     private String mapName;
     private ArrayList<String> playerNames;
+    private ArrayList<String> playerStrategies;
     private ActionBar actionBar;
     private FloatingActionButton floatingActionButton;
     private String currentPhase;
+    private String playType;
     public ListView logView;
     public static ArrayAdapter<String> logViewAdapter;
     public static ArrayList<String> logViewArrayList;
@@ -133,21 +134,21 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
      * This method initialize the the referrences and gets data from previous activity
      */
     public void init() {
-
+        final Intent intent = getIntent();
         pImage = findViewById(R.id.play_screen_image);
         pName = findViewById(R.id.play_screen_player_name);
         pCountries = findViewById(R.id.play_screen_territories);
         pArmies = findViewById(R.id.play_screen_armies);
         cardView = findViewById(R.id.play_screen_cardview);
         recyclerView = findViewById(R.id.play_screen_reyclerview);
-
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
 
-        final Intent intent = getIntent();
         if (((GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT")) == null) {
             mapName = intent.getStringExtra("MAP_NAME");
             playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
+            playerStrategies = intent.getStringArrayListExtra("STRATERGY_INFO");
+            playType = intent.getStringExtra("PLAY_TYPE");
             startGame();
             addObserversToPlayer();
         } else {
@@ -165,17 +166,16 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
     /**
      * This method handles the phase transition of the gameplay
-     *
-     * @param phase: The string which holds the phase
+     * @param phase The name of the phase of type string.
      */
-    @Override
     public void changePhase(final String phase) {
         if (phase != null) {
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
-                    StartupPhaseController.getInstance().init(gamePlay).start(playerNames);
+                    gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
+                    StartupPhaseController.getInstance().init(gamePlay).start(playerNames, playerStrategies);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
@@ -193,9 +193,8 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
 
                     ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
 
-                    adapter = new PlayScreenRVAdapter(this, gamePlay, recyclerView);
+                    adapter = new PlayScreenRVAdapter(this, gamePlay);
                     recyclerView.setAdapter(adapter);
-                    adapter.setPhaseManager(this);
                     pName.setText(gamePlay.getCurrentPlayer().getName());
                     pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
                     pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
@@ -221,6 +220,7 @@ public class PlayScreenActivity extends AppCompatActivity implements PhaseManage
                     gamePlay.setCurrentPhase(phase);
                     LogManager.getInstance().writeLog("\nPhase : " + phase);
                     actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
+
                     break;
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
