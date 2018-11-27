@@ -61,7 +61,6 @@ public class ReinforcementPhaseControllerTest {
     @Test
     public void reinforcementArmiesCountTest() {
         startupphase.assignInitialCountries();
-        startupphase.assignInitialCountries();
         startupphase.placeInitialArmies();
         gamePlay.setCurrentPlayer();
         assertTrue(gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay)==3);

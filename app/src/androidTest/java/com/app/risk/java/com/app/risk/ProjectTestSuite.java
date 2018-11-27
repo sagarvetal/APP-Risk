@@ -2,14 +2,18 @@ package com.app.risk.java.com.app.risk;
 
 import com.app.risk.java.com.app.risk.controller.AllOutAttackTest;
 import com.app.risk.java.com.app.risk.controller.AttackPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller.CardAssignTest;
 import com.app.risk.java.com.app.risk.controller.CardExchangeControllerTest;
 import com.app.risk.java.com.app.risk.controller.CheckAfterEachAttackTest;
 import com.app.risk.java.com.app.risk.controller.ExchangeCardForArmiesTest;
 import com.app.risk.java.com.app.risk.controller.FortificationPhaseControllerTest;
 import com.app.risk.java.com.app.risk.controller.FortificationUnConnectedTest;
 import com.app.risk.java.com.app.risk.controller.MapDriverControllerTest;
+import com.app.risk.java.com.app.risk.controller.MoreAttackPossibleTest;
+import com.app.risk.java.com.app.risk.controller.PlayerWonTest;
 import com.app.risk.java.com.app.risk.controller.PreAttackAdjacentCountryTest;
 import com.app.risk.java.com.app.risk.controller.PreAttackSufficientArmyTest;
+import com.app.risk.java.com.app.risk.controller.ReinforcementContinentValueTest;
 import com.app.risk.java.com.app.risk.controller.ReinforcementPhaseControllerTest;
 import com.app.risk.java.com.app.risk.controller.StartUpPhaseAssignArmiesTest;
 import com.app.risk.java.com.app.risk.controller.StartUpPhaseAssignCountriesTest;
@@ -67,6 +71,10 @@ import org.junit.runners.Suite;
         OneContinentCheckTest.class,//checks whether all the countries belong to one continent or not
         SubGraphConnectedTest.class,//checks whether the subgraph is connected or not
         ValidConnectedGraphTest.class,//checks whether the graph is valid or not
+        CardAssignTest.class,//checks whether the card is assigned after the attack
+        PlayerWonTest.class,//check whether did the player win the game
+        ReinforcementContinentValueTest.class,//checks the army count after the player has occupied the whole continent
+        MoreAttackPossibleTest.class//checks whether there is more attack possible or not
 })
 public class ProjectTestSuite {
 }

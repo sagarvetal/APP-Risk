@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.MapSelectionActivity" />
+        <activity android:name=".view.TournamentMenuActivity" />
         <activity android:name=".view.PlayScreenActivity" />
         <activity
             android:name=".view.UserDrivenMapsActivity"

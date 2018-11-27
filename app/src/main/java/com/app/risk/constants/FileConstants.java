@@ -16,4 +16,6 @@ public class FileConstants {
     //Maps
     public static final String MAP_FILE_PATH = "app_maps";
     public static final String MAP_FILE_EXTENSTION = ".map";
+    public static final String GAME_SAVE_LOAD_FILE_PATH = "app_games";
+    public static final String GAME_SAVE_LOAD_FILE_EXTENSTION = ".ser";
 }
