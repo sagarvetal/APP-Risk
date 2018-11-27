@@ -10,7 +10,6 @@ import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
-import com.app.risk.utility.LogManager;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -74,7 +73,8 @@ public class ReinforcementPhaseController {
     public void showReinforcementDialogBox(final Country toCountry, final ArrayList<Country> countries){
         final AlertDialog.Builder reinforcementDialogBox = new AlertDialog.Builder(context);
         reinforcementDialogBox.setTitle("Place Armies");
-        LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + toCountry.getNameOfCountry());
+
+        PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + toCountry.getNameOfCountry());
 
         final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
         reinforcementDialogBox.setView(view);
@@ -90,11 +90,11 @@ public class ReinforcementPhaseController {
                 gamePlay.getCurrentPlayer().decrementReinforcementArmies(numberPicker.getValue());
                 toCountry.incrementArmies(numberPicker.getValue());
 
-                LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + toCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has placed " + numberPicker.getValue() + " armies on " + toCountry.getNameOfCountry());
 
                 getActivity().notifyPlayScreenRVAdapter();
                 if(gamePlay.getCurrentPlayer().getReinforcementArmies() == 0){
-                    LogManager.getInstance().writeLog(gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
+                    PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has placed all his reinforcement armies.");
                     getActivity().changePhase(GamePlayConstants.ATTACK_PHASE);
                 }
             }

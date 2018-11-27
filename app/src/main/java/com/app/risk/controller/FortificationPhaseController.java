@@ -11,7 +11,6 @@ import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
-import com.app.risk.utility.LogManager;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -70,8 +69,7 @@ public class FortificationPhaseController {
      */
     public void showFortificationDialogBox(final Country fromCountry, final ArrayList<Country> countries){
         if(fromCountry.getNoOfArmies() > 1){
-            LogManager.getInstance().writeLog("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
-
+            PhaseViewController.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
             final ArrayList<String> reachableCountries  = getReachableCountries(fromCountry, countries);
             final String[] reachableCountryArray = new String[reachableCountries.size()];
             reachableCountries.toArray(reachableCountryArray);
@@ -88,7 +86,7 @@ public class FortificationPhaseController {
                     .show();
         }
         else{
-            LogManager.getInstance().writeLog(fromCountry.getNameOfCountry() + " must have armies more than one to move.");
+            PhaseViewController.getInstance().addAction(fromCountry.getNameOfCountry() + " must have armies more than one to move.");
             Toast.makeText(context, "Country must have armies greater than one", Toast.LENGTH_SHORT).show();
         }
     }
@@ -121,7 +119,7 @@ public class FortificationPhaseController {
                 gamePlay.getCountries().get(destinationCountry).incrementArmies(numberPicker.getValue());
 
                 final String message = numberPicker.getValue() + " armies moved from " + fromCountry.getNameOfCountry() + " to " + destinationCountry;
-                LogManager.getInstance().writeLog(message);
+                PhaseViewController.getInstance().addAction(message);
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
                 if(gamePlay.getCurrentPlayer().isNewCountryConquered()){

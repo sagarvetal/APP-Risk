@@ -7,7 +7,6 @@ import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.utility.LogManager;
 
 import java.util.ArrayList;
 
