@@ -27,17 +27,17 @@ public class RandomPlayerStrategy implements Strategy {
     /**
      * This is reinforcement method for random strategy player.
      * It places the random no of reinforcement armies on random country player owns.
-     *
      * @param gamePlay The GamePlay object.
-     * @param player   The Player object.
+     * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param toCountry The country where player placing the reinforcement armies.
      */
     @Override
-    public void reinforcementPhase(final GamePlay gamePlay, final Player player) {
-        ArrayList<Country> countriesBelongingToPlayer = gamePlay.getCountryListByPlayerId(player.getId());
+    public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
         while(player.getReinforcementArmies()!=0){
-            int putCountryIndex = random.nextInt(countriesBelongingToPlayer.size()+1)-1;
+            int putCountryIndex = random.nextInt(countriesOwnedByPlayer.size()+1)-1;
             int reinforcementArmiesToPutInCountry = random.nextInt(player.getReinforcementArmies());
-            countriesBelongingToPlayer.get(putCountryIndex).incrementArmies(reinforcementArmiesToPutInCountry);
+            countriesOwnedByPlayer.get(putCountryIndex).incrementArmies(reinforcementArmiesToPutInCountry);
             player.decrementReinforcementArmies(reinforcementArmiesToPutInCountry);
             if(player.getCards().size()>2) {
                 CardExchangeController.getInstance().init(player).exchangeCardsStrategyImplementation();
@@ -48,27 +48,28 @@ public class RandomPlayerStrategy implements Strategy {
     /**
      * This is attack method for random strategy player.
      * It attacks a random no of times on a random country.
-     *
      * @param gamePlay The GamePlay object.
-     * @param player   The Player object.
+     * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param attackingCountry The attacker country
+     * @param defendingCountry The defender country
      */
     @Override
-    public void attackPhase(final GamePlay gamePlay, final Player player) {
-        ArrayList<Country> countriesBelongingToPlayer = gamePlay.getCountryListByPlayerId(player.getId());
+    public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         ArrayList<Country> countriesNotBelongingToPlayer = (ArrayList<Country>) gamePlay.getCountries().values();
         List<Country> countriesWithLessThan2Armies = new ArrayList<>();
-        countriesNotBelongingToPlayer.removeAll(countriesBelongingToPlayer);
-        for (int i = 0; i < countriesBelongingToPlayer.size(); i++) {
-            if (countriesBelongingToPlayer.get(i).getNoOfArmies() < 2) {
-                countriesWithLessThan2Armies.add(countriesBelongingToPlayer.get(i));
+        countriesNotBelongingToPlayer.removeAll(countriesOwnedByPlayer);
+        for (int i = 0; i < countriesOwnedByPlayer.size(); i++) {
+            if (countriesOwnedByPlayer.get(i).getNoOfArmies() < 2) {
+                countriesWithLessThan2Armies.add(countriesOwnedByPlayer.get(i));
             }
         }
-        countriesBelongingToPlayer.removeAll(countriesWithLessThan2Armies);
+        countriesOwnedByPlayer.removeAll(countriesWithLessThan2Armies);
         int numberOfTurns = random.nextInt(countriesNotBelongingToPlayer.size() + 1);
         for (int i = 0; i < numberOfTurns; i++) {
-            int fromCountryIndex = random.nextInt(countriesBelongingToPlayer.size() + 1) - 1;
-            Country fromCountry = countriesBelongingToPlayer.get(fromCountryIndex);
-            int armiesInFromCountry = countriesBelongingToPlayer.get(fromCountryIndex).getNoOfArmies() - 1;
+            int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size() + 1) - 1;
+            Country fromCountry = countriesOwnedByPlayer.get(fromCountryIndex);
+            int armiesInFromCountry = countriesOwnedByPlayer.get(fromCountryIndex).getNoOfArmies() - 1;
             List<String> adjacentCountries = fromCountry.getAdjacentCountries();
             List<Country> attackableCountries = new ArrayList<>();
             for (int j = 0; j < adjacentCountries.size(); j++) {
@@ -102,30 +103,29 @@ public class RandomPlayerStrategy implements Strategy {
                 player.incrementCountries(1);
                 attackableCountries.remove(toCountry);
                 if(toCountry.getNoOfArmies()>=2)
-                    countriesBelongingToPlayer.add(toCountry);
+                    countriesOwnedByPlayer.add(toCountry);
             }
-            if(!(player.isMoreAttackPossible(gamePlay, countriesBelongingToPlayer)))
+            if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer)))
                 break;
         }
     }
 
     /**
      * This is fortification method for random strategy player.
-     * It fortifies a random country.
-     *
-     * @param gamePlay The GamePlay object.
-     * @param player   The Player object.
+     * It fortifies a random country.@param gamePlay The GamePlay object.
+     * @param player The Player object.
+     * @param countriesOwnedByPlayer The list of countries owned by player.
+     * @param fromCountry The country from where player wants to move armies.
      */
     @Override
-    public void fortificationPhase(final GamePlay gamePlay, final Player player) {
-        ArrayList<Country> countriesBelongingToPlayer = gamePlay.getCountryListByPlayerId(player.getId());
+    public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
         while (true) {
-            int fromCountryIndex = random.nextInt(countriesBelongingToPlayer.size() + 1) - 1;
-            Country fromCountry = countriesBelongingToPlayer.get(fromCountryIndex);
-            if (fromCountry.getNoOfArmies() > 1) {
-                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountry, countriesBelongingToPlayer);
+            int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size() + 1) - 1;
+            Country fromCountryChosenRandom = countriesOwnedByPlayer.get(fromCountryIndex);
+            if (fromCountryChosenRandom.getNoOfArmies() > 1) {
+                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandom, countriesOwnedByPlayer);
                 Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size()) - 1));
-                FortificationPhaseController.getInstance().fortifyCountry(fromCountry, toCountry, random.nextInt(fromCountry.getNoOfArmies()));
+                FortificationPhaseController.getInstance().fortifyCountry(fromCountryChosenRandom, toCountry, random.nextInt(fromCountryChosenRandom.getNoOfArmies()));
                 break;
             }
         }
