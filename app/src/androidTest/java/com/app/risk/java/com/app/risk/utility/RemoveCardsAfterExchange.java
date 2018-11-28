@@ -3,6 +3,7 @@ package com.app.risk.java.com.app.risk.utility;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.CardExchangeController;
 import com.app.risk.model.Card;
 import com.app.risk.model.Continent;
@@ -54,7 +55,10 @@ public class RemoveCardsAfterExchange {
         countryList.get("Pakistan").setAdjacentCountries(pakistan);
 
         gm.setCountries(countryList);
-        gm.setPlayers(playerNames);
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        gm.setPlayers(playerNames,strategy);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
 
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
@@ -105,7 +109,7 @@ public class RemoveCardsAfterExchange {
     {
 
         int cardCount=gm.getCurrentPlayer().getCards().size();
-        CardExchangeController cardExchange=new CardExchangeController(gm.getCurrentPlayer());
+        CardExchangeController cardExchange=CardExchangeController.init(gm.getCurrentPlayer());
         cardExchange.exchangeArmiesForCards(cardList1);
         cardExchange.removeExchangedCards(cardList1);
         assertTrue(gm.getCurrentPlayer().getCards().size()==cardCount-3);
