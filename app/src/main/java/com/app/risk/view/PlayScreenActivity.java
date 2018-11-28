@@ -245,7 +245,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
                         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, countriesOwnedByPlayer, null);
-                        sleep(5000, GamePlayConstants.ATTACK_PHASE);
+                        sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.ATTACK_PHASE);
                     } else {
                         displayAlert("", message);
                     }
@@ -265,7 +265,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().attackPhase(gamePlay, countriesOwnedByPlayer, null, null);
-                        sleep(5000, GamePlayConstants.FORTIFICATION_PHASE);
+                        sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.FORTIFICATION_PHASE);
                     }
 
                     break;
@@ -286,7 +286,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                         if(!gamePlay.getCurrentPlayer().isHuman()){
                             gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
-                            sleep(5000, GamePlayConstants.REINFORCEMENT_PHASE);
+                            sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.REINFORCEMENT_PHASE);
                         }
                     }
 
@@ -411,7 +411,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    public void sleep(final long milliseconds, final String nextPhase){
+    public void sleep(final int milliseconds, final String nextPhase){
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

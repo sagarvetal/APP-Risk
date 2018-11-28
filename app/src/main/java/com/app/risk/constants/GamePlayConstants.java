@@ -37,4 +37,7 @@ public class GamePlayConstants {
     public static final String RANDOM_STRATEGY = "Random Strategy";
     public static final String CHEATER_STRATEGY = "Cheater Strategy";
 
+    //Sleep time (in milliseconds) after every phase
+    public static final int SLEEP_TIME = 10000;
+
 }
