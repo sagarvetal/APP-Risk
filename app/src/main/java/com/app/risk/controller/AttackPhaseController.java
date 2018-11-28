@@ -104,17 +104,8 @@ public class AttackPhaseController implements View.OnClickListener {
         if(gamePlay.getCurrentPlayer().isPlayerWon(gamePlay.getCountries())) {
             PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has won the game.");
             Toast.makeText(context, "Congratulations!!! You won the game.", Toast.LENGTH_SHORT).show();
-            new AlertDialog.Builder(context)
-                    .setMessage("You won the game!!!")
-                    .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            context.startActivity(new Intent(context.getApplicationContext(), MainScreenActivity.class));
-                        }
-                    })
-                    .setTitle("Congratulations!!!")
-                    .setCancelable(false)
-                    .create().show();
+            gamePlay.getCurrentPlayer().setPlayerWon(true);
+            getActivity().changePhase(GamePlayConstants.FORTIFICATION_PHASE);
 
         } else if(!gamePlay.getCurrentPlayer().isMoreAttackPossible(gamePlay, countries)) {
             PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " can not do more attacks as do not have enough armies.");

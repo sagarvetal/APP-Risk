@@ -36,6 +36,7 @@ public class Player extends Observable implements Serializable {
     private boolean isNewCountryConquered;
     private Strategy strategy;
     private boolean isHuman;
+    private boolean isPlayerWon;
 
     /**
      * This is a default constructor and it initializes the card list.
@@ -372,6 +373,22 @@ public class Player extends Observable implements Serializable {
      */
     public void setHuman(boolean isHuman) {
         this.isHuman = isHuman;
+    }
+
+    /**
+     * Getter function to get the flag to determine whether the player has won the game or not.
+     * @return true if player has won, otherwise return false.
+     */
+    public boolean isPlayerWon() {
+        return isPlayerWon;
+    }
+
+    /**
+     * Setter function to set the flag used to determine whether the player has won the game or not.
+     * @isPlayerWon true if player has won, otherwise return false.
+     */
+    public void setPlayerWon(boolean isPlayerWon) {
+        this.isPlayerWon = isPlayerWon;
     }
 
     /**
