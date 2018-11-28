@@ -466,6 +466,7 @@ public class Player extends Observable implements Serializable {
      */
     public void attackPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         getStrategy().attackPhase(gamePlay, this, countriesOwnedByPlayer, attackingCountry, defendingCountry);
+        gamePlay.checkPlayerStatus();
     }
 
 
