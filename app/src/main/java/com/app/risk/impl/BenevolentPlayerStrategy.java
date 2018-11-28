@@ -8,6 +8,8 @@ import com.app.risk.model.Player;
 import com.app.risk.controller.PhaseViewController;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -22,10 +24,11 @@ public class BenevolentPlayerStrategy implements Strategy {
     /**
      * This is reinforcement method for benevolent strategy player.
      * It places the reinforcement armies on the weakest countries having less no of armies.
-     * @param gamePlay The GamePlay object.
-     * @param player The Player object.
+     *
+     * @param gamePlay               The GamePlay object.
+     * @param player                 The Player object.
      * @param countriesOwnedByPlayer The list of countries owned by player.
-     * @param toCountry The country where player placing the reinforcement armies.
+     * @param toCountry              The country where player placing the reinforcement armies.
      */
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
@@ -37,7 +40,7 @@ public class BenevolentPlayerStrategy implements Strategy {
                     PhaseViewController.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
                     PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
                     gamePlay.getCurrentPlayer().decrementReinforcementArmies(1);
-                    reinforcement-=1;
+                    reinforcement -= 1;
                     country.incrementArmies(1);
                     PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed 1 army on " + country.getNameOfCountry());
                     if (reinforcement == 0) {
@@ -49,6 +52,7 @@ public class BenevolentPlayerStrategy implements Strategy {
 
         }
     }
+
     /**
      * This is method helps in finding weakest country owned by the player
      *
@@ -95,11 +99,12 @@ public class BenevolentPlayerStrategy implements Strategy {
     /**
      * This is attack method for benevolent strategy player.
      * It never attacks on any country.
-     * @param gamePlay The GamePlay object.
-     * @param player The Player object.
+     *
+     * @param gamePlay               The GamePlay object.
+     * @param player                 The Player object.
      * @param countriesOwnedByPlayer The list of countries owned by player.
-     * @param attackingCountry The attacker country
-     * @param defendingCountry The defender country
+     * @param attackingCountry       The attacker country
+     * @param defendingCountry       The defender country
      */
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
@@ -109,59 +114,77 @@ public class BenevolentPlayerStrategy implements Strategy {
     /**
      * This is fortification method for benevolent strategy player.
      * It fortifies in order to move armies to weaker countries.
-     * @param gamePlay The GamePlay object.
-     * @param player The Player object.
+     *
+     * @param gamePlay               The GamePlay object.
+     * @param player                 The Player object.
      * @param countriesOwnedByPlayer The list of countries owned by player.
-     * @param fromCountry The country from where player wants to move armies.
+     * @param fromCountry            The country from where player wants to move armies.
      */
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
-        HashMap<String, Integer> playerCountryDetails = playerCountryDetails(countriesOwnedByPlayer);
-        int minimumArmies = playerCountryDetails.get("minimum");
-        Country weakestCountry = null;
-
-        for (Country country : countriesOwnedByPlayer) {
-            if (country.getNoOfArmies() == minimumArmies){
-                weakestCountry = country;
-                break;
-            }
-        }
-
-        PhaseViewController.getInstance().addAction(weakestCountry.getNameOfCountry() + " is the weakest country owned by " + gamePlay.getCurrentPlayer().getName());
-        PhaseViewController.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
-
-        final ArrayList<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(weakestCountry, countriesOwnedByPlayer);
-        ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, gamePlay);
-        HashMap<String, Integer> strongestCountry = playerCountryDetails(reachableCountryArrayList);
-        int maxInConnected = strongestCountry.get("maximum");
-        int avgInConnected = strongestCountry.get("average");
-        Country StrongCountry = null;
-        if (maxInConnected >= 3 && (maxInConnected - avgInConnected) >= 1 && maxInConnected > minimumArmies) {
-            for (Country country : reachableCountryArrayList) {
-                if (country.getNoOfArmies() == maxInConnected) {
-                    StrongCountry = country;
+        ArrayList<Country> weakCountries = new ArrayList<Country>();
+        weakCountries.addAll(countriesOwnedByPlayer);
+        sortTheCountries(weakCountries, true);
+        PhaseViewController.getInstance().addAction("Checking all weaker countries to make a fortification by " + gamePlay.getCurrentPlayer().getName());
+        boolean fortification = false;
+        for (Country weakCountry : weakCountries) {
+            ArrayList<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(weakCountry, countriesOwnedByPlayer);
+            if (reachableCountries.size() != 0) {
+                ArrayList<Country> reachableCountryArrayList = getCountryArrayList(reachableCountries, gamePlay);
+                sortTheCountries(reachableCountryArrayList, false);
+                for (Country strongestNearWeakest : reachableCountryArrayList) {
+                    if (strongestNearWeakest.getNoOfArmies() - weakCountry.getNoOfArmies() > 1) {
+                        fortification = true;
+                        int noOfArmies = strongestNearWeakest.getNoOfArmies() - weakCountry.getNoOfArmies() / 2;
+                        strongestNearWeakest.decrementArmies(noOfArmies);
+                        weakCountry.incrementArmies(noOfArmies);
+                        PhaseViewController.getInstance().addAction(weakCountry.getNameOfCountry() + " is the one of the weaker countries owned by " + gamePlay.getCurrentPlayer().getName());
+                        PhaseViewController.getInstance().addAction(noOfArmies + " armies are moved from " + strongestNearWeakest.getNameOfCountry() + " to " + weakCountry);
+                        break;
+                    }
+                }
+                if (fortification) {
                     break;
                 }
             }
-            final int noOfArmies = maxInConnected - avgInConnected;
-            StrongCountry.decrementArmies(noOfArmies);
-            weakestCountry.incrementArmies(noOfArmies);
-            PhaseViewController.getInstance().addAction(maxInConnected - avgInConnected + " armies are moved from " + StrongCountry.getNameOfCountry() + " to " + weakestCountry);
-        } else {
-            PhaseViewController.getInstance().addAction(weakestCountry.getNameOfCountry() + " is surrounded by weak countries");
+        }
+        if (!fortification) {
+            PhaseViewController.getInstance().addAction("Fortification is not possible!!.Reason:Weak Country is not surrounded by any strong country");
         }
     }
+
     /**
      * This is method gets the list of countries that are reachable for a player
+     *
      * @param reachableCountries ArrayList of the country names which are reachable
-     * @param gamePlay The GamePlay object.
+     * @param gamePlay           The GamePlay object.
      * @return ArrayList of country which are reachable
      */
     private ArrayList<Country> getCountryArrayList(ArrayList<String> reachableCountries, GamePlay gamePlay) {
         ArrayList<Country> countries = new ArrayList<Country>();
         for (String name : reachableCountries) {
-            countries.add(gamePlay.getCountries().get(name));
+            if(gamePlay.getCountries().containsKey(name))
+            {
+             countries.add(gamePlay.getCountries().get(name));
+            }
         }
         return countries;
+    }
+
+
+    private void sortTheCountries(ArrayList<Country> countryList, boolean ascending) {
+        final boolean ascend = ascending;
+        Collections.sort(countryList, new Comparator<Country>() {
+            public int compare(Country s1, Country s2) {
+                int result;
+                if (ascend) {
+                    result = s1.getNoOfArmies() - (s2.getNoOfArmies());
+                } else {
+                    result = s2.getNoOfArmies() - (s1.getNoOfArmies());
+                }
+                return result;
+            }
+        });
+
     }
 }
