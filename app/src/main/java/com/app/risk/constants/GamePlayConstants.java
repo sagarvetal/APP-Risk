@@ -40,4 +40,9 @@ public class GamePlayConstants {
     //Sleep time (in milliseconds) after every phase
     public static final int SLEEP_TIME = 10000;
 
+    //Game Mode
+    public static final String GAME_MODE = "Game Mode";
+    public static final String SINGLE_GAME_MODE = "Single Game Mode";
+    public static final String TOURNAMENT_MODE = "Tournament Mode";
+
 }

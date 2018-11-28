@@ -36,6 +36,7 @@ public class GamePlay implements Serializable {
     private Queue<Integer> playerIdQueue;
     private final int[] colorCodes = {Color.RED,Color.GREEN,Color.BLUE
             ,Color.DKGRAY,Color.MAGENTA,Color.YELLOW};
+    private int noOfTurns;
 
     /**
      * This is a default constructor.
@@ -146,12 +147,39 @@ public class GamePlay implements Serializable {
      * If the player is inactive, it will remove that player from queue and recursively call itself.
      */
     public void setCurrentPlayer() {
+        decrementNoOfTurns(1);
         final Player player = players.get(playerIdQueue.poll());
         if (!player.isActive()) {
             setCurrentPlayer();
         } else {
             currentPlayer = player;
             playerIdQueue.offer(currentPlayer.getId());
+        }
+    }
+
+    /**
+     * Getter function to get the no of turns remaining for the game in tournament mode.
+     * @return The no of turns remaining for the game in tournament mode.
+     */
+    public int getNoOfTurns() {
+        return noOfTurns;
+    }
+
+    /**
+     * Setter function to set the no of turns given for the game in tournament mode.
+     * @return The no of turns given for the game in tournament mode.
+     */
+    public void setNoOfTurns(int noOfTurns) {
+        this.noOfTurns = noOfTurns;
+    }
+
+    /**
+     * This method decrement the no of turn given for the game by given count.
+     * @param count The count to decrease the no of turns of the game.
+     */
+    public void decrementNoOfTurns(int count) {
+        if(this.noOfTurns > 0){
+            this.noOfTurns -= count;
         }
     }
 
@@ -272,6 +300,18 @@ public class GamePlay implements Serializable {
                 player.setHuman(false);
                 player.setStrategy(new CheaterPlayerStrategy());
                 break;
+        }
+    }
+
+    /**
+     * This method checks whether player is holding any country or not.
+     * If not, it makes that player inactive.
+     */
+    public void checkPlayerStatus(){
+        for(final Player player : getPlayers().values()) {
+            if(getCountryListByPlayerId(player.getId()).size() == 0){
+                player.setActive(false);
+            }
         }
     }
 }
