@@ -36,6 +36,7 @@ public class Player extends Observable implements Serializable {
     private boolean isNewCountryConquered;
     private Strategy strategy;
     private boolean isHuman;
+    private boolean isPlayerWon;
 
     /**
      * This is a default constructor and it initializes the card list.
@@ -375,6 +376,22 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
+     * Getter function to get the flag to determine whether the player has won the game or not.
+     * @return true if player has won, otherwise return false.
+     */
+    public boolean isPlayerWon() {
+        return isPlayerWon;
+    }
+
+    /**
+     * Setter function to set the flag used to determine whether the player has won the game or not.
+     * @isPlayerWon true if player has won, otherwise return false.
+     */
+    public void setPlayerWon(boolean isPlayerWon) {
+        this.isPlayerWon = isPlayerWon;
+    }
+
+    /**
      * This is calculate the total reinforcement armies.
      * It sets the no of reinforcement armies given to the player
      * based on no of countries player owns and no of cards.
@@ -449,6 +466,7 @@ public class Player extends Observable implements Serializable {
      */
     public void attackPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         getStrategy().attackPhase(gamePlay, this, countriesOwnedByPlayer, attackingCountry, defendingCountry);
+        gamePlay.checkPlayerStatus();
     }
 
 
