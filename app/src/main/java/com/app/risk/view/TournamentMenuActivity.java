@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.GamePlay;
+import com.app.risk.utility.MapReader;
 
 import java.util.ArrayList;
 
@@ -74,9 +75,9 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         mapArrayList = new ArrayList<>();
         selectedPlayerStratergies = new ArrayList<>();
         selectedMapList = new ArrayList<>();
-        for(int i=0;i<5;i++){
-            mapArrayList.add("Map " + (i+1));
-        }
+
+        mapArrayList = MapReader.getMapList(this.getApplicationContext());
+
     }
 
     /**
@@ -166,7 +167,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
             int numberPickerValue = playerRestrictionPicker.getValue();
             int gamePickerValue = gameSelectionPicker.getValue();
             if(selectedPlayerStratergies.size() >=2 && selectedMapList.size() >=1){
-                final Intent intent = new Intent(TournamentMenuActivity.this,MainScreenActivity.class);
+                final Intent intent = new Intent(TournamentMenuActivity.this,PlayScreenActivity.class);
                 intent.putStringArrayListExtra("MAPS",selectedMapList);
                 intent.putStringArrayListExtra("PLAYER_STRATERGIES",selectedPlayerStratergies);
                 intent.putExtra("NO_OF_GAMES",gamePickerValue);
