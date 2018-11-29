@@ -22,13 +22,34 @@ import java.util.HashMap;
 import static org.junit.Assert.assertTrue;
 
 public class AggresiveStrategyTest {
+    /**
+     * Game play object
+     */
     GamePlay gamePlay;
+    /**
+     * Context object
+     */
     Context context = null;
+    /**
+     * Startupphasecontroller object
+     */
     StartupPhaseController startupphase = null;
+    /**
+     * Reinforcementphasecontroller object
+     */
     ReinforcementPhaseController reinforcementPhaseController = null;
+    /**
+     * playernames array
+     */
     ArrayList<String> playerNames = new ArrayList<String>();
+    /**
+     * hashmap of countries
+     */
     HashMap<String, Country> countries = new HashMap<String, Country>();
 
+    /**
+     * Sets up all variables to be used for testing
+     */
     @Before
     public void setUp(){
         gamePlay = new GamePlay();
@@ -60,6 +81,10 @@ public class AggresiveStrategyTest {
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
     }
+
+    /**
+     * Checks aggresive reinforcement functionality
+     */
     @Test
     public void aggresiveReinforcementArmiesCountTest(){
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
@@ -83,6 +108,9 @@ public class AggresiveStrategyTest {
         System.out.println(reinforcement);
     }
 
+    /**
+     * Checks aggresive attack functionalitu
+     */
     @Test
     public void aggresiveAttackTest(){
         startupphase.assignInitialCountries();
@@ -98,6 +126,10 @@ public class AggresiveStrategyTest {
         int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
         assertTrue(afterAttackArmies == 2);
     }
+
+    /**
+     * Checks aggresive fortification functionality
+     */
 
     @Test
     public void aggresiveFortificationTest(){
