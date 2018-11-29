@@ -1,5 +1,6 @@
 package com.app.risk.java.com.app.risk.UtilityOld;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -27,7 +28,10 @@ public class ContinentsOwnedByPlayerTest {
         ArrayList<String> arrPlayer = new ArrayList<>();
         arrPlayer.add("1");
         arrPlayer.add("2");
-        gamePlay.setPlayers(arrPlayer);
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        gamePlay.setPlayers(arrPlayer,strategy);
         HashMap<String, Country> countries = new HashMap<>();
         HashMap<String, Continent> continents = new HashMap<>();
 

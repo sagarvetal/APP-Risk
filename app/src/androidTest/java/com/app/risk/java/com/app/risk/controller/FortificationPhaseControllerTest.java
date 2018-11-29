@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -73,7 +74,11 @@ public class FortificationPhaseControllerTest {
         countryList.get("Nepal").setAdjacentCountries(nepal);
         countryList.get("Bhutan").setAdjacentCountries(bhutan);
         gm.setCountries(countryList);
-        gm.setPlayers(playerNames);
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        gm.setPlayers(playerNames,strategy);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Bhutan").setPlayer(gm.getPlayers().get(0));

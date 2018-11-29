@@ -3,6 +3,7 @@ package com.app.risk.java.com.app.risk.controller;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -41,7 +42,11 @@ public class StartupPhaseControllerTest {
         playerNames.add("player1");
         playerNames.add("player2");
         playerNames.add("player3");
-        gamePlay.setPlayers(playerNames);
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        gamePlay.setPlayers(playerNames,strategy);
         HashMap<String, Country> countries = new HashMap<String, Country>();
         countries.put("India", new Country("India", new Continent("Asia", 2)));
         countries.put("Italy", new Country("Italy", new Continent("europe", 3)));

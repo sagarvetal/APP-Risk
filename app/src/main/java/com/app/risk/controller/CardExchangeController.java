@@ -19,8 +19,15 @@ public class CardExchangeController {
     private static CardExchangeController cardExchangeController;
     private Player player;
 
+    /**
+     * Default constructor
+     */
     private CardExchangeController(){}
 
+    /**
+     * This method implements singleton pattern for CardExchangeController
+     * @return Static reference of CardExchangeController
+     */
     public static CardExchangeController getInstance() {
         if(cardExchangeController == null) {
             cardExchangeController = new CardExchangeController();
@@ -28,6 +35,11 @@ public class CardExchangeController {
         return cardExchangeController;
     }
 
+    /**
+     * This method implements singleton pattern for CardExchangeController and sets the player object
+     * @param player Player object
+     * @return Static reference of CardExchangeController
+     */
     public static CardExchangeController init(final Player player) {
         getInstance();
         cardExchangeController.player = player;
@@ -81,6 +93,12 @@ public class CardExchangeController {
         player.setCards(updatedCards);
     }
 
+    /**
+     * This method implements card exchange for computer strategy players without user interaction by choosing three
+     * most suitable cards for exchange (based on the rules).
+     * It performs the exchange based on the cards automatically chosen and awards the player the appropriate number of
+     * armies received in exchange for those cards and removes those cards from the player's list of cards.
+     */
     public void exchangeCardsStrategyImplementation(){
 
         List<Card> cardList = player.getCards();
