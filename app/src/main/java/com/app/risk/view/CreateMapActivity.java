@@ -42,29 +42,95 @@ import java.util.Map;
 
 public class CreateMapActivity extends Activity {
 
+    /**
+     * Radius of circle
+     */
     public static final int RADIUS = 100;
+    /**
+     * filename for 3D map
+     */
     private static final String fileName3DMap = "3D.map";
+    /**
+     * filename for world map
+     */
     private static final String fileNameWorldMap = "World.map";
 
+    /**
+     * Checks if is edit mode true
+     */
     private boolean isEditMode = false;
 
+    /**
+     * list of country shown
+     */
     private ListView listCountry;
+    /**
+     * country list with item object
+     */
     private ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
+    /**
+     * adaptor object
+     */
     private CountryAdaptor countryAdaptor;
+    /**
+     * list of countries as grpah object
+     */
     private ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
+    /**
+     * List of countries added in map
+     */
     private ArrayList<Integer> arrCountryAdded = new ArrayList<>();
+    /**
+     * Index of to button
+     */
     private int indexOfToButton = -1;
+    /**
+     * Index of from button
+     */
     private int indexOfFromButton = -1;
+    /**
+     * number of total countries
+     */
     private int totalCountries = 0;
+    /**
+     * count of number of countries added in graph
+     */
     private int totalCountriesAddedInGraph = 0;
+    /**
+     * surfaceview object
+     */
     private SurfaceView surfaceView;
+    /**
+     * canvas object
+     */
     private Canvas canvas;
+    /**
+     * List of coutries associated with each country
+     */
     private HashMap<Continent, ArrayList<Country>> userCreatedMapData = new HashMap<Continent, ArrayList<Country>>();
+    /**
+     * Index of country currently selected
+     */
     private int currentIndexCountrySelected;
+    /**
+     * width of screen size for canvas
+     */
     private float width;
+    /**
+     * height of screen size for canvas
+     */
     private float height;
+    /**
+     * width calculated from min and max x xcoordinate from map loaded
+     */
     private  float mWidth;
+    /**
+     * height calculated from min and max y  y coordinate from map loaded
+     */
     private float mHeight;
+    /**
+     * File name of map loaded
+     */
     private String fileName;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -154,11 +220,21 @@ public class CreateMapActivity extends Activity {
 
     }
 
+    /**
+     * gets mapped x xoordinate according to ratio
+     * @param xCoordinate - old xcoordinate
+     * @return mapped coordinate
+     */
     public float getXCordinate(float xCoordinate){
         float percent_width = Float.valueOf(xCoordinate) / width;
         return percent_width * mWidth;
     }
 
+    /**
+     * gets mapped y coordinate according to ratio
+     * @param yCoordinate - old y coordinate
+     * @return mapped coordinate
+     */
     public float getYCordinate(float yCoordinate){
         float percent_height = Float.valueOf(yCoordinate) / height;
         return percent_height * mHeight;

@@ -3,6 +3,7 @@ package com.app.risk.java.com.app.risk.controller;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -28,10 +29,25 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class ReinforcementContinentValueTest {
+    /**
+     * Game play object
+     */
     GamePlay gamePlay;
+    /**
+     * context object
+     */
     Context context=null;
+    /**
+     * object of startupphase controlled
+     */
     StartupPhaseController startupphase=null;
+    /**
+     * Object of reinforcementphase controlled
+     */
     ReinforcementPhaseController reinforcementPhaseController=null;
+    /**
+     * list of playernames
+     */
     ArrayList<String> playerNames=new ArrayList<String>();
     int currentPlayerId=0;
     /**
@@ -46,7 +62,11 @@ public class ReinforcementContinentValueTest {
         playerNames.add("player1");
         playerNames.add("player2");
         playerNames.add("player3");
-        gamePlay.setPlayers(playerNames);
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        gamePlay.setPlayers(playerNames,strategy);
 
         HashMap<String,Country> countries=new HashMap<String,Country>();
         Continent asia=new Continent("Asia",5);
