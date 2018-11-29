@@ -8,10 +8,8 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * A concrete strategy class that implements a aggressive player strategy.
@@ -53,14 +51,14 @@ public class AggressivePlayerStrategy implements Strategy {
         while (strongestCountry.getNoOfArmies()>1){
             Country toCountry = getToCountry(gamePlay, player);
             if (toCountry != null){
-                int defenderDice = performAttack(player,toCountry);
-                if (defenderDice > 0){
+                int attackersDice = performAttack(player,toCountry);
+                if (attackersDice > 0){
                     toCountry.getPlayer().decrementCountries(1);
                     toCountry.setPlayer(strongestCountry.getPlayer());
                     gamePlay.getCurrentPlayer().setNewCountryConquered(true);
                     int movingArmies = 0;
-                    if (defenderDice <= strongestCountry.getNoOfArmies()){
-                        movingArmies = defenderDice;
+                    if (attackersDice <= strongestCountry.getNoOfArmies()){
+                        movingArmies = attackersDice;
                     } else {
                         movingArmies = strongestCountry.getNoOfArmies();
                     }
@@ -165,8 +163,6 @@ public class AggressivePlayerStrategy implements Strategy {
      * @param gamePlay - gameplayobjec
      * @return returns true if path exist and false otherwise
      */
-
-
     public boolean checkIfPathExistBetweenCountries(Country startCountry,Country endCountry,GamePlay gamePlay){
         ArrayList<Country> nieghbourCountries = addOwnAdjacentCountries(gamePlay,startCountry);
         boolean isEndCountryFound = false;
