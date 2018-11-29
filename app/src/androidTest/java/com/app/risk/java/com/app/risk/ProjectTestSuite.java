@@ -2,6 +2,7 @@ package com.app.risk.java.com.app.risk;
 
 import com.app.risk.java.com.app.risk.controller.AllOutAttackTest;
 import com.app.risk.java.com.app.risk.controller.AttackPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller.BenevolentStrategyTest;
 import com.app.risk.java.com.app.risk.controller.CardAssignTest;
 import com.app.risk.java.com.app.risk.controller.CardExchangeControllerTest;
 import com.app.risk.java.com.app.risk.controller.CheckAfterEachAttackTest;
@@ -20,10 +21,12 @@ import com.app.risk.java.com.app.risk.controller.StartUpPhaseAssignCountriesTest
 import com.app.risk.java.com.app.risk.controller.StartupPhaseControllerTest;
 import com.app.risk.java.com.app.risk.utility.ConnectedGraphTest;
 import com.app.risk.java.com.app.risk.utility.DisConnectedGraphTest;
+import com.app.risk.java.com.app.risk.utility.LoadGameTest;
 import com.app.risk.java.com.app.risk.utility.MapReaderTest;
 import com.app.risk.java.com.app.risk.utility.MapVerificationTest;
 import com.app.risk.java.com.app.risk.utility.MapWriterTest;
 import com.app.risk.java.com.app.risk.utility.OneContinentCheckTest;
+import com.app.risk.java.com.app.risk.utility.SaveGameTest;
 import com.app.risk.java.com.app.risk.utility.SubGraphConnectedTest;
 import com.app.risk.java.com.app.risk.utility.ValidConnectedGraphTest;
 import com.app.risk.java.com.app.risk.view.CardExchangeDialogTest;
@@ -74,7 +77,10 @@ import org.junit.runners.Suite;
         CardAssignTest.class,//checks whether the card is assigned after the attack
         PlayerWonTest.class,//check whether did the player win the game
         ReinforcementContinentValueTest.class,//checks the army count after the player has occupied the whole continent
-        MoreAttackPossibleTest.class//checks whether there is more attack possible or not
+        MoreAttackPossibleTest.class,//checks whether there is more attack possible or not
+        SaveGameTest.class,//checks whether the game is saved properly or not
+        LoadGameTest.class,//checks whether the game which is saved to the file is loaded properly or not
+        BenevolentStrategyTest.class//checks whether the benevolent player behaviour in all the three phases
 })
 public class ProjectTestSuite {
 }
