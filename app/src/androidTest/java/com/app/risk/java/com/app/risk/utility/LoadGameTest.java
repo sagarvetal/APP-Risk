@@ -5,6 +5,7 @@ import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.impl.CheaterPlayerStrategy;
 import com.app.risk.impl.HumanPlayerStrategy;
+import com.app.risk.model.Card;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -25,8 +26,14 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class LoadGameTest {
-    public Context context = null;
-    public GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case

@@ -23,8 +23,14 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class OneContinentCheckTest {
-    private String fileLocation;
-    Context context=null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances class objects against the country name
+     */
+    private String fileLocation = null;
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case
