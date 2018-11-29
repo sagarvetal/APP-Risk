@@ -58,28 +58,26 @@ public class ReinforcementContinentValueTest {
     @Before
     public void setUp() {
         gamePlay=new GamePlay();
-
         context = InstrumentationRegistry.getTargetContext();
-        ArrayList<String> strategy = new ArrayList<>();
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-
         playerNames.add("player1");
         playerNames.add("player2");
         playerNames.add("player3");
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         gamePlay.setPlayers(playerNames,strategy);
 
         HashMap<String,Country> countries=new HashMap<String,Country>();
         Continent asia=new Continent("Asia",5);
         Continent europe=new Continent("europe",3);
-        Continent usa= new Continent("USA",4);
-        Country india = new Country("India",asia);
-        Country italy = new Country("Italy",europe);
-        Country america = new Country("America",usa);
-        Country pakistan = new Country("pakistan",asia);
-        Country nepal = new Country("nepal",europe);
-        Country butan = new Country("butan",usa);
+        Continent usa=new Continent("USA",4);
+        Country india =new Country("India",asia);
+        Country italy =new Country("Italy",europe);
+        Country america =new Country("America",usa);
+        Country pakistan =new Country("pakistan",asia);
+        Country nepal =new Country("nepal",europe);
+        Country butan =new Country("butan",usa);
         asia.setCountries(india);
         asia.setCountries(pakistan);
         europe.setCountries(italy);

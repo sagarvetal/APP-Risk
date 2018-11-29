@@ -56,16 +56,14 @@ public class ReinforcementPhaseControllerTest {
     public void setUp() {
         gamePlay=new GamePlay();
         context = InstrumentationRegistry.getTargetContext();
-        ArrayList<String> strategy = new ArrayList<>();
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-
         playerNames.add("player1");
         playerNames.add("player2");
         playerNames.add("player3");
+        ArrayList<String> strategy=new ArrayList<String>();
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         gamePlay.setPlayers(playerNames,strategy);
-
         HashMap<String,Country> countries=new HashMap<String,Country>();
         countries.put("India",new Country("India",new Continent("Asia",2)));
         countries.put("Italy",new Country("Italy",new Continent("europe",3)));
