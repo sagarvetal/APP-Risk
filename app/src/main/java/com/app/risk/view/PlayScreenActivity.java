@@ -86,7 +86,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
 
-        PhaseViewController.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
+        PhaseViewController.getInstance().init(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this);
         logView=findViewById(R.id.activity_play_screen_logview);
 
         logViewArrayList = new ArrayList<>();
