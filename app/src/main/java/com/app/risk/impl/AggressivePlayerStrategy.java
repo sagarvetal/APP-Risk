@@ -18,7 +18,11 @@ import java.util.Iterator;
  * @version 1.0.0 (Date: 22/11/2018)
  */
 public class AggressivePlayerStrategy implements Strategy {
-    Country strongestCountry;
+    /**
+     * country owned by player having maximum number of armies
+     */
+    private Country strongestCountry;
+
     /**
      * This is reinforcement method for aggressive strategy player.
      * It places the reinforcement armies on the strongest country having higher no of armies.
@@ -62,8 +66,8 @@ public class AggressivePlayerStrategy implements Strategy {
                     } else {
                         movingArmies = strongestCountry.getNoOfArmies();
                     }
-                    strongestCountry.decrementArmies(movingArmies);
                     toCountry.incrementArmies(movingArmies);
+                    strongestCountry.decrementArmies(movingArmies);
                 }
             } else {
                 break;
@@ -87,6 +91,13 @@ public class AggressivePlayerStrategy implements Strategy {
         return null;
     }
 
+
+    /**
+     * Performs Attack
+     * @param player  attacker player
+     * @param toCountry defender player
+     * @return no of attacker dice
+     */
     public int performAttack(Player player, Country toCountry){
         int attackCount = 0;
         int noOfAttackerDice = 0;
@@ -183,6 +194,12 @@ public class AggressivePlayerStrategy implements Strategy {
         return isEndCountryFound;
     }
 
+    /**
+     * Returns list of adjacent countries which are owned by same player
+     * @param gamePlay gameplay object
+     * @param country country whose adjacent countries are to be found
+     * @return list of adjacent countries
+     */
     public ArrayList<Country> addOwnAdjacentCountries(GamePlay gamePlay,Country country){
         ArrayList<Country> arrCountry = new ArrayList<>();
         for (String CountryName : country.getAdjacentCountries()){
