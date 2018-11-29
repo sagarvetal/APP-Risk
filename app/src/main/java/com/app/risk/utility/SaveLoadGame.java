@@ -15,8 +15,21 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Save a serializable game object to file and load a game from a file for play.
+ *
+ * @author Akshita Angara
+ * @version 1.0.0
+ */
 public class SaveLoadGame {
 
+    /**
+     * Save a serialzable game object to a filename chosen by the user
+     * @param gamePlay Serializable gampeplay object to be saved
+     * @param fileName Filename chosen by the user
+     * @param context Context of the application
+     * @return True if the file is successfully written, false otherwise
+     */
     public boolean saveGame(GamePlay gamePlay, String fileName, Context context) {
 
         try {
@@ -44,6 +57,12 @@ public class SaveLoadGame {
         }
     }
 
+    /**
+     * Load a game for play from the file chosen by the user
+     * @param fileName Filename chosen by the user
+     * @param context Context of the application
+     * @return Gameplay object loaded from the file chosen by the user for play
+     */
     public GamePlay loadGame(String fileName, Context context) {
 
         try {
@@ -72,6 +91,11 @@ public class SaveLoadGame {
         }
     }
 
+    /**
+     * Method to return a list of saved games
+     * @param context Context of the application
+     * @return List of all the saved games
+     */
     public String[] savedGamesList(Context context) {
 
         final String rootPath = context.getFilesDir().getAbsolutePath();
