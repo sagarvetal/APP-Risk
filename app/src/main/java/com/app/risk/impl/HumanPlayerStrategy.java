@@ -8,6 +8,7 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 22/11/2018)
  */
-public class HumanPlayerStrategy implements Strategy {
+public class HumanPlayerStrategy implements Strategy,Serializable {
 
     /**
      * This is reinforcement method for human strategy player.
