@@ -754,6 +754,8 @@ public class Player extends Observable implements Serializable {
                     cardsToRemove.add(cardList.get(i));
                 else if(infantryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD))
                     cardsToRemove.add(cardList.get(i));
+                if(cardsToRemove.size()==3)
+                    break;
             }
             if(cardsToRemove.size() == 3){
                 removeExchangedCards(cardsToRemove);
@@ -761,9 +763,11 @@ public class Player extends Observable implements Serializable {
                 cardsToRemove.clear();
                 for(int i=0; i<cardList.size(); i++) {
                     if (cardsToRemove.size() > 0 && cardsToRemove.contains(cardList.get(i)))
-                        break;
+                        continue;
                     else
                         cardsToRemove.add(cardList.get(i));
+                    if(cardsToRemove.size()==3)
+                        break;
                 }
                 removeExchangedCards(cardsToRemove);
             }
