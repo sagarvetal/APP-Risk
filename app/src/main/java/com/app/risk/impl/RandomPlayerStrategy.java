@@ -81,9 +81,11 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             Country toCountry = attackableCountries.get(toCountryIndex);
             performAllOutAttack(fromCountry, toCountry, armiesInFromCountry, player, attackableCountries, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
+                player.setPlayerWon(true);
                 break;
-            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer)))
+            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer))){
                 break;
+            }
         }
     }
 

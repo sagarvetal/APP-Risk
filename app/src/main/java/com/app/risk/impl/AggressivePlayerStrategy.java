@@ -73,6 +73,9 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
                 break;
             }
         }
+        if(player.isPlayerWon(gamePlay.getCountries())) {
+            player.setPlayerWon(true);
+        }
     }
 
     /**
