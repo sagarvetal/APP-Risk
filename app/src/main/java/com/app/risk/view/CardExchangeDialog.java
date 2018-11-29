@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.adapters.CardExchangeAdapter;
-import com.app.risk.controller.CardExchangeController;
 import com.app.risk.model.Card;
 import com.app.risk.model.Player;
 
@@ -32,20 +31,20 @@ import java.util.Observer;
 public class CardExchangeDialog extends AlertDialog implements Observer {
 
     private Context context;
-    CardExchangeController cardExchangeController;
+    private Player player;
     List<Card> cardList;
 
     /**
      * Default Construtor
      * @param context current application context
-     * @param cardExchangeController card exchange controller
+     * @param player current player
      */
-    public CardExchangeDialog(@NonNull Context context, CardExchangeController cardExchangeController) {
+    public CardExchangeDialog(@NonNull Context context, Player player) {
         super(context);
         this.context = context;
-        this.cardExchangeController = cardExchangeController;
-        cardList = cardExchangeController.getCardList();
-        cardExchangeController.getPlayer().addObserver(this);
+        this.player = player;
+        cardList = player.getCards();
+        player.addObserver(this);
     }
 
     /**
@@ -105,7 +104,7 @@ public class CardExchangeDialog extends AlertDialog implements Observer {
                     CardExchangeDialog.super.dismiss();
                 } else {
                     if (selectedCards.size() == 3) {
-                        int armiesAwarded = cardExchangeController.exchangeArmiesForCards(selectedCards);
+                        int armiesAwarded = player.exchangeArmiesForCards(selectedCards);
                         if(armiesAwarded != -1) {
                             String message = armiesAwarded + " armies have been exchanged for cards.";
                             new AlertDialog.Builder(context)
@@ -137,7 +136,7 @@ public class CardExchangeDialog extends AlertDialog implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(o instanceof Player){
-            cardList = cardExchangeController.getCardList();
+            cardList = player.getCards();
             setUp();
         }
     }

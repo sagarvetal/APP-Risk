@@ -681,4 +681,96 @@ public class Player extends Observable implements Serializable {
         float percentage = (size/countriesSize) *100;
         return percentage;
     }
+
+    /**
+     * Check the validity of selected cards and return the number of armies to be awarded in its exchange
+     * @param cardsToExchange list of cards selected by player
+     * @return number of armies in exchange of selected cards
+     */
+    public int exchangeArmiesForCards(List<Card> cardsToExchange){
+
+        if(cardsExchangeable(cardsToExchange)){
+            setCardsExchangedInRound(true);
+            setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
+            incrementArmies(getArmiesInExchangeOfCards());
+            setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
+            removeExchangedCards(cardsToExchange);
+        } else {
+            return -1;
+        }
+
+        return getArmiesInExchangeOfCards();
+    }
+
+    /**
+     * Remove the selected cards from the cards owned by the player once they are exchanged
+     * @param cardsToExchange list of cards selected by the player
+     */
+    public void removeExchangedCards(List<Card> cardsToExchange){
+
+        List<Card> updatedCards = getCards();
+        updatedCards.removeAll(cardsToExchange);
+        setCards(updatedCards);
+    }
+
+    /**
+     * This method implements card exchange for computer strategy players without user interaction by choosing three
+     * most suitable cards for exchange (based on the rules).
+     * It performs the exchange based on the cards automatically chosen and awards the player the appropriate number of
+     * armies received in exchange for those cards and removes those cards from the player's list of cards.
+     */
+    public void exchangeCardsStrategyImplementation(){
+
+        List<Card> cardList = getCards();
+        int infantryCardCount = 0;
+        int cavalryCardCount = 0;
+        int artilleryCardCount = 0;
+        for(int i=0; i<cardList.size(); i++){
+            if(cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD)){
+                artilleryCardCount++;
+                if(artilleryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD)){
+                cavalryCardCount++;
+                if(cavalryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD)){
+                infantryCardCount++;
+                if(infantryCardCount == 3)
+                    break;
+            }
+        }
+        if(artilleryCardCount == 3 || cavalryCardCount == 3 || infantryCardCount == 3 ||
+                (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
+            setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
+            incrementArmies(getArmiesInExchangeOfCards());
+            setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
+
+            List<Card> cardsToRemove = new ArrayList<>();
+            for(int i=0; i<cardList.size(); i++){
+                if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(cavalryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(infantryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                if(cardsToRemove.size()==3)
+                    break;
+            }
+            if(cardsToRemove.size() == 3){
+                removeExchangedCards(cardsToRemove);
+            } else {
+                cardsToRemove.clear();
+                for(int i=0; i<cardList.size(); i++) {
+                    if (cardsToRemove.size() > 0 && cardsToRemove.contains(cardList.get(i)))
+                        continue;
+                    else
+                        cardsToRemove.add(cardList.get(i));
+                    if(cardsToRemove.size()==3)
+                        break;
+                }
+                removeExchangedCards(cardsToRemove);
+            }
+        }
+    }
 }

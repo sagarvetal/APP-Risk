@@ -53,6 +53,9 @@ public class CheaterPlayerStrategy implements Strategy {
                 defenderCountry.getPlayer().incrementArmies(noOfArmies);
             }
         }
+        if(player.isPlayerWon(gamePlay.getCountries())){
+            player.setPlayerWon(true);
+        }
     }
 
     /**
