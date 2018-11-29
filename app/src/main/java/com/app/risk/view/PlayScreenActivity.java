@@ -272,10 +272,10 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
-                    addObserversToPlayer();
                     gamePlay.setNoOfTurns(noOfTurns);
                     gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
                     StartupPhaseController.getInstance().init(gamePlay).start(playerNames, playerStrategies);
+                    addObserversToPlayer();
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
@@ -485,7 +485,9 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
            logViewArrayList.addAll(((PhaseModel)observable).getActions());
            logViewAdapter.notifyDataSetChanged();
        } else if(observable instanceof Player) {
-           playerStateAdapter.notifyDataSetChanged();
+           if(playerStateAdapter != null){
+               playerStateAdapter.notifyDataSetChanged();
+           }
            pArmies.setText("" + ((Player) observable).getNoOfArmies());
            pCountries.setText("" + ((Player) observable).getNoOfCountries());
        }
