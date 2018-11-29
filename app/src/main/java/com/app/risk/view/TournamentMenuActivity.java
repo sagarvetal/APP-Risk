@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.GamePlay;
 
 import java.util.ArrayList;
 
@@ -165,13 +166,13 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
             int numberPickerValue = playerRestrictionPicker.getValue();
             int gamePickerValue = gameSelectionPicker.getValue();
             if(selectedPlayerStratergies.size() >=2 && selectedMapList.size() >=1){
-//                Intent intent = new Intent(TournamentMenuActivity.this,MainScreenActivity.class);
-//                intent.putStringArrayListExtra("STRATERGIES",selectedPlayerStratergies);
-//                intent.putStringArrayListExtra("MAPS",selectedMapList);
-//                intent.putExtra("MAX_TURNS",numberPickerValue);
-                // intent.putExtra("GAMES",gamePickerValue);
-                // intent.putExtra("PLAY_TYPE","TOURNAMENT");
-
+                final Intent intent = new Intent(TournamentMenuActivity.this,MainScreenActivity.class);
+                intent.putStringArrayListExtra("MAPS",selectedMapList);
+                intent.putStringArrayListExtra("PLAYER_STRATERGIES",selectedPlayerStratergies);
+                intent.putExtra("NO_OF_GAMES",gamePickerValue);
+                intent.putExtra("MAX_TURNS",numberPickerValue);
+                intent.putExtra(GamePlayConstants.GAME_MODE, GamePlayConstants.TOURNAMENT_MODE);
+                startActivity(intent);
             }
             else{
                 Toast.makeText(this, "" +
