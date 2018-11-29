@@ -41,6 +41,7 @@ import com.app.risk.utility.MapReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -58,7 +59,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private CardView cardView;
     private GamePlay gamePlay;
     private PlayScreenRVAdapter adapter;
-    private String playType;
+    private String gameMode;
     private String mapName;
     private ArrayList<String> playerNames;
     private ArrayList<String> playerStrategies;
@@ -70,7 +71,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private PlayerStateAdapter playerStateAdapter;
     private ListView listPlayerState ;
     private ArrayList<Country> countriesOwnedByPlayer;
-    private ArrayList<String> winningPlayers = new ArrayList<>();
+    private int noOfTurns;
 
     /**
      * This method is the main creation method of the activity
@@ -157,28 +158,68 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         final LinearLayoutManager layout = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layout);
 
+        gameMode = intent.getStringExtra(GamePlayConstants.GAME_MODE);
+
+        if(GamePlayConstants.SINGLE_GAME_MODE.equalsIgnoreCase(gameMode)) {
+            singleGameMode(intent);
+        } else {
+            tournamentMode(intent);
+        }
+
+    }
+
+    public void singleGameMode(final Intent intent) {
         if (((GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT")) == null) {
             mapName = intent.getStringExtra("MAP_NAME");
             playerNames = intent.getStringArrayListExtra("PLAYER_INFO");
-            playerStrategies = intent.getStringArrayListExtra("STRATERGY_INFO");
-            playType = intent.getStringExtra("PLAY_TYPE");
-            addObserversToPlayer();
+            playerStrategies = intent.getStringArrayListExtra("PLAYER_STRATERGIES");
             startGame(GamePlayConstants.STARTUP_PHASE);
         } else {
             gamePlay = (GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT");
-            addObserversToPlayer();
             startGame(gamePlay.getCurrentPhase());
         }
+    }
 
+    public void tournamentMode(final Intent intent) {
+        final ArrayList<String> maps = intent.getStringArrayListExtra("MAPS");
+        playerStrategies = intent.getStringArrayListExtra("PLAYER_STRATERGIES");
+        final int noOfGames = intent.getIntExtra("NO_OF_GAMES", 1);
+        noOfTurns = intent.getIntExtra("MAX_TURNS", 10);
+
+        final HashMap<String, ArrayList<String>> tournamentResult = new HashMap<>();
+
+        for(final String map : maps) {
+            final ArrayList<String> winningPlayers = new ArrayList<>();
+            for(int i = 1; i <= noOfGames; i++) {
+                mapName = map;
+                playerNames = getPlayerNames(playerStrategies);
+                startGame(GamePlayConstants.STARTUP_PHASE);
+                if(gamePlay.getNoOfTurns() == 0){
+                    winningPlayers.add("Draw");
+                } else {
+                    winningPlayers.add(gamePlay.getCurrentPlayer().getName());
+                }
+            }
+            tournamentResult.put(map, winningPlayers);
+        }
+    }
+
+    public ArrayList<String> getPlayerNames(final ArrayList<String> playerStrategies){
+        final ArrayList<String> playerNames = new ArrayList<>();
+        for(final String strategy : playerStrategies){
+            playerNames.add(strategy.split(" ")[0]);
+        }
+        return playerNames;
     }
 
     /**
      * This method invoker method of start game i.e. startup method
      */
     public void startGame(final String phaseName) {
+        addObserversToPlayer();
         changePhase(phaseName);
 
-        if(winningPlayers.size() > 0){
+        if(GamePlayConstants.SINGLE_GAME_MODE.equalsIgnoreCase(gameMode)){
             new AlertDialog.Builder(this)
                 .setMessage("You won the game!!!")
                 .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
@@ -187,7 +228,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                         startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                     }
                 })
-                .setTitle("Congratulations " + winningPlayers.get(0) + " !!!")
+                .setTitle("Congratulations " + gamePlay.getCurrentPlayer().getName() + " !!!")
                 .setCancelable(false)
                 .create().show();
         }
@@ -203,12 +244,17 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 case GamePlayConstants.STARTUP_PHASE:
                     gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
+                    gamePlay.setNoOfTurns(noOfTurns);
                     gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
                     StartupPhaseController.getInstance().init(gamePlay).start(playerNames, playerStrategies);
                     changePhase(GamePlayConstants.REINFORCEMENT_PHASE);
                     break;
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
+                    if(GamePlayConstants.TOURNAMENT_MODE.equalsIgnoreCase(gameMode) && gamePlay.getNoOfTurns() == 0){
+                        return;
+                    }
+
                     GamePlayConstants.PHASE_IN_PROGRESS = false;
                     PhaseViewController.getInstance().clearPhaseView();
 
@@ -272,24 +318,23 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                 case GamePlayConstants.FORTIFICATION_PHASE:
                     if(gamePlay.getCurrentPlayer().isPlayerWon()) {
-                        winningPlayers.add(gamePlay.getCurrentPlayer().getName());
-                    } else {
-                        GamePlayConstants.PHASE_IN_PROGRESS = false;
-                        floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
-                        gamePlay.setCurrentPhase(phase);
-
-                        FortificationPhaseController.getInstance().init(this, gamePlay);
-
-                        PhaseViewController.getInstance().addAction("\nPhase : " + phase);
-                        actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-
-
-                        if(!gamePlay.getCurrentPlayer().isHuman()){
-                            gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
-                            sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.REINFORCEMENT_PHASE);
-                        }
+                        return;
                     }
 
+                    GamePlayConstants.PHASE_IN_PROGRESS = false;
+                    floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
+                    gamePlay.setCurrentPhase(phase);
+
+                    FortificationPhaseController.getInstance().init(this, gamePlay);
+
+                    PhaseViewController.getInstance().addAction("\nPhase : " + phase);
+                    actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
+
+
+                    if(!gamePlay.getCurrentPlayer().isHuman()){
+                        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
+                        sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.REINFORCEMENT_PHASE);
+                    }
 
                     break;
             }

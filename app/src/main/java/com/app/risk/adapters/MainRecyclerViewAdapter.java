@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.model.GamePlay;
 import com.app.risk.view.EditMap;
@@ -147,6 +148,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                                             GamePlay gamePlay = SaveLoadGameController.loadGame(savedGamesList[selectedGameIndex], invokingActivity);
                                                             Intent intent = new Intent(invokingActivity.getApplicationContext(), PlayScreenActivity.class);
                                                             intent.putExtra("GAMEPLAY_OBJECT", gamePlay);
+                                                            intent.putExtra(GamePlayConstants.GAME_MODE, GamePlayConstants.SINGLE_GAME_MODE);
                                                             invokingActivity.startActivity(intent);
                                                         }
                                                     })

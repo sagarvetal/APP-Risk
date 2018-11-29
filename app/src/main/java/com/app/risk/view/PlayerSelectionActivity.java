@@ -197,9 +197,9 @@ public class PlayerSelectionActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(PlayerSelectionActivity.this, PlayScreenActivity.class);
                                 intent.putStringArrayListExtra("PLAYER_INFO", playerNames);
-                                intent.putStringArrayListExtra("STRATERGY_INFO",playerStratergies);
+                                intent.putStringArrayListExtra("PLAYER_STRATERGIES",playerStratergies);
                                 intent.putExtra("MAP_NAME", mapInfo);
-                                intent.putExtra("PLAY_TYPE","SINGLE");
+                                intent.putExtra(GamePlayConstants.GAME_MODE, GamePlayConstants.SINGLE_GAME_MODE);
                                 startActivity(intent);
                             }
                         }).create().show();
