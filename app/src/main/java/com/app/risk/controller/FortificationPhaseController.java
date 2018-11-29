@@ -70,7 +70,7 @@ public class FortificationPhaseController {
     public void showFortificationDialogBox(final Country fromCountry, final ArrayList<Country> countries){
         if(fromCountry.getNoOfArmies() > 1){
             PhaseViewController.getInstance().addAction("Checking all connected countries owned by " + gamePlay.getCurrentPlayer().getName());
-            final ArrayList<String> reachableCountries  = getReachableCountries(fromCountry, countries);
+            final ArrayList<String> reachableCountries  = getReachableCountries(fromCountry, countries,true);
             final String[] reachableCountryArray = new String[reachableCountries.size()];
             reachableCountries.toArray(reachableCountryArray);
 
@@ -188,12 +188,15 @@ public class FortificationPhaseController {
      * @param countriesOwnedByPlayer List of countries owned by player.
      * @return List of connected countries from given country.
      */
-    public ArrayList<String> getReachableCountries(final Country fromCountry, final ArrayList<Country> countriesOwnedByPlayer){
+    public ArrayList<String> getReachableCountries(final Country fromCountry, final ArrayList<Country> countriesOwnedByPlayer,final boolean isWithArmies){
         final ArrayList<String> reachableCountries = new ArrayList<>();
         for(final Country toCountry : countriesOwnedByPlayer) {
             if(!fromCountry.getNameOfCountry().equalsIgnoreCase(toCountry.getNameOfCountry()) &&
                     isCountriesConnected(fromCountry, toCountry)) {
-                reachableCountries.add(toCountry.getNameOfCountry() + " : " + toCountry.getNoOfArmies());
+                if(isWithArmies)
+                    reachableCountries.add(toCountry.getNameOfCountry() + " : " + toCountry.getNoOfArmies());
+                else
+                    reachableCountries.add(toCountry.getNameOfCountry());
             }
         }
         return reachableCountries;
