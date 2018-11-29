@@ -18,7 +18,11 @@ import java.util.Iterator;
  * @version 1.0.0 (Date: 22/11/2018)
  */
 public class AggressivePlayerStrategy implements Strategy,Serializable {
-    Country strongestCountry;
+    /**
+     * country owned by player having maximum number of armies
+     */
+    private Country strongestCountry;
+
     /**
      * This is reinforcement method for aggressive strategy player.
      * It places the reinforcement armies on the strongest country having higher no of armies.
@@ -51,19 +55,19 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
         while (strongestCountry.getNoOfArmies()>1){
             Country toCountry = getToCountry(gamePlay, player);
             if (toCountry != null){
-                int defenderDice = performAttack(player,toCountry);
-                if (defenderDice > 0){
+                int attackersDice = performAttack(player,toCountry);
+                if (attackersDice > 0){
                     toCountry.getPlayer().decrementCountries(1);
                     toCountry.setPlayer(strongestCountry.getPlayer());
                     gamePlay.getCurrentPlayer().setNewCountryConquered(true);
                     int movingArmies = 0;
-                    if (defenderDice <= strongestCountry.getNoOfArmies()){
-                        movingArmies = defenderDice;
+                    if (attackersDice <= strongestCountry.getNoOfArmies()){
+                        movingArmies = attackersDice;
                     } else {
                         movingArmies = strongestCountry.getNoOfArmies();
                     }
-                    strongestCountry.decrementArmies(movingArmies);
                     toCountry.incrementArmies(movingArmies);
+                    strongestCountry.decrementArmies(movingArmies);
                 }
             } else {
                 break;
@@ -87,6 +91,13 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
         return null;
     }
 
+
+    /**
+     * Performs Attack
+     * @param player  attacker player
+     * @param toCountry defender player
+     * @return no of attacker dice
+     */
     public int performAttack(Player player, Country toCountry){
         int attackCount = 0;
         int noOfAttackerDice = 0;
@@ -163,8 +174,6 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
      * @param gamePlay - gameplayobjec
      * @return returns true if path exist and false otherwise
      */
-
-
     public boolean checkIfPathExistBetweenCountries(Country startCountry,Country endCountry,GamePlay gamePlay){
         ArrayList<Country> nieghbourCountries = addOwnAdjacentCountries(gamePlay,startCountry);
         boolean isEndCountryFound = false;
@@ -185,6 +194,12 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
         return isEndCountryFound;
     }
 
+    /**
+     * Returns list of adjacent countries which are owned by same player
+     * @param gamePlay gameplay object
+     * @param country country whose adjacent countries are to be found
+     * @return list of adjacent countries
+     */
     public ArrayList<Country> addOwnAdjacentCountries(GamePlay gamePlay,Country country){
         ArrayList<Country> arrCountry = new ArrayList<>();
         for (String CountryName : country.getAdjacentCountries()){

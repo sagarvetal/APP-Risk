@@ -29,10 +29,25 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class ReinforcementContinentValueTest {
+    /**
+     * Game play object
+     */
     GamePlay gamePlay;
+    /**
+     * context object
+     */
     Context context=null;
+    /**
+     * object of startupphase controlled
+     */
     StartupPhaseController startupphase=null;
+    /**
+     * Object of reinforcementphase controlled
+     */
     ReinforcementPhaseController reinforcementPhaseController=null;
+    /**
+     * list of playernames
+     */
     ArrayList<String> playerNames=new ArrayList<String>();
     int currentPlayerId=0;
     /**

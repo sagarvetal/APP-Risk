@@ -35,17 +35,28 @@ public class PhaseViewController {
     /**
      * This is a method that returns the same single instance of the PhaseViewController class
      * when it is called
+     * @return PhaseViewController single instance of the class
+     */
+    public static PhaseViewController getInstance() {
+        if (phaseViewController == null) {
+            phaseViewController = new PhaseViewController();
+        }
+        return phaseViewController;
+    }
+
+
+    /**
+     * This is a method that returns the same single instance of the PhaseViewController class
+     * when it is called
      * @param dirPath path in which the file is generated with all the logs
      * @param view on which the observer pattern is implemented
      * @return PhaseViewController single instance of the class
      */
-    public static PhaseViewController getInstance(String dirPath, PlayScreenActivity view) {
-        if (phaseViewController == null) {
-            phaseViewController = new PhaseViewController();
-            phaseViewController.dirPath = dirPath;
-            logmsg = new PhaseModel();
-            logmsg.addObserver(view);
-        }
+    public PhaseViewController init(final String dirPath, final PlayScreenActivity view) {
+        getInstance();
+        phaseViewController.dirPath = dirPath;
+        phaseViewController.logmsg = new PhaseModel();
+        phaseViewController.logmsg.addObserver(view);
         return phaseViewController;
     }
     /**
@@ -55,29 +66,17 @@ public class PhaseViewController {
     public void addAction(String action) {
         BufferedWriter output = null;
         try {
-
             File logDirectory = new File(dirPath);
             if (!logDirectory.exists())
                 logDirectory.mkdirs();
             File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
-            boolean result = false;
-            try {
-
-                result = file.createNewFile();
-                System.out.println("::::::::::::::::::::::::::::::::write LOg result::::::::::::::::::" + result);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
             FileOutputStream f = new FileOutputStream(file, true);
             output = new BufferedWriter(new OutputStreamWriter(f));
             output.write(action);
             output.newLine();
 
         } catch (IOException e) {
-
-        } catch (Exception e) {
-
+            System.out.println("Error writing log");
         } finally {
             if (output != null) {
                 try {
@@ -101,22 +100,19 @@ public class PhaseViewController {
         File logDirectory = new File(PhaseViewController.getInstance().dirPath);
         if (!logDirectory.exists())
             logDirectory.mkdirs();
-        File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
         try {
-            boolean result = file.createNewFile();
-            System.out.println("::::::::::::::::::::::::::::::::read LOG  result::::::::::::::::::" + result);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
+            File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
             scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                logs.add(scanner.nextLine());
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            if(scanner != null){
+                scanner.close();
+            }
         }
-        while (scanner.hasNext()) {
-            logs.add(scanner.nextLine());
-        }
-        scanner.close();
         return logs;
     }
 
@@ -128,15 +124,5 @@ public class PhaseViewController {
         logmsg.clear();
     }
 
-    /**
-     * This is a method that returns the same single instance of the PhaseViewController class
-     * when it is called
-     * @return PhaseViewController single instance of the class
-     */
-    public static PhaseViewController getInstance() {
-        if (phaseViewController == null) {
-            phaseViewController = new PhaseViewController();
-        }
-        return phaseViewController;
-    }
+
 }

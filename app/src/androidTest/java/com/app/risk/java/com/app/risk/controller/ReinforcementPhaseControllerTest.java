@@ -26,10 +26,25 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class ReinforcementPhaseControllerTest {
+    /**
+     * Gameplay object
+     */
     GamePlay gamePlay;
+    /**
+     * Context object
+     */
     Context context=null;
+    /**
+     * Startupphasecontroller object
+     */
     StartupPhaseController startupphase=null;
+    /**
+     * Reinforcementphasecontrolled object
+     */
     ReinforcementPhaseController reinforcementPhaseController=null;
+    /**
+     * playername list
+     */
     ArrayList<String> playerNames=new ArrayList<String>();
 
     /**

@@ -39,6 +39,11 @@ public class MapVerification {
 
         this.gameMapList = gameMapList;
 
+        if (gameMapList.size()==0){
+            System.out.println("Error: Size zero");
+            return false;
+        }
+
         if (!uniqueCountries()) {
             System.out.println("Error: Duplicate countries exist.");
             return false;
@@ -117,7 +122,6 @@ public class MapVerification {
 
         countriesVisited.clear();
         depthFirstTraversalStack.clear();
-
         depthFirstTraversalStack.push(gameMapList.get(0));
 
         depthFirstTraversal(gameMapList);
