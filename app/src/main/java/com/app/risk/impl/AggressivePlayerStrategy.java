@@ -61,7 +61,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
                     toCountry.setPlayer(strongestCountry.getPlayer());
                     gamePlay.getCurrentPlayer().setNewCountryConquered(true);
                     int movingArmies = 0;
-                    if (attackersDice <= strongestCountry.getNoOfArmies()){
+                    if (attackersDice < strongestCountry.getNoOfArmies()){
                         movingArmies = attackersDice;
                     } else {
                         movingArmies = strongestCountry.getNoOfArmies();
@@ -138,7 +138,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
         for (Country c1 : countriesOwnedByPlayer){
             for (Country c2 : countriesOwnedByPlayer){
                 if (c1 != c2){
-                    if (checkIfPathExistBetweenCountries(countryOne,countryTwo,gamePlay)){
+                    if (checkIfPathExistBetweenCountries(c1,c2,gamePlay)){
                         if ((c1.getNoOfArmies()+c2.getNoOfArmies()>maxNieghbourCountryCount)){
                             countryOne = c1;
                             countryTwo = c2;
@@ -184,7 +184,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
                 ArrayList<Country> ownAdjacentCountries = addOwnAdjacentCountries(gamePlay,country);
                 if (ownAdjacentCountries.contains(endCountry)){
                     isEndCountryFound = true;
-                    break;
+                    return isEndCountryFound;
                 } else {
                     nieghbourCountries.addAll(ownAdjacentCountries);
                     nieghbourCountryList.remove();
