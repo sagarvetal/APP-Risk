@@ -72,6 +72,7 @@ public class MapReader {
     private static void readGameFromFile(Context context, String fileName) {
 
         try {
+            finalGameMapList = new ArrayList<>();
 
             String mapDir = context.getFilesDir() + File.separator + FileConstants.MAP_FILE_PATH;
             File mapDirectory = new File(mapDir, fileName);

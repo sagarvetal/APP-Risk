@@ -38,6 +38,11 @@ public class GamePlayConstants {
     public static final String CHEATER_STRATEGY = "Cheater Strategy";
 
     //Sleep time (in milliseconds) after every phase
-    public static final int SLEEP_TIME = 10000;
+    public static final int SLEEP_TIME = 4500;
+
+    //Game Mode
+    public static final String GAME_MODE = "Game Mode";
+    public static final String SINGLE_GAME_MODE = "Single Game Mode";
+    public static final String TOURNAMENT_MODE = "Tournament Mode";
 
 }
