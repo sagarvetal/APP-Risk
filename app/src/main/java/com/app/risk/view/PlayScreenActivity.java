@@ -71,7 +71,6 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private PlayerStateAdapter playerStateAdapter;
     private ListView listPlayerState ;
     private ArrayList<Country> countriesOwnedByPlayer;
-    private HashMap<String, String> tournamentResult = new HashMap<>();
     private int noOfTurns;
 
     /**
@@ -187,18 +186,21 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         final int noOfGames = intent.getIntExtra("NO_OF_GAMES", 1);
         noOfTurns = intent.getIntExtra("MAX_TURNS", 10);
 
-        for(int i = 1; i <= noOfGames; i++) {
-            for(final String map : maps) {
+        final HashMap<String, ArrayList<String>> tournamentResult = new HashMap<>();
+
+        for(final String map : maps) {
+            final ArrayList<String> winningPlayers = new ArrayList<>();
+            for(int i = 1; i <= noOfGames; i++) {
                 mapName = map;
                 playerNames = getPlayerNames(playerStrategies);
                 startGame(GamePlayConstants.STARTUP_PHASE);
-                final String key = "Game " + i + "," + map;
                 if(gamePlay.getNoOfTurns() == 0){
-                    tournamentResult.put(key, "Draw");
+                    winningPlayers.add("Draw");
                 } else {
-                    tournamentResult.put(key, gamePlay.getCurrentPlayer().getName());
+                    winningPlayers.add(gamePlay.getCurrentPlayer().getName());
                 }
             }
+            tournamentResult.put(map, winningPlayers);
         }
     }
 
