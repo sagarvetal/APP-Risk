@@ -35,6 +35,9 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
         while(player.getReinforcementArmies()!=0){
             int countryIndex = random.nextInt(countriesOwnedByPlayer.size());
             int noOfArmies = random.nextInt(player.getReinforcementArmies());
+            if(player.getReinforcementArmies() == 1){
+                noOfArmies = 1;
+            }
             countriesOwnedByPlayer.get(countryIndex).incrementArmies(noOfArmies);
             player.decrementReinforcementArmies(noOfArmies);
             if(player.getCards().size()>2) {
@@ -54,19 +57,14 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
      */
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
-        ArrayList<Country> countriesNotBelongingToPlayer = (ArrayList<Country>) gamePlay.getCountries().values();
-        List<Country> countriesWithLessThan2Armies = new ArrayList<>();
-        countriesNotBelongingToPlayer.removeAll(countriesOwnedByPlayer);
-        for (int i = 0; i < countriesOwnedByPlayer.size(); i++) {
-            if (countriesOwnedByPlayer.get(i).getNoOfArmies() < 2) {
-                countriesWithLessThan2Armies.add(countriesOwnedByPlayer.get(i));
-            }
-        }
-        countriesOwnedByPlayer.removeAll(countriesWithLessThan2Armies);
+        ArrayList<Country> countriesNotBelongingToPlayer = getNotBelongingCountries(gamePlay);
         int numberOfTurns = random.nextInt(countriesNotBelongingToPlayer.size());
         for (int i = 0; i < numberOfTurns; i++) {
             int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size());
             Country fromCountry = countriesOwnedByPlayer.get(fromCountryIndex);
+            if(fromCountry.getNoOfArmies() < 2){
+                continue;
+            }
             List<Country> attackableCountries = new ArrayList<>();
             List<String> adjacentCountries = fromCountry.getAdjacentCountries();
             for (int j = 0; j < adjacentCountries.size(); j++) {
@@ -81,9 +79,11 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             Country toCountry = attackableCountries.get(toCountryIndex);
             performAllOutAttack(fromCountry, toCountry, armiesInFromCountry, player, attackableCountries, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
+                player.setPlayerWon(true);
                 break;
-            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer)))
+            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer))){
                 break;
+            }
         }
     }
 
@@ -140,5 +140,20 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             if(toCountry.getNoOfArmies()>=2)
                 countriesOwnedByPlayer.add(toCountry);
         }
+    }
+
+    /**
+     * This method return the list of all countries not belongs to current player.
+     * @param gamePlay The GamePlay object
+     * @return The list of all countries not belongs to current player.
+     */
+    public ArrayList<Country> getNotBelongingCountries(final GamePlay gamePlay){
+        final ArrayList<Country> countryList = new ArrayList<>();
+        for(final Country country : gamePlay.getCountries().values()){
+            if(gamePlay.getCurrentPlayer().getId() != country.getPlayer().getId()){
+                countryList.add(country);
+            }
+        }
+        return countryList;
     }
 }
