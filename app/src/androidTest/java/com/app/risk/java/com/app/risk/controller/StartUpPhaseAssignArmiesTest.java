@@ -25,10 +25,21 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class StartUpPhaseAssignArmiesTest {
-    GamePlay gamePlay;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gamePlay = null;
+    /**
+     * startupphase would hold the instance of the StartupPhaseController
+     */
     StartupPhaseController startupphase = null;
-
+    /**
+     * playerNames would the list of all the player names
+     */
     ArrayList<String> playerNames = new ArrayList<String>();
 
     /**
@@ -42,11 +53,11 @@ public class StartUpPhaseAssignArmiesTest {
         playerNames.add("player1");
         playerNames.add("player2");
         playerNames.add("player3");
-        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> strategy = new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gamePlay.setPlayers(playerNames,strategy);
+        gamePlay.setPlayers(playerNames, strategy);
         HashMap<String, Country> countries = new HashMap<String, Country>();
         countries.put("India", new Country("India", new Continent("Asia", 2)));
         countries.put("Italy", new Country("Italy", new Continent("europe", 3)));
@@ -78,8 +89,7 @@ public class StartUpPhaseAssignArmiesTest {
      * its sets the gameplay object to null
      */
     @After
-    public void cleanUp()
-    {
+    public void cleanUp() {
         gamePlay = null;
     }
 

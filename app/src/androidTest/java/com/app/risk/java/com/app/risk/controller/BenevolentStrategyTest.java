@@ -28,11 +28,29 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class BenevolentStrategyTest {
-    GamePlay gamePlay;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gamePlay = null;
+    /**
+     * startupphase would hold the instance of the StartupPhaseController required for all the test cases
+     */
     StartupPhaseController startupphase = null;
+    /**
+     * reinforcementPhaseController would hold the instance of the ReinforcementPhaseController required for all the test cases
+     */
     ReinforcementPhaseController reinforcementPhaseController = null;
+    /**
+     * playerNames would hold the list of all the player names
+     */
     ArrayList<String> playerNames = new ArrayList<String>();
+    /**
+     * countries would hold map each of the country name to the country object
+     */
     HashMap<String, Country> countries = new HashMap<String, Country>();
 
     /**
@@ -74,7 +92,7 @@ public class BenevolentStrategyTest {
     }
 
     /**
-     * This method checks the army count in the reinforcement phase
+     * This method checks the army count in the reinforcement phase for benevolent player
      */
     @Test
     public void benevolentReinforcementArmiesCountTest() {
@@ -99,6 +117,9 @@ public class BenevolentStrategyTest {
         System.out.println(reinforcement);
     }
 
+    /**
+     * This method checks whether army count is not changed afetr the attack phase for benevolent player
+     */
     @Test
     public void benevolentAttackTest() {
         startupphase.assignInitialCountries();
@@ -110,11 +131,14 @@ public class BenevolentStrategyTest {
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
         AttackPhaseController fc = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         int beforeAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
-        gamePlay.getCurrentPlayer().attackPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
+        gamePlay.getCurrentPlayer().attackPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
         int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
         assertTrue(beforeAttackArmies == afterAttackArmies);
     }
 
+    /**
+     * This method checks valid fortification is performed for benevolent player
+     */
     @Test
     public void benevolentFortificationTest() {
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
@@ -129,12 +153,13 @@ public class BenevolentStrategyTest {
         gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
-        FortificationPhaseController.getInstance().init(context,gamePlay);
-        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),null);
-        int india=gamePlay.getCountries().get("India").getNoOfArmies();
-        int america=gamePlay.getCountries().get("India").getNoOfArmies();
-        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies()==gamePlay.getCountries().get("America").getNoOfArmies());
+        FortificationPhaseController.getInstance().init(context, gamePlay);
+        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
+        int india = gamePlay.getCountries().get("India").getNoOfArmies();
+        int america = gamePlay.getCountries().get("India").getNoOfArmies();
+        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == gamePlay.getCountries().get("America").getNoOfArmies());
     }
+
     /**
      * This method gets executed after the test case has been executed
      * its sets the gameplay to null

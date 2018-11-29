@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used to check whether a country has lost all it armies in all out attack
  *
@@ -25,9 +26,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class AllOutAttackTest {
 
-
-    Context context = null;
-    GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case
@@ -54,10 +60,10 @@ public class AllOutAttackTest {
         countryList.get("Pakistan").setAdjacentCountries(pakistan);
 
         gm.setCountries(countryList);
-        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> strategy = new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gm.setPlayers(playerNames,strategy);
+        gm.setPlayers(playerNames, strategy);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
 
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
@@ -67,14 +73,15 @@ public class AllOutAttackTest {
         gm.getCountries().get("India").setNoOfArmies(5);
         context = InstrumentationRegistry.getTargetContext();
     }
+
     /**
      * This method checks whether a country has lost all it armies in all out attack
      */
     @Test
     public void afterAllOutAttackPhaseTest() {
         AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        gm.getPlayers().get(0).performAllOutAttack(gm.getCountries().get("India"),gm.getCountries().get("Pakistan"));
-        assertTrue(gm.getCountries().get("India").getNoOfArmies()==1||gm.getCountries().get("Pakistan").getNoOfArmies()==0);
+        gm.getPlayers().get(0).performAllOutAttack(gm.getCountries().get("India"), gm.getCountries().get("Pakistan"));
+        assertTrue(gm.getCountries().get("India").getNoOfArmies() == 1 || gm.getCountries().get("Pakistan").getNoOfArmies() == 0);
 
     }
 
@@ -83,9 +90,8 @@ public class AllOutAttackTest {
      * its sets the game map to null
      */
     @After
-    public void cleanUp()
-    {
+    public void cleanUp() {
 
-        gm=null;
+        gm = null;
     }
 }

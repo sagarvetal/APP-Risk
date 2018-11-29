@@ -18,6 +18,9 @@ import static org.junit.Assert.assertTrue;
  * Class to test continents owned by player
  */
 public class PlayScreenActivityTest {
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
     GamePlay gamePlay = new GamePlay();
 
     /**
