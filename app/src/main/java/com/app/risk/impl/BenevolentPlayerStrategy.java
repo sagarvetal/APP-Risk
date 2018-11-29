@@ -136,7 +136,7 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
                         strongestNearWeakest.decrementArmies(noOfArmies);
                         weakCountry.incrementArmies(noOfArmies);
                         PhaseViewController.getInstance().addAction(weakCountry.getNameOfCountry() + " is the one of the weaker countries owned by " + gamePlay.getCurrentPlayer().getName());
-                        PhaseViewController.getInstance().addAction(noOfArmies + " armies are moved from " + strongestNearWeakest.getNameOfCountry() + " to " + weakCountry);
+                        PhaseViewController.getInstance().addAction(noOfArmies + " armies are moved from " + strongestNearWeakest.getNameOfCountry() + " to " + weakCountry.getNameOfCountry());
                         break;
                     }
                 }
@@ -170,18 +170,20 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
 
 
     private void sortTheCountries(ArrayList<Country> countryList, boolean ascending) {
-        final boolean ascend = ascending;
-        Collections.sort(countryList, new Comparator<Country>() {
-            public int compare(Country s1, Country s2) {
-                int result;
-                if (ascend) {
-                    result = s1.getNoOfArmies() - (s2.getNoOfArmies());
-                } else {
-                    result = s2.getNoOfArmies() - (s1.getNoOfArmies());
+        if(countryList.size() > 0){
+            final boolean ascend = ascending;
+            Collections.sort(countryList, new Comparator<Country>() {
+                public int compare(Country s1, Country s2) {
+                    int result;
+                    if (ascend) {
+                        result = s1.getNoOfArmies() - (s2.getNoOfArmies());
+                    } else {
+                        result = s2.getNoOfArmies() - (s1.getNoOfArmies());
+                    }
+                    return result;
                 }
-                return result;
-            }
-        });
+            });
+        }
 
     }
 }
