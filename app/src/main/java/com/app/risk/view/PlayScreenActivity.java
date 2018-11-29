@@ -73,8 +73,12 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private PlayerStateAdapter playerStateAdapter;
     private ListView listPlayerState ;
     private ArrayList<Country> countriesOwnedByPlayer;
+    private ArrayList<String> mapList;
     private int noOfTurns;
-    private boolean isGameEnd;
+    private int noOfGames;
+    private int currentGameCount;
+    private LinkedHashMap<String, ArrayList<String>> tournamentResult = new LinkedHashMap<>();
+    private ArrayList<String> winningPlayers;
 
     /**
      * This method is the main creation method of the activity
@@ -86,7 +90,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
 
-        PhaseViewController.getInstance(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this).readLog();
+        PhaseViewController.getInstance().init(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this);
         logView=findViewById(R.id.activity_play_screen_logview);
 
         logViewArrayList = new ArrayList<>();
@@ -185,43 +189,43 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     }
 
     public void tournamentMode(final Intent intent) {
-        final ArrayList<String> maps = intent.getStringArrayListExtra("MAPS");
+        mapList = intent.getStringArrayListExtra("MAPS");
         playerStrategies = intent.getStringArrayListExtra("PLAYER_STRATERGIES");
-        final int noOfGames = intent.getIntExtra("NO_OF_GAMES", 1);
+        noOfGames = intent.getIntExtra("NO_OF_GAMES", 1);
         noOfTurns = intent.getIntExtra("MAX_TURNS", 10);
 
-        final LinkedHashMap<String, ArrayList<String>> tournamentResult = new LinkedHashMap<>();
-
-        for(final String map : maps) {
-            final ArrayList<String> winningPlayers = new ArrayList<>();
-            for(int i = 1; i <= noOfGames; i++) {
-                isGameEnd = false;
-                mapName = map;
-                playerNames = getPlayerNames(playerStrategies);
-                startGame(GamePlayConstants.STARTUP_PHASE);
-
-//                while(!isGameEnd){
-//                    System.out.println("Khana bana le .....................................");
-//                }
-                if(gamePlay.getNoOfTurns() == 0){
-                    winningPlayers.add("Draw");
-                } else {
-                    winningPlayers.add(gamePlay.getCurrentPlayer().getName());
-                }
-            }
-            tournamentResult.put(map, winningPlayers);
+        winningPlayers = new ArrayList<>();
+        winningPlayers.add(" ");
+        for(int i = 1; i <= noOfGames; i++){
+            winningPlayers.add("Game " + i);
         }
+        mapName = "";
 
-        showTournamentResult(tournamentResult,noOfGames);
+        startTournament();
     }
 
-    public void showTournamentResult(final LinkedHashMap<String,ArrayList<String>> tournamentResult,final int noOfGames){
+    public void startTournament(){
+        if(currentGameCount < noOfGames) {
+            ++currentGameCount;
+        } else {
+            currentGameCount = 1;
+            mapList.remove(0);
+        }
+        if(mapList.size() != 0){
+            if(currentGameCount == 1){
+                tournamentResult.put(mapName, winningPlayers);
+            }
+            mapName = mapList.get(0);
+            playerNames = getPlayerNames(playerStrategies);
+            startGame(GamePlayConstants.STARTUP_PHASE);
+        } else {
+            showTournamentResult(tournamentResult, noOfGames);
+        }
+    }
+
+    public void showTournamentResult(final LinkedHashMap<String,ArrayList<String>> tournamentResult, final int noOfGames){
 
         final ArrayList<String> gridViewArrayList = new ArrayList<>();
-         gridViewArrayList.add("");
-        for(int i=1;i<=noOfGames;i++){
-            gridViewArrayList.add("Game " + i);
-        }
 
         for(Map.Entry<String,ArrayList<String>> entry : tournamentResult.entrySet()){
             gridViewArrayList.add(entry.getKey());
@@ -231,7 +235,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
 
         final View view = getLayoutInflater().inflate(R.layout.final_result_dialog, null);
-        GridView gridView = view.findViewById(R.id.final_result_dialog_gridview);
+        final GridView gridView = view.findViewById(R.id.final_result_dialog_gridview);
         gridView.setNumColumns(noOfGames + 1);
         gridView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,gridViewArrayList));
 
@@ -277,7 +281,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                 case GamePlayConstants.REINFORCEMENT_PHASE:
                     if(GamePlayConstants.TOURNAMENT_MODE.equalsIgnoreCase(gameMode) && gamePlay.getNoOfTurns() == 0){
-                        isGameEnd = true;
+                        winningPlayers.add("Draw");
+                        startTournament();
                     } else {
                         GamePlayConstants.PHASE_IN_PROGRESS = false;
                         PhaseViewController.getInstance().clearPhaseView();
@@ -357,7 +362,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                     .setCancelable(false)
                                     .create().show();
                         } else {
-                            isGameEnd = true;
+                            winningPlayers.add(gamePlay.getCurrentPlayer().getName());
+                            startTournament();
                         }
                     } else {
                         GamePlayConstants.PHASE_IN_PROGRESS = false;
@@ -375,8 +381,6 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                             sleep(GamePlayConstants.SLEEP_TIME, GamePlayConstants.REINFORCEMENT_PHASE);
                         }
                     }
-
-
                     break;
             }
         }
