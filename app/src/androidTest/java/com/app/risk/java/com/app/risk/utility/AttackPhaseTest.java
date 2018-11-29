@@ -73,7 +73,10 @@ public class AttackPhaseTest {
     public void afterAttackPhaseTest() {
         AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
         gm.getPlayers().get(0).performAttack(gm.getCountries().get("India"),gm.getCountries().get("Pakistan"),3,2);
-        assertTrue((gm.getCountries().get("India").getNoOfArmies()==3)||(gm.getCountries().get("India").getNoOfArmies()==5)||(gm.getCountries().get("India").getNoOfArmies()==2)||(gm.getCountries().get("India").getNoOfArmies()==4));
+        assertTrue(((gm.getCountries().get("India").getNoOfArmies()==3)&&(gm.getCountries().get("Pakistan").getNoOfArmies()==4))||
+                             ((gm.getCountries().get("India").getNoOfArmies()==4)&&(gm.getCountries().get("Pakistan").getNoOfArmies()==3))||
+                             ((gm.getCountries().get("India").getNoOfArmies()==2)&&(gm.getCountries().get("Pakistan").getNoOfArmies()==5)));
+
        }
 
     /**
