@@ -3,6 +3,7 @@ package com.app.risk.impl;
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -38,6 +39,7 @@ public class RandomPlayerStrategy implements Strategy {
             player.decrementReinforcementArmies(noOfArmies);
             if(player.getCards().size()>2) {
                 player.exchangeCardsStrategyImplementation();
+                PhaseViewController.getInstance().addAction("Exchanging cards for random player " + player.getName());
             }
         }
     }
@@ -80,9 +82,12 @@ public class RandomPlayerStrategy implements Strategy {
             Country toCountry = attackableCountries.get(toCountryIndex);
             performAllOutAttack(fromCountry, toCountry, armiesInFromCountry, player, attackableCountries, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
+                PhaseViewController.getInstance().addAction(player.getName() + " conquered the entire map.");
                 break;
-            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer)))
+            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer))) {
+                PhaseViewController.getInstance().addAction("No more attack possible by "+player.getName());
                 break;
+            }
         }
     }
 
@@ -104,11 +109,14 @@ public class RandomPlayerStrategy implements Strategy {
                 final int noOfArmies = random.nextInt(fromCountryChosenRandomly.getNoOfArmies());
                 fromCountryChosenRandomly.decrementArmies(noOfArmies);
                 toCountry.incrementArmies(noOfArmies);
+                PhaseViewController.getInstance().addAction(noOfArmies + "moved from " + fromCountryChosenRandomly + " to " + toCountry);
                 break;
             }
         }
-        if(player.isNewCountryConquered())
+        if(player.isNewCountryConquered()) {
+            PhaseViewController.getInstance().addAction("Cards being assigned to "+player.getName());
             player.assignCards(gamePlay);
+        }
     }
 
     /**
@@ -127,11 +135,14 @@ public class RandomPlayerStrategy implements Strategy {
         while(fromCountry.getNoOfArmies() != 1 || toCountry.getNoOfArmies() != 0) {
             attackingDiceRoll = random.nextInt(armiesInFromCountry > 3 ? 3 : armiesInFromCountry);
             defendingDiceRoll = AttackPhaseController.getInstance().getDefenderDices(toCountry);
+            PhaseViewController.getInstance().addAction("Attacking dice roll: "+attackingDiceRoll+" defending dice roll: "+defendingDiceRoll);
             player.performAttack(fromCountry, toCountry, attackingDiceRoll, defendingDiceRoll);
         }
         if(toCountry.getNoOfArmies() == 0){
             player.setNewCountryConquered(true);
+            PhaseViewController.getInstance().addAction(player.getName() + " conquered " + toCountry.getNameOfCountry());
             toCountry.setNoOfArmies(attackingDiceRoll);
+            PhaseViewController.getInstance().addAction(attackingDiceRoll + " armies given to country " + toCountry.getNameOfCountry());
             fromCountry.decrementArmies(attackingDiceRoll);
             toCountry.setPlayer(player);
             player.incrementCountries(1);
