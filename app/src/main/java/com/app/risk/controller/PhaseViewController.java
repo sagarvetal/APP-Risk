@@ -75,7 +75,7 @@ public class PhaseViewController {
             output.write(action);
             output.newLine();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error writing log");
         } finally {
             if (output != null) {

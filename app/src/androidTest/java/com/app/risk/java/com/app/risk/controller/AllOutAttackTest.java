@@ -3,16 +3,20 @@ package com.app.risk.java.com.app.risk.controller;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.view.PlayScreenActivity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,6 +70,7 @@ public class AllOutAttackTest {
         gm.getCountries().get("Pakistan").setNoOfArmies(5);
         gm.getCountries().get("India").setNoOfArmies(5);
         context = InstrumentationRegistry.getTargetContext();
+
     }
     /**
      * This method checks whether a country has lost all it armies in all out attack
