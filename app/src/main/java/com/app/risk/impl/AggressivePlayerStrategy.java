@@ -6,7 +6,7 @@ import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +17,7 @@ import java.util.Iterator;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 22/11/2018)
  */
-public class AggressivePlayerStrategy implements Strategy {
+public class AggressivePlayerStrategy implements Strategy,Serializable {
     Country strongestCountry;
     /**
      * This is reinforcement method for aggressive strategy player.
