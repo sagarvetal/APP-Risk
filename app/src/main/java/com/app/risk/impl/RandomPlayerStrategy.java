@@ -7,6 +7,7 @@ import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -17,7 +18,7 @@ import java.util.Random;
  * @author Sagar Vetal
  * @version 1.0.0 (Date: 22/11/2018)
  */
-public class RandomPlayerStrategy implements Strategy {
+public class RandomPlayerStrategy implements Strategy,Serializable {
 
     private Random random = new Random();
 
@@ -80,9 +81,11 @@ public class RandomPlayerStrategy implements Strategy {
             Country toCountry = attackableCountries.get(toCountryIndex);
             performAllOutAttack(fromCountry, toCountry, armiesInFromCountry, player, attackableCountries, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
+                player.setPlayerWon(true);
                 break;
-            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer)))
+            } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer))){
                 break;
+            }
         }
     }
 
@@ -99,7 +102,7 @@ public class RandomPlayerStrategy implements Strategy {
             int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size());
             Country fromCountryChosenRandomly = countriesOwnedByPlayer.get(fromCountryIndex);
             if (fromCountryChosenRandomly.getNoOfArmies() > 1) {
-                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandomly, countriesOwnedByPlayer);
+                List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(fromCountryChosenRandomly, countriesOwnedByPlayer,false);
                 Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size())));
                 final int noOfArmies = random.nextInt(fromCountryChosenRandomly.getNoOfArmies());
                 fromCountryChosenRandomly.decrementArmies(noOfArmies);
