@@ -27,7 +27,6 @@ import com.app.risk.adapters.PlayerStateAdapter;
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
-import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.SaveLoadGameController;
@@ -111,7 +110,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                         case GamePlayConstants.REINFORCEMENT_PHASE:
                             PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " has decided to claim his cards.");
                             if (gamePlay.getCurrentPlayer().getCards().size() > 0 && !gamePlay.getCurrentPlayer().isCardsExchangedInRound()) {
-                                CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, CardExchangeController.getInstance().init(gamePlay.getCurrentPlayer()));
+                                CardExchangeDialog cardExchangeDialog = new CardExchangeDialog(PlayScreenActivity.this, gamePlay.getCurrentPlayer());
                                 cardExchangeDialog.setContentView(R.layout.card_exchange);
                                 cardExchangeDialog.setCancelable(false);
                                 cardExchangeDialog.show();

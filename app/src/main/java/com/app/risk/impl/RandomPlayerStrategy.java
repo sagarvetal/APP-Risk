@@ -2,7 +2,6 @@ package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
 import com.app.risk.controller.AttackPhaseController;
-import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
@@ -38,7 +37,7 @@ public class RandomPlayerStrategy implements Strategy {
             countriesOwnedByPlayer.get(countryIndex).incrementArmies(noOfArmies);
             player.decrementReinforcementArmies(noOfArmies);
             if(player.getCards().size()>2) {
-                CardExchangeController.getInstance().init(player).exchangeCardsStrategyImplementation();
+                player.exchangeCardsStrategyImplementation();
             }
         }
     }
