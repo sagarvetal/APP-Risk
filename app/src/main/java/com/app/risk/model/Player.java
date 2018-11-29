@@ -36,6 +36,7 @@ public class Player extends Observable implements Serializable {
     private boolean isNewCountryConquered;
     private Strategy strategy;
     private boolean isHuman;
+    private boolean isPlayerWon;
 
     /**
      * This is a default constructor and it initializes the card list.
@@ -375,6 +376,22 @@ public class Player extends Observable implements Serializable {
     }
 
     /**
+     * Getter function to get the flag to determine whether the player has won the game or not.
+     * @return true if player has won, otherwise return false.
+     */
+    public boolean isPlayerWon() {
+        return isPlayerWon;
+    }
+
+    /**
+     * Setter function to set the flag used to determine whether the player has won the game or not.
+     * @isPlayerWon true if player has won, otherwise return false.
+     */
+    public void setPlayerWon(boolean isPlayerWon) {
+        this.isPlayerWon = isPlayerWon;
+    }
+
+    /**
      * This is calculate the total reinforcement armies.
      * It sets the no of reinforcement armies given to the player
      * based on no of countries player owns and no of cards.
@@ -449,6 +466,7 @@ public class Player extends Observable implements Serializable {
      */
     public void attackPhase(final GamePlay gamePlay, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         getStrategy().attackPhase(gamePlay, this, countriesOwnedByPlayer, attackingCountry, defendingCountry);
+        gamePlay.checkPlayerStatus();
     }
 
 
@@ -502,31 +520,33 @@ public class Player extends Observable implements Serializable {
      */
     public StringBuilder performAttack(final Country attackingCountry, final Country defendingCountry, final int noOfAttackerDice, final int noOfDefenderDice){
 
-        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
-        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
-
         final StringBuilder attackResult = new StringBuilder();
         attackResult.append("\nBefore Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + ", Defender armies : " + defendingCountry.getNoOfArmies() + "\n\n");
+        attackResult.append("No of attacker dice : " + noOfAttackerDice + "\n No of defender dice : " + noOfDefenderDice + "\n");
+
+        final ArrayList<Integer> attackerDiceRollsOutputList = getDiceRollsOutput(noOfAttackerDice);
+        final ArrayList<Integer> defenderDiceRollsOutputList = getDiceRollsOutput(noOfDefenderDice);
+
+        attackResult.append("Attacker Dice Rolls : " + attackerDiceRollsOutputList + "\n");
+        attackResult.append("Defender Dice Rolls : " + defenderDiceRollsOutputList + "\n");
 
         while(!defenderDiceRollsOutputList.isEmpty() && !attackerDiceRollsOutputList.isEmpty() ){
-
-            attackResult.append("Attacker dice : " + attackerDiceRollsOutputList.get(0) + ", Defender dice : " + defenderDiceRollsOutputList.get(0));
 
             if(defenderDiceRollsOutputList.get(0) >= attackerDiceRollsOutputList.get(0)){
                 attackingCountry.decrementArmies(1);
                 attackingCountry.getPlayer().decrementArmies(1);
-                attackResult.append("\nDefender won \n");
+                attackResult.append("\nDefender won");
             } else {
                 defendingCountry.decrementArmies(1);
                 defendingCountry.getPlayer().decrementArmies(1);
-                attackResult.append("\nAttacker won \n");
+                attackResult.append("\nAttacker won");
             }
             defenderDiceRollsOutputList.remove(0);
             attackerDiceRollsOutputList.remove(0);
         }
 
-        attackResult.append("\nAfter Attack : \n");
+        attackResult.append("\n\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
         PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;
@@ -660,5 +680,93 @@ public class Player extends Observable implements Serializable {
         float countriesSize=totalCountries;
         float percentage = (size/countriesSize) *100;
         return percentage;
+    }
+
+    /**
+     * Check the validity of selected cards and return the number of armies to be awarded in its exchange
+     * @param cardsToExchange list of cards selected by player
+     * @return number of armies in exchange of selected cards
+     */
+    public int exchangeArmiesForCards(List<Card> cardsToExchange){
+
+        if(cardsExchangeable(cardsToExchange)){
+            setCardsExchangedInRound(true);
+            setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
+            incrementArmies(getArmiesInExchangeOfCards());
+            setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
+            removeExchangedCards(cardsToExchange);
+        } else {
+            return -1;
+        }
+
+        return getArmiesInExchangeOfCards();
+    }
+
+    /**
+     * Remove the selected cards from the cards owned by the player once they are exchanged
+     * @param cardsToExchange list of cards selected by the player
+     */
+    public void removeExchangedCards(List<Card> cardsToExchange){
+
+        List<Card> updatedCards = getCards();
+        updatedCards.removeAll(cardsToExchange);
+        setCards(updatedCards);
+    }
+
+    /**
+     * This method implements card exchange for computer strategy players without user interaction by choosing three
+     * most suitable cards for exchange (based on the rules).
+     * It performs the exchange based on the cards automatically chosen and awards the player the appropriate number of
+     * armies received in exchange for those cards and removes those cards from the player's list of cards.
+     */
+    public void exchangeCardsStrategyImplementation(){
+
+        List<Card> cardList = getCards();
+        int infantryCardCount = 0;
+        int cavalryCardCount = 0;
+        int artilleryCardCount = 0;
+        for(int i=0; i<cardList.size(); i++){
+            if(cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD)){
+                artilleryCardCount++;
+                if(artilleryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD)){
+                cavalryCardCount++;
+                if(cavalryCardCount == 3)
+                    break;
+            } else if(cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD)){
+                infantryCardCount++;
+                if(infantryCardCount == 3)
+                    break;
+            }
+        }
+        if(artilleryCardCount == 3 || cavalryCardCount == 3 || infantryCardCount == 3 ||
+                (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
+            setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
+            incrementArmies(getArmiesInExchangeOfCards());
+            setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
+
+            List<Card> cardsToRemove = new ArrayList<>();
+            for(int i=0; i<cardList.size(); i++){
+                if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(cavalryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+                else if(infantryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD))
+                    cardsToRemove.add(cardList.get(i));
+            }
+            if(cardsToRemove.size() == 3){
+                removeExchangedCards(cardsToRemove);
+            } else {
+                cardsToRemove.clear();
+                for(int i=0; i<cardList.size(); i++) {
+                    if (cardsToRemove.size() > 0 && cardsToRemove.contains(cardList.get(i)))
+                        break;
+                    else
+                        cardsToRemove.add(cardList.get(i));
+                }
+                removeExchangedCards(cardsToRemove);
+            }
+        }
     }
 }

@@ -8,10 +8,8 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * A concrete strategy class that implements a aggressive player strategy.
