@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -319,25 +322,39 @@ public class AttackPhaseController implements View.OnClickListener {
 
     /**
      * It shows the dialog box for selecting defender dices for human strategy.
-     * @param maxDiceValue Maximum no of dices defender can select.
+     * @param defendingCountry The defending country.
      * @return The selected no of dices for defender.
      */
-    public int showDiceSelectionDialogBox(int maxDiceValue){
-        final View view = View.inflate(context,R.layout.play_screen_reinforcement_option,null);
+    public int showDiceSelectionDialogBox(final Country defendingCountry){
+        final View view = View.inflate(context,R.layout.human_player_selection_dialog,null);
 
-        final NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.human_player_selection_dialog_number_picker);
+        final NumberPicker numberPicker = view.findViewById(R.id.human_player_selection_dialog_number_picker);
         numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(maxDiceValue);
+        numberPicker.setMaxValue(defendingCountry.getNoOfArmies() >= 2 ? 2 : 1);
         numberPicker.setWrapSelectorWheel(false);
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                throw  new RuntimeException();
+            }
+        };
+
         new AlertDialog.Builder(context)
                 .setView(view)
+                .setTitle("Defend Country : " + defendingCountry.getNameOfCountry())
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         defenderDices = numberPicker.getValue();
+                        handler.sendMessage(handler.obtainMessage());
                     }
-                }).setCancelable(false);
+                }).setCancelable(false)
+                .create().show();
 
+        try {
+            Looper.loop();
+        }
+        catch (RuntimeException e2){}
         return defenderDices;
     }
 
@@ -352,7 +369,7 @@ public class AttackPhaseController implements View.OnClickListener {
         final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
 
         if (strategy instanceof HumanPlayerStrategy)
-            defenderDices = showDiceSelectionDialogBox(defendingCountry.getNoOfArmies() >= 2 ? 2 : 1);
+            defenderDices = showDiceSelectionDialogBox(defendingCountry);
         else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
             defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
         else if (strategy instanceof BenevolentPlayerStrategy)

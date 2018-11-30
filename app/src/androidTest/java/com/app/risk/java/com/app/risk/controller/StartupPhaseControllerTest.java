@@ -25,10 +25,21 @@ import static org.junit.Assert.assertEquals;
  * @version 1.0.0
  */
 public class StartupPhaseControllerTest {
-    GamePlay gamePlay;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gamePlay = null;
+    /**
+     * startupphase would hold the instance of the StartupPhaseController
+     */
     StartupPhaseController startupphase = null;
-
+    /**
+     * playerNames would the list of all the player names
+     */
     ArrayList<String> playerNames = new ArrayList<String>();
 
     /**

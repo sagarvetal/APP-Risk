@@ -26,10 +26,14 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class PreAttackSufficientArmyTest {
-
-
-    Context context = null;
-    GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used check whether the card is assigned after the attack
  *
@@ -28,9 +29,18 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(AndroidJUnit4.class)
 public class CardAssignTest {
+    /**
+     * fileLocation would hold the location of the file
+     */
     private String fileLocation;
-    Context context = null;
-    GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case
@@ -74,11 +84,11 @@ public class CardAssignTest {
         countryList.get("Nepal").setAdjacentCountries(nepal);
         countryList.get("Bhutan").setAdjacentCountries(bhutan);
         gm.setCountries(countryList);
-        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> strategy = new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gm.setPlayers(playerNames,strategy);
+        gm.setPlayers(playerNames, strategy);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Bhutan").setPlayer(gm.getPlayers().get(0));
@@ -95,16 +105,16 @@ public class CardAssignTest {
      */
     @Test
     public void fortificationConnectedTest() {
-        int intialcards=gm.getCards().size();
+        int intialcards = gm.getCards().size();
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
         gm.getCurrentPlayer().assignCards(gm);
-        int afterFortification=gm.getCards().size();
-        System.out.println(":::::::::::::initial:::::::::"+intialcards);
-        System.out.println(":::::::::::::after fortification:::::::::"+afterFortification);
-        if(gm.getCurrentPlayer().isNewCountryConquered())
-        assertTrue(afterFortification-intialcards==1);
+        int afterFortification = gm.getCards().size();
+        System.out.println(":::::::::::::initial:::::::::" + intialcards);
+        System.out.println(":::::::::::::after fortification:::::::::" + afterFortification);
+        if (gm.getCurrentPlayer().isNewCountryConquered())
+            assertTrue(afterFortification - intialcards == 1);
         else
-            assertTrue(afterFortification-intialcards==0);
+            assertTrue(afterFortification - intialcards == 0);
     }
 
     /**
@@ -112,8 +122,7 @@ public class CardAssignTest {
      * its sets the game map to null
      */
     @After
-    public void cleanUp()
-    {
-        gm=null;
+    public void cleanUp() {
+        gm = null;
     }
 }
