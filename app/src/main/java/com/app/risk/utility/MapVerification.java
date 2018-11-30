@@ -137,7 +137,6 @@ public class MapVerification {
     /**
      * Performs a check to make sure each continent in the map is a connected subgraph
      * (implements DFS on each continent)
-     *
      * @return true if each continent is a connected subgraph, false otherwise
      */
     public boolean checkContinentIsConnectedSubgraph() {
@@ -182,7 +181,9 @@ public class MapVerification {
                 continue;
             } else {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
-
+                if (countryVisited.getFromCountry().getNameOfCountry().contains("Algeria")||countryVisited.getFromCountry().getNameOfCountry().contains("Andorra")){
+                    System.out.print(2);
+                }
                 for (GameMap neighbourCountry : countryVisited.getConnectedToCountries()) {
                     if (isCountryANeighbour(traversableCountries, neighbourCountry)
                             && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())) {

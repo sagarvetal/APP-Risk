@@ -490,7 +490,6 @@ public class CreateMapActivity extends Activity {
                 alert.setMessage("");
                 alert.setTitle("Enter Map name");
                 alert.setView(edittext);
-
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String mapName = edittext.getText().toString();
@@ -565,7 +564,6 @@ public class CreateMapActivity extends Activity {
 
     /**
      * Find index of object in array of game map object recieved according to country
-     *
      * @param country country object
      * @return index object
      */
