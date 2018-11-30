@@ -169,8 +169,33 @@ public class CreateMapActivity extends Activity {
             findMinMaxCoordinates();
 
             handleEditMode();
+
+            if (isMappingRequired()){
+                performMapping();
+            }
+
         }
 
+    }
+
+    public boolean isMappingRequired(){
+        boolean isMappingRequired = false;
+        for (int i = 0; i < arrCountriesRepresentationOnGraph.size() ; i++){
+            if (arrCountriesRepresentationOnGraph.get(i).getCoordinateX()<=380){
+                isMappingRequired = true;
+                return isMappingRequired;
+            }
+        }
+        return isMappingRequired;
+    }
+
+    public void performMapping(){
+
+        for (int i = 0 ; i < arrCountriesRepresentationOnGraph.size() ; i++){
+            GameMap map = arrCountriesRepresentationOnGraph.get(i);
+            map.setCoordinateX(getXCordinate(map.getCoordinateX()));
+            map.setCoordinateY(getYCordinate(map.getCoordinateY()));
+        }
     }
 
     /**
@@ -647,23 +672,14 @@ public class CreateMapActivity extends Activity {
         for (GameMap map : arrCountriesRepresentationOnGraph) {
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
-            if (map.getCoordinateX()<=373) {
-                drawCircle(getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),65,paint);
-            } else {
-                drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
-            }
+
+            drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
+
             for (GameMap nieghbourCountry : map.getConnectedToCountries()) {
-                if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                    drawLine(getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),getXCordinate(nieghbourCountry.getCoordinateX()),getYCordinate(nieghbourCountry.getCoordinateY()),connectionLine);
-                }else{
-                    drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
-                }
+                drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
             }
-            if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),text);
-            } else {
-                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
-            }
+
+            drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
         currentIndexCountrySelected = -1;
