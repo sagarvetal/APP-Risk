@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A concrete strategy class that implements a aggressive player strategy.
@@ -40,7 +41,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
             }
         }
         strongestCountry.incrementArmies(player.getReinforcementArmies());
-        PhaseViewController.getInstance().addAction("Reinforcement Armies alloted : " + player.getReinforcementArmies());
+        PhaseViewController.getInstance().addAction(player.getName() + " has placed " + player.getReinforcementArmies() + " armies on " + strongestCountry.getNameOfCountry());
         player.setReinforcementArmies(0);
     }
 
@@ -53,41 +54,29 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         while (strongestCountry.getNoOfArmies()>1){
-            Country toCountry = getToCountry(gamePlay, player);
+            final Country toCountry = getToCountry(gamePlay, player);
             if (toCountry != null){
-                int attackersDice = performAttack(player,toCountry);
-                if (attackersDice > 0){
-                    toCountry.getPlayer().decrementCountries(1);
-                    toCountry.setPlayer(strongestCountry.getPlayer());
-                    gamePlay.getCurrentPlayer().setNewCountryConquered(true);
-                    int movingArmies = 0;
-                    if (attackersDice < strongestCountry.getNoOfArmies()){
-                        movingArmies = attackersDice;
-                    } else {
-                        movingArmies = strongestCountry.getNoOfArmies();
-                    }
-                    toCountry.incrementArmies(movingArmies);
-                    strongestCountry.decrementArmies(movingArmies);
-                }
+                performAllOutAttack(player, strongestCountry, toCountry, countriesOwnedByPlayer);
             } else {
                 break;
             }
         }
         if(player.isPlayerWon(gamePlay.getCountries())) {
+            PhaseViewController.getInstance().addAction(player.getName() + " has conquered the entire map.");
             player.setPlayerWon(true);
         }
     }
 
     /**
-     * selects defender country
-     * @param gamePlay - gameplay object
-     * @param player - player object
-     * @return defender country
+     * This method finds the defender country.
+     * @param gamePlay The GamePlay object.
+     * @param player The Player object.
+     * @return The defender country.
      */
-    public Country getToCountry(GamePlay gamePlay, Player player){
-        HashMap<String,Country> countries = gamePlay.getCountries();
+    public Country getToCountry(final GamePlay gamePlay, final Player player){
+        final HashMap<String,Country> countries = gamePlay.getCountries();
         for (String countryName :strongestCountry.getAdjacentCountries()){
-            if (countries.get(countryName).getPlayer() != strongestCountry.getPlayer()){
+            if (countries.get(countryName).getPlayer().getId() != player.getId()){
                 return countries.get(countryName);
             }
         }
@@ -96,34 +85,42 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
 
 
     /**
-     * Performs Attack
-     * @param player  attacker player
-     * @param toCountry defender player
-     * @return no of attacker dice
+     * Method to perform all out attack from a country to another country till either the attacking country has only 1 army
+     * or till the defending country has no armies remaining.
+     * @param player Current player
+     * @param fromCountry Attacking country
+     * @param toCountry Defending country
+     * @param countriesOwnedByPlayer All countries owned by the player
      */
-    public int performAttack(Player player, Country toCountry){
-        int attackCount = 0;
+    public void performAllOutAttack(final Player player, final Country fromCountry, final Country toCountry, final List<Country> countriesOwnedByPlayer){
         int noOfAttackerDice = 0;
-
+        PhaseViewController.getInstance().addAction("\nAttacking country: " + strongestCountry.getNameOfCountry());
+        PhaseViewController.getInstance().addAction("Defending country: " + toCountry.getNameOfCountry());
+        final StringBuilder attackResult = new StringBuilder();
         while(strongestCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() != 0){
-            noOfAttackerDice = getAttackerDice();
+            noOfAttackerDice = strongestCountry.getNoOfArmies() > 3 ? 3 : strongestCountry.getNoOfArmies() - 1 ;
             final int noOfDefenderDice = AttackPhaseController.getInstance().getDefenderDices(toCountry);
-            PhaseViewController.getInstance().addAction("\nAttack No : " + (++attackCount));
-            PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
-            PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
             final String result = player.performAttack(strongestCountry, toCountry, noOfAttackerDice, noOfDefenderDice).toString();
-            PhaseViewController.getInstance().addAction("Attack result : " + result);
-
+            attackResult.append(result);
         }
-        return noOfAttackerDice;
-    }
+        PhaseViewController.getInstance().addAction(attackResult.toString());
 
-    /**
-     * Gets attacker dice according to its no of armies
-     * @return attacker dice
-     */
-    public int getAttackerDice(){
-        return strongestCountry.getNoOfArmies() > 3 ? 3 : strongestCountry.getNoOfArmies() - 1 ;
+        if(toCountry.getNoOfArmies() == 0){
+            int noOfArmiesToMove = 1;
+            if(noOfAttackerDice > fromCountry.getNoOfArmies()){
+                noOfArmiesToMove = fromCountry.getNoOfArmies() - 1;
+            } else {
+                noOfArmiesToMove = noOfAttackerDice;
+            }
+            player.setNewCountryConquered(true);
+            PhaseViewController.getInstance().addAction(player.getName() + " conquered " + toCountry.getNameOfCountry());
+            toCountry.setNoOfArmies(noOfArmiesToMove);
+            PhaseViewController.getInstance().addAction(noOfArmiesToMove +" armies moved from " + fromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
+            fromCountry.decrementArmies(noOfArmiesToMove);
+            toCountry.setPlayer(player);
+            player.incrementCountries(1);
+            countriesOwnedByPlayer.add(toCountry);
+        }
     }
 
 
@@ -135,40 +132,34 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
      */
     @Override
     public void fortificationPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country fromCountry) {
-        Country countryOne = new Country();
-        Country countryTwo = new Country();
+        Country srcCountry = null;
+        Country destCountry = null;
         int maxNieghbourCountryCount = 0;
-        for (Country c1 : countriesOwnedByPlayer){
-            for (Country c2 : countriesOwnedByPlayer){
+        for (final Country c1 : countriesOwnedByPlayer){
+            for (final Country c2 : countriesOwnedByPlayer){
                 if (c1 != c2){
                     if (checkIfPathExistBetweenCountries(c1,c2,gamePlay)){
-                        if ((c1.getNoOfArmies()+c2.getNoOfArmies()>maxNieghbourCountryCount)){
-                            countryOne = c1;
-                            countryTwo = c2;
-                            maxNieghbourCountryCount = countryOne.getNoOfArmies() + countryTwo.getNoOfArmies();
+                        if ((c1.getNoOfArmies() + c2.getNoOfArmies()) > maxNieghbourCountryCount){
+                            srcCountry = c1;
+                            destCountry = c2;
+                            maxNieghbourCountryCount = srcCountry.getNoOfArmies() + destCountry.getNoOfArmies();
                         }
                     }
                 }
             }
-
         }
 
-        performFortification(countryOne,countryTwo);
-        PhaseViewController.getInstance().addAction("Country fortified : " + countryOne.getNameOfCountry());
+        if(srcCountry != null && destCountry != null){
+            final int noOfArmiesToMove = srcCountry .getNoOfArmies() - 1;
+            destCountry.incrementArmies(noOfArmiesToMove);
+            srcCountry.decrementArmies(noOfArmiesToMove);
+            PhaseViewController.getInstance().addAction(noOfArmiesToMove + " armies moved from " + srcCountry.getNameOfCountry() + " to " + destCountry);
+        } else {
+            PhaseViewController.getInstance().addAction("Fortification was not possible.");
+        }
 
     }
 
-    /**
-     * Performs actual fortification, that is increase and decreases country
-     * @param fortifyCountry- Country whose armies would be used for fortification
-     * @param country - countries having maximum armies in neighbour
-     */
-
-    public void performFortification(Country country , Country fortifyCountry){
-        PhaseViewController.getInstance().addAction("Fortified Armies : " + Integer.toString(fortifyCountry.getNoOfArmies()-1));
-        country.incrementArmies(fortifyCountry.getNoOfArmies()-1);
-        fortifyCountry.decrementArmies(fortifyCountry.getNoOfArmies()-1);
-    }
 
     /**
      * Checks if path exist between 2 given countries
@@ -204,12 +195,12 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
      * @return list of adjacent countries
      */
     public ArrayList<Country> addOwnAdjacentCountries(GamePlay gamePlay,Country country){
-        ArrayList<Country> arrCountry = new ArrayList<>();
+        ArrayList<Country> countryList = new ArrayList<>();
         for (String CountryName : country.getAdjacentCountries()){
-            if (gamePlay.getCountries().get(CountryName).getPlayer() == country.getPlayer()){
-                arrCountry.add(gamePlay.getCountries().get(CountryName));
+            if (gamePlay.getCountries().get(CountryName).getPlayer().getId() == country.getPlayer().getId()){
+                countryList.add(gamePlay.getCountries().get(CountryName));
             }
         }
-        return arrCountry;
+        return countryList;
     }
 }

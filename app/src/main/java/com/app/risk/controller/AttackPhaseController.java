@@ -192,9 +192,6 @@ public class AttackPhaseController implements View.OnClickListener {
                 final int noOfAttackerDice = attackerNumberPicker.getValue();
                 final int noOfDefenderDice = defenderNumberPicker.getValue();
 
-                PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
-                PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
-
                 final String result = gamePlay.getCurrentPlayer().performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
                 attackResult.append(result);
 
@@ -208,11 +205,13 @@ public class AttackPhaseController implements View.OnClickListener {
                 attackResult.append(result);
             }
 
+            PhaseViewController.getInstance().addAction(attackResult.toString());
+
             if(defendingCountry.getNoOfArmies() == 0) {
-                PhaseViewController.getInstance().addAction("Player won the country " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " conquered " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
             } else if(attackingCountry.getNoOfArmies() == 1) {
-                PhaseViewController.getInstance().addAction("Player lost the attack on " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " lost the attack on " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
             }
 

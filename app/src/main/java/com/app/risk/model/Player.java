@@ -497,10 +497,7 @@ public class Player extends Observable implements Serializable {
             final int noOfAttackerDice = attackingCountry.getNoOfArmies() > 3 ? 3 : attackingCountry.getNoOfArmies() - 1;
             final int noOfDefenderDice = defendingCountry.getNoOfArmies() > 2 ? 2 : defendingCountry.getNoOfArmies();
 
-            PhaseViewController.getInstance().addAction("\nAttack No : " + (++attackCount));
-            PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
-            PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
-
+            attackResult.append("Attack No : " + (++attackCount));
             final String result = performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
             attackResult.append(result);
             attackResult.append("-------------------------------------------\n");
@@ -547,7 +544,7 @@ public class Player extends Observable implements Serializable {
         }
 
         attackResult.append("\n\nAfter Attack : \n");
-        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n");
+        attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n\n");
         PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;
     }
