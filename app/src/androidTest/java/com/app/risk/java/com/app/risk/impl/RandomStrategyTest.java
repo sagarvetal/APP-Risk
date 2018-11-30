@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -132,10 +132,13 @@ public class RandomStrategyTest {
         attackPhaseController = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         ((RandomPlayerStrategy) gamePlay.getCurrentPlayer().getStrategy()).performAllOutAttack(gamePlay.getCountries().get("America"),
                 gamePlay.getCountries().get("Italy"), gamePlay.getCurrentPlayer(), gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId()));
-        if(gamePlay.getCountries().get("America").getNoOfArmies()==1 || gamePlay.getCountries().get("Italy").getNoOfArmies()==0){
-            flag = true;
+        if(gamePlay.getCountries().get("America").getPlayer()==gamePlay.getCountries().get("Italy").getPlayer()){
+            assertTrue(gamePlay.getCountries().get("Italy").getNoOfArmies()<=3);
         }
-        assertTrue(flag == true);
+        else
+        {
+            assertTrue(gamePlay.getCountries().get("America").getNoOfArmies()==1);
+        }
     }
 
     /**

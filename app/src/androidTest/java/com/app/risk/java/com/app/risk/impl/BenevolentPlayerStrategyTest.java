@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,44 +21,52 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
 
-public class AggresiveStrategyTest {
+/**
+ * This class is used to test the benevolent player behaviour in all the three phases
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
+public class BenevolentPlayerStrategyTest {
     /**
-     * Game play object which stores information of players,countries contients
+     * context instance would hold the instance of the target activity
      */
-    GamePlay gamePlay;
+    private Context context = null;
     /**
-     * Context object to be used in while invoking diffrent controllers
+     * gameplay instances would hold the objects required for the test cases
      */
-    Context context = null;
+    private GamePlay gamePlay = null;
     /**
-     *  instance of Startupphasecontroller which manages all start up related activities
+     * startupphase would hold the instance of the StartupPhaseController required for all the test cases
      */
     StartupPhaseController startupphase = null;
     /**
-     * instance of Reinforcementphasecontroller which manages all reinforcement related activites
+     * reinforcementPhaseController would hold the instance of the ReinforcementPhaseController required for all the test cases
      */
     ReinforcementPhaseController reinforcementPhaseController = null;
     /**
-     * list of player name objects
+     * playerNames would hold the list of all the player names
      */
     ArrayList<String> playerNames = new ArrayList<String>();
     /**
-     * hashmap to store country name and their corresponding country
+     * countries would hold map each of the country name to the country object
      */
     HashMap<String, Country> countries = new HashMap<String, Country>();
 
     /**
-     * Sets up all variables to be used for testing
+     * This method gets executed before the test case
+     * sets the gameplay instance with the values required for the testing
+     * and sets the context of the test case
      */
     @Before
-    public void setUp(){
+    public void setUp() {
         gamePlay = new GamePlay();
         context = InstrumentationRegistry.getTargetContext();
         playerNames.add("player1");
         playerNames.add("player2");
         ArrayList<String> strategy = new ArrayList<String>();
-        strategy.add(GamePlayConstants.AGGRESSIVE_STRATEGY);
-        strategy.add(GamePlayConstants.AGGRESSIVE_STRATEGY);
+        strategy.add(GamePlayConstants.BENEVOLENT_STRATEGY);
+        strategy.add(GamePlayConstants.BENEVOLENT_STRATEGY);
         gamePlay.setPlayers(playerNames, strategy);
         ArrayList<String> india = new ArrayList<String>();
         india.add("Italy");
@@ -80,13 +88,14 @@ public class AggresiveStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
+
     }
 
     /**
-     * Checks aggresive reinforcement functionality
+     * This method checks the army count in the reinforcement phase for benevolent player
      */
     @Test
-    public void aggresiveReinforcementArmiesCountTest(){
+    public void benevolentReinforcementArmiesCountTest() {
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
         gamePlay.getPlayers().get(0).setNoOfCountries(3);
         gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
@@ -104,15 +113,15 @@ public class AggresiveStrategyTest {
         int reinforcement = gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay);
         System.out.println(reinforcement);
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
-        assertTrue(gamePlay.getCountries().get("America").getNoOfArmies() == reinforcement + 3);
+        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == reinforcement + 1);
         System.out.println(reinforcement);
     }
 
     /**
-     * Checks aggresive attack functionality
+     * This method checks whether army count is not changed afetr the attack phase for benevolent player
      */
     @Test
-    public void aggresiveAttackTest(){
+    public void benevolentAttackTest() {
         startupphase.assignInitialCountries();
         startupphase.assignInitialArmies();
         startupphase.placeInitialArmies();
@@ -122,23 +131,18 @@ public class AggresiveStrategyTest {
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
         AttackPhaseController fc = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         int beforeAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
-        gamePlay.getCurrentPlayer().attackPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
+        gamePlay.getCurrentPlayer().attackPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
         int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
-        assertTrue(afterAttackArmies == 2);
+        assertTrue(beforeAttackArmies == afterAttackArmies);
     }
 
     /**
-     * Checks aggresive fortification functionality
+     * This method checks valid fortification is performed for benevolent player
      */
-
     @Test
-    public void aggresiveFortificationTest(){
-        ArrayList<String> adjacentCountries = new ArrayList<>();
-        adjacentCountries.add("Italy");
-        adjacentCountries.add("America");
+    public void benevolentFortificationTest() {
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
         gamePlay.getPlayers().get(0).setNoOfCountries(3);
-        gamePlay.getCountries().get("India").setAdjacentCountries(adjacentCountries);
         gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("India").setNoOfArmies(1);
         gamePlay.getCountries().get("Italy").setPlayer(gamePlay.getPlayers().get(0));
@@ -149,11 +153,11 @@ public class AggresiveStrategyTest {
         gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
-        FortificationPhaseController.getInstance().init(context,gamePlay);
-        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),null);
-        int india=gamePlay.getCountries().get("India").getNoOfArmies();
-        int america=gamePlay.getCountries().get("America").getNoOfArmies();
-        assertTrue(gamePlay.getCountries().get("America").getNoOfArmies()==4);
+        FortificationPhaseController.getInstance().init(context, gamePlay);
+        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
+        int india = gamePlay.getCountries().get("India").getNoOfArmies();
+        int america = gamePlay.getCountries().get("India").getNoOfArmies();
+        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == gamePlay.getCountries().get("America").getNoOfArmies());
     }
 
     /**

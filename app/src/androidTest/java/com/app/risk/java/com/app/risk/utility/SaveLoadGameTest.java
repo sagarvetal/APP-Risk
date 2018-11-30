@@ -1,26 +1,35 @@
 package com.app.risk.java.com.app.risk.utility;
+
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+
 import com.app.risk.constants.FileConstants;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.impl.CheaterPlayerStrategy;
+import com.app.risk.impl.HumanPlayerStrategy;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+import com.app.risk.model.Player;
 import com.app.risk.utility.SaveLoadGame;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used to check whether the instance is saved to the map properly or not
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class SaveGameTest {
+public class SaveLoadGameTest {
     /**
      * context instance would hold the instance of the target activity
      */
@@ -81,6 +90,30 @@ public class SaveGameTest {
         assertTrue(mapDirectory.exists());
 
     }
+
+    /**
+     * This method checks whether the game which is saved to the file is loaded properly or not
+     */
+    @Test
+    public void loadGameTest() {
+        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> playerNames = new ArrayList<String>();
+        playerNames.add("Player1");
+        playerNames.add("Player2");
+        strategy.add(GamePlayConstants.HUMAN_STRATEGY);
+        strategy.add(GamePlayConstants.CHEATER_STRATEGY);
+        gm.setPlayers(playerNames,strategy);
+        SaveLoadGame saveLoadGame=new SaveLoadGame();
+        saveLoadGame.saveGame(gm,"saveLoadGameTest",context);
+        String mapDir = context.getFilesDir() + File.separator + FileConstants.GAME_SAVE_LOAD_FILE_PATH + File.separator +"saveLoadGameTest.ser";
+        File mapDirectory = new File(mapDir);
+        assertTrue(mapDirectory.exists());
+        GamePlay loadedGame=saveLoadGame.loadGame("saveLoadGameTest.ser",context);
+        HashMap<Integer,Player> player=loadedGame.getPlayers();
+        assertTrue(loadedGame.getPlayers().get(0).getStrategy() instanceof HumanPlayerStrategy);
+        assertTrue(loadedGame.getPlayers().get(1).getStrategy() instanceof CheaterPlayerStrategy);
+    }
+
 
     /**
      * This method gets executed after the test case has been executed
