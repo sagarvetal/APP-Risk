@@ -13,6 +13,9 @@ import com.app.risk.utility.SaveLoadGame;
  */
 public class SaveLoadGameController {
 
+    /**
+     * saveLoadGame : Holds the save game instance
+     */
     private static SaveLoadGame saveLoadGame = new SaveLoadGame();
 
     /**

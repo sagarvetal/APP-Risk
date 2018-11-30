@@ -19,6 +19,9 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class PercentageOfMapPlayScreenActivityTest {
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
     GamePlay gamePlay = new GamePlay();
 
     /**
@@ -29,10 +32,10 @@ public class PercentageOfMapPlayScreenActivityTest {
         ArrayList<String> arrPlayer = new ArrayList<>();
         arrPlayer.add("1");
         arrPlayer.add("2");
-        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> strategy = new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gamePlay.setPlayers(arrPlayer,strategy);
+        gamePlay.setPlayers(arrPlayer, strategy);
         HashMap<String, Country> countries = new HashMap<>();
         HashMap<String, Continent> continents = new HashMap<>();
 
@@ -64,13 +67,13 @@ public class PercentageOfMapPlayScreenActivityTest {
         country3.setPlayer(gamePlay.getPlayers().get(1));
         country4.setPlayer(gamePlay.getPlayers().get(1));
 
-        countries.put("India",country1);
-        countries.put("Sri",country2);
-        countries.put("Pak",country3);
-        countries.put("Nepal",country4);
+        countries.put("India", country1);
+        countries.put("Sri", country2);
+        countries.put("Pak", country3);
+        countries.put("Nepal", country4);
         gamePlay.setCountries(countries);
-        continents.put("Asia",continent1);
-        continents.put("Europe",continent2);
+        continents.put("Asia", continent1);
+        continents.put("Europe", continent2);
         gamePlay.setContinents(continents);
 
     }
@@ -80,7 +83,7 @@ public class PercentageOfMapPlayScreenActivityTest {
      */
     @Test
     public void percentageOwnedByPlayerTest() {
-        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50 );
+        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50);
     }
 
     /**

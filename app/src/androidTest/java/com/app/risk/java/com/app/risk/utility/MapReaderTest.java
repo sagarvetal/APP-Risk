@@ -3,7 +3,9 @@ package com.app.risk.java.com.app.risk.utility;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
+import com.app.risk.model.Card;
 import com.app.risk.model.GameMap;
+import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
 import com.app.risk.utility.MapVerification;
 
@@ -11,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -23,8 +26,14 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class MapReaderTest {
-    private String fileLocation;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances class objects against the country name
+     */
+    private String fileLocation = null;
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case

@@ -31,6 +31,7 @@ public class EditMap extends AppCompatActivity {
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
     ArrayList<String> mapList=null;
     ArrayList<GameMap> listOfGameMap=new ArrayList<GameMap>();
+    MapReader mapReader = new MapReader();
 
     /**
      * {@inheritDoc}
@@ -42,7 +43,7 @@ public class EditMap extends AppCompatActivity {
 
         setContentView(R.layout.activity_edit_map_layout);
         listView = findViewById(R.id.edit_map_listview);
-        mapList=MapReader.getMapList(getApplicationContext());
+        mapList= mapReader.getMapList(getApplicationContext());
         listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mapList));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,8 +89,8 @@ public class EditMap extends AppCompatActivity {
 
                     System.out.println("::::::::::::::::::::::my path:::::::::::::::::"+PathHolder);
 
-                    List<GameMap> listOfGameMapList=MapReader.returnGameMapFromFile(getApplicationContext(),PathHolder);
-                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::"+MapReader.getMapList(getApplicationContext()));
+                    List<GameMap> listOfGameMapList=mapReader.returnGameMapFromFile(getApplicationContext(),PathHolder);
+                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::"+mapReader.getMapList(getApplicationContext()));
                     System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::"+listOfGameMapList.size());
                     listOfGameMap.addAll(listOfGameMapList);
                     System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::"+listOfGameMap.size());

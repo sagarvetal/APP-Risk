@@ -23,6 +23,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class StartupPhaseController {
 
+    /**
+     * startupPhaseController: singleton instance of the controller
+     * gamePlay: To manage the state and retrieve data
+     */
+
     private GamePlay gamePlay;
     private static StartupPhaseController startupPhaseController;
 

@@ -22,8 +22,14 @@ import static org.junit.Assert.assertFalse;
  * @version 1.0.0
  */
 public class DisConnectedGraphTest {
+    /**
+     * fileLocation instance would hold the file location address
+     */
     private String fileLocation;
-    Context context=null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case

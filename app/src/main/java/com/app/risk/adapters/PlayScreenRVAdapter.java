@@ -11,12 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
-import com.app.risk.controller.AttackPhaseController;
-import com.app.risk.controller.FortificationPhaseController;
-import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
@@ -29,9 +25,22 @@ import java.util.ArrayList;
  */
 public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapter.PlayScreenViewHolder> {
 
+
+    /**
+     * gameplay : To manage the state and retrieve data
+     */
     private GamePlay gamePlay;
+    /**
+     * countries: Countries arrayList to hold countries hold by player data
+     */
     private ArrayList<Country> countries;
+    /**
+     * context: instance of the invoking activity
+     */
     private Context context;
+    /**
+     * neighbourCountries : ArrayList ot hold the names of neighbouring countries
+     */
     private ArrayList<String> neighbouringCountries;
 
 

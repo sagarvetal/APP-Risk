@@ -24,7 +24,8 @@ public class MapDriverController {
      * @return List of GameMap object
      */
     public List<GameMap> readmap(final Context context, String mapName) {
-        return MapReader.returnGameMapFromFile(context, mapName);
+        final MapReader mapReader = new MapReader();
+        return mapReader.returnGameMapFromFile(context, mapName);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.app.risk.view;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,25 +13,74 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.GameMap;
 import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
+import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    private Button mapSelectionButton, stratergiesSelectionButton, okayButton;
-    private NumberPicker playerRestrictionPicker,gameSelectionPicker;
-
+    /**
+     * mapSelectionButton: shows dialog to select maps
+     */
+    private Button mapSelectionButton;
+    /**
+     * stratergiesSelectionButton: shows dialog to select strategies
+     */
+    private Button stratergiesSelectionButton;
+    /**
+     * okayButton: checks and starts tournament mode
+     */
+    private Button okayButton;
+    /**
+     * playerRestrictionPicker : selects the restriction of turns
+     */
+    private NumberPicker playerRestrictionPicker;
+    /**
+     * gameSelectionPicker : selects the number of games to be played
+     */
+    private NumberPicker gameSelectionPicker;
+    /**
+     * mapArrayList: holds the list of maps
+     */
     private ArrayList<String> mapArrayList;
-    private ArrayList<String> selectedPlayerStratergies,selectedMapList;
+    /**
+     * selectedPlayerStrategies: holds the list of strategies
+     */
+    private ArrayList<String> selectedPlayerStratergies;
+    /**
+     * selectedMapList: holds the list of selected maps
+     */
+    private ArrayList<String> selectedMapList;
+    /**
+     * playerStratergiesArray: Holds the array of game play strategies
+     */
     private String[] playerStratergiesArray = {GamePlayConstants.AGGRESSIVE_STRATEGY,
             GamePlayConstants.BENEVOLENT_STRATEGY,GamePlayConstants.RANDOM_STRATEGY,
             GamePlayConstants.CHEATER_STRATEGY};
 
+    /**
+     * mapListArray: array of maps for passing into dialog
+     */
     private String[] mapListArray;
-    private boolean[] checkedStateMapArray,checkedStateStratergiesArray;
+   
+    /**
+     * mapReader to read each selected map and verify if its valid before proceeding to play
+     */
+    private MapReader mapReader = new MapReader();
+
+    /**
+     * checkedStateMapArray: maintains the state of selected maps
+     */
+    private boolean[] checkedStateMapArray;
+    /**
+     * checkedStateStratergiesArray: maintains the state of selected strategies
+     */
+    private boolean[] checkedStateStratergiesArray;
+
 
 
     /**
@@ -76,7 +126,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         selectedPlayerStratergies = new ArrayList<>();
         selectedMapList = new ArrayList<>();
 
-        mapArrayList = MapReader.getMapList(this.getApplicationContext());
+        mapArrayList = mapReader.getMapList(this.getApplicationContext());
 
     }
 
@@ -114,7 +164,15 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             if(isChecked){
-                                checkedStateMapArray[which] = true;
+                                MapVerification mapVerification = new MapVerification();
+                                boolean validMap = mapVerification.mapVerification(mapReader.returnGameMapFromFile(TournamentMenuActivity.this, mapListArray[which]));
+                                if(validMap) {
+                                    checkedStateMapArray[which] = true;
+                                } else {
+                                    Toast.makeText(TournamentMenuActivity.this, mapListArray[which] + " is invalid", Toast.LENGTH_LONG).show();
+                                    checkedStateMapArray[which] = false;
+                                    isChecked = false;
+                                }
                             }
                             else{
                                 checkedStateMapArray[which] = false;

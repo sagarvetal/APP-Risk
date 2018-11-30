@@ -20,7 +20,9 @@ import java.util.ArrayList;
  * @version 1.0.0
  */
 public class MainScreenActivity extends AppCompatActivity {
-     //Holds the data to main menu and passed to recycler view
+    /**
+     * Holds the data to main menu and passed to recycler view
+     */
     private ArrayList<String> mainMenuList;
 
     /**

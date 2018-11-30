@@ -25,10 +25,18 @@ import static org.junit.Assert.assertFalse;
  * @version 1.0.0
  */
 public class MoreAttackPossibleTest {
-
+    /**
+     * countryList instance would hold instance of the country against the country name
+     */
     HashMap<String, Country> countryList = new HashMap<String, Country>();
-    Context context = null;
-    GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case
@@ -74,7 +82,6 @@ public class MoreAttackPossibleTest {
     @Test
     public void afterAllOutAttackPhaseTest() {
         AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        //gm.getPlayers().get(0).performAllOutAttack(gm.getCountries().get("India"),gm.getCountries().get("Pakistan"));
         ArrayList<Country> countryArrayList=new ArrayList<Country>();
         countryArrayList.addAll(countryList.values());
         assertFalse(gm.getCurrentPlayer().isMoreAttackPossible(gm,countryArrayList));

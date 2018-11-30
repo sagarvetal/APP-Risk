@@ -7,17 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import com.app.risk.R;
-import com.app.risk.model.Country;
-import com.app.risk.model.GameMap;
 import com.app.risk.model.GamePlay;
-
 import android.widget.TextView;
-
 import java.util.ArrayList;
+
+/**
+ * Adapter class to display the list of countries in edit map
+ *
+ * @author Urvi
+ * @version 1.0.0
+ */
 
 public class CustomArrayAdapter extends ArrayAdapter{
 
+    /**
+     * gameplay : To manage the state and retrieve data
+     */
     private GamePlay gamePlay;
+
+    /**
+     * objects: name of the countries
+     */
     private ArrayList<String> objects;
 
     /**
