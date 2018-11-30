@@ -21,21 +21,65 @@ import java.util.concurrent.ThreadLocalRandom;
  * @version 1.0.0 (Date: 04/10/2018)
  */
 public class Player extends Observable implements Serializable {
-
+    /**
+     * id stores the player ID of the player.
+     */
     private int id;
+    /**
+     * name stores the name of the player.
+     */
     private String name;
+    /**
+     * colorCode.
+     */
     private int colorCode;
+    /**
+     * noOfCountries stores the number of countries owned by the player.
+     */
     private int noOfCountries;
+    /**
+     * noOfArmies stores the number of armies owned by the player.
+     */
     private int noOfArmies;
+    /**
+     * noOfContinents stores the number of continent owned by the player.
+     */
     private int noOfContinents;
+    /**
+     * reinforcementArmies stores the number of reinforcement armies given to the player.
+     */
     private int reinforcementArmies;
+    /**
+     * cards stores the list of cards given to the player.
+     */
     private List<Card> cards;
+    /**
+     * isActive is true if the player is active.
+     */
     private boolean isActive;
+    /**
+     * armiesInExchangeOfCards stores the number of armies given in exchange of cards.
+     */
     private int armiesInExchangeOfCards;
+    /**
+     * cardsExchangedInRound stores the number of armies exchanged in the round.
+     */
     private boolean cardsExchangedInRound;
+    /**
+     * isNewCountryConquered stores the true if the new country is conquered in attack.
+     */
     private boolean isNewCountryConquered;
+    /**
+     * strategy stores the instance of player strategy.
+     */
     private Strategy strategy;
+    /**
+     * isHuman stores true if its a human player.
+     */
     private boolean isHuman;
+    /**
+     * isPlayerWon stores true if player won.
+     */
     private boolean isPlayerWon;
 
     /**

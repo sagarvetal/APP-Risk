@@ -22,13 +22,13 @@ import org.junit.runners.Suite;
 
 /**
  * Created by Akhila Chilukuri on 07-Nov-17.
- * Tests for Map Validation
+ * Tests for Risk Project
  */
 
 @RunWith(Suite.class)
 
 /**
- * Suite for Map Validation
+ * Suite for Risk Project
  */
 @Suite.SuiteClasses({
         AttackPhaseControllerTest.class,//contains test cases used to validate the attack phase.
@@ -45,8 +45,8 @@ import org.junit.runners.Suite;
         CardExchangeDialogTest.class,//contains test cases which checks whether the cards have been removed after it has been exchanged for armies
         PercentageOfMapPlayScreenActivityTest.class,//contains test cases which checks test percentage of the Map owned by player
         PlayScreenActivityTest.class,//contains test cases which checks the continents owned by player
-        AggresiveStrategyTest.class,
-        RandomStrategyTest.class,
+        AggresiveStrategyTest.class,//contains test cases which test aggressive player strategy
+        RandomStrategyTest.class,///contains test cases which test random player strategy
 })
 public class RiskProjectTestSuite {
 }
