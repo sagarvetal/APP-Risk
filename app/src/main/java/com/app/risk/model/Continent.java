@@ -11,8 +11,17 @@ import java.util.ArrayList;
  */
 public class Continent implements Serializable {
 
+    /**
+     * Defines the name of continent
+     */
     private String nameOfContinent;
+    /**
+     * stores the control value for given continent
+     */
     private int armyControlValue;
+    /**
+     * Stores the list of coutries belonging to continent
+     */
     private ArrayList<Country> countries;
 
     /**

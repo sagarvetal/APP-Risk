@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class BenevolentStrategyTest {
+public class BenevolentPlayerStrategyTest {
     /**
      * context instance would hold the instance of the target activity
      */

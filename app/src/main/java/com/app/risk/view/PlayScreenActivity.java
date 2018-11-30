@@ -525,7 +525,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 .setPositiveButton("Exit Game", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        finishAffinity();
                         startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                     }
                 })
@@ -678,9 +678,10 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
      * Shows the alert dialog for the full log of system
      */
     public void showLogDialog(){
-        String[] logViewArray = new String[logViewArrayList.size()];
-        for(int i=0;i<logViewArrayList.size();i++){
-            logViewArray[i] = logViewArrayList.get(i);
+        ArrayList<String> logViewList = PhaseViewController.getInstance().readLog(this);
+        String[] logViewArray = new String[logViewList.size()];
+        for(int i=0;i<logViewList.size();i++){
+            logViewArray[i] = logViewList.get(i);
         }
         new AlertDialog.Builder(PlayScreenActivity.this)
                 .setItems(logViewArray,null)

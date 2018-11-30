@@ -1,5 +1,7 @@
 package com.app.risk.utility;
 
+import android.graphics.Paint;
+
 import com.app.risk.model.Continent;
 
 import com.app.risk.model.Country;
@@ -137,7 +139,6 @@ public class MapVerification {
     /**
      * Performs a check to make sure each continent in the map is a connected subgraph
      * (implements DFS on each continent)
-     *
      * @return true if each continent is a connected subgraph, false otherwise
      */
     public boolean checkContinentIsConnectedSubgraph() {
@@ -177,12 +178,12 @@ public class MapVerification {
         while (!depthFirstTraversalStack.empty()) {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
+            countryVisited = getGameMapObjectFromList(countryVisited);
 
             if (countriesVisited != null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())) {
                 continue;
             } else {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
-
                 for (GameMap neighbourCountry : countryVisited.getConnectedToCountries()) {
                     if (isCountryANeighbour(traversableCountries, neighbourCountry)
                             && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())) {
@@ -193,6 +194,19 @@ public class MapVerification {
         }
     }
 
+    /**
+     * Get updated object from gamemaplist
+     * @param map map object from DFS
+     * @return updated object from game map list
+     */
+    public GameMap getGameMapObjectFromList(GameMap map){
+        for (GameMap map1 : gameMapList){
+            if (map1.getFromCountry().getNameOfCountry().equals(map.getFromCountry().getNameOfCountry())){
+                return map1;
+            }
+        }
+        return null;
+    }
     /**
      * Method to check if the adjacent neighbour country can be traversed to find a path
      * @param traversableCountries list of traversable countries

@@ -18,10 +18,11 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * This class is used check whether the fortification is done between connected countries or not
+ * This class is used check validate the fortification phase
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
@@ -102,11 +103,20 @@ public class FortificationPhaseControllerTest {
      * This method checks whether the fortification is done between connected countries or not
      */
     @Test
-    public void fortificationConnectedTest() {
+    public void connectedCountriesFortifiedTest() {
         FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
         assertTrue(fc.isCountriesConnected(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")));
     }
+    /**
+     * This method checks whether the fortification is not done between unconnected countries or not
+     */
+    @Test
+    public void fortificationUnConnectedTest() {
+        gm.getCountries().get("Nepal").setPlayer(gm.getPlayers().get(1));
+        FortificationPhaseController fc = FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
+        assertFalse(fc.isCountriesConnected(gm.getCountries().get("India"), gm.getCountries().get("Bhutan")) && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Bhutan").getPlayer().getId() && gm.getCountries().get("India").getPlayer().getId() == gm.getCountries().get("Nepal").getPlayer().getId());
 
+    }
     /**
      * This method gets executed after the test case has been executed
      * its sets the game map to null
