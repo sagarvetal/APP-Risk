@@ -39,6 +39,7 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.PhaseModel;
 import com.app.risk.model.Player;
 import com.app.risk.controller.PhaseViewController;
+import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
 
 import java.io.File;
@@ -169,6 +170,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     private ArrayList<String> winningPlayers;
 
     /**
+     * Flag to check whether playing old game.
+     */
+    private boolean isOldGame;
+
+    /**
      * This method is the main creation method of the activity
      *
      * @param savedInstanceState: instance of the activity
@@ -178,7 +184,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
 
-        PhaseViewController.getInstance().init(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this);
+        PhaseViewController.getInstance().init(this);
         logView=findViewById(R.id.activity_play_screen_logview);
 
         logViewArrayList = new ArrayList<>();
@@ -274,6 +280,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
             startGame(GamePlayConstants.STARTUP_PHASE);
         } else {
             gamePlay = (GamePlay) intent.getSerializableExtra("GAMEPLAY_OBJECT");
+            isOldGame = true;
             addObserversToPlayer();
             startGame(gamePlay.getCurrentPhase());
         }
@@ -389,26 +396,15 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                         floatingActionButton.setImageResource(R.drawable.ic_card_white_24dp);
                         actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
-                        gamePlay.setCurrentPhase(GamePlayConstants.REINFORCEMENT_PHASE);
+                        gamePlay.setCurrentPhase(phase);
                         gamePlay.setCurrentPlayer();
+
+                        initializeDataToUI(phase);
 
                         PhaseViewController.getInstance().addAction("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
                         PhaseViewController.getInstance().addAction("\nPhase : " + phase);
 
                         ReinforcementPhaseController.getInstance().init(this, gamePlay).start();
-                        countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
-
-                        adapter = new PlayScreenRVAdapter(this, gamePlay, countriesOwnedByPlayer);
-                        recyclerView.setAdapter(adapter);
-                        if(gameMode.equals(GamePlayConstants.TOURNAMENT_MODE)){
-                            pName.setText(gamePlay.getCurrentPlayer().getName() + "( "
-                             + gamePlay.getCurrentPlayer().getStrategy() + " )");
-                        }
-                        else{
-                            pName.setText(gamePlay.getCurrentPlayer().getName());
-                        }
-                        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
-                        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
 
                         final Player currentPlayer = gamePlay.getCurrentPlayer();
                         final String message = String.format(GamePlayConstants.REINFORCEMENT_MSG,
@@ -416,12 +412,6 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                 currentPlayer.getNoOfCountries(),
                                 currentPlayer.getName(),
                                 currentPlayer.getReinforcementArmies());
-
-                        final ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
-                        playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
-
-                        listPlayerState = findViewById(R.id.list_play_view);
-                        listPlayerState.setAdapter(playerStateAdapter);
 
                         if(!gamePlay.getCurrentPlayer().isHuman()){
                             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -438,12 +428,18 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     GamePlayConstants.PHASE_IN_PROGRESS = false;
                     gamePlay.getCurrentPlayer().setCardsExchangedInRound(false);
                     floatingActionButton.setImageResource(R.drawable.ic_shield_24dp);
+                    actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                     gamePlay.setCurrentPhase(phase);
 
-                    AttackPhaseController.getInstance().init(this, gamePlay);
+                    if(isOldGame){
+                        initializeDataToUI(phase);
+                        isOldGame = false;
+                    }
 
+                    PhaseViewController.getInstance().addAction("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
                     PhaseViewController.getInstance().addAction("\nPhase : " + phase);
-                    actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
+
+                    AttackPhaseController.getInstance().init(this, gamePlay);
 
                     if(!gamePlay.getCurrentPlayer().isHuman()){
                         gamePlay.getCurrentPlayer().attackPhase(gamePlay, countriesOwnedByPlayer, null, null);
@@ -474,13 +470,18 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     } else {
                         GamePlayConstants.PHASE_IN_PROGRESS = false;
                         floatingActionButton.setImageResource(R.drawable.ic_armies_add_24dp);
+                        actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
                         gamePlay.setCurrentPhase(phase);
 
-                        FortificationPhaseController.getInstance().init(this, gamePlay);
+                        if(isOldGame){
+                            initializeDataToUI(phase);
+                            isOldGame = false;
+                        }
 
+                        PhaseViewController.getInstance().addAction("\nPlayer Name : " + gamePlay.getCurrentPlayer().getName());
                         PhaseViewController.getInstance().addAction("\nPhase : " + phase);
-                        actionBar.setTitle(getResources().getString(R.string.app_name) + " : " + phase);
 
+                        FortificationPhaseController.getInstance().init(this, gamePlay);
 
                         if(!gamePlay.getCurrentPlayer().isHuman()){
                             gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, countriesOwnedByPlayer, null);
@@ -490,6 +491,22 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     break;
             }
         }
+    }
+
+    public void initializeDataToUI(final String phase) {
+        countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
+        adapter = new PlayScreenRVAdapter(this, gamePlay, countriesOwnedByPlayer);
+        recyclerView.setAdapter(adapter);
+
+        pName.setText(gamePlay.getCurrentPlayer().getName());
+        pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
+        pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
+
+        final ArrayList<Player> arrPlayer = new ArrayList<>(gamePlay.getPlayers().values());
+        playerStateAdapter = new PlayerStateAdapter(arrPlayer,gamePlay,this);
+
+        listPlayerState = findViewById(R.id.list_play_view);
+        listPlayerState.setAdapter(playerStateAdapter);
     }
 
     /**
@@ -677,7 +694,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
      * Shows the alert dialog for the full log of system
      */
     public void showLogDialog(){
-        ArrayList<String> logViewList = PhaseViewController.getInstance().readLog(this);
+        ArrayList<String> logViewList = LogManager.readLog(this);
         String[] logViewArray = new String[logViewList.size()];
         Toast.makeText(this, ""
                 +logViewArray.length, Toast.LENGTH_SHORT).show();
