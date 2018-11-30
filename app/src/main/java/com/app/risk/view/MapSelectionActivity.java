@@ -18,7 +18,10 @@ import java.util.ArrayList;
  */
 public class MapSelectionActivity extends AppCompatActivity {
 
-    private ArrayList<String> list;
+    /**
+     * mapSelectionList: Holds the map list
+     */
+    private ArrayList<String> mapSelectionList;
 
     /**
      * This is the main creation method of the activity
@@ -35,7 +38,7 @@ public class MapSelectionActivity extends AppCompatActivity {
      * This method initialize the pagerview of the activity
      */
     public void setUpViewPager() {
-        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), MapReader.getMapList(this.getApplicationContext()),this);
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), (new MapReader()).getMapList(this.getApplicationContext()),this);
         final ViewPager viewPager = findViewById(R.id.map_selection_viewpager);
         viewPager.setAdapter(adapter);
     }

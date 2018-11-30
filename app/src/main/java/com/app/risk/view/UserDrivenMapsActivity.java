@@ -240,7 +240,6 @@ public class UserDrivenMapsActivity extends AppCompatActivity implements View.On
         if (editMode) {
             setTheListView(bundle);
             fileName = intent.getExtras().getString("fileName");
-
             intent.putExtra("fileName", fileName);
             sendBundle.putBoolean("isEditMode", true);
             sendBundle.putSerializable("arrGameData", intent.getSerializableExtra("arrGameData"));

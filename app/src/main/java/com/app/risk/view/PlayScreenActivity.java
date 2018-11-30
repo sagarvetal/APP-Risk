@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +14,10 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,29 +60,116 @@ import java.util.Observer;
  */
 public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
+    /**
+     * pImage: image of the player
+     */
     private ImageView pImage;
-    private TextView pName, pArmies, pCountries;
+    /**
+     * pName: name of the player
+     */
+    private TextView pName;
+    /**
+     * pArmies: armies of the player
+     */
+    private TextView pArmies;
+    /**
+     * pCountries: number of player countries
+     */
+    private TextView pCountries;
+    /**
+     * recyclerView: hold and create data representation of player countries
+     */
     private RecyclerView recyclerView;
+    /**
+     * cardView: holds the reference of a card
+     */
     private CardView cardView;
+    /**
+     * gamePlay: To manage the state and retrieve data
+     */
     private GamePlay gamePlay;
+    /**
+     * adapter: holds the data of play screen adapter
+     */
     private PlayScreenRVAdapter adapter;
+    /**
+     * gameMode: holds the current game mode
+     */
     private String gameMode;
+
+    /**
+     * mapName: contains the name of the map
+     */
     private String mapName;
+
+    /**
+     * playerNames: contains the name of the players
+     */
     private ArrayList<String> playerNames;
+
+    /**
+     * playerStrategies: contains the strategies of the player
+     */
     private ArrayList<String> playerStrategies;
+    /**
+     * actionBar: reference to the top toolbar
+     */
     private ActionBar actionBar;
+    /**
+     * floatingActionButton: the phase changing button
+     */
     private FloatingActionButton floatingActionButton;
+    /**
+     * logView: phase view represented in the list view
+     */
     private ListView logView;
+    /**
+     * logViewAdapter: holds the data of the list view
+     */
     public static ArrayAdapter<String> logViewAdapter;
+    /**
+     * logViewArrayList: holds the data of list view
+     */
     public static ArrayList<String> logViewArrayList;
+    /**
+     * playerStateAdapter: holds the state of the player
+     */
     private PlayerStateAdapter playerStateAdapter;
-    private ListView listPlayerState ;
-    private ArrayList<Country> countriesOwnedByPlayer;
+
+    /**
+     * mapList: list of all the maps
+     */
     private ArrayList<String> mapList;
+
+    /**
+     * listPlayerState: holds the list of each player(world domination view)
+     */
+    private ListView listPlayerState ;
+    /**
+     * countriesOwnedByPlayer: holds all the countries hold by player
+     */
+    private ArrayList<Country> countriesOwnedByPlayer;
+    /**
+     * noOfTurns: restrictive turns in tournament mode for each player
+     */
+
     private int noOfTurns;
+
+    /**
+     * noOfGames: number of games in tournament mode
+     */
     private int noOfGames;
+    /**
+     * currentGameCount: holds the current count of game
+     */
     private int currentGameCount;
+    /**
+     * tournamentResult: holds the results of the tournament mode
+     */
     private LinkedHashMap<String, ArrayList<String>> tournamentResult = new LinkedHashMap<>();
+    /**
+     * winningPlayers: holds the data of winning players in games
+     */
     private ArrayList<String> winningPlayers;
 
     /**
@@ -97,10 +189,13 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         logViewAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, logViewArrayList);
         logView.setAdapter(logViewAdapter);
 
+        manageLogViewDialog();
+
         actionBar = getSupportActionBar();
         manageFloatingButtonTransitions();
         init();
     }
+
 
     /**
      * This method initalizes and listens the evenets of the floating Button
@@ -195,12 +290,6 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         noOfTurns = intent.getIntExtra("MAX_TURNS", 10);
 
         winningPlayers = new ArrayList<>();
-        winningPlayers.add(" ");
-        for(int i = 1; i <= noOfGames; i++){
-            winningPlayers.add("Game " + i);
-        }
-        mapName = "";
-
         startTournament();
     }
 
@@ -209,12 +298,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
             ++currentGameCount;
         } else {
             currentGameCount = 1;
+            tournamentResult.put(mapName, winningPlayers);
+            winningPlayers = new ArrayList<String>();
             mapList.remove(0);
         }
         if(mapList.size() != 0){
-            if(currentGameCount == 1){
-                tournamentResult.put(mapName, winningPlayers);
-            }
             mapName = mapList.get(0);
             playerNames = getPlayerNames(playerStrategies);
             startGame(GamePlayConstants.STARTUP_PHASE);
@@ -223,26 +311,42 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    public void showTournamentResult(final LinkedHashMap<String,ArrayList<String>> tournamentResult, final int noOfGames){
+    public void showTournamentResult(final LinkedHashMap<String, ArrayList<String>> tournamentResult, final int noOfGames){
 
         final ArrayList<String> gridViewArrayList = new ArrayList<>();
 
-        for(Map.Entry<String,ArrayList<String>> entry : tournamentResult.entrySet()){
-            gridViewArrayList.add(entry.getKey());
-            for(String winnerName : entry.getValue()){
-                gridViewArrayList.add(winnerName);
+        for(int i = 0; i < noOfGames; i++){
+            StringBuilder temp = new StringBuilder();
+            temp.append("Game " + (i+1) + ":\n");
+            for(Map.Entry<String,ArrayList<String>> entry : tournamentResult.entrySet()){
+                temp.append(entry.getKey() + " : " + entry.getValue().get(i) + "\n");
             }
+            gridViewArrayList.add(temp.toString());
         }
 
-        final View view = getLayoutInflater().inflate(R.layout.final_result_dialog, null);
-        final GridView gridView = view.findViewById(R.id.final_result_dialog_gridview);
-        gridView.setNumColumns(noOfGames + 1);
-        gridView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,gridViewArrayList));
+        String[] gridViewArray = new String[gridViewArrayList.size()];
+
+        for(int i=0;i<gridViewArrayList.size();i++){
+            gridViewArray[i] = gridViewArrayList.get(i);
+        }
 
         new AlertDialog.Builder(this)
-                .setView(view)
-                .setTitle("Results")
-                .setPositiveButton("Ok",null)
+                .setItems(gridViewArray,null)
+                .setTitle("Game Log")
+                .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                    }
+                })
+                .setNeutralButton("Show Log", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showLogDialog();
+                    }
+                })
+                .setCancelable(false)
                 .create().show();
 
     }
@@ -270,7 +374,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         if (phase != null) {
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
-                    gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    MapReader mapReader = new MapReader();
+                    gamePlay = mapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
                     gamePlay.setNoOfTurns(noOfTurns);
                     gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
@@ -355,6 +460,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                     .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            finishAffinity();
                                             startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                                         }
                                     })
@@ -444,7 +550,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                finish();
+                                                finishAffinity();
                                                 startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                                             }
                                         })
@@ -465,7 +571,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
         AlertDialog backAlertDialog = backAlertDialogBox.show();
         Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        if (GamePlayConstants.PHASE_IN_PROGRESS) {
+        if(gamePlay.getCurrentPlayer().isHuman()) {
+            if (GamePlayConstants.PHASE_IN_PROGRESS) {
+                saveGameButton.setEnabled(false);
+            }
+        } else {
             saveGameButton.setEnabled(false);
         }
     }
@@ -510,5 +620,79 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 changePhase(nextPhase);
             }
         },milliseconds);
+    }
+
+    /**
+     * This method shows the dialog box of the phase view
+     */
+    public void manageLogViewDialog(){
+
+       logView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+               if(gamePlay.getCurrentPlayer().isHuman()){
+                   String[] logViewArray = new String[logViewArrayList.size()];
+                   for(int i=0;i<logViewArrayList.size();i++){
+                       logViewArray[i] = logViewArrayList.get(i);
+                   }
+                   new AlertDialog.Builder(PlayScreenActivity.this)
+                           .setItems(logViewArray,null)
+                           .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
+                           .setPositiveButton("Back",null)
+                           .create().show();
+               }
+           }
+       });
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param menu: reference to menu
+     * @return : returns who is to handle the menu event (1:system)
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.play_screen_menu,menu);
+        return true;
+    }
+
+    /**
+     *{@inheritDoc}
+     * @param item: reference to menu item
+     * @return : returns who is to handle the menu event (1:user)
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.play_action_view){
+
+            showLogDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Shows the alert dialog for the full log of system
+     */
+    public void showLogDialog(){
+        String[] logViewArray = new String[logViewArrayList.size()];
+        for(int i=0;i<logViewArrayList.size();i++){
+            logViewArray[i] = logViewArrayList.get(i);
+        }
+        new AlertDialog.Builder(PlayScreenActivity.this)
+                .setItems(logViewArray,null)
+                .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
+                .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
 }
