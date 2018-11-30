@@ -27,6 +27,11 @@ import java.util.Stack;
  */
 public class FortificationPhaseController {
 
+    /**
+     * fortificationPhaseController: singleton instance of the controller
+     * gamePlay: To manage the state and retrieve data
+     * context: instance of the invoking activity
+     */
     private GamePlay gamePlay;
     private Context context;
     private static FortificationPhaseController fortificationPhaseController;

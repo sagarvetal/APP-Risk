@@ -32,22 +32,40 @@ import java.util.Random;
 /**
  * This class is used for the attack phase.
  * Player can attack from a country he owns to adjacent country owned by another player.
- * @author Sagar Vetal
+ * @author Sagar Vetal and Himanshu Kohli
  * @version 1.0.0 (Date: 06/11/2018)
  */
 public class AttackPhaseController implements View.OnClickListener {
 
+
+    /**
+     * attackPhaseController: singleton instance of the controller
+     * gamePlay: To manage the state and retrieve data
+     * context: instance of the invoking activity
+     */
     private static AttackPhaseController attackPhaseController;
     private GamePlay gamePlay;
     private Context context;
 
+    /**
+     * contries: List of countries
+     * attackingCountry: holds the data of attacking country
+     * defendingCountry: holds the data of the defending country
+     */
     private ArrayList<Country> countries;
     private Country attackingCountry, defendingCountry;
 
+    /**
+     * mainAlertDialog: To represent data in dialogbox
+     * rollButton: To perform dice roll
+     * allOutButton: To perform all out operation
+     * attackerNumberPicker: Allows user to select the number of attacking dice
+     * defendingNumberPicker: Allows user to select the number of defending dice
+     * defenderDice: minimum number of defending dice value
+     */
     private AlertDialog mainAlertDialog;
     private Button rollButton,allOutButton;
     private NumberPicker attackerNumberPicker, defenderNumberPicker;
-
     private int defenderDices = 1;
 
     /**

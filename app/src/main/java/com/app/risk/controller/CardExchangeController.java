@@ -16,6 +16,11 @@ import java.util.List;
  */
 public class CardExchangeController {
 
+
+    /**
+     * cardExchangeController: singleton instance of the controller
+     * player: To manage the exchange of cards of player
+     */
     private static CardExchangeController cardExchangeController;
     private Player player;
 

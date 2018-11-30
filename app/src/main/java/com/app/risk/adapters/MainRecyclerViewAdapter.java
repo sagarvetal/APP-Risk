@@ -34,6 +34,10 @@ import java.util.ArrayList;
  */
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.CardViewHolder> {
 
+    /**
+     * cardArrayList : initializes the arraylist of the menu
+     * invokingActivity: The context of the activity
+     */
     private ArrayList<String> cardArrayList;
     private Context invokingActivity;
 
