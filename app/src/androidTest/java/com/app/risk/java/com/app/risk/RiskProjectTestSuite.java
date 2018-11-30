@@ -1,20 +1,20 @@
 package com.app.risk.java.com.app.risk;
-import com.app.risk.java.com.app.risk.controller1.AttackPhaseControllerTest;
-import com.app.risk.java.com.app.risk.controller1.CardExchangeControllerTest;
-import com.app.risk.java.com.app.risk.controller1.FortificationPhaseControllerTest;
-import com.app.risk.java.com.app.risk.controller1.MapDriverControllerTest;
-import com.app.risk.java.com.app.risk.controller1.ReinforcementPhaseControllerTest;
-import com.app.risk.java.com.app.risk.controller1.StartUpPhaseControllerTest;
-import com.app.risk.java.com.app.risk.impl1.AggresiveStrategyTest;
-import com.app.risk.java.com.app.risk.impl1.BenevolentPlayerStrategyTest;
-import com.app.risk.java.com.app.risk.impl1.RandomStrategyTest;
-import com.app.risk.java.com.app.risk.utility1.MapWriterTest;
-import com.app.risk.java.com.app.risk.utility1.MapReaderTest;
-import com.app.risk.java.com.app.risk.utility1.MapVerificationTest;
-import com.app.risk.java.com.app.risk.utility1.SaveLoadGameTest;
-import com.app.risk.java.com.app.risk.view1.CardExchangeDialogTest;
-import com.app.risk.java.com.app.risk.view1.PercentageOfMapPlayScreenActivityTest;
-import com.app.risk.java.com.app.risk.view1.PlayScreenActivityTest;
+import com.app.risk.java.com.app.risk.controller.AttackPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller.CardExchangeControllerTest;
+import com.app.risk.java.com.app.risk.controller.FortificationPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller.MapDriverControllerTest;
+import com.app.risk.java.com.app.risk.controller.ReinforcementPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller.StartUpPhaseControllerTest;
+import com.app.risk.java.com.app.risk.impl.AggresiveStrategyTest;
+import com.app.risk.java.com.app.risk.impl.BenevolentPlayerStrategyTest;
+import com.app.risk.java.com.app.risk.impl.RandomStrategyTest;
+import com.app.risk.java.com.app.risk.utility.MapWriterTest;
+import com.app.risk.java.com.app.risk.utility.MapReaderTest;
+import com.app.risk.java.com.app.risk.utility.MapVerificationTest;
+import com.app.risk.java.com.app.risk.utility.SaveLoadGameTest;
+import com.app.risk.java.com.app.risk.view.CardExchangeDialogTest;
+import com.app.risk.java.com.app.risk.view.PercentageOfMapPlayScreenActivityTest;
+import com.app.risk.java.com.app.risk.view.PlayScreenActivityTest;
 
 
 import org.junit.runner.RunWith;
@@ -48,5 +48,5 @@ import org.junit.runners.Suite;
         AggresiveStrategyTest.class,
         RandomStrategyTest.class,
 })
-public class MapValidationTestSuite {
+public class RiskProjectTestSuite {
 }

@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.view1;
+package com.app.risk.java.com.app.risk.view;
 
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Continent;
@@ -15,27 +15,26 @@ import java.util.HashMap;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Class to test percentage of the Map owned by player
+ * Class to test continents owned by player
  */
-
-public class PercentageOfMapPlayScreenActivityTest {
+public class PlayScreenActivityTest {
     /**
      * gameplay instances would hold the objects required for the test cases
      */
     GamePlay gamePlay = new GamePlay();
 
     /**
-     * Set's up Game play object to be used to test percentage owned by player
+     * This set's up data for game play object
      */
     @Before
     public void setUp() {
         ArrayList<String> arrPlayer = new ArrayList<>();
         arrPlayer.add("1");
         arrPlayer.add("2");
-        ArrayList<String> strategy = new ArrayList<String>();
+        ArrayList<String> strategy=new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gamePlay.setPlayers(arrPlayer, strategy);
+        gamePlay.setPlayers(arrPlayer,strategy);
         HashMap<String, Country> countries = new HashMap<>();
         HashMap<String, Continent> continents = new HashMap<>();
 
@@ -64,31 +63,32 @@ public class PercentageOfMapPlayScreenActivityTest {
 
         country1.setPlayer(gamePlay.getPlayers().get(0));
         country2.setPlayer(gamePlay.getPlayers().get(0));
-        country3.setPlayer(gamePlay.getPlayers().get(1));
+        country3.setPlayer(gamePlay.getPlayers().get(0));
         country4.setPlayer(gamePlay.getPlayers().get(1));
 
-        countries.put("India", country1);
-        countries.put("Sri", country2);
-        countries.put("Pak", country3);
-        countries.put("Nepal", country4);
+        countries.put("India",country1);
+        countries.put("Sri",country2);
+        countries.put("Pak",country3);
+        countries.put("Nepal",country4);
         gamePlay.setCountries(countries);
-        continents.put("Asia", continent1);
-        continents.put("Europe", continent2);
+        continents.put("Asia",continent1);
+        continents.put("Europe",continent2);
         gamePlay.setContinents(continents);
 
     }
 
     /**
-     * Test percentage of map owned by player
+     * Test continents owned by player and asserts true if test succeds
      */
     @Test
-    public void percentageOwnedByPlayerTest() {
-        assertTrue(gamePlay.getPlayers().get(0).getPercentageOfMapOwnedByPlayer(gamePlay) == 50);
+    public void continentsOwned() {
+        assertTrue(gamePlay.getPlayers().get(0).getContinentsOwnedByPlayer(gamePlay) == 1 );
     }
 
     /**
-     * Set's gameplay object to null
+     * Sets gamplay object to null
      */
+
     @After
     public void cleanUp() {
         gamePlay = null;
