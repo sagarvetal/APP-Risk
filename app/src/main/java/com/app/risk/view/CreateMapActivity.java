@@ -700,6 +700,13 @@ public class CreateMapActivity extends Activity {
         canvas.drawLine(x,y,neighbourX,neighbourY, line);
     }
 
+    /**
+     * Draws text in circle
+     * @param str text to be dr
+     * @param x
+     * @param y
+     * @param text
+     */
     public void drawText(String str,float x,float y,Paint text){
         canvas.drawText(str,x,y,text);
     }
