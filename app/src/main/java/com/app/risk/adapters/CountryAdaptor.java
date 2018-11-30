@@ -1,4 +1,4 @@
-package com.app.risk.utility;
+package com.app.risk.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
