@@ -13,6 +13,7 @@ import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -146,5 +147,10 @@ public class RandomStrategyTest {
             flag = true;
         }
         assertTrue(flag == true);
+    }
+
+    @After
+    public void cleanUp(){
+        gamePlay = null;
     }
 }
