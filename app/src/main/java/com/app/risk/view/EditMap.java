@@ -112,7 +112,7 @@ public class EditMap extends AppCompatActivity {
                     System.out.println("::::::::::::::::::::::my path:::::::::::::::::" + PathHolder);
 
                     List<GameMap> listOfGameMapList = mapReader.returnGameMapFromFile(getApplicationContext(),PathHolder);
-                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::" + MapReader.getMapList(getApplicationContext()));
+                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::" + (new MapReader()).getMapList(getApplicationContext()));
                     System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::" + listOfGameMapList.size());
 
                     listOfGameMap.addAll(listOfGameMapList);

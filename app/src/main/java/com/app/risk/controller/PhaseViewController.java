@@ -1,6 +1,8 @@
 package com.app.risk.controller;
 
 
+import android.content.Context;
+
 import com.app.risk.constants.FileConstants;
 import com.app.risk.model.PhaseModel;
 import com.app.risk.view.PlayScreenActivity;
@@ -23,13 +25,12 @@ import java.util.Scanner;
 
 public class PhaseViewController {
     /**
-     * phaseViewController holds the instance of the phase view controller.
-     *
+     * It is a singleton instance of the controller
      */
     private static PhaseViewController phaseViewController;
+
     /**
-     * dirPath stores the file path where the log file is stored.
-     *
+     * It is a directory path to store logs
      */
     private String dirPath;
     /**
@@ -37,6 +38,7 @@ public class PhaseViewController {
      *
      */
     public static PhaseModel logmsg;
+
     /**
      * This is a default constructor.
      *
@@ -106,10 +108,10 @@ public class PhaseViewController {
      * This is a method that reads the logs from the file
      * @return List<String> list of the messages that have been logged into the file
      */
-    public List<String> readLog() {
+    public ArrayList<String> readLog(final Context context) {
         Scanner scanner = null;
         ArrayList<String> logs = new ArrayList<String>();
-        File logDirectory = new File(PhaseViewController.getInstance().dirPath);
+        File logDirectory = new File(context.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH);
         if (!logDirectory.exists())
             logDirectory.mkdirs();
         try {
