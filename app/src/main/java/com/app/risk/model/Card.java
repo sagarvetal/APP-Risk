@@ -11,7 +11,13 @@ import java.util.List;
  */
 public class Card implements Serializable {
 
+    /**
+     * Defines the type of card
+     */
     private String type;
+    /**
+     * Checks weather the card is selected or not.
+     */
     private boolean isSelected;
 
     /**

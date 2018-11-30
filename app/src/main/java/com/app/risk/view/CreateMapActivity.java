@@ -28,7 +28,7 @@ import com.app.risk.controller.MapDriverController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
-import com.app.risk.utility.CountryAdaptor;
+import com.app.risk.adapters.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
@@ -46,14 +46,6 @@ public class CreateMapActivity extends Activity {
      * Radius of circle
      */
     public static final int RADIUS = 65;
-    /**
-     * filename for 3D map
-     */
-    private static final String fileName3DMap = "3D.map";
-    /**
-     * filename for world map
-     */
-    private static final String fileNameWorldMap = "World.map";
 
     /**
      * Checks if is edit mode true
@@ -61,7 +53,7 @@ public class CreateMapActivity extends Activity {
     private boolean isEditMode = false;
 
     /**
-     * list of country shown
+     * Defines object to listview  to display country
      */
     private ListView listCountry;
     /**
@@ -69,7 +61,7 @@ public class CreateMapActivity extends Activity {
      */
     private ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
     /**
-     * adaptor object
+     * adaptor object which manages list of countries
      */
     private CountryAdaptor countryAdaptor;
     /**
@@ -81,11 +73,11 @@ public class CreateMapActivity extends Activity {
      */
     private ArrayList<Integer> arrCountryAdded = new ArrayList<>();
     /**
-     * Index of to button
+     * Index of to button which stores the toCountry in arrCountriesRepresentationOnGraph
      */
     private int indexOfToButton = -1;
     /**
-     * Index of from button
+     * Index of from button which stores the fromCountry in arrCountriesRepresentationOnGraph
      */
     private int indexOfFromButton = -1;
     /**
@@ -97,11 +89,11 @@ public class CreateMapActivity extends Activity {
      */
     private int totalCountriesAddedInGraph = 0;
     /**
-     * surfaceview object
+     * surfaceview object which holds canvas
      */
     private SurfaceView surfaceView;
     /**
-     * canvas object
+     * canvas object which manages rendering of countries
      */
     private Canvas canvas;
     /**
