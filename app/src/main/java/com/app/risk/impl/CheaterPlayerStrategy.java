@@ -1,6 +1,7 @@
 package com.app.risk.impl;
 
 import com.app.risk.Interfaces.Strategy;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
@@ -28,7 +29,10 @@ public class CheaterPlayerStrategy implements Strategy,Serializable {
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
 
         for(final Country country : countriesOwnedByPlayer){
+            PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
             country.setNoOfArmies(country.getNoOfArmies() * 2);
+            PhaseViewController.getInstance().addAction(player.getName() + "has doubled the armies on " + country.getNameOfCountry());
+            PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
         }
         player.setNoOfArmies(player.getNoOfArmies() * 2);
     }
@@ -50,8 +54,10 @@ public class CheaterPlayerStrategy implements Strategy,Serializable {
                 final Country defenderCountry = gamePlay.getCountries().get(neighbour);
                 final int noOfArmies = defenderCountry.getNoOfArmies();
                 defenderCountry.getPlayer().decrementArmies(noOfArmies);
+                defenderCountry.getPlayer().decrementCountries(1);
                 defenderCountry.setPlayer(player);
                 defenderCountry.getPlayer().incrementArmies(noOfArmies);
+                PhaseViewController.getInstance().addAction(player.getName() + " conquered " + defenderCountry.getNameOfCountry());
             }
         }
         if(player.isPlayerWon(gamePlay.getCountries())){
@@ -74,8 +80,11 @@ public class CheaterPlayerStrategy implements Strategy,Serializable {
             for(final String neighbour : adjacentCountries){
                 if(player.getId() != gamePlay.getCountries().get(neighbour).getPlayer().getId()){
                     final int noOfArmies = country.getNoOfArmies();
+                    PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
                     country.incrementArmies(noOfArmies);
                     player.incrementArmies(noOfArmies);
+                    PhaseViewController.getInstance().addAction(player.getName() + "has doubled the armies on " + country.getNameOfCountry());
+                    PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
                     break;
                 }
             }

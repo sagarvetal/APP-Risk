@@ -17,6 +17,28 @@ import java.util.List;
 public class MapDriverController {
 
     /**
+     * It is a singleton instance of the controller
+     */
+    private static MapDriverController mapDriverController;
+
+    /**
+     * This is default constructor.
+     */
+    private MapDriverController() {
+    }
+
+    /**
+     * This method implements the singleton pattern for MapDriverController
+     * @return The static reference of MapDriverController.
+     */
+    public static MapDriverController getInstance() {
+        if(mapDriverController == null) {
+            mapDriverController = new MapDriverController();
+        }
+        return mapDriverController;
+    }
+
+    /**
      * Return GameMap object after loading file to edit map
      *
      * @param context current state/context of the application
