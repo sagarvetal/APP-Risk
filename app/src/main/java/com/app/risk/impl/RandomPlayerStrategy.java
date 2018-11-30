@@ -161,7 +161,7 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
                     randomFromCountry.decrementArmies(noOfArmies);
                     toCountry.incrementArmies(noOfArmies);
                     isFortificationDone = true;
-                    PhaseViewController.getInstance().addAction(noOfArmies + "moved from " + randomFromCountry + " to " + toCountry);
+                    PhaseViewController.getInstance().addAction(noOfArmies + " armies moved from " + randomFromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
                     break;
                 }
             }
