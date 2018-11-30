@@ -241,7 +241,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
             }
             else{
                 Toast.makeText(this, "" +
-                        "Please Select at least one stratergy \n" +
+                        "Please Select at least one map \n" +
                         "and two player stratergies.", Toast.LENGTH_SHORT).show();
             }
         }

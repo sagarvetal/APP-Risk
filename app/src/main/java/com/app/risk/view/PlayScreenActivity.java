@@ -39,6 +39,7 @@ import com.app.risk.model.GamePlay;
 import com.app.risk.model.PhaseModel;
 import com.app.risk.model.Player;
 import com.app.risk.controller.PhaseViewController;
+import com.app.risk.utility.LogManager;
 import com.app.risk.utility.MapReader;
 
 import java.io.File;
@@ -183,7 +184,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_screen);
 
-        PhaseViewController.getInstance().init(this.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH,this);
+        PhaseViewController.getInstance().init(this);
         logView=findViewById(R.id.activity_play_screen_logview);
 
         logViewArrayList = new ArrayList<>();
@@ -496,6 +497,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         countriesOwnedByPlayer = gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId());
         adapter = new PlayScreenRVAdapter(this, gamePlay, countriesOwnedByPlayer);
         recyclerView.setAdapter(adapter);
+
         pName.setText(gamePlay.getCurrentPlayer().getName());
         pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
         pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
@@ -692,7 +694,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
      * Shows the alert dialog for the full log of system
      */
     public void showLogDialog(){
-        ArrayList<String> logViewList = PhaseViewController.getInstance().readLog(this);
+        ArrayList<String> logViewList = LogManager.readLog(this);
         String[] logViewArray = new String[logViewList.size()];
         Toast.makeText(this, ""
                 +logViewArray.length, Toast.LENGTH_SHORT).show();
@@ -701,13 +703,14 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
         new AlertDialog.Builder(PlayScreenActivity.this)
                 .setItems(logViewArray,null)
-                .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
+                .setTitle("Log View ")
                 .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         performExitGame();
                     }
                 })
+                .setNeutralButton("Back",null)
                 .setCancelable(false)
                 .create().show();
     }

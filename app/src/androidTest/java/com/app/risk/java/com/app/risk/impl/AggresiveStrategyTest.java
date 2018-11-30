@@ -124,7 +124,7 @@ public class AggresiveStrategyTest {
         int beforeAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
         gamePlay.getCurrentPlayer().attackPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
         int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
-        assertTrue(afterAttackArmies == 2);
+        assertTrue(afterAttackArmies == 1);
     }
 
     /**
@@ -153,7 +153,7 @@ public class AggresiveStrategyTest {
         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),null);
         int india=gamePlay.getCountries().get("India").getNoOfArmies();
         int america=gamePlay.getCountries().get("America").getNoOfArmies();
-        assertTrue(gamePlay.getCountries().get("America").getNoOfArmies()==4);
+        assertTrue(gamePlay.getCountries().get("Italy").getNoOfArmies()==4);
     }
 
     /**
