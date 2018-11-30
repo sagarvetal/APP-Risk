@@ -99,7 +99,8 @@ public class EditMap extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("edit Mode",true);
                     bundle.putSerializable("maps",maps);
-                    bundle.putSerializable("arrGameData",listOfGameMap);
+                    bundle.putSerializable("arrGameData",listOfGameMap
+                    );
                     editMap.putExtras(bundle);
                     startActivity(editMap);
 
