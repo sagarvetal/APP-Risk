@@ -483,7 +483,7 @@ public class Player extends Observable implements Serializable {
                 }
             }
             if(isWholeContinentOccupied) {
-                PhaseViewController.getInstance().addAction(getName() + " holds complete continent " + continent);
+                PhaseViewController.getInstance().addAction(getName() + " holds complete continent " + continent.getNameOfContinent());
                 PhaseViewController.getInstance().addAction(getName() + " gets " + continent.getArmyControlValue() + " armies corresponding to continent's control value.");
                 continentValue += continent.getArmyControlValue();
             }

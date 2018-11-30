@@ -7,6 +7,7 @@ import com.app.risk.java.com.app.risk.controller.ReinforcementPhaseControllerTes
 import com.app.risk.java.com.app.risk.controller.StartUpPhaseControllerTest;
 import com.app.risk.java.com.app.risk.impl.AggresiveStrategyTest;
 import com.app.risk.java.com.app.risk.impl.BenevolentPlayerStrategyTest;
+import com.app.risk.java.com.app.risk.impl.CheaterStrategyTest;
 import com.app.risk.java.com.app.risk.impl.RandomStrategyTest;
 import com.app.risk.java.com.app.risk.utility.MapWriterTest;
 import com.app.risk.java.com.app.risk.utility.MapReaderTest;
@@ -47,6 +48,7 @@ import org.junit.runners.Suite;
         PlayScreenActivityTest.class,//contains test cases which checks the continents owned by player
         AggresiveStrategyTest.class,//contains test cases which test aggressive player strategy
         RandomStrategyTest.class,///contains test cases which test random player strategy
+        CheaterStrategyTest.class,///contains test cases which test cheater player strategy
 })
 public class RiskProjectTestSuite {
 }
