@@ -37,7 +37,7 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
         while(player.getReinforcementArmies()!=0){
             final Country reinforcementCountry = countriesOwnedByPlayer.get(random.nextInt(countriesOwnedByPlayer.size()));
             int noOfArmies = random.nextInt(player.getReinforcementArmies());
-            if(player.getReinforcementArmies() == 1){
+            if(noOfArmies == 0){
                 noOfArmies = 1;
             }
             reinforcementCountry.incrementArmies(noOfArmies);
@@ -59,6 +59,9 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         int numberOfTurns = random.nextInt(gamePlay.getCountries().values().size() - countriesOwnedByPlayer.size());
+        if(numberOfTurns == 0){
+            numberOfTurns = 1;
+        }
         for (int i = 0; i < numberOfTurns; i++) {
             int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size());
             Country fromCountry = countriesOwnedByPlayer.get(fromCountryIndex);
@@ -103,8 +106,11 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
         PhaseViewController.getInstance().addAction("\nAttacking country: "+fromCountry.getNameOfCountry());
         PhaseViewController.getInstance().addAction("Defending country: "+toCountry.getNameOfCountry());
         final StringBuilder attackResult = new StringBuilder();
-        while(fromCountry.getNoOfArmies() != 1 || toCountry.getNoOfArmies() != 0) {
+        while(fromCountry.getNoOfArmies() > 1 || toCountry.getNoOfArmies() > 0) {
             attackingDiceRoll = random.nextInt(fromCountry.getNoOfArmies() > 3 ? 3 : fromCountry.getNoOfArmies()-1);
+            if(attackingDiceRoll == 0){
+                attackingDiceRoll = 1;
+            }
             int defendingDiceRoll = AttackPhaseController.getInstance().getDefenderDices(toCountry);
             final StringBuilder result = player.performAttack(fromCountry, toCountry, attackingDiceRoll, defendingDiceRoll);
             attackResult.append(result);
@@ -144,7 +150,10 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
                 final List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(randomFromCountry, countriesOwnedByPlayer,false);
                 if(reachableCountries.size() > 0) {
                     final Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size())));
-                    final int noOfArmies = random.nextInt(randomFromCountry.getNoOfArmies());
+                    int noOfArmies = random.nextInt(randomFromCountry.getNoOfArmies());
+                    if(noOfArmies == 0){
+                        noOfArmies = 1;
+                    }
                     randomFromCountry.decrementArmies(noOfArmies);
                     toCountry.incrementArmies(noOfArmies);
                     isFortificationDone = true;
