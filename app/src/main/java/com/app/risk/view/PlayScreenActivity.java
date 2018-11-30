@@ -62,58 +62,114 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
     /**
      * pImage: image of the player
-     * pName: name of the player
-     * pArmies: armies of the player
-     * pCountries: number of player countries
-     * recyclerView: hold and create data representation of player countries
-     * gamePlay: To manage the state and retrieve data
-     * mapName: contains the name of the map
      */
     private ImageView pImage;
-    private TextView pName, pArmies, pCountries;
+    /**
+     * pName: name of the player
+     */
+    private TextView pName;
+    /**
+     * pArmies: armies of the player
+     */
+    private TextView pArmies;
+    /**
+     * pCountries: number of player countries
+     */
+    private TextView pCountries;
+    /**
+     * recyclerView: hold and create data representation of player countries
+     */
     private RecyclerView recyclerView;
+    /**
+     * cardView: holds the reference of a card
+     */
     private CardView cardView;
+    /**
+     * gamePlay: To manage the state and retrieve data
+     */
     private GamePlay gamePlay;
+    /**
+     * adapter: holds the data of play screen adapter
+     */
     private PlayScreenRVAdapter adapter;
+    /**
+     * gameMode: holds the current game mode
+     */
     private String gameMode;
+
+    /**
+     * mapName: contains the name of the map
+     */
     private String mapName;
 
     /**
      * playerNames: contains the name of the players
-     * playerStrategies: contains the strategies of the player
-     * actionBar: reference to the top toolbar
-     * floatingActionButton: the phase changing button
-     * logView: phase view represented in the list view
-     * logViewAdapter: holds the data of the list view
-     * logViewArrayList: holds the data of list view
-     * playerStateAdapter: holds the state of the player
-     *
      */
     private ArrayList<String> playerNames;
+
+    /**
+     * playerStrategies: contains the strategies of the player
+     */
     private ArrayList<String> playerStrategies;
+    /**
+     * actionBar: reference to the top toolbar
+     */
     private ActionBar actionBar;
+    /**
+     * floatingActionButton: the phase changing button
+     */
     private FloatingActionButton floatingActionButton;
+    /**
+     * logView: phase view represented in the list view
+     */
     private ListView logView;
+    /**
+     * logViewAdapter: holds the data of the list view
+     */
     public static ArrayAdapter<String> logViewAdapter;
+    /**
+     * logViewArrayList: holds the data of list view
+     */
     public static ArrayList<String> logViewArrayList;
+    /**
+     * playerStateAdapter: holds the state of the player
+     */
     private PlayerStateAdapter playerStateAdapter;
 
     /**
-     * listPlayerState: holds the list of all the players
-     * countriesOwnedByPlayer: holds all the countries hold by player
-     * noOfTurns: restrictive turns in tournament mode for each player
-     * noOfGames: number of games in tournament mode
-     * currentGameCount: holds the current count of game
-     * tournamentResult: holds the results of the tournament mode
-     * winningPlayers: holds the data of winning players in games
+     * mapList: list of all the maps
+     */
+    private ArrayList<String> mapList;
+
+    /**
+     * listPlayerState: holds the list of each player(world domination view)
      */
     private ListView listPlayerState ;
+    /**
+     * countriesOwnedByPlayer: holds all the countries hold by player
+     */
     private ArrayList<Country> countriesOwnedByPlayer;
-    private ArrayList<String> mapList;
+    /**
+     * noOfTurns: restrictive turns in tournament mode for each player
+     */
+
     private int noOfTurns;
+
+    /**
+     * noOfGames: number of games in tournament mode
+     */
     private int noOfGames;
+    /**
+     * currentGameCount: holds the current count of game
+     */
     private int currentGameCount;
+    /**
+     * tournamentResult: holds the results of the tournament mode
+     */
     private LinkedHashMap<String, ArrayList<String>> tournamentResult = new LinkedHashMap<>();
+    /**
+     * winningPlayers: holds the data of winning players in games
+     */
     private ArrayList<String> winningPlayers;
 
     /**
@@ -318,7 +374,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         if (phase != null) {
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
-                    gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    MapReader mapReader = new MapReader();
+                    gamePlay = mapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
                     gamePlay.setNoOfTurns(noOfTurns);
                     gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
@@ -514,7 +571,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
         AlertDialog backAlertDialog = backAlertDialogBox.show();
         Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        if (GamePlayConstants.PHASE_IN_PROGRESS) {
+        if(gamePlay.getCurrentPlayer().isHuman()) {
+            if (GamePlayConstants.PHASE_IN_PROGRESS) {
+                saveGameButton.setEnabled(false);
+            }
+        } else {
             saveGameButton.setEnabled(false);
         }
     }

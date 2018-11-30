@@ -28,12 +28,19 @@ public class PlayScreenRVAdapter extends RecyclerView.Adapter<PlayScreenRVAdapte
 
     /**
      * gameplay : To manage the state and retrieve data
-     * countries: Countries arrayList to hold countries hold by player data
-     * neighbourCountries : ArrayList ot hold the names of neighbouring countries
      */
     private GamePlay gamePlay;
+    /**
+     * countries: Countries arrayList to hold countries hold by player data
+     */
     private ArrayList<Country> countries;
+    /**
+     * context: instance of the invoking activity
+     */
     private Context context;
+    /**
+     * neighbourCountries : ArrayList ot hold the names of neighbouring countries
+     */
     private ArrayList<String> neighbouringCountries;
 
 
