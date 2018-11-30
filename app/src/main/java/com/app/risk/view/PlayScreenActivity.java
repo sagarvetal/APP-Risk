@@ -680,13 +680,14 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         }
         new AlertDialog.Builder(PlayScreenActivity.this)
                 .setItems(logViewArray,null)
-                .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
+                .setTitle("Log View ")
                 .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         performExitGame();
                     }
                 })
+                .setNeutralButton("Back",null)
                 .setCancelable(false)
                 .create().show();
     }
