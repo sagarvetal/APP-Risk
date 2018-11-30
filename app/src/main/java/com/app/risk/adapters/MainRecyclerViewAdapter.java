@@ -202,7 +202,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     }
 
     public void showLogDialog(){
-        ArrayList<String> logViewList = PhaseViewController.getInstance().readLog(invokingActivity);
+        ArrayList<String> logViewList = LogManager.readLog(invokingActivity);
         String[] logViewArray = new String[logViewList.size()];
 
         if(logViewArray.length == 0){
