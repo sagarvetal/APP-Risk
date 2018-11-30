@@ -400,7 +400,13 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                         adapter = new PlayScreenRVAdapter(this, gamePlay, countriesOwnedByPlayer);
                         recyclerView.setAdapter(adapter);
-                        pName.setText(gamePlay.getCurrentPlayer().getName());
+                        if(gameMode.equals(GamePlayConstants.TOURNAMENT_MODE)){
+                            pName.setText(gamePlay.getCurrentPlayer().getName() + "( "
+                             + gamePlay.getCurrentPlayer().getStrategy() + " )");
+                        }
+                        else{
+                            pName.setText(gamePlay.getCurrentPlayer().getName());
+                        }
                         pArmies.setText("" + gamePlay.getCurrentPlayer().getNoOfArmies());
                         pCountries.setText("" + gamePlay.getCurrentPlayer().getNoOfCountries());
 
