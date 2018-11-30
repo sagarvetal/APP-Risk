@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -80,6 +81,7 @@ public class AggresiveStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
+        PhaseViewController.getInstance().init(context);
     }
 
     /**
@@ -153,7 +155,7 @@ public class AggresiveStrategyTest {
         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),null);
         int india=gamePlay.getCountries().get("India").getNoOfArmies();
         int america=gamePlay.getCountries().get("America").getNoOfArmies();
-        assertTrue(gamePlay.getCountries().get("Italy").getNoOfArmies()==4);
+        assertTrue(gamePlay.getCountries().get("America").getNoOfArmies()==4);
     }
 
     /**

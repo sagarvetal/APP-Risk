@@ -5,6 +5,7 @@ import com.app.risk.java.com.app.risk.controller.FortificationPhaseControllerTes
 import com.app.risk.java.com.app.risk.controller.MapDriverControllerTest;
 import com.app.risk.java.com.app.risk.controller.ReinforcementPhaseControllerTest;
 import com.app.risk.java.com.app.risk.controller.StartUpPhaseControllerTest;
+import com.app.risk.java.com.app.risk.view.TournamentModeTest;
 import com.app.risk.java.com.app.risk.impl.AggresiveStrategyTest;
 import com.app.risk.java.com.app.risk.impl.BenevolentPlayerStrategyTest;
 import com.app.risk.java.com.app.risk.impl.CheaterStrategyTest;
@@ -49,6 +50,7 @@ import org.junit.runners.Suite;
         AggresiveStrategyTest.class,//contains test cases which test aggressive player strategy
         RandomStrategyTest.class,///contains test cases which test random player strategy
         CheaterStrategyTest.class,///contains test cases which test cheater player strategy
+        TournamentModeTest.class ///contains test case for tournament
 })
 public class RiskProjectTestSuite {
 }

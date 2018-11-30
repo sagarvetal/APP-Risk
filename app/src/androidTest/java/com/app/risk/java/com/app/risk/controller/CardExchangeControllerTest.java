@@ -7,6 +7,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.CardExchangeController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.model.Card;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
@@ -112,6 +113,7 @@ public class CardExchangeControllerTest {
         gm.setCurrentPlayer(gm.getPlayers().get(0));
         gm.setCards();
         context = InstrumentationRegistry.getTargetContext();
+        PhaseViewController.getInstance().init(context);
     }
 
     /**

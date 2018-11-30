@@ -1,21 +1,17 @@
 package com.app.risk.java.com.app.risk.controller;
-
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
-
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
-
+import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -216,7 +212,7 @@ public class AttackPhaseControllerTest {
      * This method checks whether after the attack phase the armies count has reduced in attacker and defender
      */
     @Test
-    public void attackerAndDefenderArmiesTest() {
+    public void attackerAndDefenderArmiesValidationTest() {
         gm.getCountries().get("India").setNoOfArmies(4);
         AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
         gm.getPlayers().get(0).performAttack(gm.getCountries().get("India"), gm.getCountries().get("Pakistan"), 3, 2);
@@ -294,14 +290,53 @@ public class AttackPhaseControllerTest {
         assertFalse(gm.getCurrentPlayer().isMoreAttackPossible(gm, countryArrayList));
 
     }
+
+    /**
+     * This method checks number of armies moved when attacker conquers the country
+     */
+    @Test
+    public void validMoveAfterConquer() {
+        ArrayList<String> playerNames = new ArrayList<String>();
+        playerNames.add("Player1");
+        playerNames.add("Player2");
+        ArrayList<String> strategy = new ArrayList<String>();
+        strategy.add(GamePlayConstants.RANDOM_STRATEGY);
+        strategy.add(GamePlayConstants.RANDOM_STRATEGY);
+        gm.setPlayers(playerNames, strategy);
+        AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
+        gm.getPlayers().get(0).performAllOutAttack(gm.getCountries().get("India"), gm.getCountries().get("Pakistan"));
+        assertTrue(gm.getCountries().get("India").getNoOfArmies() == 1 || gm.getCountries().get("Pakistan").getNoOfArmies() == 0);
+        if(gm.getCountries().get("India").getPlayer()==gm.getCountries().get("Pakistan").getPlayer()){
+            assertTrue(gm.getCountries().get("Pakistan").getNoOfArmies()<=3);
+        }
+        else
+        {
+            int armies=gm.getCountries().get("India").getNoOfArmies();
+            System.out.println(armies);
+            assertTrue(armies==1);
+        }
+
+    }
     /**
      * This method checks whether the player win the game
      */
     @Test
     public void playerWonTest() {
         AttackPhaseController ac = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gm);
-        assertTrue(gm.getCurrentPlayer().isPlayerWon(countryList));
 
+        gm.getPlayers().get(0).performAllOutAttack(gm.getCountries().get("India"), gm.getCountries().get("Pakistan"));
+        assertTrue(gm.getCountries().get("India").getNoOfArmies() == 1 || gm.getCountries().get("Pakistan").getNoOfArmies() == 0);
+        if(gm.getCountries().get("India").getPlayer()==gm.getCountries().get("Pakistan").getPlayer()){
+            assertTrue(gm.getCurrentPlayer().isPlayerWon(gm.getCountries()));
+        }
+        else
+        {
+            int armies=gm.getCountries().get("India").getNoOfArmies();
+            System.out.println(armies);
+            assertTrue(armies==1);
+            gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(0));
+            assertTrue(gm.getCurrentPlayer().isPlayerWon(gm.getCountries()));
+        }
     }
     /**
      * This method gets executed after the test case has been executed

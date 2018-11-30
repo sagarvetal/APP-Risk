@@ -41,7 +41,7 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
         final int min = findleastArmies(countriesOwnedByPlayer);
         for (final Country country : countriesOwnedByPlayer) {
             if (country.getNoOfArmies() == min) {
-                PhaseViewController.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
+                PhaseViewController.getInstance().addAction("\nWeak Country found : " + country.getNameOfCountry());
                 PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
                 country.incrementArmies(reinforcement);
                 player.decrementReinforcementArmies(reinforcement);

@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.impl.CheaterPlayerStrategy;
@@ -81,7 +82,7 @@ public class CheaterStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
-
+        PhaseViewController.getInstance().init(context);
     }
 
     /**
@@ -153,18 +154,12 @@ public class CheaterStrategyTest {
         gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
-
-        // india and italy have america as their neighbour
         int armiesOnIndia = gamePlay.getCountries().get("India").getNoOfArmies();
         int armiesOnItaly = gamePlay.getCountries().get("Italy").getNoOfArmies();
-
-
         FortificationPhaseController.getInstance().init(context, gamePlay);
         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
-
         assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == (armiesOnIndia * 2)
                 && gamePlay.getCountries().get("Italy").getNoOfArmies() == (armiesOnItaly * 2));
-
     }
 
     /**
