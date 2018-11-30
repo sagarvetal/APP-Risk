@@ -647,7 +647,7 @@ public class CreateMapActivity extends Activity {
         for (GameMap map : arrCountriesRepresentationOnGraph) {
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
-            if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
+            if (map.getCoordinateX()<=373) {
                 drawCircle(getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),65,paint);
             } else {
                 drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
@@ -660,11 +660,10 @@ public class CreateMapActivity extends Activity {
                 }
             }
             if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX()-10),getYCordinate(map.getCoordinateY()-10),text);
+                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),text);
             } else {
                 drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
             }
-
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
         currentIndexCountrySelected = -1;
