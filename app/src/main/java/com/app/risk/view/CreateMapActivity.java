@@ -688,6 +688,14 @@ public class CreateMapActivity extends Activity {
         currentIndexCountrySelected = -1;
     }
 
+    /**
+     * Draws line on canvas
+     * @param x starting x
+     * @param y starting y
+     * @param neighbourX neighbour x
+     * @param neighbourY neighbour y
+     * @param line paint object
+     */
     public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
         canvas.drawLine(x,y,neighbourX,neighbourY, line);
     }
