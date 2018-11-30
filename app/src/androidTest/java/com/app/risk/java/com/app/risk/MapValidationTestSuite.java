@@ -1,30 +1,20 @@
 package com.app.risk.java.com.app.risk;
-
-import com.app.risk.java.com.app.risk.UtilityOld.AllOutAttackTest;
-import com.app.risk.java.com.app.risk.UtilityOld.AttackPhaseTest;
-import com.app.risk.java.com.app.risk.UtilityOld.CardExchangePossibleTest;
-import com.app.risk.java.com.app.risk.UtilityOld.CheckAfterEachAttackTest;
-import com.app.risk.java.com.app.risk.UtilityOld.ConnectedGraphTest;
-import com.app.risk.java.com.app.risk.UtilityOld.ContinentsOwnedByPlayerTest;
-import com.app.risk.java.com.app.risk.UtilityOld.DisConnectedGraphTest;
-import com.app.risk.java.com.app.risk.UtilityOld.ExchangeCardForArmiesTest;
-import com.app.risk.java.com.app.risk.UtilityOld.FortificationConnectedTest;
-import com.app.risk.java.com.app.risk.UtilityOld.FortificationUnConnectedTest;
-import com.app.risk.java.com.app.risk.UtilityOld.InvalidMapTest;
-import com.app.risk.java.com.app.risk.UtilityOld.MapReaderTest;
-import com.app.risk.java.com.app.risk.UtilityOld.OneContinentCheckTest;
-import com.app.risk.java.com.app.risk.UtilityOld.PercentageOfMapOwnedByPlayerTest;
-import com.app.risk.java.com.app.risk.UtilityOld.PreAttackAdjacentCountryTest;
-import com.app.risk.java.com.app.risk.UtilityOld.PreAttackSufficientArmyTest;
-import com.app.risk.java.com.app.risk.UtilityOld.ReinforcementArmiesCountTest;
-import com.app.risk.java.com.app.risk.UtilityOld.RemoveCardsAfterExchange;
-import com.app.risk.java.com.app.risk.UtilityOld.SaveMapTest;
-import com.app.risk.java.com.app.risk.UtilityOld.StartUpPhaseAssignArmiesTest;
-import com.app.risk.java.com.app.risk.UtilityOld.StartUpPhaseAssignCountriesTest;
-import com.app.risk.java.com.app.risk.UtilityOld.StartUpPhaseInitialArmies;
-import com.app.risk.java.com.app.risk.UtilityOld.SubGraphConnectedTest;
-import com.app.risk.java.com.app.risk.UtilityOld.UniqueCountryTest;
-import com.app.risk.java.com.app.risk.UtilityOld.ValidConnectedGraphTest;
+import com.app.risk.java.com.app.risk.controller1.AttackPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller1.CardExchangeControllerTest;
+import com.app.risk.java.com.app.risk.controller1.FortificationPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller1.MapDriverControllerTest;
+import com.app.risk.java.com.app.risk.controller1.ReinforcementPhaseControllerTest;
+import com.app.risk.java.com.app.risk.controller1.StartUpPhaseControllerTest;
+import com.app.risk.java.com.app.risk.impl1.AggresiveStrategyTest;
+import com.app.risk.java.com.app.risk.impl1.BenevolentPlayerStrategyTest;
+import com.app.risk.java.com.app.risk.impl1.RandomStrategyTest;
+import com.app.risk.java.com.app.risk.utility1.MapWriterTest;
+import com.app.risk.java.com.app.risk.utility1.MapReaderTest;
+import com.app.risk.java.com.app.risk.utility1.MapVerificationTest;
+import com.app.risk.java.com.app.risk.utility1.SaveLoadGameTest;
+import com.app.risk.java.com.app.risk.view1.CardExchangeDialogTest;
+import com.app.risk.java.com.app.risk.view1.PercentageOfMapPlayScreenActivityTest;
+import com.app.risk.java.com.app.risk.view1.PlayScreenActivityTest;
 
 
 import org.junit.runner.RunWith;
@@ -41,31 +31,22 @@ import org.junit.runners.Suite;
  * Suite for Map Validation
  */
 @Suite.SuiteClasses({
-        ConnectedGraphTest.class,           //Validation for connected graph
-        MapReaderTest.class,                //Validation for reading the Map
-        OneContinentCheckTest.class,        //Checks for one continent countries
-        SubGraphConnectedTest.class,        //Checks whether subgraph is connected in graph
-        UniqueCountryTest.class,           //Checks whether countries are unique or not
-        SaveMapTest.class,                 //validates whther the map is saved or not
-        DisConnectedGraphTest.class,
-        ValidConnectedGraphTest.class,
-        InvalidMapTest.class,
-        FortificationConnectedTest.class,
-        FortificationUnConnectedTest.class,
-        ReinforcementArmiesCountTest.class,
-        StartUpPhaseAssignArmiesTest.class,
-        StartUpPhaseAssignCountriesTest.class,
-        StartUpPhaseInitialArmies.class,
-        PreAttackAdjacentCountryTest.class,
-        PreAttackSufficientArmyTest.class,
-        CheckAfterEachAttackTest.class,
-        AttackPhaseTest.class,
-        AllOutAttackTest.class,
-        CardExchangePossibleTest.class,
-        ExchangeCardForArmiesTest.class,
-        RemoveCardsAfterExchange.class,
-        PercentageOfMapOwnedByPlayerTest.class,
-        ContinentsOwnedByPlayerTest.class
+        AttackPhaseControllerTest.class,//contains test cases used to validate the attack phase.
+        CardExchangeControllerTest.class,//contains test cases used validate card assignment
+        FortificationPhaseControllerTest.class,//contains test cases which checks and validates the fortification phase
+        ReinforcementPhaseControllerTest.class,//contains test cases which checks and validates the reinforcement phase
+        StartUpPhaseControllerTest.class,//contains test cases which checks and validates the startup phase
+        MapDriverControllerTest.class,//contains test cases which checks whether the map is read properly or not
+        MapReaderTest.class,//contains test cases which checks whether the country in the map is unique or not
+        MapVerificationTest.class,//contains test cases which checks whether map is invalid or not
+        MapWriterTest.class,//contains test cases which checks whether the map is saved properly or not
+        SaveLoadGameTest.class,//contains test cases which checks whether the instance is saved to the map properly or not
+        BenevolentPlayerStrategyTest.class,//contains test cases which checks the benevolent player behaviour in all the three phases
+        CardExchangeDialogTest.class,//contains test cases which checks whether the cards have been removed after it has been exchanged for armies
+        PercentageOfMapPlayScreenActivityTest.class,//contains test cases which checks test percentage of the Map owned by player
+        PlayScreenActivityTest.class,//contains test cases which checks the continents owned by player
+        AggresiveStrategyTest.class,
+        RandomStrategyTest.class,
 })
 public class MapValidationTestSuite {
 }

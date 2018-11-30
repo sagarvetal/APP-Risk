@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.UtilityOld;
+package com.app.risk.java.com.app.risk.view1;
 
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.model.Continent;
@@ -17,7 +17,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * Class to test continents owned by player
  */
-public class ContinentsOwnedByPlayerTest {
+public class PlayScreenActivityTest {
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
     GamePlay gamePlay = new GamePlay();
 
     /**

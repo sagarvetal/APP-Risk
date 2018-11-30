@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.UtilityOld;
+package com.app.risk.java.com.app.risk.view1;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -18,18 +18,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
+
 /**
  * This class is used to check whether the cards have been removed after it has been exchanged for armies
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class RemoveCardsAfterExchange {
-    Context context = null;
-    GamePlay gm = null;
-    ArrayList<Card> cardList1=null;
-    ArrayList<Card> cardList2=null;
-    ArrayList<Card> cardList3=null;
+public class CardExchangeDialogTest {
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player1
+     */
+    ArrayList<Card> cardList1 = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player2
+     */
+    ArrayList<Card> cardList2 = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player3
+     */
+    ArrayList<Card> cardList3 = null;
     /**
      * This method gets executed before the test case
      * sets the gameplay instance with the values required for the testing and context of the test case
