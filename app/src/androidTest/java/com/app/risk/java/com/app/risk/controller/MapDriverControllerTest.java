@@ -21,8 +21,15 @@ import static org.junit.Assert.assertNotNull;
  * @version 1.0.0
  */
 public class MapDriverControllerTest {
+    /**
+     * fileLocation would hold the location of the file
+     */
     private String fileLocation;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+
 
     /**
      * This method gets executed before the test case

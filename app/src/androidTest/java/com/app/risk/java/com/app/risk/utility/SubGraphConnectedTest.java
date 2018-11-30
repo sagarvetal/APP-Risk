@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.model.GameMap;
+import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
 import com.app.risk.utility.MapVerification;
 
@@ -23,8 +24,18 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class SubGraphConnectedTest {
-    private String fileLocation;
-    Context context = null;
+    /**
+     * fileLocation instance would hold the target with class name
+     */
+    private String fileLocation = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
     /**
      * This method gets executed before the test case
      * sets the file location and the context of the test case

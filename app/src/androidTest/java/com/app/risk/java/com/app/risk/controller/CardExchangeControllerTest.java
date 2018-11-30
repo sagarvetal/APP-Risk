@@ -26,11 +26,27 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class CardExchangeControllerTest {
-    Context context = null;
-    GamePlay gm = null;
-    ArrayList<Card> cardList1=null;
-    ArrayList<Card> cardList2=null;
-    ArrayList<Card> cardList3=null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player1
+     */
+    ArrayList<Card> cardList1 = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player2
+     */
+    ArrayList<Card> cardList2 = null;
+    /**
+     * cardList1 instances would hold the list of all the cards hold by the player3
+     */
+    ArrayList<Card> cardList3 = null;
+
     /**
      * This method gets executed before the test case
      * sets the gameplay instance with the values required for the testing and context of the test case
@@ -56,10 +72,10 @@ public class CardExchangeControllerTest {
         countryList.get("Pakistan").setAdjacentCountries(pakistan);
 
         gm.setCountries(countryList);
-        ArrayList<String> strategy=new ArrayList<String>();
+        ArrayList<String> strategy = new ArrayList<String>();
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
         strategy.add(GamePlayConstants.HUMAN_STRATEGY);
-        gm.setPlayers(playerNames,strategy);
+        gm.setPlayers(playerNames, strategy);
         gm.getCountries().get("India").setPlayer(gm.getPlayers().get(0));
 
         gm.getCountries().get("Pakistan").setPlayer(gm.getPlayers().get(1));
@@ -67,33 +83,33 @@ public class CardExchangeControllerTest {
         gm.setCurrentPlayer(gm.getPlayers().get(0));
         gm.getCountries().get("Pakistan").setNoOfArmies(5);
         gm.getCountries().get("India").setNoOfArmies(4);
-        cardList1=new ArrayList<Card>();
-        Card card1=new Card("infantry");
+        cardList1 = new ArrayList<Card>();
+        Card card1 = new Card("infantry");
         card1.setSelected(true);
-        Card card2=new Card("infantry");
+        Card card2 = new Card("infantry");
         card2.setSelected(true);
-        Card card3=new Card("infantry");
+        Card card3 = new Card("infantry");
         card3.setSelected(true);
         cardList1.add(card1);
         cardList1.add(card2);
         cardList1.add(card3);
 
-        cardList2=new ArrayList<Card>();
-        Card card4=new Card("infantry");
+        cardList2 = new ArrayList<Card>();
+        Card card4 = new Card("infantry");
         card4.setSelected(true);
-        Card card5=new Card("cavalry");
+        Card card5 = new Card("cavalry");
         card5.setSelected(true);
-        Card card6=new Card("artillery");
+        Card card6 = new Card("artillery");
         card6.setSelected(true);
         cardList2.add(card4);
         cardList2.add(card5);
         cardList2.add(card6);
-       cardList3=new ArrayList<Card>();
-        Card card7=new Card("infantry");
+        cardList3 = new ArrayList<Card>();
+        Card card7 = new Card("infantry");
         card7.setSelected(true);
-        Card card8=new Card("cavalry");
+        Card card8 = new Card("cavalry");
         card8.setSelected(true);
-        Card card9=new Card("cavalry");
+        Card card9 = new Card("cavalry");
         card9.setSelected(true);
         cardList3.add(card7);
         cardList3.add(card8);
@@ -101,25 +117,25 @@ public class CardExchangeControllerTest {
         gm.getCurrentPlayer().setCards(cardList1);
         context = InstrumentationRegistry.getTargetContext();
     }
+
     /**
      * This method check whether card exchange is possible or not
      */
     @Test
-    public void cardExchangePossibleTest()
-    {
+    public void cardExchangePossibleTest() {
         assertTrue(gm.getCurrentPlayer().cardsExchangeable(cardList1));
         gm.getCurrentPlayer().setCards(cardList2);
         assertTrue(gm.getCurrentPlayer().cardsExchangeable(cardList2));
         gm.getCurrentPlayer().setCards(cardList3);
         assertFalse(gm.getCurrentPlayer().cardsExchangeable(cardList3));
     }
+
     /**
      * This method gets executed after the test case has been executed
      * its sets the game map to null
      */
     @After
-    public void cleanUp()
-    {
-        gm=null;
+    public void cleanUp() {
+        gm = null;
     }
 }
