@@ -117,7 +117,7 @@ public class MapVerificationTest {
         MapVerification mapVerification = new MapVerification();
         List<GameMap> listGameMap = mapReader.returnGameMapFromFile(context, fileLocation);
         mapVerification.mapVerification(listGameMap);
-        assertFalse(mapVerification.mapVerification(listGameMap));
+        assertFalse(mapVerification.checkContinentIsConnectedSubgraph());
 
     }
     /**
