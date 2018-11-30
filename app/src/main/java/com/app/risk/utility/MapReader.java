@@ -29,14 +29,35 @@ import java.util.List;
  */
 public class MapReader {
 
+    /**
+     * To read each line in the file loaded
+     */
     private String line;
 
+    /**
+     * Hashmap to store a Continent object with its name as the key
+     */
     private HashMap<String, Continent> continentHashMap = new HashMap<>();
+    /**
+     * Hashmap to store a Country object with its name as the key
+     */
     private HashMap<String, Country> countryHashMap = new HashMap<>();
+    /**
+     * Final gamePlay object which will be returned on calling the returnGamePlayFromFile() method
+     */
     private GamePlay finalGamePlay = new GamePlay();
 
+    /**
+     * Hashmap to store a GameMap object with the name of the country as the key
+     */
     private HashMap<String, GameMap> countryGameMapList = new HashMap<>();
+    /**
+     * List to store all the continents in the map
+     */
     private List<Continent> continentList = new ArrayList<>();
+    /**
+     * Final list of gameMap objects which will be returned on calling the returnGameMapFromFile() method
+     */
     private List<GameMap> finalGameMapList = new ArrayList<>();
 
     /**

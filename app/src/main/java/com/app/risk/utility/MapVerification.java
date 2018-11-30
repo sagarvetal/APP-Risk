@@ -1,11 +1,7 @@
 package com.app.risk.utility;
 
-import android.graphics.Paint;
-
 import com.app.risk.model.Continent;
-
 import com.app.risk.model.Country;
-
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
@@ -25,10 +21,25 @@ import java.util.Stack;
  */
 public class MapVerification {
 
+    /**
+     * List of gameMap objects that will be sent as parameter by the method requesting map verification
+     */
     private List<GameMap> gameMapList = new ArrayList<>();
+    /**
+     * A common hashmap which is being used to verify the 3rd and 4th validity checks
+     */
     private HashMap<Object, Object> mappingForVerification = new HashMap<>();
+    /**
+     * Stack to perform depth first search
+     */
     private Stack<GameMap> depthFirstTraversalStack = new Stack<>();
+    /**
+     * List of countries visited during depth first traversal
+     */
     private List<String> countriesVisited = new ArrayList<>();
+    /**
+     * Hashmap to store a mapping of all the countries that belong to one continent with continent as the key
+     */
     private HashMap<Continent, List<GameMap>> continentCountryMapping = new HashMap<>();
 
     /**
