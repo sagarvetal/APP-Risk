@@ -35,6 +35,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
 
     private String[] mapListArray;
     private boolean[] checkedStateMapArray,checkedStateStratergiesArray;
+    private MapReader mapReader = new MapReader();
 
 
     /**
@@ -80,7 +81,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         selectedPlayerStratergies = new ArrayList<>();
         selectedMapList = new ArrayList<>();
 
-        mapArrayList = MapReader.getMapList(this.getApplicationContext());
+        mapArrayList = mapReader.getMapList(this.getApplicationContext());
 
     }
 
@@ -118,7 +119,6 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             if(isChecked){
-                                MapReader mapReader = new MapReader();
                                 MapVerification mapVerification = new MapVerification();
                                 boolean validMap = mapVerification.mapVerification(mapReader.returnGameMapFromFile(TournamentMenuActivity.this, mapListArray[which]));
                                 if(validMap) {

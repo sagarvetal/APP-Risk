@@ -106,7 +106,7 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
         PhaseViewController.getInstance().addAction("\nAttacking country: "+fromCountry.getNameOfCountry());
         PhaseViewController.getInstance().addAction("Defending country: "+toCountry.getNameOfCountry());
         final StringBuilder attackResult = new StringBuilder();
-        while(fromCountry.getNoOfArmies() > 1 || toCountry.getNoOfArmies() > 0) {
+        while(fromCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() > 0) {
             attackingDiceRoll = random.nextInt(fromCountry.getNoOfArmies() > 3 ? 3 : fromCountry.getNoOfArmies()-1);
             if(attackingDiceRoll == 0){
                 attackingDiceRoll = 1;
