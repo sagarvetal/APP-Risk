@@ -42,28 +42,93 @@ import static java.sql.DriverManager.println;
  * @version 1.0.0
  */
 public class UserDrivenMapsActivity extends AppCompatActivity implements View.OnClickListener {
+    /**
+     * continentSelected holds the value of the continent selected.
+     */
     String continentSelected = "";
+    /**
+     * countrySelected holds the value of the country selected.
+     */
     String countrySelected = "";
+    /**
+     * continentValueSelected holds the value of the continent Value Selected
+     */
     int continentValueSelected;
+    /**
+     * continent is a UI component object which would display the list of continents to the user on User Interface.
+     */
     Spinner continent = null;
+    /**
+     * country is a UI component object which would display the list of countries to the user on User Interface.
+     */
     Spinner country = null;
+    /**
+     * continentValue is a UI component object which holds the continent value associated with the continent.
+     */
     EditText continentValue = null;
+    /**
+     * addCountry is a UI component which would add the country to the selected country list.
+     */
     Button addCountry = null;
+    /**
+     * connectMap is a UI component which would add the connections between the countries.
+     */
     Button connectMap = null;
+    /**
+     * addCustomValue is UI component which would help th user add the custom country and continent value.
+     */
     Button addCustomValue = null;
+    /**
+     * selectedCountryList holds the list of all the countries selected.
+     */
     ListView selectedCountryList = null;
-    UserDrivenMapsActivity currentobj = null;
+    /**
+     * countryListAdapter would bind the list of countries to the UI component.
+     */
     CountryAdaptor countryListAdapter = null;
+    /**
+     * countryAdapter holds the list of all the countries.
+     */
     ArrayAdapter<String> countryAdapter = null;
+    /**
+     * continentFlag is true if its continent.
+     */
     boolean continentFlag = false;
+    /**
+     * continentsList holds the list of all the continents to be displayed.
+     */
     List<String> continentsList = null;
+    /**
+     * presentcountryList holds the list of all the present countries.
+     */
     List<String> presentcountryList = null;
+    /**
+     * continentAdapter binds the list of continents to the UI.
+     */
     ArrayAdapter<String> continentAdapter = null;
+    /**
+     * currentContinent holds the value of the current continent.
+     */
     String currentContinent = "";
+    /**
+     * maps holds the continent value to the arraylist of countries
+     */
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
+    /**
+     * countryList holds the ArrayList of the UI Item which would contain the list of countries.
+     */
     ArrayList<UserDrivenMapsActivity.Item> countryList = new ArrayList<UserDrivenMapsActivity.Item>();
-    private  String fileName;
+    /**
+     *fileName holds the name of the map thst is being edited .
+     */
+    private String fileName;
+    /**
+     * sendBundle holds the map of key value pairs that is sent from the previous UI.
+     */
     Bundle sendBundle = new Bundle();
+    /**
+     * editMode is true if the UI is opened in the edit mode.
+     */
     Boolean editMode = false;
 
     /**
@@ -399,7 +464,7 @@ public class UserDrivenMapsActivity extends AppCompatActivity implements View.On
 
         if (editMode) {
             userMapConnect.putExtras(sendBundle);
-            userMapConnect.putExtra("fileName",fileName);
+            userMapConnect.putExtra("fileName", fileName);
         }
         startActivity(userMapConnect);
     }

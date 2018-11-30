@@ -20,6 +20,10 @@ import java.util.HashMap;
  * @version 1.0.0 (Date: 22/11/2018)
  */
 public class BenevolentPlayerStrategy implements Strategy,Serializable {
+    /**
+     * currentPhase stores the current phase of the player.
+     *
+     */
     private String currentPhase;
 
     /**

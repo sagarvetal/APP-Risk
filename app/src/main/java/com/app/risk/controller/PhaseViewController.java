@@ -22,6 +22,7 @@ import java.util.Scanner;
  */
 
 public class PhaseViewController {
+<<<<<<< HEAD
 
     /**
      * It is a singleton instance of the controller
@@ -35,6 +36,21 @@ public class PhaseViewController {
 
     /**
      * It is a phase model to contain a list of actions performed by player.
+=======
+    /**
+     * phaseViewController holds the instance of the phase view controller.
+     *
+     */
+    private static PhaseViewController phaseViewController;
+    /**
+     * dirPath stores the file path where the log file is stored.
+     *
+     */
+    private String dirPath;
+    /**
+     * logmsg stores the latest log that has to displayed on the phase view.
+     *
+>>>>>>> 353a44f938ab8e772f2e42666d31336588ae2d7f
      */
     public static PhaseModel logmsg;
 
