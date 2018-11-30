@@ -24,6 +24,10 @@ import java.util.List;
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
+    /**
+     * mapList: names of all the maps
+     * context: instance of the invoking activity
+     */
 
     private ArrayList<String> mapList;
     private Context context;

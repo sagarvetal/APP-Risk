@@ -15,9 +15,17 @@ import java.util.List;
 
 /**
  * This is class to manage state of players
- *
+ * @author Akshita Angara
+ * @version 1.0.0
  */
 public class PlayerStateAdapter extends BaseAdapter {
+
+    /**
+     * playerList: List of the players
+     * context: Instance of the invoking activity
+     * gamePlay: To manage the state and retrieve data
+     */
+
     List<Player> playerList;
     private final Context context;
     GamePlay gamePlay;
