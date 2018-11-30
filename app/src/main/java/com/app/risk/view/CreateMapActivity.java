@@ -660,9 +660,9 @@ public class CreateMapActivity extends Activity {
                 }
             }
             if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX())-20,getYCordinate(map.getCoordinateY())-20,text);
+                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX()-10),getYCordinate(map.getCoordinateY()-10),text);
             } else {
-                canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
+                drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
             }
 
         }
@@ -671,15 +671,15 @@ public class CreateMapActivity extends Activity {
     }
 
     public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
-        canvas.drawLine(map.getCoordinateX(), map.getCoordinateY(), nieghbourCountry.getCoordinateX(), nieghbourCountry.getCoordinateY(), connectionLine);
+        canvas.drawLine(x,y,neighbourX,neighbourY, line);
     }
 
-    public void drawText(float x,float y,float neighbourX,float neighbourY,String text){
-        canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
+    public void drawText(String str,float x,float y,Paint text){
+        canvas.drawText(str,x,y,text);
     }
 
     public void drawCircle(float x,float y,int radius,Paint paint){
-        canvas.drawCircle(map.getCoordinateX(), map.getCoordinateY(), RADIUS, paint);
+        canvas.drawCircle(x,y,radius,paint);
     }
 
     /**
