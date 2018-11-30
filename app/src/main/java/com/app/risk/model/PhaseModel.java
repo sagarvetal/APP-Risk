@@ -13,8 +13,7 @@ import java.util.Observable;
  */
 public class PhaseModel extends Observable {
     /**
-     *message holds the list of all the messages to be displayed on the phase view
-     *
+     * Stores list of messages for phases
      */
     private ArrayList<String> message=new ArrayList<String>();
 

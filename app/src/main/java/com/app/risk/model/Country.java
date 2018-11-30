@@ -15,10 +15,25 @@ import java.io.Serializable;
 
 public class Country implements Serializable, Comparable<Country> {
 
+    /**
+     * Stores the name of country
+     */
     private String nameOfCountry;
+    /**
+     * Stores the contient to which the given country belongs
+     */
     private Continent belongsToContinent;
+    /**
+     * Stores the name of list of countries adjacent to given country
+     */
     private ArrayList<String> adjacentCountries;
+    /**
+     * Stores the player to whom the country belongs
+     */
     private Player player;
+    /**
+     * Stores the no of armies belonging to given country
+     */
     private int noOfArmies;
 
     /**
