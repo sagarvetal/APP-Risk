@@ -153,7 +153,7 @@ public class AggresiveStrategyTest {
         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),null);
         int india=gamePlay.getCountries().get("India").getNoOfArmies();
         int america=gamePlay.getCountries().get("America").getNoOfArmies();
-        assertTrue(gamePlay.getCountries().get("America").getNoOfArmies()==4);
+        assertTrue(gamePlay.getCountries().get("Italy").getNoOfArmies()==4);
     }
 
     /**
