@@ -374,7 +374,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         if (phase != null) {
             switch (phase) {
                 case GamePlayConstants.STARTUP_PHASE:
-                    gamePlay = MapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
+                    MapReader mapReader = new MapReader();
+                    gamePlay = mapReader.returnGamePlayFromFile(this.getApplicationContext(), mapName);
                     gamePlay.setCards();
                     gamePlay.setNoOfTurns(noOfTurns);
                     gamePlay.setCurrentPhase(GamePlayConstants.STARTUP_PHASE);
@@ -570,7 +571,11 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
         AlertDialog backAlertDialog = backAlertDialogBox.show();
         Button saveGameButton = backAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        if (GamePlayConstants.PHASE_IN_PROGRESS) {
+        if(gamePlay.getCurrentPlayer().isHuman()) {
+            if (GamePlayConstants.PHASE_IN_PROGRESS) {
+                saveGameButton.setEnabled(false);
+            }
+        } else {
             saveGameButton.setEnabled(false);
         }
     }
