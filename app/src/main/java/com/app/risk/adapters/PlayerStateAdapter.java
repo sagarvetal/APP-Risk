@@ -22,12 +22,16 @@ public class PlayerStateAdapter extends BaseAdapter {
 
     /**
      * playerList: List of the players
-     * context: Instance of the invoking activity
-     * gamePlay: To manage the state and retrieve data
      */
 
     List<Player> playerList;
+    /**
+     * context: Instance of the invoking activity
+     */
     private final Context context;
+    /**
+     * gamePlay: To manage the state and retrieve data
+     */
     GamePlay gamePlay;
 
     /**

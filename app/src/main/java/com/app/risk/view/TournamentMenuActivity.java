@@ -19,18 +19,57 @@ import java.util.ArrayList;
 
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    private Button mapSelectionButton, stratergiesSelectionButton, okayButton;
-    private NumberPicker playerRestrictionPicker,gameSelectionPicker;
-
+    /**
+     * mapSelectionButton: shows dialog to select maps
+     */
+    private Button mapSelectionButton;
+    /**
+     * stratergiesSelectionButton: shows dialog to select strategies
+     */
+    private Button stratergiesSelectionButton;
+    /**
+     * okayButton: checks and starts tournament mode
+     */
+    private Button okayButton;
+    /**
+     * playerRestrictionPicker : selects the restriction of turns
+     */
+    private NumberPicker playerRestrictionPicker;
+    /**
+     * gameSelectionPicker : selects the number of games to be played
+     */
+    private NumberPicker gameSelectionPicker;
+    /**
+     * mapArrayList: holds the list of maps
+     */
     private ArrayList<String> mapArrayList;
-    private ArrayList<String> selectedPlayerStratergies,selectedMapList;
+    /**
+     * selectedPlayerStrategies: holds the list of strategies
+     */
+    private ArrayList<String> selectedPlayerStratergies;
+    /**
+     * selectedMapList: holds the list of selected maps
+     */
+    private ArrayList<String> selectedMapList;
+    /**
+     * playerStratergiesArray: Holds the array of game play strategies
+     */
     private String[] playerStratergiesArray = {GamePlayConstants.AGGRESSIVE_STRATEGY,
             GamePlayConstants.BENEVOLENT_STRATEGY,GamePlayConstants.RANDOM_STRATEGY,
             GamePlayConstants.CHEATER_STRATEGY};
 
+    /**
+     * mapListArray: array of maps for passing into dialog
+     */
     private String[] mapListArray;
-    private boolean[] checkedStateMapArray,checkedStateStratergiesArray;
+    /**
+     * checkedStateMapArray: maintains the state of selected maps
+     */
+    private boolean[] checkedStateMapArray;
+    /**
+     * checkedStateStratergiesArray: maintains the state of selected strategies
+     */
+    private boolean[] checkedStateStratergiesArray;
 
 
     /**

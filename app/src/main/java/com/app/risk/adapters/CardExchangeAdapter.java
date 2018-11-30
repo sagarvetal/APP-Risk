@@ -24,10 +24,13 @@ public class CardExchangeAdapter extends BaseAdapter {
 
     /**
      * cardsOfPlayer: To hold the list of card
-     * context: Instance of invoking activity
      */
 
     List<Card> cardsOfPlayer;
+
+    /**
+     * context: Instance of invoking activity
+     */
     private Context context;
 
     /**

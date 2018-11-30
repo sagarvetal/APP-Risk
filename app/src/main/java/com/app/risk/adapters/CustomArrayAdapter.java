@@ -22,9 +22,12 @@ public class CustomArrayAdapter extends ArrayAdapter{
 
     /**
      * gameplay : To manage the state and retrieve data
-     * objects: name of the countries
      */
     private GamePlay gamePlay;
+
+    /**
+     * objects: name of the countries
+     */
     private ArrayList<String> objects;
 
     /**
