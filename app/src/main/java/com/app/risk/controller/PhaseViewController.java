@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.app.risk.constants.FileConstants;
 import com.app.risk.model.PhaseModel;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.io.BufferedWriter;
@@ -40,6 +41,11 @@ public class PhaseViewController {
     public static PhaseModel logmsg;
 
     /**
+     * It is an instance of the invoking activity
+     */
+    private Context context;
+
+    /**
      * This is a default constructor.
      *
      */
@@ -66,68 +72,21 @@ public class PhaseViewController {
      * @param view on which the observer pattern is implemented
      * @return PhaseViewController single instance of the class
      */
-    public PhaseViewController init(final String dirPath, final PlayScreenActivity view) {
+    public PhaseViewController init(final Context context) {
         getInstance();
-        phaseViewController.dirPath = dirPath;
+        phaseViewController.context = context;
         phaseViewController.logmsg = new PhaseModel();
-        phaseViewController.logmsg.addObserver(view);
+        phaseViewController.logmsg.addObserver(getActivity());
         return phaseViewController;
     }
+
     /**
      * This is a method that writes the given log in the file and log object
      * @param action message of the log that would be written into file and displayed on the view
      */
     public void addAction(String action) {
-        BufferedWriter output = null;
-        try {
-            File logDirectory = new File(dirPath);
-            if (!logDirectory.exists())
-                logDirectory.mkdirs();
-            File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
-            FileOutputStream f = new FileOutputStream(file, true);
-            output = new BufferedWriter(new OutputStreamWriter(f));
-            output.write(action);
-            output.newLine();
-
-        } catch (Exception e) {
-            System.out.println("Error writing log");
-        } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-
-                }
-
-                logmsg.setAction(action);
-            }
-        }
-    }
-
-    /**
-     * This is a method that reads the logs from the file
-     * @return List<String> list of the messages that have been logged into the file
-     */
-    public ArrayList<String> readLog(final Context context) {
-        Scanner scanner = null;
-        ArrayList<String> logs = new ArrayList<String>();
-        File logDirectory = new File(context.getFilesDir() + File.separator + FileConstants.LOG_FILE_PATH);
-        if (!logDirectory.exists())
-            logDirectory.mkdirs();
-        try {
-            File file = new File(logDirectory, FileConstants.LOG_FILE_NAME);
-            scanner = new Scanner(file);
-            while (scanner.hasNext()) {
-                logs.add(scanner.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if(scanner != null){
-                scanner.close();
-            }
-        }
-        return logs;
+        logmsg.setAction(action);
+        LogManager.writeLog(action, context);
     }
 
     /**
@@ -138,5 +97,12 @@ public class PhaseViewController {
         logmsg.clear();
     }
 
+    /**
+     * This method cast the context and returns PlayScreenActivity object.
+     * @return The PlayScreenActivity object.
+     */
+    public PlayScreenActivity getActivity() {
+        return (PlayScreenActivity) context;
+    }
 
 }
