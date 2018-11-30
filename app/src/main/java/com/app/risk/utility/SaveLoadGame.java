@@ -105,4 +105,11 @@ public class SaveLoadGame {
         else
             return mapDir.list();
     }
+
+    public void deleteSavedFile(String fileName, Context context) {
+
+        String mapDir = context.getFilesDir() + File.separator + FileConstants.GAME_SAVE_LOAD_FILE_PATH;
+        File toDelete = new File(mapDir, fileName);
+        toDelete.delete();
+    }
 }
