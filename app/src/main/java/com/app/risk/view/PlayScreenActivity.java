@@ -628,6 +628,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
                if(gamePlay.getCurrentPlayer().isHuman()){
                    String[] logViewArray = new String[logViewArrayList.size()];
+
                    for(int i=0;i<logViewArrayList.size();i++){
                        logViewArray[i] = logViewArrayList.get(i);
                    }
@@ -675,6 +676,8 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
     public void showLogDialog(){
         ArrayList<String> logViewList = PhaseViewController.getInstance().readLog(this);
         String[] logViewArray = new String[logViewList.size()];
+        Toast.makeText(this, ""
+                +logViewArray.length, Toast.LENGTH_SHORT).show();
         for(int i=0;i<logViewList.size();i++){
             logViewArray[i] = logViewList.get(i);
         }
