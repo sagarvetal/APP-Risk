@@ -5,7 +5,7 @@ import com.app.risk.java.com.app.risk.controller.FortificationPhaseControllerTes
 import com.app.risk.java.com.app.risk.controller.MapDriverControllerTest;
 import com.app.risk.java.com.app.risk.controller.ReinforcementPhaseControllerTest;
 import com.app.risk.java.com.app.risk.controller.StartUpPhaseControllerTest;
-import com.app.risk.java.com.app.risk.controller.TournamentModeTest;
+import com.app.risk.java.com.app.risk.view.TournamentModeTest;
 import com.app.risk.java.com.app.risk.impl.AggresiveStrategyTest;
 import com.app.risk.java.com.app.risk.impl.BenevolentPlayerStrategyTest;
 import com.app.risk.java.com.app.risk.impl.CheaterStrategyTest;
