@@ -28,9 +28,18 @@ import static org.junit.Assert.assertFalse;
  */
 @RunWith(AndroidJUnit4.class)
 public class FortificationUnConnectedTest {
+    /**
+     * fileLocation would hold the location of the file
+     */
     private String fileLocation;
-    Context context = null;
-    GamePlay gm = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case

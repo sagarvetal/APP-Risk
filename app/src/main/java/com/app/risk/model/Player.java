@@ -693,7 +693,9 @@ public class Player extends Observable implements Serializable {
             setCardsExchangedInRound(true);
             setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
             incrementArmies(getArmiesInExchangeOfCards());
+            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " awarded to " + getName() + " in exchange of cards.");
             setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
+            PhaseViewController.getInstance().addAction(getReinforcementArmies() + " reinforcement armies awarded to " + getName() + " in exchange of cards.");
             removeExchangedCards(cardsToExchange);
         } else {
             return -1;
@@ -744,8 +746,9 @@ public class Player extends Observable implements Serializable {
                 (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
             setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
             incrementArmies(getArmiesInExchangeOfCards());
+            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " awarded to " + getName() + " in exchange of cards.");
             setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
-
+            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " awarded to " + getName() + " in exchange of cards.");
             List<Card> cardsToRemove = new ArrayList<>();
             for(int i=0; i<cardList.size(); i++){
                 if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))

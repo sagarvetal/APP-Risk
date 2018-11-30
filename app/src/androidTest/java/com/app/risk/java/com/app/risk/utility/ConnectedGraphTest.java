@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.model.GameMap;
+import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
 import com.app.risk.utility.MapVerification;
 
@@ -23,8 +24,18 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class ConnectedGraphTest {
+    /**
+     * fileLocation instance would hold the file location address
+     */
     private String fileLocation;
-    Context context = null;
+    /**
+     * context instance would hold the instance of the target activity
+     */
+    private Context context = null;
+    /**
+     * gameplay instances would hold the objects required for the test cases
+     */
+    private GamePlay gm = null;
 
     /**
      * This method gets executed before the test case
