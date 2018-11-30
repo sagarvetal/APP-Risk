@@ -367,14 +367,18 @@ public class AttackPhaseController implements View.OnClickListener {
         int defenderDices = 1;
         final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
 
-        if (strategy instanceof HumanPlayerStrategy)
+        if (strategy instanceof HumanPlayerStrategy) {
             defenderDices = showDiceSelectionDialogBox(defendingCountry);
-        else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
+        } else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy) {
             defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
-        else if (strategy instanceof BenevolentPlayerStrategy)
+        } else if (strategy instanceof BenevolentPlayerStrategy) {
             defenderDices = 1;
-        else if (strategy instanceof RandomPlayerStrategy)
+        } else if (strategy instanceof RandomPlayerStrategy) {
             defenderDices = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+            if(defenderDices == 0){
+                defenderDices = 1;
+            }
+        }
 
         return defenderDices;
     }
