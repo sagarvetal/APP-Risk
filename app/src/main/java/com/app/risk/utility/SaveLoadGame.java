@@ -106,6 +106,11 @@ public class SaveLoadGame {
             return mapDir.list();
     }
 
+    /**
+     * Method to delete a saved game file from the device memory once the file has been loaded
+     * @param fileName name of the file to be deleted
+     * @param context context of the application
+     */
     public void deleteSavedFile(String fileName, Context context) {
 
         String mapDir = context.getFilesDir() + File.separator + FileConstants.GAME_SAVE_LOAD_FILE_PATH;

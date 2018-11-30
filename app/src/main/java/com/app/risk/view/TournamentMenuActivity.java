@@ -21,6 +21,12 @@ import com.app.risk.utility.MapVerification;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity generates the selection menu for the tournament
+ *
+ * @author Himanshu Kohli
+ * @version 1.0.0
+ */
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     /**
