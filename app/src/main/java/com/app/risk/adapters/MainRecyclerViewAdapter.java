@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.model.GamePlay;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.EditMap;
 import com.app.risk.view.PlayScreenActivity;
 import com.app.risk.view.TournamentMenuActivity;
@@ -131,6 +132,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                 .setPositiveButton("Start new game", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        LogManager.clearLog(invokingActivity);
                                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
                                     }
                                 })
@@ -168,6 +170,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         break;
 
                     case "Tournament Game":
+                        LogManager.clearLog(invokingActivity);
                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(),TournamentMenuActivity.class));
                         break;
 
