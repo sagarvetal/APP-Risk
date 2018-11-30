@@ -142,7 +142,8 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
             }
         }
         if (!fortification) {
-            PhaseViewController.getInstance().addAction("Fortification is not possible!!.Reason:Weak Country is not surrounded by any strong country");
+            PhaseViewController.getInstance().addAction("Fortification is not possible!!");
+            PhaseViewController.getInstance().addAction("Reason: Weak Country is not surrounded by any strong country");
         }
     }
 
