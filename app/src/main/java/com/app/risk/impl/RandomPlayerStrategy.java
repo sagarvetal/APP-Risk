@@ -128,9 +128,10 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             }
             player.setNewCountryConquered(true);
             PhaseViewController.getInstance().addAction(player.getName() + " conquered " + toCountry.getNameOfCountry());
-            toCountry.setNoOfArmies(noOfArmiesToMove);
             PhaseViewController.getInstance().addAction(noOfArmiesToMove +" armies moved from " + fromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
+            toCountry.getPlayer().decrementCountries(1);
             fromCountry.decrementArmies(noOfArmiesToMove);
+            toCountry.setNoOfArmies(noOfArmiesToMove);
             toCountry.setPlayer(player);
             player.incrementCountries(1);
             countriesOwnedByPlayer.add(toCountry);
