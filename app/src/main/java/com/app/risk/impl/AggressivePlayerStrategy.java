@@ -154,7 +154,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
             final int noOfArmiesToMove = srcCountry .getNoOfArmies() - 1;
             destCountry.incrementArmies(noOfArmiesToMove);
             srcCountry.decrementArmies(noOfArmiesToMove);
-            PhaseViewController.getInstance().addAction(noOfArmiesToMove + " armies moved from " + srcCountry.getNameOfCountry() + " to " + destCountry);
+            PhaseViewController.getInstance().addAction(noOfArmiesToMove + " armies moved from " + srcCountry.getNameOfCountry() + " to " + destCountry.getNameOfCountry());
         } else {
             PhaseViewController.getInstance().addAction("Fortification was not possible.");
         }

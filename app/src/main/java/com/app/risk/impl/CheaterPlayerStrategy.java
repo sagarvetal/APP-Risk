@@ -31,7 +31,7 @@ public class CheaterPlayerStrategy implements Strategy,Serializable {
         for(final Country country : countriesOwnedByPlayer){
             PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
             country.setNoOfArmies(country.getNoOfArmies() * 2);
-            PhaseViewController.getInstance().addAction(player.getName() + "has doubled the armies on " + country.getNameOfCountry());
+            PhaseViewController.getInstance().addAction(player.getName() + " has doubled the armies on " + country.getNameOfCountry());
             PhaseViewController.getInstance().addAction(country.getNameOfCountry() + " : " + country.getNoOfArmies());
         }
         player.setNoOfArmies(player.getNoOfArmies() * 2);

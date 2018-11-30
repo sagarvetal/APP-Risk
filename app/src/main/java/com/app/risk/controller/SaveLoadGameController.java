@@ -51,6 +51,11 @@ public class SaveLoadGameController {
         return saveLoadGame.savedGamesList(context);
     }
 
+    /**
+     * Method to delete a saved file from the device memory once the file has been loaded for game play
+     * @param fileName name of the file to be deleted
+     * @param context context of the application
+     */
     public static void deleteSavedFile(String fileName, Context context){
 
         saveLoadGame.deleteSavedFile(fileName, context);
