@@ -181,7 +181,7 @@ public class CreateMapActivity extends Activity {
     public boolean isMappingRequired(){
         boolean isMappingRequired = false;
         for (int i = 0; i < arrCountriesRepresentationOnGraph.size() ; i++){
-            if (arrCountriesRepresentationOnGraph.get(i).getCoordinateX()<=380){
+            if (arrCountriesRepresentationOnGraph.get(i).getCoordinateX()<=300){
                 isMappingRequired = true;
                 return isMappingRequired;
             }
@@ -483,6 +483,7 @@ public class CreateMapActivity extends Activity {
         if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true) {
             if (isEditMode){
                 handleMapVerificationSucced(fileName);
+                showToast(getString(R.string.edit_file_saved));
             }else{
                 final EditText edittext = new EditText(CreateMapActivity.this);
                 AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
@@ -524,6 +525,7 @@ public class CreateMapActivity extends Activity {
     public void handleMapVerificationSucced(String filename) {
         MapDriverController mapDriverController = new MapDriverController();
         mapDriverController.writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+
     }
 
     /**
