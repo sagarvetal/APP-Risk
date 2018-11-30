@@ -22,6 +22,12 @@ import java.util.HashMap;
 
 import static junit.framework.TestCase.assertTrue;
 
+/**
+ * This class is used to test random strategy player behaviour in all the three phases.
+ *
+ * @author Akshita Angara
+ * @version 1.0.0
+ */
 public class RandomStrategyTest {
 
     private Context context = null;
@@ -33,6 +39,11 @@ public class RandomStrategyTest {
     HashMap<String, Country> countries = new HashMap<String, Country>();
     boolean flag;
 
+    /**
+     * This method gets executed before the test case
+     * sets the gameplay instance with the values required for the testing
+     * and sets the context of the test case
+     */
     @Before
     public void setUp(){
         gamePlay = new GamePlay();
@@ -66,6 +77,9 @@ public class RandomStrategyTest {
         startupPhaseController = StartupPhaseController.getInstance().init(gamePlay);
     }
 
+    /**
+     * This method checks that atleast one country from all the countries that belong to the random player has been reinforced.
+     */
     @Test
     public void randomReinforcementTest(){
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
@@ -97,6 +111,9 @@ public class RandomStrategyTest {
         assertTrue(flag == true);
     }
 
+    /**
+     * This method checks whether an attack was completely performed on the attacking country of the random player and the defending country
+     */
     @Test
     public void randomAttackTest(){
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
@@ -115,12 +132,15 @@ public class RandomStrategyTest {
         attackPhaseController = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         ((RandomPlayerStrategy) gamePlay.getCurrentPlayer().getStrategy()).performAllOutAttack(gamePlay.getCountries().get("America"),
                 gamePlay.getCountries().get("Italy"), gamePlay.getCurrentPlayer(), gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId()));
-        if(gamePlay.getCountries().get("America").getNoOfArmies()!=6 && gamePlay.getCountries().get("Italy").getNoOfArmies()!=4){
+        if(gamePlay.getCountries().get("America").getNoOfArmies()==1 || gamePlay.getCountries().get("Italy").getNoOfArmies()==0){
             flag = true;
         }
         assertTrue(flag == true);
     }
 
+    /**
+     * This method checks valid fortification is performed for random player
+     */
     @Test
     public void randomFortificationTest(){
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
@@ -149,6 +169,10 @@ public class RandomStrategyTest {
         assertTrue(flag == true);
     }
 
+    /**
+     * This method gets executed after the test case has been executed
+     * its sets the gameplay to null
+     */
     @After
     public void cleanUp(){
         gamePlay = null;
