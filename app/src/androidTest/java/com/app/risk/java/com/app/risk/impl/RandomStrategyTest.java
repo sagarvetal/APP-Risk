@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.impl.RandomPlayerStrategy;
@@ -93,6 +94,7 @@ public class RandomStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupPhaseController = StartupPhaseController.getInstance().init(gamePlay);
+        PhaseViewController.getInstance().init(InstrumentationRegistry.getTargetContext());
     }
 
     /**

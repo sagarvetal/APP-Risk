@@ -68,8 +68,6 @@ public class PhaseViewController {
     /**
      * This is a method that returns the same single instance of the PhaseViewController class
      * when it is called
-     * @param dirPath path in which the file is generated with all the logs
-     * @param view on which the observer pattern is implemented
      * @return PhaseViewController single instance of the class
      */
     public PhaseViewController init(final Context context) {

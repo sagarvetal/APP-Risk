@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -75,6 +76,7 @@ public class ReinforcementPhaseControllerTest {
         gamePlay.setCountries(countries);
         startupphase =StartupPhaseController.getInstance().init(gamePlay);
         reinforcementPhaseController=ReinforcementPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(),gamePlay);
+        PhaseViewController.getInstance().init(context);
     }
     /**
      * This method checks the army count in the reinforcement phase
