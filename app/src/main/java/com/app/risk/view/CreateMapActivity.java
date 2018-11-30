@@ -170,6 +170,11 @@ public class CreateMapActivity extends Activity {
 
     }
 
+    /**
+     * Checks if mapping is requried
+     * @return boolean if mapping is required
+     */
+
     public boolean isMappingRequired(){
         boolean isMappingRequired = false;
         for (int i = 0; i < arrCountriesRepresentationOnGraph.size() ; i++){
@@ -181,6 +186,9 @@ public class CreateMapActivity extends Activity {
         return isMappingRequired;
     }
 
+    /**
+     * Performs mapping of screen size to current
+     */
     public void performMapping(){
 
         for (int i = 0 ; i < arrCountriesRepresentationOnGraph.size() ; i++){
