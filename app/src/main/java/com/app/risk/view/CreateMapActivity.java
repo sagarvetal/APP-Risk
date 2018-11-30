@@ -195,6 +195,10 @@ public class CreateMapActivity extends Activity {
             GameMap map = arrCountriesRepresentationOnGraph.get(i);
             map.setCoordinateX(getXCordinate(map.getCoordinateX()));
             map.setCoordinateY(getYCordinate(map.getCoordinateY()));
+            for (GameMap neighbouringCountry : map.getConnectedToCountries()){
+                neighbouringCountry.setCoordinateX(getXCordinate(neighbouringCountry.getCoordinateX()));
+                neighbouringCountry.setCoordinateY(getYCordinate(neighbouringCountry.getCoordinateY()));
+            }
         }
     }
 
