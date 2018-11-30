@@ -332,11 +332,12 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
         new AlertDialog.Builder(this)
                 .setItems(gridViewArray,null)
-                .setTitle("Game Log")
+                .setTitle("Tournament Result")
                 .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
+                        finish();
                         startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
                     }
                 })
@@ -461,6 +462,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             finishAffinity();
+                                            finish();
                                             startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                                         }
                                     })
@@ -526,6 +528,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
+                        finish();
                         startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                     }
                 })
@@ -551,6 +554,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 finishAffinity();
+                                                finish();
                                                 startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
                                             }
                                         })
@@ -690,6 +694,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finishAffinity();
+                        finish();
                         startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
                     }
                 })
