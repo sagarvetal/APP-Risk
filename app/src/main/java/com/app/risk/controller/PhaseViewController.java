@@ -22,9 +22,22 @@ import java.util.Scanner;
  */
 
 public class PhaseViewController {
+
+    /**
+     * It is a singleton instance of the controller
+     */
     private static PhaseViewController phaseViewController;
+
+    /**
+     * It is a directory path to store logs
+     */
     private String dirPath;
+
+    /**
+     * It is a phase model to contain a list of actions performed by player.
+     */
     public static PhaseModel logmsg;
+
     /**
      * This is a default constructor.
      *
