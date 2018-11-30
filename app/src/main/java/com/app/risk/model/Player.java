@@ -448,6 +448,9 @@ public class Player extends Observable implements Serializable {
         PhaseViewController.getInstance().addAction("Total continent control value awarded : " + continentValue);
         setReinforcementArmies(reinforcementArmies + continentValue);
         incrementArmies(reinforcementArmies + continentValue);
+        if(!isHuman){
+            exchangeCardsStrategyImplementation();
+        }
     }
 
     /**
@@ -589,7 +592,6 @@ public class Player extends Observable implements Serializable {
 
         attackResult.append("\n\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n\n");
-        PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;
     }
 
@@ -783,13 +785,22 @@ public class Player extends Observable implements Serializable {
                     break;
             }
         }
+
+        if(infantryCardCount > 0 || cavalryCardCount > 0 || artilleryCardCount > 0){
+            PhaseViewController.getInstance().addAction("Available Cards");
+            PhaseViewController.getInstance().addAction(GamePlayConstants.ARTILLERY_CARD + " : " + artilleryCardCount);
+            PhaseViewController.getInstance().addAction(GamePlayConstants.INFANTRY_CARD + " : " + infantryCardCount);
+            PhaseViewController.getInstance().addAction(GamePlayConstants.CAVALRY_CARD + " : " + cavalryCardCount);
+        } else {
+            PhaseViewController.getInstance().addAction("No cards available");
+        }
+
         if(artilleryCardCount == 3 || cavalryCardCount == 3 || infantryCardCount == 3 ||
                 (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
             setArmiesInExchangeOfCards(getArmiesInExchangeOfCards() + 5);
             incrementArmies(getArmiesInExchangeOfCards());
-            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " awarded to " + getName() + " in exchange of cards.");
             setReinforcementArmies(getReinforcementArmies() + getArmiesInExchangeOfCards());
-            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " awarded to " + getName() + " in exchange of cards.");
+            PhaseViewController.getInstance().addAction(getArmiesInExchangeOfCards() + " armies awarded to " + getName() + " in exchange of cards.");
             List<Card> cardsToRemove = new ArrayList<>();
             for(int i=0; i<cardList.size(); i++){
                 if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))
@@ -814,6 +825,10 @@ public class Player extends Observable implements Serializable {
                         break;
                 }
                 removeExchangedCards(cardsToRemove);
+            }
+        } else {
+            if(cardList.size() > 0){
+                PhaseViewController.getInstance().addAction("Player can not exchange cards");
             }
         }
     }
