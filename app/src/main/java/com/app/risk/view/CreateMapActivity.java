@@ -170,6 +170,11 @@ public class CreateMapActivity extends Activity {
 
     }
 
+    /**
+     * Checks if mapping is requried
+     * @return boolean if mapping is required
+     */
+
     public boolean isMappingRequired(){
         boolean isMappingRequired = false;
         for (int i = 0; i < arrCountriesRepresentationOnGraph.size() ; i++){
@@ -181,6 +186,9 @@ public class CreateMapActivity extends Activity {
         return isMappingRequired;
     }
 
+    /**
+     * Performs mapping of screen size to current
+     */
     public void performMapping(){
 
         for (int i = 0 ; i < arrCountriesRepresentationOnGraph.size() ; i++){
@@ -680,14 +688,36 @@ public class CreateMapActivity extends Activity {
         currentIndexCountrySelected = -1;
     }
 
+    /**
+     * Draws line on canvas
+     * @param x starting x
+     * @param y starting y
+     * @param neighbourX neighbour x
+     * @param neighbourY neighbour y
+     * @param line paint object
+     */
     public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
         canvas.drawLine(x,y,neighbourX,neighbourY, line);
     }
 
+    /**
+     * Draws text in circle
+     * @param str text to be dr
+     * @param x
+     * @param y
+     * @param text
+     */
     public void drawText(String str,float x,float y,Paint text){
         canvas.drawText(str,x,y,text);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param radius
+     * @param paint
+     */
     public void drawCircle(float x,float y,int radius,Paint paint){
         canvas.drawCircle(x,y,radius,paint);
     }
