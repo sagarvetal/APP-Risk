@@ -51,8 +51,7 @@ public class EditMap extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 listOfGameMap = new ArrayList<>();
                 String fileName=mapList.get(i);
-                MapDriverController mapDriverController = new MapDriverController();
-                List<GameMap> listOfGameMapList=mapDriverController.readmap(getApplicationContext(),fileName);
+                List<GameMap> listOfGameMapList = MapDriverController.getInstance().readmap(getApplicationContext(),fileName);
                 listOfGameMap.addAll(listOfGameMapList);
                 maps=convertIntoHashMap(listOfGameMap);
                 Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);

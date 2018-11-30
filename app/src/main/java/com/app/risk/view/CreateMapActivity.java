@@ -522,8 +522,7 @@ public class CreateMapActivity extends Activity {
      */
 
     public void handleMapVerificationSucced(String filename) {
-        MapDriverController mapDriverController = new MapDriverController();
-        mapDriverController.writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+        MapDriverController.getInstance().writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
 
     }
 
