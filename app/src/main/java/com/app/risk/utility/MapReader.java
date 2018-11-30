@@ -153,6 +153,18 @@ public class MapReader {
                         }
                     }
 
+                    for(GameMap gameMap: finalGameMapList){
+                        Country currentCountry = countryHashMap.get(gameMap.getFromCountry().getNameOfCountry());
+                        List<GameMap> adjacentCountries = gameMap.getConnectedToCountries();
+                        ArrayList<String> adjacentCountriesString = currentCountry.getAdjacentCountries();
+                        for(GameMap gameMap1: adjacentCountries){
+                            if(!adjacentCountriesString.contains(gameMap1.getFromCountry().getNameOfCountry()))
+                                adjacentCountriesString.add(gameMap1.getFromCountry().getNameOfCountry());
+                        }
+                        currentCountry.setAdjacentCountries(adjacentCountriesString);
+                        countryHashMap.put(gameMap.getFromCountry().getNameOfCountry(), currentCountry);
+                    }
+
                     finalGamePlay.setCountries(countryHashMap);
                 }
             }
@@ -207,11 +219,21 @@ public class MapReader {
 
         ArrayList<GameMap> returnCountryList = new ArrayList<>();
 
+        if(countryGameMapList.get(words[0]).getConnectedToCountries().size()>0){
+            ArrayList<GameMap> tempConnectedCountry = countryGameMapList.get(words[0]).getConnectedToCountries();
+            for(int i=0; i<tempConnectedCountry.size(); i++)
+                returnCountryList.add(tempConnectedCountry.get(i));
+        }
+
         for (int i = 4; i < words.length; i++) {
             if (countryGameMapList.containsKey(words[i])) {
                 returnCountryList.add(countryGameMapList.get(words[i]));
             } else {
-                countryGameMapList.put(words[i], new GameMap(new Country(words[i])));
+                GameMap tempGameMap = new GameMap(new Country(words[i]));
+                ArrayList<GameMap> tempConnectedCountry = new ArrayList<>();
+                tempConnectedCountry.add(countryGameMapList.get(words[0]));
+                tempGameMap.setConnectedToCountries(tempConnectedCountry);
+                countryGameMapList.put(words[i], tempGameMap);
                 returnCountryList.add(countryGameMapList.get(words[i]));
             }
         }
