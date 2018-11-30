@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
+import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.impl.RandomPlayerStrategy;
@@ -29,11 +30,13 @@ public class RandomStrategyTest {
     AttackPhaseController attackPhaseController = null;
     ArrayList<String> playerNames = new ArrayList<String>();
     HashMap<String, Country> countries = new HashMap<String, Country>();
+    boolean flag;
 
     @Before
     public void setUp(){
         gamePlay = new GamePlay();
         context = InstrumentationRegistry.getTargetContext();
+        flag = false;
         playerNames.add("player1");
         playerNames.add("player2");
         ArrayList<String> strategy = new ArrayList<String>();
@@ -81,14 +84,13 @@ public class RandomStrategyTest {
         int reinforcement = gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay);
         System.out.println(reinforcement);
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
-        boolean flag = false;
-        if(gamePlay.getCountries().get("India").getNoOfArmies()>1){
+        if(gamePlay.getCountries().get("India").getNoOfArmies()!=1){
             flag = true;
         }
-        if(gamePlay.getCountries().get("Italy").getNoOfArmies()>2){
+        if(gamePlay.getCountries().get("Italy").getNoOfArmies()!=2){
             flag = true;
         }
-        if(gamePlay.getCountries().get("America").getNoOfArmies()>3){
+        if(gamePlay.getCountries().get("America").getNoOfArmies()!=3){
             flag = true;
         }
         assertTrue(flag == true);
@@ -98,15 +100,51 @@ public class RandomStrategyTest {
     public void randomAttackTest(){
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
         gamePlay.getPlayers().get(1).setNoOfArmies(4);
-        gamePlay.getPlayers().get(0).setNoOfCountries(1);
-        gamePlay.getPlayers().get(1).setNoOfCountries(1);
+        gamePlay.getPlayers().get(0).setNoOfCountries(3);
+        gamePlay.getPlayers().get(1).setNoOfCountries(3);
+        gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
+        gamePlay.getCountries().get("pakistan").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("America").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("America").setNoOfArmies(6);
+        gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
+        gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("Italy").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("Italy").setNoOfArmies(4);
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
         attackPhaseController = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         ((RandomPlayerStrategy) gamePlay.getCurrentPlayer().getStrategy()).performAllOutAttack(gamePlay.getCountries().get("America"),
-                gamePlay.getCountries().get("Italy"), null, null, null);
+                gamePlay.getCountries().get("Italy"), gamePlay.getCurrentPlayer(), gamePlay.getCountryListByPlayerId(gamePlay.getCurrentPlayer().getId()));
+        if(gamePlay.getCountries().get("America").getNoOfArmies()!=6 && gamePlay.getCountries().get("Italy").getNoOfArmies()!=4){
+            flag = true;
+        }
+        assertTrue(flag == true);
+    }
+
+    @Test
+    public void randomFortificationTest(){
+        gamePlay.getPlayers().get(0).setNoOfArmies(6);
+        gamePlay.getPlayers().get(0).setNoOfCountries(3);
+        gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
+        gamePlay.getCountries().get("India").setNoOfArmies(1);
+        gamePlay.getCountries().get("Italy").setPlayer(gamePlay.getPlayers().get(0));
+        gamePlay.getCountries().get("Italy").setNoOfArmies(2);
+        gamePlay.getCountries().get("America").setPlayer(gamePlay.getPlayers().get(0));
+        gamePlay.getCountries().get("America").setNoOfArmies(3);
+        gamePlay.getCountries().get("pakistan").setPlayer(gamePlay.getPlayers().get(1));
+        gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
+        gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
+        gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
+        FortificationPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
+        gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
+        if(gamePlay.getCountries().get("India").getNoOfArmies()!=1){
+            flag = true;
+        }
+        if(gamePlay.getCountries().get("Italy").getNoOfArmies()!=2){
+            flag = true;
+        }
+        if(gamePlay.getCountries().get("America").getNoOfArmies()!=3){
+            flag = true;
+        }
+        assertTrue(flag == true);
     }
 }
