@@ -1,6 +1,5 @@
 package com.app.risk.java.com.app.risk.impl;
 
-import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.constants.GamePlayConstants;
