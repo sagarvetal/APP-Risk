@@ -57,6 +57,7 @@ public class CheaterPlayerStrategy implements Strategy,Serializable {
                 defenderCountry.getPlayer().decrementCountries(1);
                 defenderCountry.setPlayer(player);
                 defenderCountry.getPlayer().incrementArmies(noOfArmies);
+                defenderCountry.getPlayer().incrementCountries(1);
                 PhaseViewController.getInstance().addAction(player.getName() + " conquered " + defenderCountry.getNameOfCountry());
             }
         }

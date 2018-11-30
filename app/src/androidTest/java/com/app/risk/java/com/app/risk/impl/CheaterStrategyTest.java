@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -128,7 +128,7 @@ public class CheaterStrategyTest {
         gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
 
-        ((CheaterPlayerStrategy)gamePlay.getCurrentPlayer().getStrategy()).attackPhase(gamePlay,gamePlay.getPlayers().get(0),gamePlay.getCountryListByPlayerId(0)
+        gamePlay.getCurrentPlayer().getStrategy().attackPhase(gamePlay,gamePlay.getPlayers().get(0),gamePlay.getCountryListByPlayerId(0)
                 ,gamePlay.getCountries().get("India")
                 ,gamePlay.getCountries().get("Italy"));
 

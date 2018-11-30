@@ -1,6 +1,5 @@
 package com.app.risk.java.com.app.risk.impl;
 
-import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
 import com.app.risk.constants.GamePlayConstants;
@@ -30,13 +29,33 @@ import static junit.framework.TestCase.assertTrue;
  */
 public class RandomStrategyTest {
 
-    private Context context = null;
+    /**
+     * gamePlay instances would hold the objects required for the test cases
+     */
     private GamePlay gamePlay = null;
+    /**
+     * startUpPhaseController would hold the instance of the StartupPhaseController required for all the test cases
+     */
     StartupPhaseController startupPhaseController = null;
+    /**
+     * reinforcementPhaseController would hold the instance of the ReinforcementPhaseController required for the randomReinforcementTest case
+     */
     ReinforcementPhaseController reinforcementPhaseController = null;
+    /**
+     * attackPhaseController would hold the instance of the AttackPhaseController required for the randomAttackTest case
+     */
     AttackPhaseController attackPhaseController = null;
+    /**
+     * playerNames would hold the list of all the player names
+     */
     ArrayList<String> playerNames = new ArrayList<String>();
+    /**
+     * Hashmap to map each country to its name with the name of the country as key
+     */
     HashMap<String, Country> countries = new HashMap<String, Country>();
+    /**
+     * A false flag which will change to true only if there is a change in the number of armies of countries in the test cases
+     */
     boolean flag;
 
     /**
@@ -47,7 +66,6 @@ public class RandomStrategyTest {
     @Before
     public void setUp(){
         gamePlay = new GamePlay();
-        context = InstrumentationRegistry.getTargetContext();
         flag = false;
         playerNames.add("player1");
         playerNames.add("player2");
