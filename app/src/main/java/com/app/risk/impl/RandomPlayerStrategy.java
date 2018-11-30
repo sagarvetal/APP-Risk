@@ -22,6 +22,9 @@ import java.util.Random;
  */
 public class RandomPlayerStrategy implements Strategy,Serializable {
 
+    /**
+     * random: To generate random numbers
+     */
     private Random random = new Random();
 
     /**
