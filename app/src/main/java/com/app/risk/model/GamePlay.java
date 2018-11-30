@@ -26,16 +26,46 @@ import java.util.Queue;
  */
 public class GamePlay implements Serializable {
 
+    /**
+     * Stores map name used in Game
+     */
     private String mapName;
+    /**
+     * Stores list all continent name corresponding to its continent object
+     */
     private HashMap<String, Continent> continents;
+    /**
+     * Stores list of all country name corresponding to its country object
+     */
     private HashMap<String, Country> countries;
+    /**
+     * Stores list of all players id corresponding to is player object
+     */
     private HashMap<Integer, Player> players;
+    /**
+     * Stores current player playing the game
+     */
     private Player currentPlayer;
+    /**
+     * Stores current phase running ie. reinforcement,attack or fortification
+     */
     private String currentPhase;
+    /**
+     * Stores list of cards used in game
+     */
     private List<Card> cards;
+    /**
+     * Stores list of player id
+     */
     private Queue<Integer> playerIdQueue;
+    /**
+     * Stores color code
+     */
     private final int[] colorCodes = {Color.RED,Color.GREEN,Color.BLUE
             ,Color.DKGRAY,Color.MAGENTA,Color.YELLOW};
+    /**
+     * Stores no of turns for phases for tournament mode
+     */
     private int noOfTurns;
 
     /**
