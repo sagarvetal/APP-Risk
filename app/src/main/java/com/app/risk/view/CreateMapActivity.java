@@ -711,6 +711,13 @@ public class CreateMapActivity extends Activity {
         canvas.drawText(str,x,y,text);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param radius
+     * @param paint
+     */
     public void drawCircle(float x,float y,int radius,Paint paint){
         canvas.drawCircle(x,y,radius,paint);
     }
