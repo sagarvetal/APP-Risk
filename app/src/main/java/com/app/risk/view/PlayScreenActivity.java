@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,7 +43,6 @@ import com.app.risk.utility.MapReader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Observable;
@@ -336,9 +332,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                        finish();
-                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                        performExitGame();
                     }
                 })
                 .setNeutralButton("Show Log", new DialogInterface.OnClickListener() {
@@ -461,9 +455,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                     .setNeutralButton( "OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            finishAffinity();
-                                            finish();
-                                            startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
+                                            performExitGame();
                                         }
                                     })
                                     .setTitle("Congratulations " + gamePlay.getCurrentPlayer().getName() + " !!!")
@@ -527,9 +519,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 .setPositiveButton("Exit Game", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                        finish();
-                        startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
+                        performExitGame();
                     }
                 })
                 .setNegativeButton("Cancel", null)
@@ -553,9 +543,7 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                finishAffinity();
-                                                finish();
-                                                startActivity(new Intent(PlayScreenActivity.this, MainScreenActivity.class));
+                                                performExitGame();
                                             }
                                         })
                                         .setCancelable(false)
@@ -696,12 +684,20 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
                 .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finishAffinity();
-                        finish();
-                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                        performExitGame();
                     }
                 })
                 .setCancelable(false)
                 .create().show();
+    }
+
+    /**
+     * Exits the game
+     */
+    public void performExitGame(){
+        Intent intent = new Intent(PlayScreenActivity.this, MainScreenActivity.class);
+        startActivity(intent);
+        finish();
+        System.exit(0);
     }
 }
