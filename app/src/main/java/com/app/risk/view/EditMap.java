@@ -22,19 +22,38 @@ import java.util.List;
 
 /**
  * MainScreenActivity display the main screen of the display
- * @author Akhila
+ *
+ * @author Akhila Chilukuri
  * @version 1.0.0
  */
 public class EditMap extends AppCompatActivity {
-    Intent intent ;
+    /**
+     * listView holds the list of all the countries and continents to be displayed.
+     */
     private ListView listView;
+    /**
+     * maps stores the list of countries for each continent in hashmap.
+     */
     HashMap<Continent, ArrayList<Country>> maps = new HashMap<Continent, ArrayList<Country>>();
-    ArrayList<String> mapList=null;
-    ArrayList<GameMap> listOfGameMap=new ArrayList<GameMap>();
+
+    /**
+    * The instance of MapReader to read the map.
+    */
     MapReader mapReader = new MapReader();
 
     /**
+     * mapList stores content fo the map read.
+     */
+    ArrayList<String> mapList = null;
+  
+    /**
+     * listOfGameMap stores the map information in the arraylist of the game map object
+     */
+    ArrayList<GameMap> listOfGameMap = new ArrayList<GameMap>();
+  
+    /**
      * {@inheritDoc}
+     *
      * @param savedInstanceState
      */
     @Override
@@ -43,22 +62,25 @@ public class EditMap extends AppCompatActivity {
 
         setContentView(R.layout.activity_edit_map_layout);
         listView = findViewById(R.id.edit_map_listview);
+
         mapList= mapReader.getMapList(getApplicationContext());
-        listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,mapList));
+        listView.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, mapList));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 listOfGameMap = new ArrayList<>();
-                String fileName=mapList.get(i);
+
+                String fileName = mapList.get(i);
                 List<GameMap> listOfGameMapList = MapDriverController.getInstance().readmap(getApplicationContext(),fileName);
+
                 listOfGameMap.addAll(listOfGameMapList);
-                maps=convertIntoHashMap(listOfGameMap);
+                maps = convertIntoHashMap(listOfGameMap);
                 Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("edit Mode",true);
-                bundle.putSerializable("maps",maps);
-                bundle.putSerializable("arrGameData",listOfGameMap);
+                bundle.putBoolean("edit Mode", true);
+                bundle.putSerializable("maps", maps);
+                bundle.putSerializable("arrGameData", listOfGameMap);
                 editMap.putExtra("fileName", fileName);
                 editMap.putExtras(bundle);
                 startActivity(editMap);
@@ -71,35 +93,37 @@ public class EditMap extends AppCompatActivity {
 
     /**
      * {@inheritDoc}
+     *
      * @param requestCode
      * @param resultCode
      * @param data
      */
     @Override
-    protected void  onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
 
-        switch(requestCode){
+        switch (requestCode) {
 
             case 7:
-                if(resultCode==RESULT_OK){
+                if (resultCode == RESULT_OK) {
 
                     String PathHolder = data.getData().getPath();
 
-                    System.out.println("::::::::::::::::::::::my path:::::::::::::::::"+PathHolder);
+                    System.out.println("::::::::::::::::::::::my path:::::::::::::::::" + PathHolder);
 
-                    List<GameMap> listOfGameMapList=mapReader.returnGameMapFromFile(getApplicationContext(),PathHolder);
-                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::"+mapReader.getMapList(getApplicationContext()));
-                    System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::"+listOfGameMapList.size());
+                    List<GameMap> listOfGameMapList = mapReader.returnGameMapFromFile(getApplicationContext(),PathHolder);
+                    System.out.println("::::::::::::::::::GAME MAP LIST::::::::::::::" + MapReader.getMapList(getApplicationContext()));
+                    System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::" + listOfGameMapList.size());
+
                     listOfGameMap.addAll(listOfGameMapList);
-                    System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::"+listOfGameMap.size());
-                    maps=convertIntoHashMap(listOfGameMap);
+                    System.out.println(":::::::::::::::::::::GAME LIST SIZE::::::::::::::::::::::::::" + listOfGameMap.size());
+                    maps = convertIntoHashMap(listOfGameMap);
                     Intent editMap = new Intent(EditMap.this, UserDrivenMapsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean("edit Mode",true);
-                    bundle.putSerializable("maps",maps);
-                    bundle.putSerializable("arrGameData",listOfGameMap
-                    );
+                    bundle.putBoolean("edit Mode", true);
+                    bundle.putSerializable("maps", maps);
+                    bundle.putSerializable("arrGameData", listOfGameMap);
+
                     editMap.putExtras(bundle);
                     startActivity(editMap);
 
@@ -112,25 +136,22 @@ public class EditMap extends AppCompatActivity {
 
     /**
      * This method convert the gamemap arraylist to hashmap
+     *
      * @param listOfGameMap list of gamemap
      * @return hashmap of the gamemap list
      */
     private HashMap<Continent, ArrayList<Country>> convertIntoHashMap(List<GameMap> listOfGameMap) {
         HashMap<Continent, ArrayList<Country>> userMaps = new HashMap<Continent, ArrayList<Country>>();
-        for(GameMap gm:listOfGameMap)
-        {
-            Country country=gm.getFromCountry();
-            Continent continent=country.getBelongsToContinent();
-            if(userMaps.containsKey(continent))
-            {
-                ArrayList<Country> userCountry=userMaps.get(continent);
+        for (GameMap gm : listOfGameMap) {
+            Country country = gm.getFromCountry();
+            Continent continent = country.getBelongsToContinent();
+            if (userMaps.containsKey(continent)) {
+                ArrayList<Country> userCountry = userMaps.get(continent);
                 userCountry.add(country);
-            }
-            else
-            {
-                ArrayList<Country> newUserMap=new ArrayList<Country>();
+            } else {
+                ArrayList<Country> newUserMap = new ArrayList<Country>();
                 newUserMap.add(country);
-                userMaps.put(continent,newUserMap);
+                userMaps.put(continent, newUserMap);
             }
 
         }
