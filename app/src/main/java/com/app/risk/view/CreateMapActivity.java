@@ -648,20 +648,19 @@ public class CreateMapActivity extends Activity {
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
             if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                canvas.drawCircle(getXCordinate(map.getCoordinateX()), getYCordinate(map.getCoordinateY()) , RADIUS, paint);
+                drawCircle(getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),65,paint);
             } else {
-                canvas.drawCircle(map.getCoordinateX(), map.getCoordinateY(), RADIUS, paint);
+                drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
             }
             for (GameMap nieghbourCountry : map.getConnectedToCountries()) {
                 if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                    canvas.drawLine(getXCordinate(map.getCoordinateX()), getYCordinate(map.getCoordinateY()), getXCordinate(nieghbourCountry.getCoordinateX()), getYCordinate(nieghbourCountry.getCoordinateY()), connectionLine);
+                    drawLine(getXCordinate(map.getCoordinateX()),getYCordinate(map.getCoordinateY()),getXCordinate(nieghbourCountry.getCoordinateX()),getYCordinate(nieghbourCountry.getCoordinateY()),connectionLine);
                 }else{
-                    canvas.drawLine(map.getCoordinateX(), map.getCoordinateY(), nieghbourCountry.getCoordinateX(), nieghbourCountry.getCoordinateY(), connectionLine);
+                    drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
                 }
             }
             if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
                 canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX())-20,getYCordinate(map.getCoordinateY())-20,text);
-
             } else {
                 canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
             }
@@ -672,15 +671,15 @@ public class CreateMapActivity extends Activity {
     }
 
     public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
-
+        canvas.drawLine(map.getCoordinateX(), map.getCoordinateY(), nieghbourCountry.getCoordinateX(), nieghbourCountry.getCoordinateY(), connectionLine);
     }
 
     public void drawText(float x,float y,float neighbourX,float neighbourY,String text){
-
+        canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
     }
 
     public void drawCircle(float x,float y,int radius,Paint paint){
-
+        canvas.drawCircle(map.getCoordinateX(), map.getCoordinateY(), RADIUS, paint);
     }
 
     /**
