@@ -545,7 +545,6 @@ public class Player extends Observable implements Serializable {
 
         attackResult.append("\n\nAfter Attack : \n");
         attackResult.append("Attacker armies : " + attackingCountry.getNoOfArmies() + " Defender armies: " + defendingCountry.getNoOfArmies() + "\n\n");
-        PhaseViewController.getInstance().addAction(attackResult.toString());
         return attackResult;
     }
 
