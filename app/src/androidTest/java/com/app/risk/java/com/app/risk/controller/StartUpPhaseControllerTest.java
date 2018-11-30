@@ -16,15 +16,15 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 /**
- * This class is used check armies count in each country in the startup phase
+ * This class validates the startup phase
  *
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class StartUpPhaseAssignArmiesTest {
+public class StartUpPhaseControllerTest {
     /**
      * context instance would hold the instance of the target activity
      */
@@ -83,7 +83,27 @@ public class StartUpPhaseAssignArmiesTest {
         }
 
     }
-
+    /**
+     * This method checks number of countries assigned in the startup phase
+     */
+    @Test
+    public void startUpPhaseAssignCountriesTest() {
+        startupphase.assignInitialCountries();
+        assertEquals(2, gamePlay.getCountryListByPlayerId(gamePlay.getPlayers().get(0).getId()).size());
+        assertEquals(2, gamePlay.getCountryListByPlayerId(gamePlay.getPlayers().get(1).getId()).size());
+        assertEquals(2, gamePlay.getCountryListByPlayerId(gamePlay.getPlayers().get(2).getId()).size());
+    }
+    /**
+     * This method checks initial armies count in the startup phase
+     */
+    @Test
+    public void startUpPhaseInitialArmies() {
+        startupphase.assignInitialCountries();
+        startupphase.assignInitialArmies();
+        assertEquals(4, gamePlay.getPlayers().get(0).getNoOfArmies());
+        assertEquals(4, gamePlay.getPlayers().get(1).getNoOfArmies());
+        assertEquals(4, gamePlay.getPlayers().get(2).getNoOfArmies());
+    }
     /**
      * This method gets executed after the test case has been executed
      * its sets the gameplay object to null

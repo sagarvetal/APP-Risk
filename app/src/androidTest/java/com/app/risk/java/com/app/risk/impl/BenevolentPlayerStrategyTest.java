@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -8,19 +8,26 @@ import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
-import com.app.risk.impl.CheaterPlayerStrategy;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import static org.junit.Assert.assertTrue;
 
-public class CheaterStrategyTest {
-
+/**
+ * This class is used to test the benevolent player behaviour in all the three phases
+ *
+ * @author Akhila Chilukuri
+ * @version 1.0.0
+ */
+public class BenevolentPlayerStrategyTest {
     /**
      * context instance would hold the instance of the target activity
      */
@@ -58,8 +65,8 @@ public class CheaterStrategyTest {
         playerNames.add("player1");
         playerNames.add("player2");
         ArrayList<String> strategy = new ArrayList<String>();
-        strategy.add(GamePlayConstants.CHEATER_STRATEGY);
-        strategy.add(GamePlayConstants.CHEATER_STRATEGY);
+        strategy.add(GamePlayConstants.BENEVOLENT_STRATEGY);
+        strategy.add(GamePlayConstants.BENEVOLENT_STRATEGY);
         gamePlay.setPlayers(playerNames, strategy);
         ArrayList<String> india = new ArrayList<String>();
         india.add("Italy");
@@ -85,10 +92,10 @@ public class CheaterStrategyTest {
     }
 
     /**
-     * This method checks the army count doubles in the reinforcement phase for cheater player
+     * This method checks the army count in the reinforcement phase for benevolent player
      */
     @Test
-    public void cheaterReinforcementArmiesCountTest() {
+    public void benevolentReinforcementArmiesCountTest() {
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
         gamePlay.getPlayers().get(0).setNoOfCountries(3);
         gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
@@ -103,68 +110,54 @@ public class CheaterStrategyTest {
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
         reinforcementPhaseController = ReinforcementPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
         reinforcementPhaseController.start();
-        int reinforcement = (gamePlay.getCountries().get("India").getNoOfArmies()) * 2;
-        //gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay);
+        int reinforcement = gamePlay.getCurrentPlayer().calculateReinforcementArmies(gamePlay);
         System.out.println(reinforcement);
         gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
-        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == reinforcement);
+        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == reinforcement + 1);
+        System.out.println(reinforcement);
     }
 
     /**
-     * This method checks whether all neighbouring country becomes his after the attack for cheater player
+     * This method checks whether army count is not changed afetr the attack phase for benevolent player
      */
     @Test
-    public void cheaterAttackTest() {
-        gamePlay.getPlayers().get(0).setNoOfArmies(6);
-        gamePlay.getPlayers().get(0).setNoOfCountries(3);
-        gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
-        gamePlay.getCountries().get("India").setNoOfArmies(1);
-        gamePlay.getCountries().get("Italy").setPlayer(gamePlay.getPlayers().get(1));
-        gamePlay.getCountries().get("Italy").setNoOfArmies(2);
-        gamePlay.getCountries().get("America").setPlayer(gamePlay.getPlayers().get(1));
-        gamePlay.getCountries().get("America").setNoOfArmies(3);
-        gamePlay.getCountries().get("pakistan").setPlayer(gamePlay.getPlayers().get(1));
-        gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
-        gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
+    public void benevolentAttackTest() {
+        startupphase.assignInitialCountries();
+        startupphase.assignInitialArmies();
+        startupphase.placeInitialArmies();
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
-
-        ((CheaterPlayerStrategy)gamePlay.getCurrentPlayer().getStrategy()).attackPhase(gamePlay,gamePlay.getPlayers().get(0),gamePlay.getCountryListByPlayerId(0)
-                ,gamePlay.getCountries().get("India")
-                ,gamePlay.getCountries().get("Italy"));
-
-        assertTrue(gamePlay.getCountries().get("India").getPlayer() == gamePlay.getCountries().get("Italy").getPlayer()
-                       && gamePlay.getCountries().get("India").getPlayer() == gamePlay.getCountries().get("America").getPlayer() );
+        reinforcementPhaseController = ReinforcementPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
+        reinforcementPhaseController.start();
+        gamePlay.getCurrentPlayer().reinforcementPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
+        AttackPhaseController fc = AttackPhaseController.getInstance().init(InstrumentationRegistry.getTargetContext(), gamePlay);
+        int beforeAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
+        gamePlay.getCurrentPlayer().attackPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
+        int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
+        assertTrue(beforeAttackArmies == afterAttackArmies);
     }
 
     /**
-     * This method checks army count doubles on each country which has enemy neighbour
+     * This method checks valid fortification is performed for benevolent player
      */
     @Test
-    public void cheaterFortificationTest() {
+    public void benevolentFortificationTest() {
         gamePlay.getPlayers().get(0).setNoOfArmies(6);
         gamePlay.getPlayers().get(0).setNoOfCountries(3);
         gamePlay.getCountries().get("India").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("India").setNoOfArmies(1);
         gamePlay.getCountries().get("Italy").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("Italy").setNoOfArmies(2);
-        gamePlay.getCountries().get("America").setPlayer(gamePlay.getPlayers().get(1));
+        gamePlay.getCountries().get("America").setPlayer(gamePlay.getPlayers().get(0));
         gamePlay.getCountries().get("America").setNoOfArmies(3);
         gamePlay.getCountries().get("pakistan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("nepal").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.getCountries().get("butan").setPlayer(gamePlay.getPlayers().get(1));
         gamePlay.setCurrentPlayer(gamePlay.getPlayers().get(0));
-
-        // india and italy have america as their neighbour
-        int armiesOnIndia = gamePlay.getCountries().get("India").getNoOfArmies();
-        int armiesOnItaly = gamePlay.getCountries().get("Italy").getNoOfArmies();
-
-
         FortificationPhaseController.getInstance().init(context, gamePlay);
         gamePlay.getCurrentPlayer().fortificationPhase(gamePlay, gamePlay.getCountryListByPlayerId(0), null);
-
-        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == (armiesOnIndia * 2)
-                && gamePlay.getCountries().get("Italy").getNoOfArmies() == (armiesOnItaly * 2));
-
+        int india = gamePlay.getCountries().get("India").getNoOfArmies();
+        int america = gamePlay.getCountries().get("India").getNoOfArmies();
+        assertTrue(gamePlay.getCountries().get("India").getNoOfArmies() == gamePlay.getCountries().get("America").getNoOfArmies());
     }
 
     /**

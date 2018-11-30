@@ -1,7 +1,5 @@
 package com.app.risk.model;
 
-import android.support.annotation.NonNull;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -13,11 +11,29 @@ import java.util.ArrayList;
  */
 public class GameMap implements Serializable {
 
+    /**
+     * Name of the source country
+     */
     private Country fromCountry;
+    /**
+     * Its position on the view (x-coordinate)
+     */
     private float coordinateX = 0;
+    /**
+     * Its position on the view (y-coordinate)
+     */
     private float coordinateY = 0;
+    /**
+     * List of all the countries (their respective GameMap objects) that the source (this) country is connected to
+     */
     private ArrayList<GameMap> connectedToCountries = new ArrayList<>();
+    /**
+     * Index of the country in the list
+     */
     private int indexOfCountryInList;
+    /**
+     * Color of the continent this country belongs to
+     */
     private int continentColor;
 
     /**

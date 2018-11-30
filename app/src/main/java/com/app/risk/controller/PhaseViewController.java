@@ -24,9 +24,21 @@ import java.util.Scanner;
  */
 
 public class PhaseViewController {
+    /**
+     * It is a singleton instance of the controller
+     */
     private static PhaseViewController phaseViewController;
+
+    /**
+     * It is a directory path to store logs
+     */
     private String dirPath;
+    /**
+     * logmsg stores the latest log that has to displayed on the phase view.
+     *
+     */
     public static PhaseModel logmsg;
+
     /**
      * This is a default constructor.
      *

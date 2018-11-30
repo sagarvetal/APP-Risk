@@ -156,6 +156,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                                             Intent intent = new Intent(invokingActivity.getApplicationContext(), PlayScreenActivity.class);
                                                             intent.putExtra("GAMEPLAY_OBJECT", gamePlay);
                                                             intent.putExtra(GamePlayConstants.GAME_MODE, GamePlayConstants.SINGLE_GAME_MODE);
+                                                            SaveLoadGameController.deleteSavedFile(savedGamesList[selectedGameIndex], invokingActivity);
                                                             invokingActivity.startActivity(intent);
                                                         }
                                                     })

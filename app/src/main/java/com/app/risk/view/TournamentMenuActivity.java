@@ -1,6 +1,7 @@
 package com.app.risk.view;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +13,13 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.GameMap;
 import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
+import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,6 +66,12 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
      * mapListArray: array of maps for passing into dialog
      */
     private String[] mapListArray;
+   
+    /**
+     * mapReader to read each selected map and verify if its valid before proceeding to play
+     */
+    private MapReader mapReader = new MapReader();
+
     /**
      * checkedStateMapArray: maintains the state of selected maps
      */
@@ -70,6 +80,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
      * checkedStateStratergiesArray: maintains the state of selected strategies
      */
     private boolean[] checkedStateStratergiesArray;
+
 
 
     /**
@@ -115,7 +126,7 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
         selectedPlayerStratergies = new ArrayList<>();
         selectedMapList = new ArrayList<>();
 
-        mapArrayList = MapReader.getMapList(this.getApplicationContext());
+        mapArrayList = mapReader.getMapList(this.getApplicationContext());
 
     }
 
@@ -153,7 +164,15 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             if(isChecked){
-                                checkedStateMapArray[which] = true;
+                                MapVerification mapVerification = new MapVerification();
+                                boolean validMap = mapVerification.mapVerification(mapReader.returnGameMapFromFile(TournamentMenuActivity.this, mapListArray[which]));
+                                if(validMap) {
+                                    checkedStateMapArray[which] = true;
+                                } else {
+                                    Toast.makeText(TournamentMenuActivity.this, mapListArray[which] + " is invalid", Toast.LENGTH_LONG).show();
+                                    checkedStateMapArray[which] = false;
+                                    isChecked = false;
+                                }
                             }
                             else{
                                 checkedStateMapArray[which] = false;

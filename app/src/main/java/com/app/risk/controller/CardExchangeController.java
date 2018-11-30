@@ -59,13 +59,6 @@ public class CardExchangeController {
         return player;
     }
 
-    /**
-     * List of cards owned by the current player
-     * @return list of cards owned by the current player
-     */
-    public List<Card> getCardList(){
-        return player.getCards();
-    }
 
     /**
      * Check the validity of selected cards and return the number of armies to be awarded in its exchange
@@ -98,60 +91,5 @@ public class CardExchangeController {
         player.setCards(updatedCards);
     }
 
-    /**
-     * This method implements card exchange for computer strategy players without user interaction by choosing three
-     * most suitable cards for exchange (based on the rules).
-     * It performs the exchange based on the cards automatically chosen and awards the player the appropriate number of
-     * armies received in exchange for those cards and removes those cards from the player's list of cards.
-     */
-    public void exchangeCardsStrategyImplementation(){
 
-        List<Card> cardList = player.getCards();
-        int infantryCardCount = 0;
-        int cavalryCardCount = 0;
-        int artilleryCardCount = 0;
-        for(int i=0; i<cardList.size(); i++){
-            if(cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD)){
-                artilleryCardCount++;
-                if(artilleryCardCount == 3)
-                    break;
-            } else if(cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD)){
-                cavalryCardCount++;
-                if(cavalryCardCount == 3)
-                    break;
-            } else if(cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD)){
-                infantryCardCount++;
-                if(infantryCardCount == 3)
-                    break;
-            }
-        }
-        if(artilleryCardCount == 3 || cavalryCardCount == 3 || infantryCardCount == 3 ||
-                (artilleryCardCount>=1 && cavalryCardCount>=1 && infantryCardCount>=1)){
-            player.setArmiesInExchangeOfCards(player.getArmiesInExchangeOfCards() + 5);
-            player.incrementArmies(player.getArmiesInExchangeOfCards());
-            player.setReinforcementArmies(player.getReinforcementArmies() + player.getArmiesInExchangeOfCards());
-
-            List<Card> cardsToRemove = new ArrayList<>();
-            for(int i=0; i<cardList.size(); i++){
-                if(artilleryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.ARTILLERY_CARD))
-                    cardsToRemove.add(cardList.get(i));
-                else if(cavalryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.CAVALRY_CARD))
-                    cardsToRemove.add(cardList.get(i));
-                else if(infantryCardCount == 3 && cardList.get(i).getType().equals(GamePlayConstants.INFANTRY_CARD))
-                    cardsToRemove.add(cardList.get(i));
-            }
-            if(cardsToRemove.size() == 3){
-                removeExchangedCards(cardsToRemove);
-            } else {
-                cardsToRemove.clear();
-                for(int i=0; i<cardList.size(); i++) {
-                    if (cardsToRemove.size() > 0 && cardsToRemove.contains(cardList.get(i)))
-                        break;
-                    else
-                        cardsToRemove.add(cardList.get(i));
-                }
-                removeExchangedCards(cardsToRemove);
-            }
-        }
-    }
 }

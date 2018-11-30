@@ -24,11 +24,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class StartupPhaseController {
 
     /**
-     * startupPhaseController: singleton instance of the controller
-     * gamePlay: To manage the state and retrieve data
+     * It holds complete game data like countries, continents and player.
      */
-
     private GamePlay gamePlay;
+
+    /**
+     * It is a singleton instance of the controller
+     */
     private static StartupPhaseController startupPhaseController;
 
     /**
