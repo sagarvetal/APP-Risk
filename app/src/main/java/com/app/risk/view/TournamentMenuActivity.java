@@ -1,6 +1,7 @@
 package com.app.risk.view;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,10 +13,13 @@ import android.widget.Toast;
 
 import com.app.risk.R;
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.model.GameMap;
 import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
+import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TournamentMenuActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -114,7 +118,16 @@ public class TournamentMenuActivity extends AppCompatActivity implements View.On
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             if(isChecked){
-                                checkedStateMapArray[which] = true;
+                                MapReader mapReader = new MapReader();
+                                MapVerification mapVerification = new MapVerification();
+                                boolean validMap = mapVerification.mapVerification(mapReader.returnGameMapFromFile(TournamentMenuActivity.this, mapListArray[which]));
+                                if(validMap) {
+                                    checkedStateMapArray[which] = true;
+                                } else {
+                                    Toast.makeText(TournamentMenuActivity.this, mapListArray[which] + " is invalid", Toast.LENGTH_LONG).show();
+                                    checkedStateMapArray[which] = false;
+                                    isChecked = false;
+                                }
                             }
                             else{
                                 checkedStateMapArray[which] = false;
