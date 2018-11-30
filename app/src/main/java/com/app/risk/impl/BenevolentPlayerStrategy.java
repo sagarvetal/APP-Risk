@@ -33,17 +33,18 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
      */
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
-        int reinforcement = gamePlay.getCurrentPlayer().getReinforcementArmies();
-            int min = findleastArmies(countriesOwnedByPlayer);
-            for (Country country : countriesOwnedByPlayer) {
-                if (country.getNoOfArmies() == min) {
-                    PhaseViewController.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
-                    PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
-                    country.incrementArmies(reinforcement);
-                    gamePlay.getCurrentPlayer().decrementReinforcementArmies(reinforcement);
-                    PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed "+reinforcement+" armies on " + country.getNameOfCountry());
-                }
+        final int reinforcement = gamePlay.getCurrentPlayer().getReinforcementArmies();
+        final int min = findleastArmies(countriesOwnedByPlayer);
+        for (final Country country : countriesOwnedByPlayer) {
+            if (country.getNoOfArmies() == min) {
+                PhaseViewController.getInstance().addAction("\nweak Country found : " + country.getNameOfCountry());
+                PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " is placing reinforcement armies on " + country.getNameOfCountry());
+                country.incrementArmies(reinforcement);
+                player.decrementReinforcementArmies(reinforcement);
+                PhaseViewController.getInstance().addAction("\n" + gamePlay.getCurrentPlayer().getName() + " has placed "+reinforcement+" armies on " + country.getNameOfCountry());
+                break;
             }
+        }
     }
 
     /**
@@ -62,32 +63,6 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
         return min;
     }
 
-    /**
-     * This is method helps in minimum,average and maximum number of armies in countries occupied by the player
-     *
-     * @param countryListOwnedByPlayer ArrayList of the country owned by the player
-     * @return HashMap with the details of minimum,maximum and average number of armies in the countries owned by the player
-     */
-    private HashMap<String, Integer> playerCountryDetails(ArrayList<Country> countryListOwnedByPlayer) {
-        HashMap<String, Integer> armiesDetails = new HashMap<String, Integer>();
-        int minArmies = Integer.MAX_VALUE, maxArmies = Integer.MIN_VALUE, avgArmies = 0;
-        int count = 0, armiesSum = 0;
-        for (Country country : countryListOwnedByPlayer) {
-            if (country.getNoOfArmies() > maxArmies)
-                maxArmies = country.getNoOfArmies();
-            else if (country.getNoOfArmies() < minArmies)
-                minArmies = country.getNoOfArmies();
-            count++;
-            armiesSum += country.getNoOfArmies();
-        }
-        avgArmies = armiesSum / count;
-        armiesDetails.put("minimum", minArmies);
-        armiesDetails.put("maximum", maxArmies);
-        armiesDetails.put("average", avgArmies);
-        armiesDetails.put("count", count);
-        return armiesDetails;
-
-    }
 
     /**
      * This is attack method for benevolent strategy player.
@@ -166,7 +141,12 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
     }
 
 
-    private void sortTheCountries(ArrayList<Country> countryList, boolean ascending) {
+    /**
+     * This method sort the given list of countries based given flag whether in ascending or descending order.
+     * @param countryList The list of country.
+     * @param ascending The flag to sort list in ascending or descending order.
+     */
+    private void sortTheCountries(final ArrayList<Country> countryList, final boolean ascending) {
         if(countryList.size() > 0){
             final boolean ascend = ascending;
             Collections.sort(countryList, new Comparator<Country>() {
@@ -181,6 +161,5 @@ public class BenevolentPlayerStrategy implements Strategy,Serializable {
                 }
             });
         }
-
     }
 }

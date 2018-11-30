@@ -13,9 +13,22 @@ import android.view.View;
  * @version 1.0.0
  */
 public class MapObjectsView extends View {
+
+    /**
+     * paint: GUI to represent countries
+     */
     private Paint paint;
+    /**
+     * xPosition: x coordinate on the map
+     */
     public float xPosition;
+    /**
+     * yPosition: y coordinate on the map
+     */
     public float yPosition;
+    /**
+     * continentColor: represents the color of the continent
+     */
     public int continentColor;
 
     /**

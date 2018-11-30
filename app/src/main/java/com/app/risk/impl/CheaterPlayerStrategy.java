@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * A concrete strategy class that implements a cheater player strategy.
  *
- * @author Sagar Vetal
+ * @author Himanshu Kohli and Sagar Vetal
  * @version 1.0.0 (Date: 22/11/2018)
  */
 public class CheaterPlayerStrategy implements Strategy,Serializable {

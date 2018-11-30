@@ -25,8 +25,18 @@ import org.w3c.dom.Text;
  */
 public class MapFragment extends Fragment {
 
+
+    /**
+     * textView: represents the name of the map view
+     */
     TextView textView;
+    /**
+     * isFileValid : holds whether the map is valid or not
+     */
     public Boolean isFileValid;
+    /**
+     * context: instance fo the invoking activity
+     */
     public Context context;
 
     /**

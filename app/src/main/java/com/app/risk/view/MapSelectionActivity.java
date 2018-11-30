@@ -18,7 +18,10 @@ import java.util.ArrayList;
  */
 public class MapSelectionActivity extends AppCompatActivity {
 
-    private ArrayList<String> list;
+    /**
+     * mapSelectionList: Holds the map list
+     */
+    private ArrayList<String> mapSelectionList;
 
     /**
      * This is the main creation method of the activity

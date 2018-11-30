@@ -22,7 +22,15 @@ import java.util.List;
  */
 public class CardExchangeAdapter extends BaseAdapter {
 
+    /**
+     * cardsOfPlayer: To hold the list of card
+     */
+
     List<Card> cardsOfPlayer;
+
+    /**
+     * context: Instance of invoking activity
+     */
     private Context context;
 
     /**

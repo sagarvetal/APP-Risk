@@ -73,7 +73,7 @@ public class CreateMapActivity extends Activity {
      */
     private CountryAdaptor countryAdaptor;
     /**
-     * list of countries as grpah object
+     * list of countries as graph object
      */
     private ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
     /**

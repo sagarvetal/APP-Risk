@@ -60,29 +60,116 @@ import java.util.Observer;
  */
 public class PlayScreenActivity extends AppCompatActivity implements Observer {
 
+    /**
+     * pImage: image of the player
+     */
     private ImageView pImage;
-    private TextView pName, pArmies, pCountries;
+    /**
+     * pName: name of the player
+     */
+    private TextView pName;
+    /**
+     * pArmies: armies of the player
+     */
+    private TextView pArmies;
+    /**
+     * pCountries: number of player countries
+     */
+    private TextView pCountries;
+    /**
+     * recyclerView: hold and create data representation of player countries
+     */
     private RecyclerView recyclerView;
+    /**
+     * cardView: holds the reference of a card
+     */
     private CardView cardView;
+    /**
+     * gamePlay: To manage the state and retrieve data
+     */
     private GamePlay gamePlay;
+    /**
+     * adapter: holds the data of play screen adapter
+     */
     private PlayScreenRVAdapter adapter;
+    /**
+     * gameMode: holds the current game mode
+     */
     private String gameMode;
+
+    /**
+     * mapName: contains the name of the map
+     */
     private String mapName;
+
+    /**
+     * playerNames: contains the name of the players
+     */
     private ArrayList<String> playerNames;
+
+    /**
+     * playerStrategies: contains the strategies of the player
+     */
     private ArrayList<String> playerStrategies;
+    /**
+     * actionBar: reference to the top toolbar
+     */
     private ActionBar actionBar;
+    /**
+     * floatingActionButton: the phase changing button
+     */
     private FloatingActionButton floatingActionButton;
+    /**
+     * logView: phase view represented in the list view
+     */
     private ListView logView;
+    /**
+     * logViewAdapter: holds the data of the list view
+     */
     public static ArrayAdapter<String> logViewAdapter;
+    /**
+     * logViewArrayList: holds the data of list view
+     */
     public static ArrayList<String> logViewArrayList;
+    /**
+     * playerStateAdapter: holds the state of the player
+     */
     private PlayerStateAdapter playerStateAdapter;
-    private ListView listPlayerState ;
-    private ArrayList<Country> countriesOwnedByPlayer;
+
+    /**
+     * mapList: list of all the maps
+     */
     private ArrayList<String> mapList;
+
+    /**
+     * listPlayerState: holds the list of each player(world domination view)
+     */
+    private ListView listPlayerState ;
+    /**
+     * countriesOwnedByPlayer: holds all the countries hold by player
+     */
+    private ArrayList<Country> countriesOwnedByPlayer;
+    /**
+     * noOfTurns: restrictive turns in tournament mode for each player
+     */
+
     private int noOfTurns;
+
+    /**
+     * noOfGames: number of games in tournament mode
+     */
     private int noOfGames;
+    /**
+     * currentGameCount: holds the current count of game
+     */
     private int currentGameCount;
+    /**
+     * tournamentResult: holds the results of the tournament mode
+     */
     private LinkedHashMap<String, ArrayList<String>> tournamentResult = new LinkedHashMap<>();
+    /**
+     * winningPlayers: holds the data of winning players in games
+     */
     private ArrayList<String> winningPlayers;
 
     /**
@@ -246,7 +333,20 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         new AlertDialog.Builder(this)
                 .setItems(gridViewArray,null)
                 .setTitle("Game Log")
-                .setPositiveButton("Back",null)
+                .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                    }
+                })
+                .setNeutralButton("Show Log", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showLogDialog();
+                    }
+                })
+                .setCancelable(false)
                 .create().show();
 
     }
@@ -522,6 +622,9 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
         },milliseconds);
     }
 
+    /**
+     * This method shows the dialog box of the phase view
+     */
     public void manageLogViewDialog(){
 
        logView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -543,29 +646,53 @@ public class PlayScreenActivity extends AppCompatActivity implements Observer {
        });
     }
 
+    /**
+     * {@inheritDoc}
+     * @param menu: reference to menu
+     * @return : returns who is to handle the menu event (1:system)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.play_screen_menu,menu);
         return true;
     }
 
+    /**
+     *{@inheritDoc}
+     * @param item: reference to menu item
+     * @return : returns who is to handle the menu event (1:user)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if(id == R.id.play_action_view){
 
-            String[] logViewArray = new String[logViewArrayList.size()];
-            for(int i=0;i<logViewArrayList.size();i++){
-                logViewArray[i] = logViewArrayList.get(i);
-            }
-            new AlertDialog.Builder(PlayScreenActivity.this)
-                    .setItems(logViewArray,null)
-                    .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
-                    .setPositiveButton("Back",null)
-                    .create().show();
+            showLogDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Shows the alert dialog for the full log of system
+     */
+    public void showLogDialog(){
+        String[] logViewArray = new String[logViewArrayList.size()];
+        for(int i=0;i<logViewArrayList.size();i++){
+            logViewArray[i] = logViewArrayList.get(i);
+        }
+        new AlertDialog.Builder(PlayScreenActivity.this)
+                .setItems(logViewArray,null)
+                .setTitle("Phase View for " + gamePlay.getCurrentPlayer().getName())
+                .setPositiveButton("Main Menu", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finishAffinity();
+                        startActivity(new Intent(PlayScreenActivity.this,MainScreenActivity.class));
+                    }
+                })
+                .setCancelable(false)
+                .create().show();
     }
 }
