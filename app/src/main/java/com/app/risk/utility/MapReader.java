@@ -29,15 +29,36 @@ import java.util.List;
  */
 public class MapReader {
 
-    private static String line;
+    /**
+     * To read each line in the file loaded
+     */
+    private String line;
 
-    private static HashMap<String, Continent> continentHashMap = new HashMap<>();
-    private static HashMap<String, Country> countryHashMap = new HashMap<>();
-    private static GamePlay finalGamePlay = new GamePlay();
+    /**
+     * Hashmap to store a Continent object with its name as the key
+     */
+    private HashMap<String, Continent> continentHashMap = new HashMap<>();
+    /**
+     * Hashmap to store a Country object with its name as the key
+     */
+    private HashMap<String, Country> countryHashMap = new HashMap<>();
+    /**
+     * Final gamePlay object which will be returned on calling the returnGamePlayFromFile() method
+     */
+    private GamePlay finalGamePlay = new GamePlay();
 
-    private static HashMap<String, GameMap> countryGameMapList = new HashMap<>();
-    private static List<Continent> continentList = new ArrayList<>();
-    private static List<GameMap> finalGameMapList = new ArrayList<>();
+    /**
+     * Hashmap to store a GameMap object with the name of the country as the key
+     */
+    private HashMap<String, GameMap> countryGameMapList = new HashMap<>();
+    /**
+     * List to store all the continents in the map
+     */
+    private List<Continent> continentList = new ArrayList<>();
+    /**
+     * Final list of gameMap objects which will be returned on calling the returnGameMapFromFile() method
+     */
+    private List<GameMap> finalGameMapList = new ArrayList<>();
 
     /**
      * Return GamePlay object after loading file to start playing
@@ -46,7 +67,7 @@ public class MapReader {
      * @param fileName user requested file name
      * @return GamePlay object
      */
-    public static GamePlay returnGamePlayFromFile(Context context, String fileName) {
+    public GamePlay returnGamePlayFromFile(Context context, String fileName) {
         readGameFromFile(context, fileName);
         return finalGamePlay;
     }
@@ -58,7 +79,7 @@ public class MapReader {
      * @param fileName user requested file name
      * @return List of GameMap object
      */
-    public static List<GameMap> returnGameMapFromFile(Context context, String fileName) {
+    public List<GameMap> returnGameMapFromFile(Context context, String fileName) {
         readGameFromFile(context, fileName);
         return finalGameMapList;
     }
@@ -69,7 +90,7 @@ public class MapReader {
      * @param context  current state/context of the application
      * @param fileName user requested file name
      */
-    private static void readGameFromFile(Context context, String fileName) {
+    private void readGameFromFile(Context context, String fileName) {
 
         try {
             finalGameMapList = new ArrayList<>();
@@ -180,7 +201,7 @@ public class MapReader {
      * @param words array of names of connected countries
      * @return list of country objects as string to be set in the game play object
      */
-    private static ArrayList<String> setAdjacentCountriesListString(String[] words) {
+    private ArrayList<String> setAdjacentCountriesListString(String[] words) {
 
         ArrayList<String> returnCountryList = new ArrayList<>();
 
@@ -196,7 +217,7 @@ public class MapReader {
      *
      * @return list of string of map names.
      */
-    public static ArrayList<String> getMapList(Context context) {
+    public ArrayList<String> getMapList(Context context) {
 
         final ArrayList<String> mapList = new ArrayList<>();
         final String rootPath = context.getFilesDir().getAbsolutePath();
@@ -215,7 +236,7 @@ public class MapReader {
      * @param words array of names of connected countries
      * @return list of country objects as objects to be set in the game map object
      */
-    private static ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
+    private ArrayList<GameMap> setAdjacentCountriesList(String[] words) {
 
         ArrayList<GameMap> returnCountryList = new ArrayList<>();
 
@@ -247,7 +268,7 @@ public class MapReader {
      * @param continentName name of the continent
      * @return true if continent belongs to continent list, false otherwise
      */
-    private static boolean continentBelongsToContinentList(String continentName) {
+    private boolean continentBelongsToContinentList(String continentName) {
 
         int flag = 0;
 
@@ -273,7 +294,7 @@ public class MapReader {
      * @param continentName name of the continent
      * @return continent object which has the same name as the parameter
      */
-    private static Continent getContinentByName(String continentName) {
+    private Continent getContinentByName(String continentName) {
 
         if (continentList.isEmpty()) {
             System.out.println("Error: Continent list is empty");

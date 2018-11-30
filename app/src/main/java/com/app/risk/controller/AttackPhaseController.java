@@ -3,7 +3,6 @@ package com.app.risk.controller;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -23,7 +22,6 @@ import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.view.MainScreenActivity;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -39,33 +37,63 @@ public class AttackPhaseController implements View.OnClickListener {
 
 
     /**
-     * attackPhaseController: singleton instance of the controller
-     * gamePlay: To manage the state and retrieve data
-     * context: instance of the invoking activity
+     * It is a singleton instance of the controller
      */
     private static AttackPhaseController attackPhaseController;
+
+    /**
+     * It holds complete game data like countries, continents and player.
+     */
     private GamePlay gamePlay;
+
+    /**
+     * It is an instance of the invoking activity
+     */
     private Context context;
 
     /**
-     * contries: List of countries
-     * attackingCountry: holds the data of attacking country
-     * defendingCountry: holds the data of the defending country
+     * It holds the list of countries
      */
     private ArrayList<Country> countries;
-    private Country attackingCountry, defendingCountry;
 
     /**
-     * mainAlertDialog: To represent data in dialogbox
-     * rollButton: To perform dice roll
-     * allOutButton: To perform all out operation
-     * attackerNumberPicker: Allows user to select the number of attacking dice
-     * defendingNumberPicker: Allows user to select the number of defending dice
-     * defenderDice: minimum number of defending dice value
+     * It holds the data of attacking country
+     */
+    private Country attackingCountry;
+
+    /**
+     * It holds the data of defending country
+     */
+    private Country defendingCountry;
+
+    /**
+     * It is used to show attack dialog box
      */
     private AlertDialog mainAlertDialog;
-    private Button rollButton,allOutButton;
-    private NumberPicker attackerNumberPicker, defenderNumberPicker;
+
+    /**
+     * It is used to perform dice roll
+     */
+    private Button rollButton;
+
+    /**
+     * It is used to perform all out operation
+     */
+    private Button allOutButton;
+
+    /**
+     * It allows user to select the number of attacking dice
+     */
+    private NumberPicker attackerNumberPicker;
+
+    /**
+     * It allows user to select the number of defending dice
+     */
+    private NumberPicker defenderNumberPicker;
+
+    /**
+     * It holds the number of defending dices
+     */
     private int defenderDices = 1;
 
     /**
@@ -385,14 +413,18 @@ public class AttackPhaseController implements View.OnClickListener {
         int defenderDices = 1;
         final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
 
-        if (strategy instanceof HumanPlayerStrategy)
+        if (strategy instanceof HumanPlayerStrategy) {
             defenderDices = showDiceSelectionDialogBox(defendingCountry);
-        else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
+        } else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy) {
             defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
-        else if (strategy instanceof BenevolentPlayerStrategy)
+        } else if (strategy instanceof BenevolentPlayerStrategy) {
             defenderDices = 1;
-        else if (strategy instanceof RandomPlayerStrategy)
+        } else if (strategy instanceof RandomPlayerStrategy) {
             defenderDices = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+            if(defenderDices == 0){
+                defenderDices = 1;
+            }
+        }
 
         return defenderDices;
     }

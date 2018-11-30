@@ -1,9 +1,7 @@
 package com.app.risk.utility;
 
 import com.app.risk.model.Continent;
-
 import com.app.risk.model.Country;
-
 import com.app.risk.model.GameMap;
 
 import java.util.ArrayList;
@@ -23,10 +21,25 @@ import java.util.Stack;
  */
 public class MapVerification {
 
+    /**
+     * List of gameMap objects that will be sent as parameter by the method requesting map verification
+     */
     private List<GameMap> gameMapList = new ArrayList<>();
+    /**
+     * A common hashmap which is being used to verify the 3rd and 4th validity checks
+     */
     private HashMap<Object, Object> mappingForVerification = new HashMap<>();
+    /**
+     * Stack to perform depth first search
+     */
     private Stack<GameMap> depthFirstTraversalStack = new Stack<>();
+    /**
+     * List of countries visited during depth first traversal
+     */
     private List<String> countriesVisited = new ArrayList<>();
+    /**
+     * Hashmap to store a mapping of all the countries that belong to one continent with continent as the key
+     */
     private HashMap<Continent, List<GameMap>> continentCountryMapping = new HashMap<>();
 
     /**
@@ -137,7 +150,6 @@ public class MapVerification {
     /**
      * Performs a check to make sure each continent in the map is a connected subgraph
      * (implements DFS on each continent)
-     *
      * @return true if each continent is a connected subgraph, false otherwise
      */
     public boolean checkContinentIsConnectedSubgraph() {
@@ -177,12 +189,12 @@ public class MapVerification {
         while (!depthFirstTraversalStack.empty()) {
 
             GameMap countryVisited = depthFirstTraversalStack.pop();
+            countryVisited = getGameMapObjectFromList(countryVisited);
 
             if (countriesVisited != null && countriesVisited.contains(countryVisited.getFromCountry().getNameOfCountry())) {
                 continue;
             } else {
                 countriesVisited.add(countryVisited.getFromCountry().getNameOfCountry());
-
                 for (GameMap neighbourCountry : countryVisited.getConnectedToCountries()) {
                     if (isCountryANeighbour(traversableCountries, neighbourCountry)
                             && !countriesVisited.contains(neighbourCountry.getFromCountry().getNameOfCountry())) {
@@ -193,6 +205,19 @@ public class MapVerification {
         }
     }
 
+    /**
+     * Get updated object from gamemaplist
+     * @param map map object from DFS
+     * @return updated object from game map list
+     */
+    public GameMap getGameMapObjectFromList(GameMap map){
+        for (GameMap map1 : gameMapList){
+            if (map1.getFromCountry().getNameOfCountry().equals(map.getFromCountry().getNameOfCountry())){
+                return map1;
+            }
+        }
+        return null;
+    }
     /**
      * Method to check if the adjacent neighbour country can be traversed to find a path
      * @param traversableCountries list of traversable countries

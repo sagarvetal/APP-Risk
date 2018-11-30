@@ -114,6 +114,7 @@ public class AggressivePlayerStrategy implements Strategy,Serializable {
             }
             player.setNewCountryConquered(true);
             PhaseViewController.getInstance().addAction(player.getName() + " conquered " + toCountry.getNameOfCountry());
+            toCountry.getPlayer().decrementCountries(1);
             toCountry.setNoOfArmies(noOfArmiesToMove);
             PhaseViewController.getInstance().addAction(noOfArmiesToMove +" armies moved from " + fromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
             fromCountry.decrementArmies(noOfArmiesToMove);

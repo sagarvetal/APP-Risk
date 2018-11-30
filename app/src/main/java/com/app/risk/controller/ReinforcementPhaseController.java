@@ -24,13 +24,19 @@ import java.util.ArrayList;
 public class ReinforcementPhaseController {
 
     /**
-     * reinforcementPhaseController: singleton instance of the controller
-     * gamePlay: To manage the state and retrieve data
-     * context: instance of the invoking activity
+     * It is a singleton instance of the controller
+     */
+    private static ReinforcementPhaseController reinforcementPhaseController;
+
+    /**
+     * It holds complete game data like countries, continents and player.
      */
     private GamePlay gamePlay;
+
+    /**
+     * It is an instance of the invoking activity
+     */
     private Context context;
-    private static ReinforcementPhaseController reinforcementPhaseController;
 
     /**
      * This is default constructor.

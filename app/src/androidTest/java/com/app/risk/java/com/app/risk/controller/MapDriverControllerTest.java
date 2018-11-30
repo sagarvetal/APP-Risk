@@ -46,7 +46,7 @@ public class MapDriverControllerTest {
      */
     @Test
     public void mapReaderTest() {
-        GamePlay gamePlay = MapReader.returnGamePlayFromFile(context, fileLocation);
+        GamePlay gamePlay = (new MapReader()).returnGamePlayFromFile(context, fileLocation);
         assertNotNull(gamePlay);
         System.out.println("Continent list: " + gamePlay.getContinents().size());
         System.out.println("Territory list size: " + gamePlay.getCountries().size());

@@ -50,4 +50,9 @@ public class SaveLoadGameController {
 
         return saveLoadGame.savedGamesList(context);
     }
+
+    public static void deleteSavedFile(String fileName, Context context){
+
+        saveLoadGame.deleteSavedFile(fileName, context);
+    }
 }
