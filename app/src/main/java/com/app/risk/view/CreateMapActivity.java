@@ -45,7 +45,7 @@ public class CreateMapActivity extends Activity {
     /**
      * Radius of circle
      */
-    public static final int RADIUS = 100;
+    public static final int RADIUS = 65;
     /**
      * filename for 3D map
      */
@@ -214,7 +214,7 @@ public class CreateMapActivity extends Activity {
 
 
         mWidth = maxX - minX + 4000;
-        mHeight = maxY - minY + 4000;
+        mHeight = maxY - minY + 3500;
         width = maxScreenX;
         height = maxScreenY;
 
@@ -231,7 +231,7 @@ public class CreateMapActivity extends Activity {
     }
 
     /**
-     * gets mapped y coordinate according to ratio
+     * gets mapped y coordinate according to ratiox
      * @param yCoordinate - old y coordinate
      * @return mapped coordinate
      */
@@ -669,6 +669,18 @@ public class CreateMapActivity extends Activity {
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
         currentIndexCountrySelected = -1;
+    }
+
+    public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
+
+    }
+
+    public void drawText(float x,float y,float neighbourX,float neighbourY,String text){
+
+    }
+
+    public void drawCircle(float x,float y,int radius,Paint paint){
+
     }
 
     /**
