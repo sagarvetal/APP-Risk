@@ -76,7 +76,7 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
 
             int toCountryIndex = random.nextInt(attackableCountries.size());
             Country toCountry = attackableCountries.get(toCountryIndex);
-            performAllOutAttack(fromCountry, toCountry, player, attackableCountries, countriesOwnedByPlayer);
+            performAllOutAttack(fromCountry, toCountry, player, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
                 PhaseViewController.getInstance().addAction(player.getName() + " conquered the entire map.");
                 player.setPlayerWon(true);
@@ -94,10 +94,9 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
      * @param fromCountry Attacking country
      * @param toCountry Defending country
      * @param player Current player
-     * @param attackableCountries Countries that can be attacked by the attacking country
      * @param countriesOwnedByPlayer All countries owned by the player
      */
-    public void performAllOutAttack(Country fromCountry, Country toCountry, Player player, List<Country> attackableCountries, List<Country> countriesOwnedByPlayer){
+    public void performAllOutAttack(Country fromCountry, Country toCountry, Player player, List<Country> countriesOwnedByPlayer){
         int attackingDiceRoll = 0;
         int defendingDiceRoll;
         PhaseViewController.getInstance().addAction("\nAttacking country: "+fromCountry.getNameOfCountry()+"\nDefending country: "+toCountry.getNameOfCountry());
@@ -123,7 +122,6 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             fromCountry.decrementArmies(noOfArmiesToMove);
             toCountry.setPlayer(player);
             player.incrementCountries(1);
-            attackableCountries.remove(toCountry);
             countriesOwnedByPlayer.add(toCountry);
         }
     }
