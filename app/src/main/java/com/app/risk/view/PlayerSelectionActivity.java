@@ -28,14 +28,49 @@ import java.util.ArrayList;
  */
 public class PlayerSelectionActivity extends AppCompatActivity {
 
+    /**
+     * mapInfo: name of the map
+     */
     private String mapInfo = "";
+    /**
+     * listView: list representation of players
+     */
     private ListView listView;
+    /**
+     * playerDisplay: display number of players
+     */
     private TextView playerDisplay;
+    /**
+     * seekBar: to increase or decrease the number of players
+     */
     private SeekBar seekBar;
+    /**
+     * nextButton: to move to next activity
+     */
     private FloatingActionButton nextButton;
-    private ArrayList<String> playerNames, playerStratergies;
-    private String playerName = "", playerStratergy = "";
+    /**
+     * playerNames: names of the players
+     */
+    private ArrayList<String> playerNames;
+    /**
+     * playerStratergies: names of the players strategies
+     */
+    private ArrayList<String> playerStratergies;
+    /**
+     * playerName: name of selected player
+     */
+    private String playerName = "";
+    /**
+     * playerStratergy: name of selected strategy
+     */
+    private String playerStratergy = "";
+    /**
+     * stratergySelectionSpinner: to show the strategies
+     */
     private Spinner stratergySelectionSpinner;
+    /**
+     * stratergyHolderArray: strategies to be represented in dialog
+     */
     private String[] stratergyHolderArray = {
             GamePlayConstants.HUMAN_STRATEGY,
             GamePlayConstants.CHEATER_STRATEGY,

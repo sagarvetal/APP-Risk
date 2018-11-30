@@ -36,9 +36,12 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
     /**
      * cardArrayList : initializes the arraylist of the menu
-     * invokingActivity: The context of the activity
      */
     private ArrayList<String> cardArrayList;
+
+    /**
+     * invokingActivity: The context of the activity
+     */
     private Context invokingActivity;
 
     /**
