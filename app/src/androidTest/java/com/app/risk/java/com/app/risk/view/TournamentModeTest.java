@@ -6,7 +6,6 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
-import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -30,21 +29,65 @@ import static org.junit.Assert.assertTrue;
  * @version 1.0.0
  */
 public class TournamentModeTest {
-
+    /**
+     * Context object to be used in while invoking diffrent controllers
+     */
     private Context context = null;
+    /**
+     * gamePlay1 object to be of map1
+     */
     private GamePlay gamePlay1 = null;
+    /**
+     * gamePlay2 object to be of map2
+     */
     private GamePlay gamePlay2 = null;
+    /**
+     * startupPhaseController holds the instance of startup Phase Controller
+     */
     StartupPhaseController startupPhaseController = null;
+    /**
+     * reinforcementPhaseController holds the instance of reinforcement Phase Controller
+     */
     ReinforcementPhaseController reinforcementPhaseController = null;
+    /**
+     * attackPhaseController holds the instance of attack Phase Controller
+     */
     AttackPhaseController attackPhaseController = null;
+    /**
+     * playerNames holds the name of the player name
+     */
     ArrayList<String> playerNames;
+    /**
+     * countries1 hashmap holds the country object with its name
+     */
     HashMap<String, Country> countries1 = new HashMap<String, Country>();
+    /**
+     * countries1 hashmap holds the country object with its name
+     */
     HashMap<String, Country> countries2 = new HashMap<String, Country>();
+    /**
+     * flag
+     */
     boolean flag;
+    /**
+     * mapList of gameplay
+     */
     ArrayList<GamePlay> mapList = null;
+    /**
+     * noOfGames
+     */
     int noOfGames;
+    /**
+     * noOfturns
+     */
     int noOfturns;
+    /**
+     * strategy of the player
+     */
     ArrayList<String> strategy;
+    /**
+     * tournamentResult result of tournament mode
+     */
     LinkedHashMap<String, ArrayList<String>> tournamentResult;
 
     /**
@@ -70,7 +113,6 @@ public class TournamentModeTest {
         playerNames.add("player1");
         playerNames.add("player2");
         tournamentResult = new LinkedHashMap<>();
-        PhaseViewController.getInstance().init(context);
     }
 
     @Test
