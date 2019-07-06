@@ -18,14 +18,25 @@ import java.util.ArrayList;
  * This class is used for the reinforcement phase.
  * It calculates the reinforcement armies for current player whose turn is going on.
  *
- * @author Sagar Vetal
+ * @author Sagar Vetal and Himanshu Kohli
  * @version 2.0.0 (Date: 05/11/2018)
  */
 public class ReinforcementPhaseController {
 
-    private GamePlay gamePlay;
-    private Context context;
+    /**
+     * It is a singleton instance of the controller
+     */
     private static ReinforcementPhaseController reinforcementPhaseController;
+
+    /**
+     * It holds complete game data like countries, continents and player.
+     */
+    private GamePlay gamePlay;
+
+    /**
+     * It is an instance of the invoking activity
+     */
+    private Context context;
 
     /**
      * This is default constructor.

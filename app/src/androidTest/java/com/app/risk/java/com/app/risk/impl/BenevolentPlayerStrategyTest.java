@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertTrue;
  * @author Akhila Chilukuri
  * @version 1.0.0
  */
-public class BenevolentStrategyTest {
+public class BenevolentPlayerStrategyTest {
     /**
      * context instance would hold the instance of the target activity
      */
@@ -88,7 +89,7 @@ public class BenevolentStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
-
+        PhaseViewController.getInstance().init(context);
     }
 
     /**

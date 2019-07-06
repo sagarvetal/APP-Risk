@@ -3,7 +3,6 @@ package com.app.risk.controller;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -23,7 +22,6 @@ import com.app.risk.impl.RandomPlayerStrategy;
 import com.app.risk.model.Country;
 import com.app.risk.model.GamePlay;
 import com.app.risk.model.Player;
-import com.app.risk.view.MainScreenActivity;
 import com.app.risk.view.PlayScreenActivity;
 
 import java.util.ArrayList;
@@ -32,22 +30,70 @@ import java.util.Random;
 /**
  * This class is used for the attack phase.
  * Player can attack from a country he owns to adjacent country owned by another player.
- * @author Sagar Vetal
+ * @author Sagar Vetal and Himanshu Kohli
  * @version 1.0.0 (Date: 06/11/2018)
  */
 public class AttackPhaseController implements View.OnClickListener {
 
+
+    /**
+     * It is a singleton instance of the controller
+     */
     private static AttackPhaseController attackPhaseController;
+
+    /**
+     * It holds complete game data like countries, continents and player.
+     */
     private GamePlay gamePlay;
+
+    /**
+     * It is an instance of the invoking activity
+     */
     private Context context;
 
+    /**
+     * It holds the list of countries
+     */
     private ArrayList<Country> countries;
-    private Country attackingCountry, defendingCountry;
 
+    /**
+     * It holds the data of attacking country
+     */
+    private Country attackingCountry;
+
+    /**
+     * It holds the data of defending country
+     */
+    private Country defendingCountry;
+
+    /**
+     * It is used to show attack dialog box
+     */
     private AlertDialog mainAlertDialog;
-    private Button rollButton,allOutButton;
-    private NumberPicker attackerNumberPicker, defenderNumberPicker;
 
+    /**
+     * It is used to perform dice roll
+     */
+    private Button rollButton;
+
+    /**
+     * It is used to perform all out operation
+     */
+    private Button allOutButton;
+
+    /**
+     * It allows user to select the number of attacking dice
+     */
+    private NumberPicker attackerNumberPicker;
+
+    /**
+     * It allows user to select the number of defending dice
+     */
+    private NumberPicker defenderNumberPicker;
+
+    /**
+     * It holds the number of defending dices
+     */
     private int defenderDices = 1;
 
     /**
@@ -174,9 +220,6 @@ public class AttackPhaseController implements View.OnClickListener {
                 final int noOfAttackerDice = attackerNumberPicker.getValue();
                 final int noOfDefenderDice = defenderNumberPicker.getValue();
 
-                PhaseViewController.getInstance().addAction("No of dice selected for attacker : " + noOfAttackerDice);
-                PhaseViewController.getInstance().addAction("No of dice selected for defender : " + noOfDefenderDice);
-
                 final String result = gamePlay.getCurrentPlayer().performAttack(attackingCountry, defendingCountry, noOfAttackerDice, noOfDefenderDice).toString();
                 attackResult.append(result);
 
@@ -190,11 +233,13 @@ public class AttackPhaseController implements View.OnClickListener {
                 attackResult.append(result);
             }
 
+            PhaseViewController.getInstance().addAction(attackResult.toString());
+
             if(defendingCountry.getNoOfArmies() == 0) {
-                PhaseViewController.getInstance().addAction("Player won the country " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " conquered " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You won the country " + defendingCountry.getNameOfCountry() + "\n");
             } else if(attackingCountry.getNoOfArmies() == 1) {
-                PhaseViewController.getInstance().addAction("Player lost the attack on " + defendingCountry.getNameOfCountry());
+                PhaseViewController.getInstance().addAction(gamePlay.getCurrentPlayer().getName() + " lost the attack on " + defendingCountry.getNameOfCountry());
                 attackResult.append("\n\n You lost the attack on " + defendingCountry.getNameOfCountry() + "\n");
             }
 
@@ -368,14 +413,18 @@ public class AttackPhaseController implements View.OnClickListener {
         int defenderDices = 1;
         final Strategy strategy =  defendingCountry.getPlayer().getStrategy();
 
-        if (strategy instanceof HumanPlayerStrategy)
+        if (strategy instanceof HumanPlayerStrategy) {
             defenderDices = showDiceSelectionDialogBox(defendingCountry);
-        else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy)
+        } else if (strategy instanceof AggressivePlayerStrategy || strategy instanceof CheaterPlayerStrategy) {
             defenderDices = defendingCountry.getNoOfArmies() >= 2 ? 2 : 1;
-        else if (strategy instanceof BenevolentPlayerStrategy)
+        } else if (strategy instanceof BenevolentPlayerStrategy) {
             defenderDices = 1;
-        else if (strategy instanceof RandomPlayerStrategy)
+        } else if (strategy instanceof RandomPlayerStrategy) {
             defenderDices = random.nextInt(defendingCountry.getNoOfArmies() > 2 ? 2 : 1);
+            if(defenderDices == 0){
+                defenderDices = 1;
+            }
+        }
 
         return defenderDices;
     }

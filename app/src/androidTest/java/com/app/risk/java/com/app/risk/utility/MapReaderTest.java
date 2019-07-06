@@ -3,9 +3,7 @@ package com.app.risk.java.com.app.risk.utility;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 
-import com.app.risk.model.Card;
 import com.app.risk.model.GameMap;
-import com.app.risk.model.GamePlay;
 import com.app.risk.utility.MapReader;
 import com.app.risk.utility.MapVerification;
 
@@ -13,7 +11,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;

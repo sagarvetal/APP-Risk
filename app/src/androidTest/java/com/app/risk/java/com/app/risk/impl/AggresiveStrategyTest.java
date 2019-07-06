@@ -1,4 +1,4 @@
-package com.app.risk.java.com.app.risk.controller;
+package com.app.risk.java.com.app.risk.impl;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -6,6 +6,7 @@ import android.support.test.InstrumentationRegistry;
 import com.app.risk.constants.GamePlayConstants;
 import com.app.risk.controller.AttackPhaseController;
 import com.app.risk.controller.FortificationPhaseController;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.ReinforcementPhaseController;
 import com.app.risk.controller.StartupPhaseController;
 import com.app.risk.model.Continent;
@@ -23,27 +24,27 @@ import static org.junit.Assert.assertTrue;
 
 public class AggresiveStrategyTest {
     /**
-     * Game play object
+     * Game play object which stores information of players,countries contients
      */
     GamePlay gamePlay;
     /**
-     * Context object
+     * Context object to be used in while invoking diffrent controllers
      */
     Context context = null;
     /**
-     * Startupphasecontroller object
+     *  instance of Startupphasecontroller which manages all start up related activities
      */
     StartupPhaseController startupphase = null;
     /**
-     * Reinforcementphasecontroller object
+     * instance of Reinforcementphasecontroller which manages all reinforcement related activites
      */
     ReinforcementPhaseController reinforcementPhaseController = null;
     /**
-     * playernames array
+     * list of player name objects
      */
     ArrayList<String> playerNames = new ArrayList<String>();
     /**
-     * hashmap of countries
+     * hashmap to store country name and their corresponding country
      */
     HashMap<String, Country> countries = new HashMap<String, Country>();
 
@@ -80,6 +81,7 @@ public class AggresiveStrategyTest {
         gamePlay.getCountries().get("Italy").setAdjacentCountries(italy);
         gamePlay.getCountries().get("America").setAdjacentCountries(america);
         startupphase = StartupPhaseController.getInstance().init(gamePlay);
+        PhaseViewController.getInstance().init(context);
     }
 
     /**
@@ -109,7 +111,7 @@ public class AggresiveStrategyTest {
     }
 
     /**
-     * Checks aggresive attack functionalitu
+     * Checks aggresive attack functionality
      */
     @Test
     public void aggresiveAttackTest(){
@@ -124,7 +126,7 @@ public class AggresiveStrategyTest {
         int beforeAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
         gamePlay.getCurrentPlayer().attackPhase(gamePlay,gamePlay.getCountryListByPlayerId(0),gamePlay.getCountryListByPlayerId(0).get(0), gamePlay.getCountryListByPlayerId(1).get(0));
         int afterAttackArmies = gamePlay.getCountryListByPlayerId(0).get(0).getNoOfArmies();
-        assertTrue(afterAttackArmies == 2);
+        assertTrue(afterAttackArmies == 1);
     }
 
     /**

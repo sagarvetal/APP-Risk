@@ -27,9 +27,20 @@ import java.util.Stack;
  */
 public class FortificationPhaseController {
 
-    private GamePlay gamePlay;
-    private Context context;
+    /**
+     * It is a singleton instance of the controller
+     */
     private static FortificationPhaseController fortificationPhaseController;
+
+    /**
+     * It holds complete game data like countries, continents and player.
+     */
+    private GamePlay gamePlay;
+
+    /**
+     * It is an instance of the invoking activity
+     */
+    private Context context;
 
     /**
      * This is default constructor.

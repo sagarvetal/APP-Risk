@@ -12,8 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Save a serializable game object to file and load a game from a file for play.
@@ -106,5 +104,17 @@ public class SaveLoadGame {
             return null;
         else
             return mapDir.list();
+    }
+
+    /**
+     * Method to delete a saved game file from the device memory once the file has been loaded
+     * @param fileName name of the file to be deleted
+     * @param context context of the application
+     */
+    public void deleteSavedFile(String fileName, Context context) {
+
+        String mapDir = context.getFilesDir() + File.separator + FileConstants.GAME_SAVE_LOAD_FILE_PATH;
+        File toDelete = new File(mapDir, fileName);
+        toDelete.delete();
     }
 }

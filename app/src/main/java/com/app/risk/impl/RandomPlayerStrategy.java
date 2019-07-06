@@ -22,6 +22,9 @@ import java.util.Random;
  */
 public class RandomPlayerStrategy implements Strategy,Serializable {
 
+    /**
+     * random: To generate random numbers
+     */
     private Random random = new Random();
 
     /**
@@ -35,14 +38,16 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
     @Override
     public void reinforcementPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country toCountry) {
         while(player.getReinforcementArmies()!=0){
-            int countryIndex = random.nextInt(countriesOwnedByPlayer.size());
+            final Country reinforcementCountry = countriesOwnedByPlayer.get(random.nextInt(countriesOwnedByPlayer.size()));
             int noOfArmies = random.nextInt(player.getReinforcementArmies());
-            if(player.getReinforcementArmies() == 1){
+            if(noOfArmies == 0){
                 noOfArmies = 1;
             }
-            countriesOwnedByPlayer.get(countryIndex).incrementArmies(noOfArmies);
+            reinforcementCountry.incrementArmies(noOfArmies);
             player.decrementReinforcementArmies(noOfArmies);
+            PhaseViewController.getInstance().addAction(player.getName() + " has placed " + noOfArmies + " armies on " + reinforcementCountry.getNameOfCountry());
         }
+        PhaseViewController.getInstance().addAction(player.getName() + " has placed all his reinforcement armies.");
     }
 
     /**
@@ -57,6 +62,9 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
     @Override
     public void attackPhase(final GamePlay gamePlay, final Player player, final ArrayList<Country> countriesOwnedByPlayer, final Country attackingCountry, final Country defendingCountry) {
         int numberOfTurns = random.nextInt(gamePlay.getCountries().values().size() - countriesOwnedByPlayer.size());
+        if(numberOfTurns == 0){
+            numberOfTurns = 1;
+        }
         for (int i = 0; i < numberOfTurns; i++) {
             int fromCountryIndex = random.nextInt(countriesOwnedByPlayer.size());
             Country fromCountry = countriesOwnedByPlayer.get(fromCountryIndex);
@@ -76,9 +84,9 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
 
             int toCountryIndex = random.nextInt(attackableCountries.size());
             Country toCountry = attackableCountries.get(toCountryIndex);
-            performAllOutAttack(fromCountry, toCountry, player, attackableCountries, countriesOwnedByPlayer);
+            performAllOutAttack(fromCountry, toCountry, player, countriesOwnedByPlayer);
             if(player.isPlayerWon(gamePlay.getCountries())) {
-                PhaseViewController.getInstance().addAction(player.getName() + " conquered the entire map.");
+                PhaseViewController.getInstance().addAction(player.getName() + " has conquered the entire map.");
                 player.setPlayerWon(true);
                 break;
             } else if(!(player.isMoreAttackPossible(gamePlay, countriesOwnedByPlayer))) {
@@ -94,17 +102,19 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
      * @param fromCountry Attacking country
      * @param toCountry Defending country
      * @param player Current player
-     * @param attackableCountries Countries that can be attacked by the attacking country
      * @param countriesOwnedByPlayer All countries owned by the player
      */
-    public void performAllOutAttack(Country fromCountry, Country toCountry, Player player, List<Country> attackableCountries, List<Country> countriesOwnedByPlayer){
+    public void performAllOutAttack(final Country fromCountry, final Country toCountry, final Player player, final List<Country> countriesOwnedByPlayer){
         int attackingDiceRoll = 0;
-        int defendingDiceRoll;
-        PhaseViewController.getInstance().addAction("\nAttacking country: "+fromCountry.getNameOfCountry()+"\nDefending country: "+toCountry.getNameOfCountry());
+        PhaseViewController.getInstance().addAction("\nAttacking country: "+fromCountry.getNameOfCountry());
+        PhaseViewController.getInstance().addAction("Defending country: "+toCountry.getNameOfCountry());
         final StringBuilder attackResult = new StringBuilder();
-        while(fromCountry.getNoOfArmies() != 1 || toCountry.getNoOfArmies() != 0) {
+        while(fromCountry.getNoOfArmies() > 1 && toCountry.getNoOfArmies() > 0) {
             attackingDiceRoll = random.nextInt(fromCountry.getNoOfArmies() > 3 ? 3 : fromCountry.getNoOfArmies()-1);
-            defendingDiceRoll = AttackPhaseController.getInstance().getDefenderDices(toCountry);
+            if(attackingDiceRoll == 0){
+                attackingDiceRoll = 1;
+            }
+            int defendingDiceRoll = AttackPhaseController.getInstance().getDefenderDices(toCountry);
             final StringBuilder result = player.performAttack(fromCountry, toCountry, attackingDiceRoll, defendingDiceRoll);
             attackResult.append(result);
         }
@@ -118,12 +128,12 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
             }
             player.setNewCountryConquered(true);
             PhaseViewController.getInstance().addAction(player.getName() + " conquered " + toCountry.getNameOfCountry());
-            toCountry.setNoOfArmies(noOfArmiesToMove);
-            PhaseViewController.getInstance().addAction(noOfArmiesToMove + " armies given to country " + toCountry.getNameOfCountry());
+            PhaseViewController.getInstance().addAction(noOfArmiesToMove +" armies moved from " + fromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
+            toCountry.getPlayer().decrementCountries(1);
             fromCountry.decrementArmies(noOfArmiesToMove);
+            toCountry.setNoOfArmies(noOfArmiesToMove);
             toCountry.setPlayer(player);
             player.incrementCountries(1);
-            attackableCountries.remove(toCountry);
             countriesOwnedByPlayer.add(toCountry);
         }
     }
@@ -144,11 +154,14 @@ public class RandomPlayerStrategy implements Strategy,Serializable {
                 final List<String> reachableCountries = FortificationPhaseController.getInstance().getReachableCountries(randomFromCountry, countriesOwnedByPlayer,false);
                 if(reachableCountries.size() > 0) {
                     final Country toCountry = gamePlay.getCountries().get(reachableCountries.get(random.nextInt(reachableCountries.size())));
-                    final int noOfArmies = random.nextInt(randomFromCountry.getNoOfArmies());
+                    int noOfArmies = random.nextInt(randomFromCountry.getNoOfArmies());
+                    if(noOfArmies == 0){
+                        noOfArmies = 1;
+                    }
                     randomFromCountry.decrementArmies(noOfArmies);
                     toCountry.incrementArmies(noOfArmies);
                     isFortificationDone = true;
-                    PhaseViewController.getInstance().addAction(noOfArmies + "moved from " + randomFromCountry + " to " + toCountry);
+                    PhaseViewController.getInstance().addAction(noOfArmies + " armies moved from " + randomFromCountry.getNameOfCountry() + " to " + toCountry.getNameOfCountry());
                     break;
                 }
             }

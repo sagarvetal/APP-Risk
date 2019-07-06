@@ -16,8 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.risk.constants.GamePlayConstants;
+import com.app.risk.controller.PhaseViewController;
 import com.app.risk.controller.SaveLoadGameController;
 import com.app.risk.model.GamePlay;
+import com.app.risk.utility.LogManager;
 import com.app.risk.view.EditMap;
 import com.app.risk.view.PlayScreenActivity;
 import com.app.risk.view.TournamentMenuActivity;
@@ -34,7 +36,14 @@ import java.util.ArrayList;
  */
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.CardViewHolder> {
 
+    /**
+     * cardArrayList : initializes the arraylist of the menu
+     */
     private ArrayList<String> cardArrayList;
+
+    /**
+     * invokingActivity: The context of the activity
+     */
     private Context invokingActivity;
 
     /**
@@ -124,6 +133,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                 .setPositiveButton("Start new game", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        LogManager.clearLog(invokingActivity);
                                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(), MapSelectionActivity.class));
                                     }
                                 })
@@ -149,6 +159,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                                                             Intent intent = new Intent(invokingActivity.getApplicationContext(), PlayScreenActivity.class);
                                                             intent.putExtra("GAMEPLAY_OBJECT", gamePlay);
                                                             intent.putExtra(GamePlayConstants.GAME_MODE, GamePlayConstants.SINGLE_GAME_MODE);
+                                                            SaveLoadGameController.deleteSavedFile(savedGamesList[selectedGameIndex], invokingActivity);
                                                             invokingActivity.startActivity(intent);
                                                         }
                                                     })
@@ -160,6 +171,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         break;
 
                     case "Tournament Game":
+                        LogManager.clearLog(invokingActivity);
                         invokingActivity.startActivity(new Intent(invokingActivity.getApplicationContext(),TournamentMenuActivity.class));
                         break;
 
@@ -176,8 +188,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                         invokingActivity.startActivity(editMap);
                         break;
 
-                    case "Help":
-                        Toast.makeText(invokingActivity, "" + cardArrayList.get(getAdapterPosition()), Toast.LENGTH_SHORT).show();
+                    case "Show Log":
+                        showLogDialog();
                         break;
 
                     case "Exit":
@@ -188,4 +200,27 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
             }
         }
     }
+
+    public void showLogDialog(){
+        ArrayList<String> logViewList = LogManager.readLog(invokingActivity);
+        String[] logViewArray = new String[logViewList.size()];
+
+        if(logViewArray.length == 0){
+            Toast.makeText(invokingActivity, ""
+                     + "Log file is Empty", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            for(int i=0;i<logViewList.size();i++){
+                logViewArray[i] = logViewList.get(i);
+            }
+            new AlertDialog.Builder(invokingActivity)
+                    .setItems(logViewArray,null)
+                    .setTitle("Log View ")
+                    .setNeutralButton("Back",null)
+                    .setCancelable(false)
+                    .create().show();
+        }
+
+    }
+
 }

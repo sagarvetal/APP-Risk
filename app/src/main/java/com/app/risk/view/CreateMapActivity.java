@@ -28,7 +28,7 @@ import com.app.risk.controller.MapDriverController;
 import com.app.risk.model.Continent;
 import com.app.risk.model.Country;
 import com.app.risk.model.GameMap;
-import com.app.risk.utility.CountryAdaptor;
+import com.app.risk.adapters.CountryAdaptor;
 import com.app.risk.utility.MapVerification;
 
 import java.util.ArrayList;
@@ -45,15 +45,7 @@ public class CreateMapActivity extends Activity {
     /**
      * Radius of circle
      */
-    public static final int RADIUS = 100;
-    /**
-     * filename for 3D map
-     */
-    private static final String fileName3DMap = "3D.map";
-    /**
-     * filename for world map
-     */
-    private static final String fileNameWorldMap = "World.map";
+    public static final int RADIUS = 65;
 
     /**
      * Checks if is edit mode true
@@ -61,7 +53,7 @@ public class CreateMapActivity extends Activity {
     private boolean isEditMode = false;
 
     /**
-     * list of country shown
+     * Defines object to listview  to display country
      */
     private ListView listCountry;
     /**
@@ -69,11 +61,11 @@ public class CreateMapActivity extends Activity {
      */
     private ArrayList<CreateMapActivity.Item> countryList = new ArrayList<CreateMapActivity.Item>();
     /**
-     * adaptor object
+     * adaptor object which manages list of countries
      */
     private CountryAdaptor countryAdaptor;
     /**
-     * list of countries as grpah object
+     * list of countries as graph object
      */
     private ArrayList<GameMap> arrCountriesRepresentationOnGraph = new ArrayList<GameMap>();
     /**
@@ -81,11 +73,11 @@ public class CreateMapActivity extends Activity {
      */
     private ArrayList<Integer> arrCountryAdded = new ArrayList<>();
     /**
-     * Index of to button
+     * Index of to button which stores the toCountry in arrCountriesRepresentationOnGraph
      */
     private int indexOfToButton = -1;
     /**
-     * Index of from button
+     * Index of from button which stores the fromCountry in arrCountriesRepresentationOnGraph
      */
     private int indexOfFromButton = -1;
     /**
@@ -97,11 +89,11 @@ public class CreateMapActivity extends Activity {
      */
     private int totalCountriesAddedInGraph = 0;
     /**
-     * surfaceview object
+     * surfaceview object which holds canvas
      */
     private SurfaceView surfaceView;
     /**
-     * canvas object
+     * canvas object which manages rendering of countries
      */
     private Canvas canvas;
     /**
@@ -169,8 +161,45 @@ public class CreateMapActivity extends Activity {
             findMinMaxCoordinates();
 
             handleEditMode();
+
+            if (isMappingRequired()){
+                performMapping();
+            }
+
         }
 
+    }
+
+    /**
+     * Checks if mapping is requried
+     * @return boolean if mapping is required
+     */
+
+    public boolean isMappingRequired(){
+        boolean isMappingRequired = false;
+        for (int i = 0; i < arrCountriesRepresentationOnGraph.size() ; i++){
+            if (arrCountriesRepresentationOnGraph.get(i).getCoordinateX()<=300){
+                isMappingRequired = true;
+                return isMappingRequired;
+            }
+        }
+        return isMappingRequired;
+    }
+
+    /**
+     * Performs mapping of screen size to current
+     */
+    public void performMapping(){
+
+        for (int i = 0 ; i < arrCountriesRepresentationOnGraph.size() ; i++){
+            GameMap map = arrCountriesRepresentationOnGraph.get(i);
+            map.setCoordinateX(getXCordinate(map.getCoordinateX()));
+            map.setCoordinateY(getYCordinate(map.getCoordinateY()));
+            for (GameMap neighbouringCountry : map.getConnectedToCountries()){
+                neighbouringCountry.setCoordinateX(getXCordinate(neighbouringCountry.getCoordinateX()));
+                neighbouringCountry.setCoordinateY(getYCordinate(neighbouringCountry.getCoordinateY()));
+            }
+        }
     }
 
     /**
@@ -214,7 +243,7 @@ public class CreateMapActivity extends Activity {
 
 
         mWidth = maxX - minX + 4000;
-        mHeight = maxY - minY + 4000;
+        mHeight = maxY - minY + 3500;
         width = maxScreenX;
         height = maxScreenY;
 
@@ -231,7 +260,7 @@ public class CreateMapActivity extends Activity {
     }
 
     /**
-     * gets mapped y coordinate according to ratio
+     * gets mapped y coordinate according to ratiox
      * @param yCoordinate - old y coordinate
      * @return mapped coordinate
      */
@@ -454,13 +483,13 @@ public class CreateMapActivity extends Activity {
         if (mapVerification.mapVerification(arrCountriesRepresentationOnGraph) == true) {
             if (isEditMode){
                 handleMapVerificationSucced(fileName);
+                showToast(getString(R.string.edit_file_saved));
             }else{
                 final EditText edittext = new EditText(CreateMapActivity.this);
                 AlertDialog.Builder alert = new AlertDialog.Builder(CreateMapActivity.this);
                 alert.setMessage("");
                 alert.setTitle("Enter Map name");
                 alert.setView(edittext);
-
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         String mapName = edittext.getText().toString();
@@ -493,8 +522,8 @@ public class CreateMapActivity extends Activity {
      */
 
     public void handleMapVerificationSucced(String filename) {
-        MapDriverController mapDriverController = new MapDriverController();
-        mapDriverController.writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+        MapDriverController.getInstance().writeMap(CreateMapActivity.this, filename, arrCountriesRepresentationOnGraph);
+
     }
 
     /**
@@ -534,7 +563,6 @@ public class CreateMapActivity extends Activity {
 
     /**
      * Find index of object in array of game map object recieved according to country
-     *
      * @param country country object
      * @return index object
      */
@@ -647,28 +675,51 @@ public class CreateMapActivity extends Activity {
         for (GameMap map : arrCountriesRepresentationOnGraph) {
             Paint paint = new Paint();
             paint.setColor(map.getContinentColor());
-            if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                canvas.drawCircle(getXCordinate(map.getCoordinateX()), getYCordinate(map.getCoordinateY()) , RADIUS, paint);
-            } else {
-                canvas.drawCircle(map.getCoordinateX(), map.getCoordinateY(), RADIUS, paint);
-            }
+
+            drawCircle(map.getCoordinateX(),map.getCoordinateY(),RADIUS,paint);
+
             for (GameMap nieghbourCountry : map.getConnectedToCountries()) {
-                if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                    canvas.drawLine(getXCordinate(map.getCoordinateX()), getYCordinate(map.getCoordinateY()), getXCordinate(nieghbourCountry.getCoordinateX()), getYCordinate(nieghbourCountry.getCoordinateY()), connectionLine);
-                }else{
-                    canvas.drawLine(map.getCoordinateX(), map.getCoordinateY(), nieghbourCountry.getCoordinateX(), nieghbourCountry.getCoordinateY(), connectionLine);
-                }
-            }
-            if (fileName.equalsIgnoreCase(fileName3DMap) || fileName.equalsIgnoreCase(fileNameWorldMap)) {
-                canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),getXCordinate(map.getCoordinateX())-20,getYCordinate(map.getCoordinateY())-20,text);
-
-            } else {
-                canvas.drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
+                drawLine(map.getCoordinateX(),map.getCoordinateY(),nieghbourCountry.getCoordinateX(),nieghbourCountry.getCoordinateY(),connectionLine);
             }
 
+            drawText(map.getFromCountry().getNameOfCountry().substring(0,2),map.getCoordinateX()-20,map.getCoordinateY(),text);
         }
         surfaceView.getHolder().unlockCanvasAndPost(canvas);
         currentIndexCountrySelected = -1;
+    }
+
+    /**
+     * Draws line on canvas
+     * @param x starting x
+     * @param y starting y
+     * @param neighbourX neighbour x
+     * @param neighbourY neighbour y
+     * @param line paint object
+     */
+    public void drawLine(float x,float y,float neighbourX,float neighbourY,Paint line){
+        canvas.drawLine(x,y,neighbourX,neighbourY, line);
+    }
+
+    /**
+     * Draws text in circle
+     * @param str text to be dr
+     * @param x
+     * @param y
+     * @param text
+     */
+    public void drawText(String str,float x,float y,Paint text){
+        canvas.drawText(str,x,y,text);
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param radius
+     * @param paint
+     */
+    public void drawCircle(float x,float y,int radius,Paint paint){
+        canvas.drawCircle(x,y,radius,paint);
     }
 
     /**

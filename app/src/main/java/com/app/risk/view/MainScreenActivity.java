@@ -20,7 +20,9 @@ import java.util.ArrayList;
  * @version 1.0.0
  */
 public class MainScreenActivity extends AppCompatActivity {
-     //Holds the data to main menu and passed to recycler view
+    /**
+     * Holds the data to main menu and passed to recycler view
+     */
     private ArrayList<String> mainMenuList;
 
     /**
@@ -41,7 +43,7 @@ public class MainScreenActivity extends AppCompatActivity {
      */
     public void setUpData() {
         final String mainMenuOptions[] = {"Single Game","Tournament Game", "Create Map", "Edit Map",
-                "Help", "Exit"};
+                "Show Log", "Exit"};
         mainMenuList = new ArrayList<>();
         for (String i : mainMenuOptions) {
             mainMenuList.add(i);

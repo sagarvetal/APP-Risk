@@ -23,7 +23,14 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class StartupPhaseController {
 
+    /**
+     * It holds complete game data like countries, continents and player.
+     */
     private GamePlay gamePlay;
+
+    /**
+     * It is a singleton instance of the controller
+     */
     private static StartupPhaseController startupPhaseController;
 
     /**

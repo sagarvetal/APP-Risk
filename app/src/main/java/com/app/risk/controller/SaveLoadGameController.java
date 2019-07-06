@@ -13,6 +13,9 @@ import com.app.risk.utility.SaveLoadGame;
  */
 public class SaveLoadGameController {
 
+    /**
+     * saveLoadGame : Holds the save game instance
+     */
     private static SaveLoadGame saveLoadGame = new SaveLoadGame();
 
     /**
@@ -46,5 +49,15 @@ public class SaveLoadGameController {
     public static String[] savedGamesList(Context context){
 
         return saveLoadGame.savedGamesList(context);
+    }
+
+    /**
+     * Method to delete a saved file from the device memory once the file has been loaded for game play
+     * @param fileName name of the file to be deleted
+     * @param context context of the application
+     */
+    public static void deleteSavedFile(String fileName, Context context){
+
+        saveLoadGame.deleteSavedFile(fileName, context);
     }
 }
